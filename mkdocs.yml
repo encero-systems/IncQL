@@ -112,6 +112,7 @@ nav:
           - Execution observations: language/how-to/execution_observations.md
           - Quality observations: language/how-to/quality_observations.md
           - Governed evidence: language/how-to/governed_evidence.md
+          - Governed plan bundles: language/how-to/governed_plan_bundles.md
       - Advanced and capability-dependent:
           - Approximate metrics: language/how-to/approximate_metrics.md
           - Typed HLL sketches: language/how-to/typed_hll_sketches.md
@@ -133,6 +134,7 @@ nav:
           - Inspection: language/reference/inspection.md
           - Quality: language/reference/quality.md
           - Governance: language/reference/governance.md
+          - Governed plan bundles: language/reference/governed_plan_bundles.md
       - Function catalog:
           - Index: language/reference/functions/index.md
           - Approximate: language/reference/functions/approximate.md

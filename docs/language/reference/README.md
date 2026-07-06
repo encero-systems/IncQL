@@ -21,6 +21,7 @@ Application developers should normally start here before reading interchange con
 - [Inspection][inspection] defines structured plan, schema, lineage, requirement, and artifact records available before execution.
 - [Quality][quality] defines typed assertions and quality observations.
 - [Governance][governance] defines governed attributes and policy-checkpoint evidence.
+- [Governed plan bundles][governed-plan-bundles] define the typed local handoff that keeps a plan and its evidence-section states together.
 
 These APIs produce evidence. They do not silently make caller-owned enforcement or publication decisions.
 
@@ -51,6 +52,7 @@ These pages are not prerequisites for ordinary query authoring. Read [What IncQL
 [filter-builders]: builders/filters.md
 [functions]: functions/index.md
 [governance]: governance.md
+[governed-plan-bundles]: governed_plan_bundles.md
 [guides]: ../how-to/README.md
 [inspection]: inspection.md
 [learn]: ../README.md

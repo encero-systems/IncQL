@@ -61,6 +61,7 @@ from pub::incql import (
     col,
     eq,
     governed_attribute,
+    governed_plan_bundle,
     inspect_plan,
     lit,
     policy_checkpoint,
@@ -383,6 +384,21 @@ def _governed_evidence_exports_compile_for_pub_consumers() -> None:
     assert checkpoint.action == PolicyCheckpointAction.Observe, "pub consumers should construct policy checkpoints"
 
 
+def _governed_plan_bundle_exports_compile_for_pub_consumers() -> None:
+    # -- Arrange --
+    mut session = Session.default()
+    orders = _orders(session, "governed_bundle_orders")
+
+    # -- Act --
+    bundle = governed_plan_bundle(orders)
+
+    # -- Assert --
+    assert bundle.section_available("plan"), "pub consumers should inspect bundle section availability"
+    assert len(bundle.sections) > 0, "pub consumers should receive bundle section records"
+    assert len(bundle.governed_attributes) > 0, "pub consumers should receive governed evidence in bundles"
+    assert len(bundle.policy_checkpoints) == 1, "pub consumers should receive policy checkpoints in bundles"
+
+
 def main() -> None:
     println("query smoke: select")
     _brace_select_aliases_and_lateral_aliases_materialize()
@@ -402,6 +418,8 @@ def main() -> None:
     _quality_vocab_assertions_execute()
     println("query smoke: governed evidence")
     _governed_evidence_exports_compile_for_pub_consumers()
+    println("query smoke: governed plan bundle")
+    _governed_plan_bundle_exports_compile_for_pub_consumers()
 EOF
 
 (cd "$PROJECT_DIR" && "$INCAN_BIN" lock >/dev/null)

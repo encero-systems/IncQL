@@ -24,6 +24,7 @@ If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. 
 - [Capture execution observations and adapter coverage][execution-observations] records concrete attempts and coverage evidence.
 - [Observe data quality checks][quality-observations] evaluates typed assertions without hiding caller-owned policy.
 - [Inspect governed evidence][governed-evidence] carries local governance metadata into an explicit decision point.
+- [Package a governed plan bundle][governed-plan-bundles] keeps one planned relation and its local evidence together in a typed handoff value.
 
 ## Advanced and capability-dependent
 
@@ -53,6 +54,7 @@ This structure is intentional: a code sample without a verification step or a ca
 [execution-observations]: execution_observations.md
 [generator-rows]: generator_rows.md
 [governed-evidence]: governed_evidence.md
+[governed-plan-bundles]: governed_plan_bundles.md
 [inspect-plan-lineage]: inspect_plan_lineage.md
 [joins]: joins.md
 [nested-row-values]: nested_row_values.md
