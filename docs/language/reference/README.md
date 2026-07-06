@@ -25,6 +25,7 @@ Application developers should normally start here before reading interchange con
 - [Plan diffs][plan-diffs] define local semantic-change records and blast-radius input artifacts.
 - [Evidence exchange][evidence-exchange] defines typed inbound and outbound bridge records, explicit mapping loss, and stable JSON projections.
 - [Semantic profiles][semantic-profiles] define versioned source and target semantic contexts plus conservative assessment states.
+- [Plan ingress][ingress] defines unresolved external-plan records, client-session evidence, coverage, diagnostics, and Prism analysis results.
 
 These APIs produce evidence. They do not silently make caller-owned enforcement or publication decisions.
 
@@ -59,6 +60,7 @@ These pages are not prerequisites for ordinary query authoring. Read [What IncQL
 [governed-plan-bundles]: governed_plan_bundles.md
 [guides]: ../how-to/README.md
 [inspection]: inspection.md
+[ingress]: ingress.md
 [learn]: ../README.md
 [operators]: substrait/operator_catalog.md
 [ownership]: ../explanation/what_incql_is.md

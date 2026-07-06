@@ -28,6 +28,7 @@ If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. 
 - [Compare plans and produce blast-radius inputs][plan-diffs] classifies local semantic changes without claiming a global dependency graph.
 - [Exchange evidence with adjacent tools][evidence-exchange] projects and imports explicitly scoped evidence without transferring semantic ownership.
 - [Assess semantic profiles][semantic-profiles] records the source or target environment behind portability and coverage evidence.
+- [Analyze an external plan request][ingress] turns a supported unresolved ingress request into Prism-owned relational evidence.
 
 ## Advanced and capability-dependent
 
@@ -60,6 +61,7 @@ This structure is intentional: a code sample without a verification step or a ca
 [governed-evidence]: governed_evidence.md
 [governed-plan-bundles]: governed_plan_bundles.md
 [inspect-plan-lineage]: inspect_plan_lineage.md
+[ingress]: ingress.md
 [joins]: joins.md
 [nested-row-values]: nested_row_values.md
 [normalize-semistructured-fields]: normalize_semistructured_fields.md
