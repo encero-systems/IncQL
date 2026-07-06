@@ -25,6 +25,7 @@ If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. 
 - [Observe data quality checks][quality-observations] evaluates typed assertions without hiding caller-owned policy.
 - [Inspect governed evidence][governed-evidence] carries local governance metadata into an explicit decision point.
 - [Package a governed plan bundle][governed-plan-bundles] keeps one planned relation and its local evidence together in a typed handoff value.
+- [Compare plans and produce blast-radius inputs][plan-diffs] classifies local semantic changes without claiming a global dependency graph.
 
 ## Advanced and capability-dependent
 
@@ -59,6 +60,7 @@ This structure is intentional: a code sample without a verification step or a ca
 [joins]: joins.md
 [nested-row-values]: nested_row_values.md
 [normalize-semistructured-fields]: normalize_semistructured_fields.md
+[plan-diffs]: plan_diffs.md
 [quality-observations]: quality_observations.md
 [quickstart]: ../quickstart.md
 [read-write]: read_write_data.md

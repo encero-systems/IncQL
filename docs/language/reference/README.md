@@ -22,6 +22,7 @@ Application developers should normally start here before reading interchange con
 - [Quality][quality] defines typed assertions and quality observations.
 - [Governance][governance] defines governed attributes and policy-checkpoint evidence.
 - [Governed plan bundles][governed-plan-bundles] define the typed local handoff that keeps a plan and its evidence-section states together.
+- [Plan diffs][plan-diffs] define local semantic-change records and blast-radius input artifacts.
 
 These APIs produce evidence. They do not silently make caller-owned enforcement or publication decisions.
 
@@ -58,6 +59,7 @@ These pages are not prerequisites for ordinary query authoring. Read [What IncQL
 [learn]: ../README.md
 [operators]: substrait/operator_catalog.md
 [ownership]: ../explanation/what_incql_is.md
+[plan-diffs]: plan_diffs.md
 [projection-builders]: builders/projections.md
 [quality]: quality.md
 [query-blocks]: query_blocks.md
