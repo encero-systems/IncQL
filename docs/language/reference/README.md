@@ -26,6 +26,7 @@ Application developers should normally start here before reading interchange con
 - [Evidence exchange][evidence-exchange] defines typed inbound and outbound bridge records, explicit mapping loss, and stable JSON projections.
 - [Semantic profiles][semantic-profiles] define versioned source and target semantic contexts plus conservative assessment states.
 - [Plan ingress][ingress] defines unresolved external-plan records, client-session evidence, coverage, diagnostics, and Prism analysis results.
+- [Verification evidence][verification] defines append-only assertion, run, observation, assurance, waiver, and projection records.
 
 These APIs produce evidence. They do not silently make caller-owned enforcement or publication decisions.
 
@@ -71,3 +72,4 @@ These pages are not prerequisites for ordinary query authoring. Read [What IncQL
 [read-roots]: substrait/read_root_binding_contract.md
 [semantic-profiles]: semantic_profiles.md
 [substrait]: substrait/conformance.md
+[verification]: verification.md

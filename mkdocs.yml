@@ -117,6 +117,7 @@ nav:
           - Evidence exchange: language/how-to/evidence_exchange.md
           - Semantic profiles: language/how-to/semantic_profiles.md
           - Plan ingress: language/how-to/ingress.md
+          - Verification evidence: language/how-to/verification_evidence.md
       - Advanced and capability-dependent:
           - Approximate metrics: language/how-to/approximate_metrics.md
           - Typed HLL sketches: language/how-to/typed_hll_sketches.md
@@ -143,6 +144,7 @@ nav:
           - Evidence exchange: language/reference/evidence_exchange.md
           - Semantic profiles: language/reference/semantic_profiles.md
           - Plan ingress: language/reference/ingress.md
+          - Verification evidence: language/reference/verification.md
       - Function catalog:
           - Index: language/reference/functions/index.md
           - Approximate: language/reference/functions/approximate.md

@@ -29,6 +29,7 @@ If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. 
 - [Exchange evidence with adjacent tools][evidence-exchange] projects and imports explicitly scoped evidence without transferring semantic ownership.
 - [Assess semantic profiles][semantic-profiles] records the source or target environment behind portability and coverage evidence.
 - [Analyze an external plan request][ingress] turns a supported unresolved ingress request into Prism-owned relational evidence.
+- [Record and project verification evidence][verification-evidence] keeps assertion, run, observation, assurance, scope, and waiver evidence separate.
 
 ## Advanced and capability-dependent
 
@@ -75,4 +76,5 @@ This structure is intentional: a code sample without a verification step or a ca
 [troubleshooting]: troubleshooting.md
 [typed-hll-sketches]: typed_hll_sketches.md
 [variant-payloads]: variant_payloads.md
+[verification-evidence]: verification_evidence.md
 [window-columns]: window_columns.md
