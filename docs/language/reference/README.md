@@ -23,6 +23,7 @@ Application developers should normally start here before reading interchange con
 - [Governance][governance] defines governed attributes and policy-checkpoint evidence.
 - [Governed plan bundles][governed-plan-bundles] define the typed local handoff that keeps a plan and its evidence-section states together.
 - [Plan diffs][plan-diffs] define local semantic-change records and blast-radius input artifacts.
+- [Evidence exchange][evidence-exchange] defines typed inbound and outbound bridge records, explicit mapping loss, and stable JSON projections.
 
 These APIs produce evidence. They do not silently make caller-owned enforcement or publication decisions.
 
@@ -49,6 +50,7 @@ These pages are not prerequisites for ordinary query authoring. Read [What IncQL
 [dataset-carriers]: dataset_carriers.md
 [dataset-methods]: dataset_methods.md
 [execution]: execution_context.md
+[evidence-exchange]: evidence_exchange.md
 [extensions]: substrait/revision_and_extension_policy.md
 [filter-builders]: builders/filters.md
 [functions]: functions/index.md

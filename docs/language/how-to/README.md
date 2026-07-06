@@ -26,6 +26,7 @@ If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. 
 - [Inspect governed evidence][governed-evidence] carries local governance metadata into an explicit decision point.
 - [Package a governed plan bundle][governed-plan-bundles] keeps one planned relation and its local evidence together in a typed handoff value.
 - [Compare plans and produce blast-radius inputs][plan-diffs] classifies local semantic changes without claiming a global dependency graph.
+- [Exchange evidence with adjacent tools][evidence-exchange] projects and imports explicitly scoped evidence without transferring semantic ownership.
 
 ## Advanced and capability-dependent
 
@@ -53,6 +54,7 @@ This structure is intentional: a code sample without a verification step or a ca
 [capabilities]: ../reference/capabilities.md
 [dataset-transformations]: dataset_transformations.md
 [execution-observations]: execution_observations.md
+[evidence-exchange]: evidence_exchange.md
 [generator-rows]: generator_rows.md
 [governed-evidence]: governed_evidence.md
 [governed-plan-bundles]: governed_plan_bundles.md

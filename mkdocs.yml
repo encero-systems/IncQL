@@ -114,6 +114,7 @@ nav:
           - Governed evidence: language/how-to/governed_evidence.md
           - Governed plan bundles: language/how-to/governed_plan_bundles.md
           - Plan diffs: language/how-to/plan_diffs.md
+          - Evidence exchange: language/how-to/evidence_exchange.md
       - Advanced and capability-dependent:
           - Approximate metrics: language/how-to/approximate_metrics.md
           - Typed HLL sketches: language/how-to/typed_hll_sketches.md
@@ -137,6 +138,7 @@ nav:
           - Governance: language/reference/governance.md
           - Governed plan bundles: language/reference/governed_plan_bundles.md
           - Plan diffs: language/reference/plan_diffs.md
+          - Evidence exchange: language/reference/evidence_exchange.md
       - Function catalog:
           - Index: language/reference/functions/index.md
           - Approximate: language/reference/functions/approximate.md
