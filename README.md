@@ -19,6 +19,8 @@
 
 Design is **RFC-driven**; **[docs/rfcs/](docs/rfcs/README.md)** is the source of truth.
 
+Documentation site: **https://encero-systems.github.io/InQL/**
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for workflow and [architecture.md](docs/architecture.md) for how this repo relates to the Incan compiler.
@@ -62,4 +64,4 @@ incan build --lib
 incan test tests
 ```
 
-See `make help` for other targets (`fmt`, `fmt-check`, `registry-metadata`, `build-locked`, …). Continuous integration builds **Incan from source** from the workflow's pinned `INCAN_REF` release branch or tag, then runs `fmt-check`, `test-style`, function registry metadata validation, `build`, `test`, and the pub-consumer smoke check (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). The docs workflow runs `mkdocs build --strict` for documentation changes; see [CONTRIBUTING.md](CONTRIBUTING.md) for the local docs build loop.
+See `make help` for other targets (`fmt`, `fmt-check`, `registry-metadata`, `build-locked`, …). Continuous integration builds **Incan from source** from the workflow's pinned `INCAN_REF` release branch or tag, then runs `fmt-check`, `test-style`, function registry metadata validation, `build`, `test`, and the pub-consumer smoke check (see [.github/workflows/ci.yml](.github/workflows/ci.yml)). The docs workflow runs `mkdocs build --strict` for documentation changes and publishes the site to GitHub Pages from `main` or manual dispatch; see [CONTRIBUTING.md](CONTRIBUTING.md) for the local docs build loop.
