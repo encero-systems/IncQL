@@ -19,7 +19,7 @@
 
 Design is **RFC-driven**; **[docs/rfcs/](docs/rfcs/README.md)** is the source of truth.
 
-Documentation site: **https://encero-systems.github.io/InQL/**
+Documentation site: **https://encero-systems.github.io/IncQL/**
 
 ## Contributing
 

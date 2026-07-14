@@ -238,7 +238,7 @@ If you want the clearest current story, read in this order:
 [docs-map]: docs_map.md
 [language-root]: language/README.md
 [incql-rfcs]: rfcs/README.md
-[incql-contributing]: ../CONTRIBUTING.md
+[incql-contributing]: https://github.com/encero-systems/IncQL/blob/main/CONTRIBUTING.md
 [src-dataset-mod]: https://github.com/encero-systems/IncQL/blob/main/src/dataset/mod.incn
 [src-dataset-ops]: https://github.com/encero-systems/IncQL/blob/main/src/dataset/ops.incn
 [src-prism]: https://github.com/encero-systems/IncQL/tree/main/src/prism

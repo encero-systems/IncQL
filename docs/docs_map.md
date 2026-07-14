@@ -1,6 +1,6 @@
-# InQL documentation map
+# IncQL documentation map
 
-This page maps the public documentation for the InQL project.
+This page maps the public documentation for the IncQL project.
 
 Use the docs tree like this:
 
