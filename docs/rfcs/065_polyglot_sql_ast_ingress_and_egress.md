@@ -19,7 +19,7 @@
 
 ## Summary
 
-This RFC defines an optional SQL frontend and egress boundary based on [Polyglot](https://github.com/tobilg/polyglot), the open-source typed SQL AST project maintained by `tobilg`. Polyglot parses and generates SQL for more than 30 documented dialects; IncQL will use that breadth at the edge while Prism remains the owner of relational semantics. IncQL must advertise a dialect or SQL feature as supported only when its Polyglot AST shape, Prism mapping, semantic profile, and selected execution path are all covered.
+This RFC defines an optional SQL frontend and egress boundary based on [Polyglot](https://github.com/tobilg/polyglot), the open-source typed SQL AST project maintained by `tobilg`. Polyglot parses and generates SQL for more than 30 documented dialects; IncQL will use that breadth at the edge while Prism remains the owner of relational semantics. IncQL must advertise a dialect or SQL feature only at the most specific level for which its Polyglot AST shape, Prism mapping, semantic profile, and required ingress, egress, or execution evidence are covered.
 
 ## Motivation
 
@@ -42,7 +42,7 @@ Polyglot provides a typed AST, dialect parser, generator, formatter, validator, 
 - Claiming more than 30 dialects, or any fixed dialect count, without current upstream evidence and IncQL coverage evidence.
 - Replacing Prism with Polyglot, SQL text, Substrait, DataFusion, or a backend engine as IncQL's semantic owner.
 - Carrying Polyglot AST nodes through Prism rewrite rules, cost evaluation, or row-by-row execution.
-- Providing full SQL compatibility, generic transpilation, stored-procedure execution, or vendor session emulation in the first slice.
+- Treating this RFC as a guarantee of full SQL compatibility, generic transpilation, stored-procedure execution, or vendor session emulation.
 - Guaranteeing byte-identical SQL on a parse-to-emit round trip.
 - Hiding unsupported syntax by silently delegating it to a backend.
 
@@ -72,12 +72,14 @@ SQL egress must start from Prism-owned relational semantics. It must construct a
 
 Polyglot parsing and generation must occur at the SQL boundary, not in Prism's internal rewrite or execution loops. An ingress implementation may cache a successfully analyzed Prism plan. Cache validity must include the normalized source statement, source dialect, selected semantic profile, Polyglot capability version, relevant catalog or schema version, and any policy or session facts that affect analysis. An egress implementation may cache generated SQL for a selected Prism fragment. Cache validity must include the Prism plan identity, target dialect, target semantic profile, parameter shape, and capability facts that affect generation or pushdown eligibility.
 
-For a dialect profile `d`, IncQL SQL support is the intersection of all of the following:
+For a dialect profile `d`, every IncQL SQL capability claim is the intersection of all of the following:
 
 - Polyglot can parse or generate the relevant dialect construct for `d`.
 - IncQL can map the construct between Polyglot AST and Prism without losing required relational meaning.
 - The selected semantic profile records any dialect-specific constraints that affect the construct.
-- The selected execution path has coverage for the resulting Prism plan.
+- The evidence required for the published claim level is present.
+
+An `execution_supported` claim additionally requires coverage for the selected execution path. Ingress and egress claims do not imply that an adapter can execute the resulting Prism plan or generated SQL.
 
 An ingress or egress result must distinguish at least these coverage states:
 
@@ -109,11 +111,11 @@ This RFC introduces no IncQL language syntax. SQL ingress and egress are package
 
 The SQL boundary has four roles: parse or construct a Polyglot AST, map the supported portion to or from Prism, record profile and coverage evidence, and render SQL when egress is requested. Prism retains responsibility for relational analysis, optimization, lineage, diagnostics, requirements, and the plan that execution adapters receive. Polyglot is therefore a direct library dependency at the boundary, but not an internal Prism node kind or an optimizer dependency.
 
-The first supported slice should be intentionally small: an unfiltered `SELECT` with direct column projections over one unqualified, unaliased named table. The corresponding Prism shape is a named-table read followed by a projection. The egress slice must reject aliases, computed projections, joins, filters, grouping, ordering, limits, offsets, common table expressions, and other constructs until their mappings and profile implications have explicit coverage.
+Every supported slice must declare its closed feature boundary and reject adjacent constructs whose mappings or profile implications lack evidence. An unfiltered `SELECT` with direct column projections over one unqualified, unaliased named table is a valid conformance seed: its Prism shape is a named-table read followed by a projection, and its declared coverage must reject aliases, computed projections, joins, filters, grouping, ordering, limits, offsets, common table expressions, and other undeclared constructs. That seed does not define the North Star or make broader relational coverage optional.
 
 Common table expressions are a required design probe before the PostgreSQL core profile can be considered representative. A supported non-recursive CTE mapping must lower each CTE body to an ordinary Prism subframe and resolve later references through a statement-local lexical binding environment. Repeated references must retain shared Prism lineage; they must not become unrelated copied plans, session-global temporary tables, or SQL text substitution. Relation aliases must remain distinct relation identities when the same subframe is referenced more than once.
 
-SQL egress must not depend on a plan having originated as SQL. When a target SQL fragment contains an eligible shared Prism subgraph, egress may choose either to inline that fragment as derived tables or to factor it into a generated CTE. Under `factor_shared`, the egress mapper selects legal shared-subgraph boundaries, assigns generated local names, orders definitions by dependency, constructs a fresh Polyglot `WITH` AST, and emits references to those definitions. Under `inline`, it emits derived tables instead. A source CTE name is provenance, not Prism semantic identity or an egress requirement. Egress policy is target- and profile-governed; it must not claim that one form is always faster or semantically interchangeable without target execution evidence.
+SQL egress must not depend on a plan having originated as SQL, and it must not independently select whether relational work is shared. Given a Prism-selected inline alternative, the lowerer may emit eligible relations as derived tables. Given a Prism-selected target-local sharing requirement and eligible shared subgraph, the lowerer may assign generated local names, order definitions by dependency, construct a fresh Polyglot `WITH` AST, and emit references when the selected SQL profile establishes that a CTE preserves the required semantics and evaluation multiplicity. A source CTE name is provenance, not Prism semantic identity or an egress requirement. If the target profile cannot realize a selected requirement, egress must request another legal Prism alternative or return a structured unsupported diagnostic; it must not silently inline, duplicate, or materialize the relation. Target-plan and execution evidence may inform a later Prism selection, but the lowerer does not become the sharing optimizer.
 
 Recursive CTEs, data-modifying CTEs, volatile or otherwise profile-sensitive expressions, row-locking behavior, and dialect-specific materialization hints remain unsupported unless a later profile defines their semantics explicitly.
 
@@ -121,9 +123,9 @@ Recursive CTEs, data-modifying CTEs, volatile or otherwise profile-sensitive exp
 
 Every declared ingress or egress feature must have a fixture corpus that names the dialect profile, SQL or Prism input, expected mapping result, and claim level. An ingress fixture must assert the Polyglot AST-to-Prism mapping rather than only accepting a parse. An egress fixture must assert the Prism-to-Polyglot AST mapping and dialect generation rather than only comparing strings. A bidirectional fixture must assert the declared semantic equivalence relation for its profile.
 
-Every unsupported feature family adjacent to a supported slice must have at least one rejection fixture. The first slice, for example, must reject a filter, join, expression projection, alias, grouping, ordering, limit, qualified or aliased source relation, and CTE until each has explicit coverage. The CTE corpus must include a non-recursive CTE referenced once and one referenced more than once, so a future mapping proves binding and reuse rather than superficial syntax acceptance.
+Every unsupported feature family adjacent to a supported slice must have at least one rejection fixture. A declared read/projection slice, for example, must reject a filter, join, expression projection, alias, grouping, ordering, limit, qualified or aliased source relation, and CTE until each has explicit coverage. The CTE corpus must include a non-recursive CTE referenced once and one referenced more than once, so a future mapping proves binding and reuse rather than superficial syntax acceptance.
 
-An `execution_supported` claim requires expected-result integration evidence for the selected execution target. It must not be inferred from parser acceptance, SQL generation, a successful AST round trip, or a successful backend compile alone. For CTE support, that evidence must include a dbt-like CTE-heavy fixture that flows through Polyglot AST ingress into Prism, lowers through IncQL's ordinary Substrait path, and executes through the selected adapter without calling that adapter's SQL parser on the source statement. The same resulting Prism graph must be eligible for egress as both generated-CTE SQL and inline SQL where the profile permits, with result equivalence asserted against the selected target. Target-plan inspection or measured execution may inform policy selection, but a structural scan-count difference alone is not a portable performance claim.
+An `execution_supported` claim requires expected-result integration evidence for the selected execution target. It must not be inferred from parser acceptance, SQL generation, a successful AST round trip, or a successful backend compile alone. For CTE support, that evidence must include a dbt-like CTE-heavy fixture that flows through Polyglot AST ingress into Prism, lowers through IncQL's ordinary Substrait path, and executes through the selected adapter without calling that adapter's SQL parser on the source statement. Where the profile permits, separate Prism-selected inline and target-local sharing alternatives must be realizable as inline and generated-CTE SQL and must produce equivalent results under the declared semantic profile. Target-plan inspection or measured execution may inform a later policy selection, but a structural scan-count difference alone is not a portable performance claim.
 
 ### Interaction with other IncQL surfaces
 
@@ -172,6 +174,6 @@ This is additive. Existing IncQL authors and serialized plans remain valid. Each
 - What compatibility and upgrade policy should apply when a Polyglot release changes parsing, generation, or dialect support for an already published IncQL profile?
 - Which cache facts are mandatory for prepared SQL plans and emitted remote SQL fragments in the first implementation?
 - Which initial dbt-like fixture family best represents repeated staging-model reuse, joins, aggregates, and incremental-model-adjacent patterns without accidentally importing dbt's materialization semantics into the first profile?
-- What target-specific cost or execution evidence is sufficient before `factor_shared` may be selected automatically rather than explicitly requested?
+- What target-specific cost or execution evidence is sufficient before Prism may select target-local sharing for SQL realization rather than a legal inline alternative?
 
-<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+<!-- Rename this section to "Design Decisions" once all questions have been resolved. An RFC cannot move from Draft to Planned until no unresolved questions remain. -->

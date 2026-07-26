@@ -6,56 +6,69 @@
 
 **Audience:** IncQL and Incan contributors, database-systems researchers, data-platform architects, and prospective execution-engine collaborators.
 
-**Scope:** This document is non-normative. It frames a research direction for Prism and defines evidence required before any product or performance claim. Focused RFCs must later specify public APIs, relational semantics, optimizer invariants, and execution contracts.
+**Scope:** This document is non-normative. It frames a research direction for Prism and defines evidence required before any product or performance claim. RFC 066 records the normative north-star boundary; focused follow-on RFCs must specify stable public APIs, individual rewrite families, statistics transport, materialization lifecycle, and adaptive execution contracts.
 
 ## Thesis
 
-Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: a system that can recognize equivalent and shared relational work, preserve the reasons a rewrite is legal, and select a target-appropriate execution or SQL representation.
+Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: a system that remains tractable over large transformation graphs, recognizes equivalent and shared relational work, preserves the reasons a rewrite is legal, and selects logical, sharing, placement, and exchange requirements before external target lowerers and execution engines choose their representations and physical plans.
 
-The goal is not to make SQL CTEs work, nor to replace DataFusion, PostgreSQL, or another execution engine. The goal is to give IncQL an optimizer-owned semantic graph that can improve plans arriving from Incan APIs, SQL, protocol frontends, Delta-like sources, and future data-product interfaces.
+The goal is not to make SQL CTEs work, nor to replace Catalyst, DataFusion, PostgreSQL, Spark, or another target optimizer or execution engine. The goal is to give IncQL an optimizer-owned semantic graph that can improve plans arriving from Incan APIs, SQL, protocol frontends, Delta-like sources, and future data-product interfaces before target-specific optimization begins.
 
-This matters because data transformations are increasingly authored as long chains of models, views, CTEs, and reusable staging steps. Those structures are useful to authors but are not necessarily the best execution structure. A capable Prism can treat them as relational intent, discover reusable work, and choose whether to inline, share, materialize, push down, repartition, or emit a different target shape.
+This matters because data transformations are increasingly authored as long chains of models, views, CTEs, and reusable staging steps. Those structures are useful to authors but are not necessarily the best execution structure. A capable Prism can treat them as relational intent, discover reusable work across declared consumers and planning horizons, and select whether work should be inlined, shared, materialized, pushed down, repartitioned, or placed elsewhere. Target lowerers and engines then realize and refine that selection.
 
 ## The product opportunity
 
-dbt's `ephemeral` materialization demonstrates the pressure clearly: an ephemeral model is emitted as a CTE rather than persisted as a database object. That is convenient authoring structure, but it leaves the target engine to infer all reuse and execution choices from one large SQL statement. [dbt CTE guidance][dbt-cte] [dbt-ephemeral]
+dbt's `ephemeral` materialization demonstrates the pressure clearly: an ephemeral model is emitted as a CTE rather than persisted as a database object. That is convenient authoring structure, but it limits the target optimizer to the relational structure and context visible in the submitted statement. [dbt CTE guidance][dbt-cte] [dbt-ephemeral]
 
 IncQL can offer a different contract:
 
 - authors retain composable, named data transformations;
 - Prism retains a typed graph of the actual relational dependencies;
 - optimizer decisions remain inspectable rather than being hidden in generated SQL;
-- execution targets receive plans shaped for their capabilities;
+- Prism can reason across declared outputs and heterogeneous candidate targets before committing to one engine's plan;
+- target lowerers receive selected logical, placement, exchange, and sharing requirements;
+- runtime observations can return as scoped evidence for bounded replanning and later executions; and
 - SQL egress is one target representation, not the semantic source of truth.
 
-The commercial hypothesis is deliberately narrower than “IncQL makes dbt faster.” It is that IncQL can make complex transformation graphs more inspectable and, where evidence supports it, cheaper to execute across heterogeneous sources and targets. That hypothesis must be tested against realistic workloads and target plans before it becomes a product claim.
+The commercial hypothesis is not merely that IncQL makes generated SQL faster. It is that IncQL can optimize relational intent before it collapses into one target's SQL or physical plan, across authoring frontends, transformation roots, executions, and heterogeneous targets, while retaining the evidence that makes equivalence, sharing, and placement decisions legal and explainable. No target-local optimizer can act on IncQL context that it never receives. Whether this wider decision surface produces cheaper or more reliable execution remains a measured hypothesis, not a performance claim.
 
 ## A north-star architecture
 
 ```text
 Authoring frontends
-Incan carriers · query blocks · SQL AST · protocol plans · source adapters
-                              │
-                              ▼
-Authored Prism graph
-immutable relational intent · schema · lineage · policy and source evidence
-                              │
-                              ▼
-Optimization memo
-equivalence groups · alternative expressions · required properties · legality
-                              │
-                              ▼
-Reuse and target planner
-inline · share · materialize · push down · repartition · join/order alternatives
-                              │
-                              ▼
-Target-specific lowering
-Substrait/DataFusion · PostgreSQL SQL · other adapters
+Incan · query blocks · SQL AST · protocols
+                 │
+                 ▼
+       Authored Prism graph
+immutable relational intent · schema · lineage · policy
+                 │
+                 ▼
+        Optimization memo ◄──────── Optional planning context
+equivalence · alternatives          capabilities · estimates · observations
+properties · legality                         ▲
+                 │                            │
+                 ▼                            │
+        Selected Prism plan                   │
+logical shape · placement · exchange          │
+sharing requirements                          │
+                 │                            │
+                 ▼                            │
+ Coordinator and target lowerers              │
+Substrait · SQL AST · multi-fragment          │
+                 │                            │
+                 ▼                            │
+        Execution targets                     │
+DataFusion · PostgreSQL · Spark · others      │
+                 │                            │
+        scoped runtime observations ──────────┘
+        at a bounded adaptive checkpoint
 ```
 
-The authored graph and optimization memo must be distinct. The authored graph records what the author or frontend meant, including source provenance. The memo records semantically equivalent alternatives. An optimizer may choose a different alternative, but it must preserve a lineage and evidence path explaining why the alternative is valid and why it was selected.
+The authored graph and optimization memo must be distinct. The authored graph records what the author or frontend meant, including source provenance. The memo records semantically equivalent alternatives. An optimizer may choose a different alternative, but it must preserve a lineage and evidence path explaining why the alternative is valid and why it was selected. Prism must also produce a valid target-independent logical result when the optional planning-evidence input is absent.
 
-This separation fits Prism's existing immutable, structurally shared planning model. It also prevents an optimizer implementation detail from becoming author-visible semantics.
+Target realization and execution remain outside Prism. A target engine may refine or replace physical choices, and a coordinator may later invoke Prism again with an immutable observation snapshot at an explicit adaptive checkpoint. Replanning derives a new selection for unfinished work; it does not mutate authored history or completed execution.
+
+This separation fits Prism's existing immutable, structurally shared planning model. It also prevents an optimizer implementation detail or runtime observation from becoming author-visible semantics.
 
 ## Research foundations
 
@@ -82,17 +95,43 @@ Prism therefore needs a reuse planner with explicit choices:
 
 An SQL CTE is only one encoding of the `share` choice. It must not be confused with a durable materialized view, and a high CTE count alone is not evidence that factoring will help.
 
+### Production reuse and optimizer services
+
+Microsoft's production research is especially relevant to the scale and lifecycle of shared work. BigSubs studies which common subexpressions to materialize across datacenter workloads, while CLOUDVIEWS studies computation reuse in an analytics job service with feedback from compilation and execution. These systems show that cross-job reuse is not an extension of CTE syntax: it requires workload identity, benefit estimation, storage and maintenance policy, and observed reuse over time. [BigSubs][bigsubs] [CLOUDVIEWS][cloudviews]
+
+Oasis explores the optimizer-as-a-service boundary, separating reusable optimization capability from an individual engine deployment. QO-Advisor demonstrates that production steering also needs validation, regression control, and a safe path for declining a proposed change. Research on joint query and resource optimization further shows that a query plan cannot be ranked independently of the resources available to execute it. These are direct precedents for Prism's standalone boundary, multi-objective planning context, and evidence-governed rollout. [Oasis][oasis] [QO-Advisor][qo-advisor] [query and resource optimization][query-resource]
+
 ### DataFusion as an experimental target
 
-DataFusion is valuable because it offers structured logical and physical planning, extensible optimizer rules, common-subexpression elimination, and `EXPLAIN ANALYZE` metrics. It should be used to test Prism's reasoning and target-lowering decisions, without becoming the semantic owner of IncQL plans. [DataFusion optimizer][datafusion-optimizer] [DataFusion logical plans][datafusion-logical-plans] [DataFusion EXPLAIN][datafusion-explain]
+DataFusion is valuable because it offers structured logical and physical planning, extensible optimizer rules, common-subexpression elimination, and `EXPLAIN ANALYZE` metrics. It should be used to test Prism's reasoning and external target-realization boundary, without becoming the semantic owner of IncQL plans. [DataFusion optimizer][datafusion-optimizer] [DataFusion logical plans][datafusion-logical-plans] [DataFusion EXPLAIN][datafusion-explain]
 
 The `optd` research project is particularly relevant: it explored a Cascades-based optimizer integrated with DataFusion, including physical-property support. It merits code and design study as a research reference. It is not yet a dependency or adoption decision. [optd overview][optd]
 
-### Cost models need humility and feedback
+### Spark Catalyst and adaptive execution
+
+Spark is essential prior art, not merely another target. Spark SQL showed that SQL and typed DataFrame authoring can converge on a common logical plan before physical execution. Catalyst provides composable tree transformations and extensible rule batches; Spark also implements statistics-informed dynamic-programming join reordering, CTE inlining governed by reference count and determinism, and physical reuse of equivalent exchanges and subqueries. [Spark SQL and Catalyst][spark-sql-paper] [Spark join reordering][spark-join-reorder] [Spark CTE inlining][spark-inline-cte] [Spark exchange and subquery reuse][spark-reuse]
+
+Adaptive Query Execution strengthens that design with runtime statistics. Spark can revise join strategies, partitioning, and skew handling after execution has produced better evidence. That is a direct precedent for treating optimization as a progression from inferred facts, through estimates, to observations rather than as a one-shot compile-time pass. [Spark adaptive query execution][spark-aqe]
+
+Catalyst also sharpens Prism's differentiation. Building a typed relational graph before SQL or physical planning is not novel by itself. Catalyst is primarily responsible for producing and adapting Spark execution, whereas Prism's proposed responsibility spans declared transformation roots, workload-level reuse, heterogeneous candidate targets, policy and semantic evidence, and explicit placement or exchange before target-local optimization. When Spark is selected, Catalyst and AQE should remain authoritative for Spark-local physical decisions.
+
+The research must not assert that Catalyst fails on complex plans merely from practitioner experience. It should test that hypothesis. CTE-heavy and deeply composed workloads must measure optimizer wall time, rule iterations where observable, logical and physical plan growth, driver memory, generated-plan size, plan stability, and runtime quality as graph complexity increases. Spark is both a design reference and an adversarial baseline.
+
+### Cost models need humility, runtime evidence, and bounded adaptation
 
 Join order, sharing, and materialization decisions are only as good as their cardinality and cost assumptions. The Join Order Benchmark research found large cardinality-estimation errors even in industrial systems. Prism should therefore record assumptions, compare them with observed target metrics where available, and improve conservatively rather than assert global optimality. [Join Order Benchmark][job]
 
 This is also why target choice matters. A PostgreSQL CTE, a DataFusion physical plan, and a remote warehouse may assign very different costs to sharing, scanning, repartitioning, and temporary materialization.
+
+Planning evidence has at least three distinct classes:
+
+- **declared or inferred facts**, such as schema, keys, constraints, policy, and logically derived bounds;
+- **pre-execution estimates**, such as row count, distinct values, histograms, file sizes, partition metadata, and target costs; and
+- **runtime observations**, such as actual rows and bytes, selectivity, skew, shuffle, spill, memory, latency, and realized target decisions.
+
+An observation is not timeless truth. It is evidence about a particular plan identity, data snapshot, parameter shape, semantic profile, target configuration, and execution attempt. Reuse requires provenance, scope, freshness, confidence, and invalidation rules.
+
+Target engines remain free to adapt their physical execution internally. In addition, a coordinator may establish an explicit adaptive checkpoint and invoke Prism again with an immutable observation snapshot. Prism may reconsider only unfinished logical, placement, exchange, sharing, or materialization choices. Completed work, authored intent, transaction and snapshot guarantees, and policy constraints remain fixed. Replanning must have a bounded cost and a legal fallback; an optimizer that spends more than the opportunity it can recover has failed.
 
 ### Equality saturation is a research branch, not the foundation
 
@@ -115,40 +154,61 @@ Prism needs an explicit answer for each rewrite family:
 
 Each rule must declare its preconditions and the evidence it consumes. “The backend accepts it” is not a legality proof.
 
+The semantic profile must cover more than schema compatibility. Relevant dimensions include bag semantics and duplicates, null three-valued logic, ordering and top-k behavior, decimal and temporal behavior, collation and time zone, overflow and error behavior, function and UDF identity, parameter bindings, volatility, transaction snapshot, and authorization context. Equal results on a fixture test one instance; they do not prove a rule.
+
 ### 2. How should shared work be represented and selected?
 
 Prism needs to distinguish a shared authored subgraph from an optimizer-selected shared execution result. The first is immutable intent; the second is a target-specific choice. The planner must account for reference count, estimated rows and bytes, source cost, memory budget, target capabilities, determinism, freshness, policy, and the cost of losing downstream specialization.
 
-### 3. Which properties belong in the first memo?
+It must also distinguish an optimization preference to reuse deterministic work from a semantic requirement to evaluate work once. Volatile, erroring, or snapshot-sensitive expressions may make evaluation multiplicity observable. A target representation such as a SQL CTE cannot satisfy a once-only requirement unless its selected profile provides that guarantee.
 
-The initial property vocabulary should be evidence-driven:
+### 3. What is one optimization problem?
+
+The planner must make its consumer set and time horizon explicit. One root query, several requested outputs, a complete transformation DAG, one scheduled execution, and a recurring workload have different identity, scheduling, freshness, and cost contracts. A planning invocation must not silently expand from one root into project-wide or cross-execution optimization.
+
+### 4. Which properties belong in the first memo?
+
+The property vocabulary should be evidence-driven:
 
 - output schema, nullability, and key facts;
+- semantic-profile dimensions that govern equivalence;
 - ordering and partitioning;
 - source location and supported pushdowns;
 - data format and connector capabilities;
 - policy and admissibility constraints;
-- target dialect and execution requirements; and
-- cardinality and size estimates with provenance.
+- target dialect and execution requirements;
+- cardinality and size estimates with provenance; and
+- observation scope, freshness, confidence, and invalidation state.
 
 The memo must not quietly turn guessed values into facts.
 
-### 4. How do we make optimizer choices explainable?
+### 5. How should runtime evidence trigger adaptation?
+
+The coordinator needs explicit safe points at which completed work is fixed and the unfinished graph can be reconsidered. Research must determine which observations justify a new logical or placement selection, how much replanning may cost, how transaction and policy guarantees survive, and what fallback runs when replanning is unavailable or unhelpful. Target-local physical adaptation and Prism re-entry are related but distinct events.
+
+### 6. How does the optimizer remain tractable?
+
+Large transformation graphs can make rule exploration itself the bottleneck. Prism needs explicit search budgets, pruning, rule scheduling, required-property propagation, deterministic or fully recorded exploration, graceful timeout behavior, and plan-stability controls. Memo size, planning latency, and memory are optimizer outputs to measure, not incidental test diagnostics.
+
+### 7. How do we make optimizer choices explainable?
 
 For every selected plan, IncQL should eventually explain:
 
 - the authored relational path;
+- the declared roots, consumer set, planning horizon, and search budget;
 - equivalent alternatives considered;
 - rules and evidence that made each alternative legal;
 - required properties at each boundary;
-- estimated and observed costs where available; and
-- why an alternative was rejected or selected.
+- declared, estimated, and observed inputs with provenance;
+- why an alternative was rejected or selected;
+- where exploration stopped or was pruned; and
+- how the selected plan differed from the target's realized and adapted plan.
 
 This is essential for governed data work and is a differentiator from opaque generated SQL.
 
 ## Evidence program
 
-The research program should use three complementary workload families.
+The research program should combine semantic, optimizer-complexity, target-comparison, and adaptive-execution evidence.
 
 ### dbt-like transformation graphs
 
@@ -157,28 +217,42 @@ Create a transparent corpus of dbt-style transformations, including chains of ep
 The target test is:
 
 ```text
-dbt-like SQL → Polyglot AST → Prism authored graph → Prism memo → Substrait → DataFusion
-                                                       └─────────→ PostgreSQL SQL
+dbt-like SQL ──→ Spark SQL ──→ Catalyst/AQE                         native baseline
+      │
+      └─→ Polyglot AST → Prism authored graph → Prism memo → selected plan
+                                                           ├─→ Substrait → DataFusion
+                                                           └─→ PostgreSQL AST → SQL
 ```
 
-The DataFusion path must not call DataFusion's SQL parser on the source SQL. The PostgreSQL path must generate a fresh Polyglot AST from Prism, testing both inline and factored-CTE egress where permitted.
+The DataFusion path must not call DataFusion's SQL parser on the source SQL. The PostgreSQL path must generate a fresh Polyglot AST from Prism, testing separately selected inline and factored-sharing alternatives where permitted. Native Spark must retain Catalyst, cost-based optimization, and AQE as configured baselines rather than being weakened to make Prism look better. A future Spark target path must preserve the selected Prism requirements while leaving Spark-local physical optimization to Catalyst and AQE.
 
 ### Analytical-query benchmarks
 
 Use TPC-DS for controlled decision-support queries and the Join Order Benchmark for difficult multi-join cardinality and ordering cases. These benchmarks do not replace dbt-like models; they prevent the research from being tuned solely to a transformation syntax. [TPC-DS][tpc-ds] [Join Order Benchmark][job]
 
+### Optimizer-complexity stress corpus
+
+Build graph families whose depth, breadth, expression size, join count, repeated-subgraph count, and number of requested outputs can be increased independently. Compare native Catalyst, DataFusion, PostgreSQL, and Prism behavior where the comparison is meaningful. Record planning wall time, plan-node growth, memo or rule-state size, planner memory, explored and pruned alternatives, fallback behavior, and plan stability. A target optimizer's poor result or failure is evidence only when the corpus, configuration, threshold, and failure mode are reproducible.
+
+### Adaptive-execution studies
+
+Create controlled estimation errors, skew, changing selectivity, and partition distributions. Record the pre-execution estimate, runtime observation, target-local adaptation, any coordinator-requested Prism replan, and the resulting unfinished plan. Compare one-shot planning, target-local adaptation alone, Prism replanning without target observations, and Prism replanning with scoped observations. The study must include cases where replanning is correctly declined because its cost, freshness, snapshot, or policy preconditions are not met.
+
 ### Cross-target plan comparison
 
 For each query, compare at least:
 
+- declared roots, consumer set, planning horizon, and data snapshot;
 - authored Prism graph size and shared-subgraph structure;
-- memo alternatives and optimization time;
+- memo alternatives, pruning decisions, optimization time, and planner memory;
 - DataFusion logical and physical plans;
 - PostgreSQL generated SQL and `EXPLAIN`/`EXPLAIN ANALYZE` output;
+- Spark analyzed, optimized, initial physical, and final adaptive plans where exposed;
+- selected Prism requirements versus target-realized and target-adapted plans;
 - result equivalence under controlled fixtures; and
 - observed scans, bytes, shuffles, memory, elapsed time, and spill behavior where each target exposes them.
 
-No aggregate benchmark score is meaningful unless semantic-equivalence checks, hardware, data scale, target versions, and configuration are recorded.
+Every comparison needs unchanged target-native baselines and explicit ablations: Prism target-independent selection, Prism target-aware selection, sharing enabled or disabled, and runtime evidence present or absent. No aggregate benchmark score is meaningful unless semantic-equivalence checks, hardware, data scale, target versions, optimizer settings, statistics state, cache state, concurrency, and configuration are recorded.
 
 ## Exploratory experiments
 
@@ -257,18 +331,20 @@ The experiments support four bounded conclusions: Polyglot is capable of carryin
 ## Staged research direction
 
 1. **Research harness and corpus.** Publish fixtures, semantic-equivalence checks, plan capture, and reproducible target configurations before making performance claims.
-2. **Relational completeness.** Strengthen Prism's relation identity, aliases, subqueries, joins, aggregates, windows, scoped bindings, and schema/property derivation.
-3. **Cascades-lite memo.** Add a separate memo over the authored graph, starting with a small audited rule set and explicit property requirements.
-4. **Reuse planner.** Evaluate inline, target-local sharing, generated SQL CTEs, and explicitly bounded transient materialization.
-5. **Cost feedback.** Connect target statistics and observed metrics to recorded estimates without making execution engines semantic authorities.
-6. **Focused RFCs.** Promote stable contracts only after the research harness establishes them.
+2. **Semantic and planning scope.** Define relational equivalence profiles, evaluation multiplicity, declared roots, consumer sets, planning horizons, and result lifetimes before comparing alternatives.
+3. **Relational completeness.** Strengthen Prism's relation identity, aliases, subqueries, joins, aggregates, windows, scoped bindings, and schema/property derivation.
+4. **Tractable memo exploration.** Add a separate memo over the authored graph with an audited rule set, explicit property requirements, search budgets, pruning, graceful fallback, and measured planning cost.
+5. **Reuse and placement selection.** Evaluate inline, target-local sharing, generated SQL CTEs, transient or durable materialization, placement, and exchange without assigning representation-specific lowering to Prism.
+6. **Runtime evidence loop.** Transport scoped target observations into immutable planning contexts, distinguish target-local adaptation from coordinator-owned replanning, and preserve completed work and authored history.
+7. **Catalyst and target baselines.** Stress native Spark Catalyst/AQE, DataFusion, and PostgreSQL alongside Prism, including cases where target-local optimization is already sufficient.
+8. **Focused RFCs.** Promote stable rule families, observation transport, adaptive checkpoints, materialization lifecycle, and target-realization contracts only after the research harness establishes them.
 
 ## Non-goals
 
 This whitepaper does not propose:
 
 - claiming that IncQL universally outperforms database optimizers;
-- replacing DataFusion, PostgreSQL, dbt, Calcite, or another database engine;
+- replacing Catalyst, DataFusion, PostgreSQL, Spark, dbt, Calcite, or another database engine;
 - treating every CTE as materialized or every shared graph as beneficial to factor;
 - introducing a general optimizer framework before relational semantics and evidence are ready;
 - making a public compatibility claim from parser, AST, or plan-shape evidence alone; or
@@ -278,30 +354,48 @@ This whitepaper does not propose:
 
 The research succeeds when IncQL can show, with reproducible evidence, that it:
 
-- understands a complex transformation graph independently of its source syntax;
+- understands a complex multi-root transformation graph independently of its source syntax;
+- remains within declared planning-time and memory budgets as graph complexity grows;
 - preserves semantic and policy constraints while exploring alternatives;
-- explains why a target plan was selected;
+- explains why a logical, sharing, placement, or exchange plan was selected and how the target realized it;
+- improves or safely retains unfinished work when scoped runtime evidence becomes available;
 - produces equivalent results across declared execution targets; and
-- demonstrates target-specific improvements on defined workloads without overstating them.
+- demonstrates workload-level or target-specific improvements over intact native baselines without overstating them.
 
-RFC 066 records the north-star contract for authored intent, memo exploration, shared-work selection, and target planning. Focused follow-on RFCs can stabilize individual rule families, property and statistics transport, materialization lifecycle, target-plan contracts, and SQL ingress/egress profiles as the evidence program resolves them.
+RFC 066 records the north-star contract for authored intent, memo exploration, bounded search, shared-work and placement selection, evidence progression, and coordinator-owned adaptive replanning. Focused follow-on RFCs can stabilize individual rule families, statistics and observation transport, materialization lifecycle, adaptive checkpoints, target-plan contracts, and SQL ingress/egress profiles as the evidence program resolves them.
+
+## Acknowledgements
+
+IncQL's proposed SQL boundary builds directly on the typed parsing and generation work in [Polyglot][polyglot]. Particular credit belongs to Polyglot's creator, [`tobilg`][tobilg], whose work makes it possible to investigate broad SQL ingress and egress without making SQL text Prism's semantic core.
 
 <!-- References -->
 
+[bigsubs]: https://www.microsoft.com/en-us/research/publication/selecting-subexpressions-to-materialize-at-datacenter-scale/
 [cascades]: https://15721.courses.cs.cmu.edu/spring2018/papers/15-optimizer1/graefe-ieee1995.pdf
 [calcite-materialized-views]: https://calcite.apache.org/docs/materialized_views.html
 [calcite-volcano]: https://calcite.apache.org/javadocAggregate/org/apache/calcite/plan/volcano/VolcanoPlanner.html
+[cloudviews]: https://www.microsoft.com/en-us/research/publication/computation-reuse-in-analytics-job-service-at-microsoft/
 [datafusion-explain]: https://datafusion.apache.org/user-guide/sql/explain.html
 [datafusion-logical-plans]: https://datafusion.apache.org/library-user-guide/building-logical-plans.html
 [datafusion-optimizer]: https://datafusion.apache.org/library-user-guide/query-optimizer.html
 [dbt-cte]: https://www.getdbt.com/blog/getting-started-with-cte
-[dbt-ephemeral]: https://materialize.com/docs/manage/dbt/get-started/
+[dbt-ephemeral]: https://docs.getdbt.com/docs/build/materializations#ephemeral
 [egg]: https://arxiv.org/abs/2004.03082
 [incan-provider-prep]: https://github.com/encero-systems/incan/issues/957
 [job]: https://15721.courses.cs.cmu.edu/spring2020/papers/22-costmodels/p204-leis.pdf
-[optd]: https://15721.courses.cs.cmu.edu/spring2024/project-showcase.html
+[oasis]: https://www.microsoft.com/en-us/research/publication/query-optimizer-as-a-service-an-idea-whose-time-has-come/
+[optd]: https://github.com/cmu-db/optd-original
+[polyglot]: https://github.com/tobilg/polyglot
 [provable-mqo]: https://arxiv.org/abs/1512.02568
+[qo-advisor]: https://www.microsoft.com/en-us/research/publication/deploying-a-steered-query-optimizer-in-production-at-microsoft/
+[query-resource]: https://www.microsoft.com/en-us/research/publication/query-and-resource-optimization-bridging-the-gap/
 [relational-eqsat]: https://inst.eecs.berkeley.edu/~cs294-260/sp24/projects/contextual-eqsat/contextual-eqsat.pdf
+[spark-aqe]: https://spark.apache.org/docs/latest/sql-performance-tuning.html#adaptive-query-execution
+[spark-inline-cte]: https://github.com/apache/spark/blob/master/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/optimizer/InlineCTE.scala
+[spark-join-reorder]: https://github.com/apache/spark/blob/master/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/optimizer/CostBasedJoinReorder.scala
+[spark-reuse]: https://github.com/apache/spark/blob/master/sql/core/src/main/scala/org/apache/spark/sql/execution/reuse/ReuseExchangeAndSubquery.scala
+[spark-sql-paper]: https://people.csail.mit.edu/matei/papers/2015/sigmod_spark_sql.pdf
 [sse-mvr]: https://link.springer.com/article/10.1007/s10796-024-10506-w
+[tobilg]: https://github.com/tobilg
 [tpc-ds]: https://www.tpc.org/tpc_documents_current_versions/pdf/tpc-ds_v2.6.0.pdf
 [volcano]: https://15721.courses.cs.cmu.edu/spring2017/papers/14-optimizer1/graefe-icde1993.pdf
