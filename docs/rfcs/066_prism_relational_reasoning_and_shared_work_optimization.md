@@ -1,19 +1,19 @@
-# InQL RFC 066: Prism relational reasoning and shared-work optimization
+# IncQL RFC 066: Prism relational reasoning and shared-work optimization
 
 - **Status:** Draft
 - **Created:** 2026-07-26
 - **Author(s):** Danny Meijer (@dannymeijer)
 - **Related:**
-  - InQL RFC 004 (execution context)
-  - InQL RFC 007 (Prism logical planning and optimization engine)
-  - InQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)
-  - InQL RFC 027 (relational evidence program)
-  - InQL RFC 030 (Prism lineage graph)
-  - InQL RFC 032 (execution observations)
-  - InQL RFC 033 (adapter requirements and coverage)
-  - InQL RFC 040 (interoperability semantic profiles)
-  - InQL RFC 041 (Prism plan ingress and external client frontends)
-  - InQL RFC 065 (Polyglot SQL AST ingress and dialect-aware egress)
+  - IncQL RFC 004 (execution context)
+  - IncQL RFC 007 (Prism logical planning and optimization engine)
+  - IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)
+  - IncQL RFC 027 (relational evidence program)
+  - IncQL RFC 030 (Prism lineage graph)
+  - IncQL RFC 032 (execution observations)
+  - IncQL RFC 033 (adapter requirements and coverage)
+  - IncQL RFC 040 (interoperability semantic profiles)
+  - IncQL RFC 041 (Prism plan ingress and external client frontends)
+  - IncQL RFC 065 (Polyglot SQL AST ingress and dialect-aware egress)
 - **Issue:** —
 - **RFC PR:** [IncQL #105](https://github.com/encero-systems/IncQL/pull/105)
 - **Written against:** Incan v0.5-era IncQL
@@ -21,7 +21,7 @@
 
 ## Summary
 
-This RFC makes Prism InQL's relational reasoning engine. Prism must preserve immutable authored relational intent while separately maintaining a memo of semantically legal alternatives, their required properties, and the evidence that makes each alternative legal. A target planner must then choose whether to inline, share, materialize, push down, repartition, or encode the selected relation in a target representation such as Substrait or SQL. This is a north-star optimizer contract: it applies to every supported frontend and target, rather than treating SQL CTEs, DataFusion plans, or a single execution engine as the optimizer's semantic core.
+This RFC makes Prism IncQL's relational reasoning engine. Prism must preserve immutable authored relational intent while separately maintaining a memo of semantically legal alternatives, their required properties, and the evidence that makes each alternative legal. A target planner must then choose whether to inline, share, materialize, push down, repartition, or encode the selected relation in a target representation such as Substrait or SQL. This is a north-star optimizer contract: it applies to every supported frontend and target, rather than treating SQL CTEs, DataFusion plans, or a single execution engine as the optimizer's semantic core.
 
 ## Core model
 
@@ -36,7 +36,7 @@ The same relational work can arrive from Incan carriers, query blocks, SQL, prot
 
 CTE-heavy transformation SQL makes the limitation visible. A CTE is an authoring and target-language construct, not proof that a relation should be materialized or even shared during execution. Conversely, an Incan-authored shared subframe may merit a generated CTE for PostgreSQL egress even though no SQL appeared at ingress. The optimizer needs to reason about relational equivalence and execution choices independently of either source or target syntax.
 
-Prism already establishes immutable authored planning, structural sharing, and lineage as InQL responsibilities. RFC 008 establishes that Session supplies execution facts while Prism remains the logical owner. This RFC supplies the missing north-star contract: how Prism explores alternatives, retains legality and provenance, selects shared work, and explains its decision without making a backend optimizer the semantic authority.
+Prism already establishes immutable authored planning, structural sharing, and lineage as IncQL responsibilities. RFC 008 establishes that Session supplies execution facts while Prism remains the logical owner. This RFC supplies the missing north-star contract: how Prism explores alternatives, retains legality and provenance, selects shared work, and explains its decision without making a backend optimizer the semantic authority.
 
 ## Goals
 
@@ -50,13 +50,13 @@ Prism already establishes immutable authored planning, structural sharing, and l
 
 ## Non-Goals
 
-- Defining a universal claim that InQL will outperform database optimizers or all generated SQL.
+- Defining a universal claim that IncQL will outperform database optimizers or all generated SQL.
 - Treating every SQL CTE, repeated subgraph, or named model as a mandatory materialization boundary.
 - Making a generated CTE equivalent to a durable materialized view, cache entry, or authored relation name.
 - Replacing a target's physical optimizer, transaction semantics, catalog, or runtime adaptive behavior.
 - Adopting Apache Calcite, `optd`, an e-graph library, or any other optimizer implementation as a required dependency.
 - Standardizing one complete cost formula, storage implementation, or public optimizer API in this RFC.
-- Allowing a target parser, target execution result, or opaque backend rewrite to establish InQL relational semantics.
+- Allowing a target parser, target execution result, or opaque backend rewrite to establish IncQL relational semantics.
 
 ## Guide-level explanation (how authors think about it)
 
@@ -80,7 +80,7 @@ An inspection surface should let an author ask why the plan differs from the aut
 
 ### Authored intent and the memo
 
-Prism must retain an immutable authored graph as the source of InQL relational intent. The graph must preserve authoring and ingress provenance, semantic targets, lineage inputs, declared policy constraints, and all facts necessary to explain source-level bindings. An optimization decision must not mutate this graph or discard its relationship to the selected plan.
+Prism must retain an immutable authored graph as the source of IncQL relational intent. The graph must preserve authoring and ingress provenance, semantic targets, lineage inputs, declared policy constraints, and all facts necessary to explain source-level bindings. An optimization decision must not mutate this graph or discard its relationship to the selected plan.
 
 Prism must represent explored relational alternatives separately from the authored graph. A memo equivalence group must contain only expressions that are semantically interchangeable under the recorded semantic profile and required properties. An alternative must record the rule or derivation that introduced it and the evidence or conditions under which it is legal. A planner may stop exploration early, but it must not present unexplored alternatives as impossible or semantically invalid.
 
@@ -114,7 +114,7 @@ Substrait remains the normative interchange contract where it is the chosen boun
 
 ### Explainability and evidence
 
-For every selected target plan, InQL must be able to produce inspectable evidence linking the selected relation to authored intent. The evidence must identify the selected semantic profile and target, equivalence alternatives considered, rules and evidence used to establish legality, required properties, estimated cost inputs and their provenance, selected sharing or materialization mode, and applicable execution observations when available.
+For every selected target plan, IncQL must be able to produce inspectable evidence linking the selected relation to authored intent. The evidence must identify the selected semantic profile and target, equivalence alternatives considered, rules and evidence used to establish legality, required properties, estimated cost inputs and their provenance, selected sharing or materialization mode, and applicable execution observations when available.
 
 An implementation must distinguish semantic equivalence evidence from result-comparison evidence, plan-shape evidence, and performance evidence. Equal results on a fixture may support a test case but do not by themselves prove a general rewrite rule. A reduced source scan count in one target plan may support target-specific investigation but does not by itself establish a portable performance claim.
 
@@ -132,7 +132,7 @@ The memo may contain logical and target-realizable alternatives. Logical equival
 
 Names and scoped bindings from a frontend are preserved as authored or ingress provenance. They are not, by themselves, target plan nodes. In particular, SQL CTE bindings may lower to ordinary lexical Prism subframes while the memo independently explores their inlining, sharing, or materialization. Recursive or data-modifying CTE semantics remain governed by their frontend profile and are not implied by this RFC.
 
-### Interaction with other InQL surfaces
+### Interaction with other IncQL surfaces
 
 - **Prism and carriers:** RFC 007 remains authoritative for immutable carrier construction and structural sharing. This RFC specifies the stronger optimizer model over that authored state.
 - **Statistics and execution:** RFC 008 remains authoritative for the Prism versus Session boundary. The memo consumes supplied statistics and observations as evidence; it does not own backend physical planning or runtime adaptation.
@@ -150,10 +150,10 @@ Serialized artifacts and inspection surfaces may need versioned additions for me
 ## Alternatives considered
 
 - **A fixed sequence of rewrites only.** Rejected as the north-star architecture because it commits too early, obscures alternative choices, and cannot adequately model interactions among join ordering, sharing, and target requirements. Rule pipelines may still be useful as bounded memo exploration strategies.
-- **Backend-owned optimization.** Rejected because backends differ, may not expose their reasoning, and cannot establish InQL semantic or policy legality. Backends remain valuable execution targets and sources of observed evidence.
+- **Backend-owned optimization.** Rejected because backends differ, may not expose their reasoning, and cannot establish IncQL semantic or policy legality. Backends remain valuable execution targets and sources of observed evidence.
 - **Optimize only SQL CTEs.** Rejected because it confuses a source-language binding form with relational identity and excludes Incan-native, protocol, and cross-source plans.
 - **Always materialize repeated work.** Rejected because materialization adds storage, freshness, scheduling, and lost-specialization costs and can be invalid under policy or target constraints.
-- **Adopt an existing optimizer wholesale.** Rejected because memo, property, and cost concepts are useful research foundations, but InQL must own its semantics, evidence, profiles, and adapter contracts.
+- **Adopt an existing optimizer wholesale.** Rejected because memo, property, and cost concepts are useful research foundations, but IncQL must own its semantics, evidence, profiles, and adapter contracts.
 - **Use equality saturation as the default substrate.** Rejected for the core architecture because unconstrained expansion can become intractable and relational alternatives require properties, target capabilities, and explainable cost selection. It remains a research option for bounded rewrite families.
 
 ## Drawbacks
@@ -172,8 +172,8 @@ Research and implementation should use a reproducible corpus that includes dbt-l
 
 ## Layers affected
 
-- **InQL specification** — Prism must define authored intent, memo alternatives, property requirements, sharing modes, selection evidence, and target-planning boundaries consistently with sibling RFCs.
-- **InQL library package** — Prism-facing APIs and inspection artifacts must preserve immutable authored state and expose selected-plan explanations without forcing a backend-specific API into authoring surfaces.
+- **IncQL specification** — Prism must define authored intent, memo alternatives, property requirements, sharing modes, selection evidence, and target-planning boundaries consistently with sibling RFCs.
+- **IncQL library package** — Prism-facing APIs and inspection artifacts must preserve immutable authored state and expose selected-plan explanations without forcing a backend-specific API into authoring surfaces.
 - **Execution / interchange** — Session and adapters must supply capability, statistics, and observation evidence with provenance; Substrait and SQL lowering must receive selected Prism semantics rather than become optimizer inputs of record.
 - **Frontend and egress integrations** — SQL, protocol, and other frontends must map to Prism before optimization; target emitters must realize selected plans only when their profile and coverage evidence permit it.
 - **Documentation and research artifacts** — capability claims, benchmarks, and plan comparisons must distinguish semantic correctness, target-plan shape, and measured performance.
