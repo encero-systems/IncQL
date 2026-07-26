@@ -11,7 +11,7 @@ IncQL uses its **own** RFC series (starting at 000), independent of the [Incan l
 | [002][rfc-002] | In Progress | Apache Substrait — `Rel`-level contract, mapping catalog, binding boundaries                      |     |
 | [003][rfc-003] | Implemented | `query {}` blocks — grammar, typing, Substrait lowering                                           |     |
 | [004][rfc-004] | In Progress | Execution context — session, DataFusion, read/transform/write                                     |     |
-| [005][rfc-005] | Blocked     | Pipe-forward relational syntax (`\|>`) — optional surface                                         |     |
+| [005][rfc-005] | Planned     | Pipe-forward relational syntax (`\|>`) — optional surface                                         |     |
 | [006][rfc-006] | Blocked     | Promote unnest/explode to core Substrait lowering — blocked on upstream Substrait standardization |     |
 | [007][rfc-007] | In Progress | Prism logical planning and optimization engine                                                    |     |
 | [008][rfc-008] | Planned     | Optimizer boundary, statistics, cost-based optimization, and adaptive execution                   |     |

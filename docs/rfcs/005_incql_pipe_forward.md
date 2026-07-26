@@ -1,13 +1,13 @@
 # IncQL RFC 005: Pipe-forward relational syntax (`|>`)
 
-- **Status:** Blocked
+- **Status:** Planned
 - **Created:** 2026-03-18
 - **Author(s):** Danny Meijer
 - **Related:**
   - IncQL RFC 000 (language specification — naming and query schema; **must** stay aligned)
   - IncQL RFC 001 (dataset types — carriers and method APIs)
   - IncQL RFC 003 (`query {}` — primary clause surface)
-  - Incan RFC 040 (Scoped DSL Glyph Surfaces — prerequisite for `|>` support)
+  - Incan RFC 040 (Scoped DSL Surface Forms — implemented prerequisite for `|>` support)
 - **Issue:** [IncQL #6](https://github.com/encero-systems/IncQL/issues/6)
 - **RFC PR:** -
 - **Written against:** Incan v0.2
@@ -17,9 +17,9 @@
 
 This RFC specifies an optional **pipe-forward** surface for IncQL relational pipelines: `|>`-chained stages applied to an existing `DataSet[T]` expression, with grammar, precedence, and desugaring to the same relational semantics as `query {}` and collection method chains. Identifier resolution and current query schema behavior **must** match IncQL RFC 000 §§2–4; this RFC does **not** redefine naming rules.
 
-> **Blcoked** for the following reason:
+> **Planning readiness:**
 >
-> - **Glyph dependency**: `|>` depends on Incan RFC 040.
+> - **Glyph dependency resolved:** Incan RFC 040 provides the scoped DSL glyph mechanism required for `|>`. It shipped in Incan v0.3, so `|>` can remain IncQL-owned rather than becoming a global Incan operator.
 
 ## Motivation
 
@@ -119,7 +119,7 @@ Pipe-forward stage keywords are activated through library-driven vocabulary, con
   Pipe-forward **must not** introduce a second resolution order for bare names or `.column`. Any deviation requires amending IncQL RFC 000.
 
 2. Dependency on Incan RFC 040
-  This RFC is blocked on Incan RFC 040. The planned implementation path for `|>` is the scoped DSL glyph mechanism defined there, not ambient global operator support in ordinary Incan expressions.
+  Incan RFC 040 is implemented and shipped in Incan v0.3. The implementation path for `|>` is its scoped DSL glyph mechanism, not ambient global operator support in ordinary Incan expressions.
 
 ## Alternatives considered
 
