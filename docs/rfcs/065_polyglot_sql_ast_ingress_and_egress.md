@@ -27,8 +27,6 @@ SQL is an important interoperability surface, but SQL text must not become IncQL
 
 Polyglot provides a typed AST, dialect parser, generator, formatter, validator, lineage utilities, and builders. It makes a better boundary than handwritten text rewriting. This RFC gives IncQL a disciplined way to accept familiar SQL and emit target SQL without treating every accepted dialect as equivalent or promising an unearned compatibility level.
 
-The initial spike demonstrated a direct PostgreSQL subset in both directions: Polyglot `SELECT` AST to Prism named-table read and projection nodes, then Prism back to a freshly constructed Polyglot AST and PostgreSQL SQL. That proof is deliberately narrow. It establishes the architectural seam, not broad SQL compatibility.
-
 ## Goals
 
 - Define SQL ingress and egress as optional frontend boundaries around Prism.

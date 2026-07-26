@@ -180,12 +180,6 @@ For each query, compare at least:
 
 No aggregate benchmark score is meaningful unless semantic-equivalence checks, hardware, data scale, target versions, and configuration are recorded.
 
-## Preliminary observation
-
-An isolated, non-product spike established a narrow but useful fact: a programmatically authored Prism subframe can be structurally shared by two consumers. A separate Polyglot egress prototype built for that same `Read → Filter → Join(shared, shared)` graph shape represented the target PostgreSQL relation as either two inline derived tables or one generated CTE referenced twice. Both target statements produced the same result on a controlled fixture. PostgreSQL produced different plan shapes: the factored form scanned the source once and scanned the CTE twice, while the inline form contained two source scans.
-
-This does not establish general performance, CTE ingress, DataFusion execution, or a complete optimizer. It motivates the evidence program above and demonstrates why source syntax alone is the wrong abstraction.
-
 ## Staged research direction
 
 1. **Research harness and corpus.** Publish fixtures, semantic-equivalence checks, plan capture, and reproducible target configurations before making performance claims.
