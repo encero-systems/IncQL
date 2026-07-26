@@ -4,15 +4,15 @@
 
 **Date:** 2026-07-26
 
-**Audience:** InQL and Incan contributors, database-systems researchers, data-platform architects, and prospective execution-engine collaborators.
+**Audience:** IncQL and Incan contributors, database-systems researchers, data-platform architects, and prospective execution-engine collaborators.
 
 **Scope:** This document is non-normative. It frames a research direction for Prism and defines evidence required before any product or performance claim. Focused RFCs must later specify public APIs, relational semantics, optimizer invariants, and execution contracts.
 
 ## Thesis
 
-Prism should evolve from an immutable logical-plan store into InQL's relational reasoning engine: a system that can recognize equivalent and shared relational work, preserve the reasons a rewrite is legal, and select a target-appropriate execution or SQL representation.
+Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: a system that can recognize equivalent and shared relational work, preserve the reasons a rewrite is legal, and select a target-appropriate execution or SQL representation.
 
-The goal is not to make SQL CTEs work, nor to replace DataFusion, PostgreSQL, or another execution engine. The goal is to give InQL an optimizer-owned semantic graph that can improve plans arriving from Incan APIs, SQL, protocol frontends, Delta-like sources, and future data-product interfaces.
+The goal is not to make SQL CTEs work, nor to replace DataFusion, PostgreSQL, or another execution engine. The goal is to give IncQL an optimizer-owned semantic graph that can improve plans arriving from Incan APIs, SQL, protocol frontends, Delta-like sources, and future data-product interfaces.
 
 This matters because data transformations are increasingly authored as long chains of models, views, CTEs, and reusable staging steps. Those structures are useful to authors but are not necessarily the best execution structure. A capable Prism can treat them as relational intent, discover reusable work, and choose whether to inline, share, materialize, push down, repartition, or emit a different target shape.
 
@@ -28,7 +28,7 @@ IncQL can offer a different contract:
 - execution targets receive plans shaped for their capabilities;
 - SQL egress is one target representation, not the semantic source of truth.
 
-The commercial hypothesis is deliberately narrower than “IncQL makes dbt faster.” It is that InQL can make complex transformation graphs more inspectable and, where evidence supports it, cheaper to execute across heterogeneous sources and targets. That hypothesis must be tested against realistic workloads and target plans before it becomes a product claim.
+The commercial hypothesis is deliberately narrower than “IncQL makes dbt faster.” It is that IncQL can make complex transformation graphs more inspectable and, where evidence supports it, cheaper to execute across heterogeneous sources and targets. That hypothesis must be tested against realistic workloads and target plans before it becomes a product claim.
 
 ## A north-star architecture
 
@@ -63,9 +63,9 @@ This separation fits Prism's existing immutable, structurally shared planning mo
 
 The most relevant architectural foundation is the Volcano/Cascades family. Cascades represents equivalent relational expressions in a memo, applies transformation and implementation rules selectively, and uses properties and cost to choose a plan. It is a stronger model than a fixed sequence of rewrites because it can retain alternatives instead of committing to the first locally plausible one. [Volcano][volcano] [Cascades][cascades]
 
-Apache Calcite's VolcanoPlanner is a useful implementation reference. It has equivalence sets, dynamic-programming optimization, relational traits, rule registration, and materialization substitution. Calcite is not an InQL dependency proposal; its concepts are the relevant part. [Calcite VolcanoPlanner][calcite-volcano] [Calcite materialized views][calcite-materialized-views]
+Apache Calcite's VolcanoPlanner is a useful implementation reference. It has equivalence sets, dynamic-programming optimization, relational traits, rule registration, and materialization substitution. Calcite is not an IncQL dependency proposal; its concepts are the relevant part. [Calcite VolcanoPlanner][calcite-volcano] [Calcite materialized views][calcite-materialized-views]
 
-The first Prism memo should be smaller than a full Cascades implementation. It should start with logical equivalence and required properties that InQL can substantiate: schema, nullability, ordering, partitioning or locality, source capability, policy constraints, and target dialect or adapter requirements. Physical implementation alternatives belong only after those facts are trustworthy.
+The first Prism memo should be smaller than a full Cascades implementation. It should start with logical equivalence and required properties that IncQL can substantiate: schema, nullability, ordering, partitioning or locality, source capability, policy constraints, and target dialect or adapter requirements. Physical implementation alternatives belong only after those facts are trustworthy.
 
 ### Shared work is multi-query optimization, not syntax cleanup
 
@@ -84,7 +84,7 @@ An SQL CTE is only one encoding of the `share` choice. It must not be confused w
 
 ### DataFusion as an experimental target
 
-DataFusion is valuable because it offers structured logical and physical planning, extensible optimizer rules, common-subexpression elimination, and `EXPLAIN ANALYZE` metrics. It should be used to test Prism's reasoning and target-lowering decisions, without becoming the semantic owner of InQL plans. [DataFusion optimizer][datafusion-optimizer] [DataFusion logical plans][datafusion-logical-plans] [DataFusion EXPLAIN][datafusion-explain]
+DataFusion is valuable because it offers structured logical and physical planning, extensible optimizer rules, common-subexpression elimination, and `EXPLAIN ANALYZE` metrics. It should be used to test Prism's reasoning and target-lowering decisions, without becoming the semantic owner of IncQL plans. [DataFusion optimizer][datafusion-optimizer] [DataFusion logical plans][datafusion-logical-plans] [DataFusion EXPLAIN][datafusion-explain]
 
 The `optd` research project is particularly relevant: it explored a Cascades-based optimizer integrated with DataFusion, including physical-property support. It merits code and design study as a research reference. It is not yet a dependency or adoption decision. [optd overview][optd]
 
@@ -135,7 +135,7 @@ The memo must not quietly turn guessed values into facts.
 
 ### 4. How do we make optimizer choices explainable?
 
-For every selected plan, InQL should eventually explain:
+For every selected plan, IncQL should eventually explain:
 
 - the authored relational path;
 - equivalent alternatives considered;
@@ -276,7 +276,7 @@ This whitepaper does not propose:
 
 ## What success would look like
 
-The research succeeds when InQL can show, with reproducible evidence, that it:
+The research succeeds when IncQL can show, with reproducible evidence, that it:
 
 - understands a complex transformation graph independently of its source syntax;
 - preserves semantic and policy constraints while exploring alternatives;
