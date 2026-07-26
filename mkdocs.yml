@@ -9,7 +9,9 @@ strict: true
 
 theme:
   name: material
-  logo: shared/brand/incql-mark.png
+  custom_dir: docs/overrides
+  logo: shared/brand/incql-logo-header.png
+  favicon: shared/brand/incql-favicon.png
   font: false
   highlightjs: false
   pygments_style: default
@@ -53,15 +55,28 @@ markdown_extensions:
       custom_checkbox: true
 
 extra_css:
-  - stylesheets/prismplane.css?v=20260719-query-block-part-34
+  # Ordered ownership contract: see docs/contributing/prismplane_docs_theme.md.
+  - stylesheets/prismplane.css?v=20260722-nav-chevron-35
+  - stylesheets/crystalline.css?v=20260726-landing-polish-10
+  - stylesheets/crystal-prototype.css?v=20260723-guides-nav-2
+  - stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1
+  - stylesheets/crystal-integration.css?v=20260723-architecture-readability-4
+  - stylesheets/crystal-learn.css?v=20260722-learn-crystal-9
+  - stylesheets/crystal-book.css?v=20260723-book-concepts-7
 
 extra_javascript:
-  - javascripts/prismplane.js?v=20260719-book-parts-24
+  - javascripts/prismplane.js?v=20260723-architecture-nav-28
+  - javascripts/crystalline.js?v=20260720-crystal-port-4
 
 nav:
   - Home: index.md
   - Learn:
       - Overview: language/README.md
+      - Ten-minute quickstart: language/quickstart.md
+      - Choose by background:
+          - From SQL: language/explanation/from_sql.md
+          - From Spark and DataFrame APIs: language/explanation/from_spark.md
+          - What IncQL is and is not: language/explanation/what_incql_is.md
       - The IncQL Book:
           - Book overview: language/tutorials/book/index.md
           - Part I · Model the work:
@@ -82,33 +97,43 @@ nav:
           - Execution context: language/explanation/execution_context.md
   - Guides:
       - Overview: language/how-to/README.md
-      - Dataset transformations: language/how-to/dataset_transformations.md
-      - Normalize semi-structured fields: language/how-to/normalize_semistructured_fields.md
-      - Nested row values: language/how-to/nested_row_values.md
-      - Generator rows: language/how-to/generator_rows.md
-      - Window columns: language/how-to/window_columns.md
-      - Approximate metrics: language/how-to/approximate_metrics.md
-      - Typed HLL sketches: language/how-to/typed_hll_sketches.md
-      - Variant payloads: language/how-to/variant_payloads.md
-      - Execution observations: language/how-to/execution_observations.md
-      - Quality observations: language/how-to/quality_observations.md
-      - Governed evidence: language/how-to/governed_evidence.md
-      - Inspect plan lineage: language/how-to/inspect_plan_lineage.md
+      - Start and connect:
+          - Read and write data: language/how-to/read_write_data.md
+          - Troubleshooting: language/how-to/troubleshooting.md
+      - Transform and query:
+          - Dataset transformations: language/how-to/dataset_transformations.md
+          - Join typed relations: language/how-to/joins.md
+          - Normalize semi-structured fields: language/how-to/normalize_semistructured_fields.md
+          - Nested row values: language/how-to/nested_row_values.md
+          - Generator rows: language/how-to/generator_rows.md
+          - Window columns: language/how-to/window_columns.md
+      - Inspect and trust:
+          - Inspect plan lineage: language/how-to/inspect_plan_lineage.md
+          - Execution observations: language/how-to/execution_observations.md
+          - Quality observations: language/how-to/quality_observations.md
+          - Governed evidence: language/how-to/governed_evidence.md
+      - Advanced and capability-dependent:
+          - Approximate metrics: language/how-to/approximate_metrics.md
+          - Typed HLL sketches: language/how-to/typed_hll_sketches.md
+          - Variant payloads: language/how-to/variant_payloads.md
   - Reference:
       - Overview: language/reference/README.md
-      - Core:
+      - Language and relational authoring:
           - Dataset carriers: language/reference/dataset_carriers.md
           - Dataset methods: language/reference/dataset_methods.md
           - Query blocks: language/reference/query_blocks.md
+          - Builders:
+              - Filters: language/reference/builders/filters.md
+              - Projections: language/reference/builders/projections.md
+              - Aggregates: language/reference/builders/aggregates.md
+      - Runtime and I/O:
           - Execution context: language/reference/execution_context.md
+          - Backend capability matrix: language/reference/capabilities.md
+      - Inspection, quality, and governance:
           - Inspection: language/reference/inspection.md
           - Quality: language/reference/quality.md
           - Governance: language/reference/governance.md
-      - Builders:
-          - Filters: language/reference/builders/filters.md
-          - Projections: language/reference/builders/projections.md
-          - Aggregates: language/reference/builders/aggregates.md
-      - Functions:
+      - Function catalog:
           - Index: language/reference/functions/index.md
           - Approximate: language/reference/functions/approximate.md
           - Format: language/reference/functions/format.md
@@ -117,15 +142,15 @@ nav:
           - Sketches: language/reference/functions/sketches.md
           - Variants: language/reference/functions/variants.md
           - Windows: language/reference/functions/windows.md
-      - Substrait:
+      - Interchange and adapter authoring:
           - Conformance: language/reference/substrait/conformance.md
           - Operator catalog: language/reference/substrait/operator_catalog.md
           - Read root binding contract: language/reference/substrait/read_root_binding_contract.md
           - Revision and extension policy: language/reference/substrait/revision_and_extension_policy.md
   - Architecture: architecture.md
   - Design records:
-      - Overview: design_records.md
       - RFCs: rfcs/README.md
+      - Overview: design_records.md
       - Whitepapers:
           - Overview: whitepapers/README.md
           - IncQL-DB: whitepapers/incql_db.md

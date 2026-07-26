@@ -2,7 +2,7 @@
 
 Query blocks are dependency-activated IncQL expressions. Use `import pub::incql` to activate the `query` vocabulary in a downstream Incan package, then import the carrier and helper names used by the block.
 
-If you are learning the surface rather than looking up its exact contract, start with [Part IV of the IncQL Book](../tutorials/book/08_first_query_block.md).
+If you are learning the surface rather than looking up its exact contract, start with [IncQL for SQL users](../explanation/from_sql.md), the [ten-minute quickstart](../quickstart.md), or [Part IV of the IncQL Book](../tutorials/book/08_first_query_block.md).
 
 ```incan
 import pub::incql
@@ -76,3 +76,12 @@ The comparison helper names use `lte` and `gte` for inclusive bounds; `le` and `
 - A `SELECT` alias may be reused by later expressions in the same `SELECT` list.
 
 Query blocks desugar into the same carrier method calls available to ordinary IncQL code before lowering through the current carrier planning path. `LazyFrame` flows are Prism-backed; concrete `DataFrame` and `DataStream` flows still use their documented carrier paths before converging at the Substrait boundary.
+
+## Current boundaries
+
+- Query blocks are checked Incan expressions, not arbitrary SQL strings and not a database SQL compatibility layer.
+- The v0.1 grammar does not document CTEs, subqueries, right/full outer joins, or general SQL DDL/DML.
+- A clause being accepted by the authoring surface does not imply that every adapter executes every function or logical value family.
+- `DataStream[T]` has a type and planning boundary, but streaming execution remains future work.
+
+Consult the [backend capability matrix](capabilities.md) for the current DataFusion path and adapter-dependent function families.

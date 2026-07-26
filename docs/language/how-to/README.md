@@ -1,30 +1,68 @@
-# IncQL language how-to guides
+# Guides
 
-How-to guides show concrete task workflows for the current IncQL package surface. They complement the reference docs, which define API shape and behavior contracts.
+Guides solve bounded tasks against IncQL's current public surface. Choose the outcome you need; each guide states its prerequisites, a concrete workflow, how to verify the result, current support boundaries, and the exact Reference pages behind the task.
 
-- [Add window columns][window-columns]
-- [Build typed HyperLogLog sketches][typed-hll-sketches]
-- [Capture execution observations and adapter coverage][execution-observations]
-- [Build deferred dataset transformations][dataset-transformations]
+If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. If you are translating an existing mental model, start from the [SQL bridge][sql-bridge] or [Spark and DataFrame bridge][spark-bridge].
+
+## Start and connect
+
+- [Read and write data][read-write] covers typed CSV, Parquet, and Arrow inputs plus bounded CSV and Parquet outputs.
+- [Troubleshoot common setup and execution failures][troubleshooting] separates activation, logical-name, schema, adapter, and observation failures.
+
+## Transform and query
+
+- [Build deferred dataset transformations][dataset-transformations] covers projection, filters, grouping, aggregates, ordering, and limits.
+- [Join typed relations][joins] covers inner and left joins through methods and query blocks.
+- [Normalize semi-structured fields][normalize-semistructured-fields] turns nested input into an explicit relational shape.
+- [Work with nested row values][nested-row-values] accesses typed nested structures.
+- [Expand rows with generators][generator-rows] applies relation-aware row expansion.
+- [Add window columns][window-columns] builds documented window expressions.
+
+## Inspect and trust
+
+- [Inspect a plan and lineage graph][inspect-plan-lineage] reads authored meaning before execution.
+- [Capture execution observations and adapter coverage][execution-observations] records concrete attempts and coverage evidence.
+- [Observe data quality checks][quality-observations] evaluates typed assertions without hiding caller-owned policy.
+- [Inspect governed evidence][governed-evidence] carries local governance metadata into an explicit decision point.
+
+## Advanced and capability-dependent
+
+These guides deliberately state their DataFusion boundary before the first example. Consult the [backend capability matrix][capabilities] before choosing one for production work.
+
 - [Estimate approximate metrics][approximate-metrics]
-- [Expand rows with generators][generator-rows]
-- [Inspect governed evidence][governed-evidence]
-- [Inspect a plan and lineage graph][inspect-plan-lineage]
-- [Normalize semi-structured fields][normalize-semistructured-fields]
-- [Observe data quality checks][quality-observations]
+- [Build typed HyperLogLog sketches][typed-hll-sketches]
 - [Inspect typed variant payloads][variant-payloads]
-- [Work with nested row values][nested-row-values]
+
+## The guide contract
+
+Every task guide answers the same five questions:
+
+1. When should I use this?
+2. What must already be true?
+3. How do I perform the task?
+4. How do I verify the result?
+5. What is supported now, and where is the exact contract?
+
+This structure is intentional: a code sample without a verification step or a capability boundary is not a complete IncQL guide.
 
 <!-- References -->
+
 [approximate-metrics]: approximate_metrics.md
+[capabilities]: ../reference/capabilities.md
 [dataset-transformations]: dataset_transformations.md
 [execution-observations]: execution_observations.md
 [generator-rows]: generator_rows.md
 [governed-evidence]: governed_evidence.md
 [inspect-plan-lineage]: inspect_plan_lineage.md
+[joins]: joins.md
 [nested-row-values]: nested_row_values.md
 [normalize-semistructured-fields]: normalize_semistructured_fields.md
 [quality-observations]: quality_observations.md
+[quickstart]: ../quickstart.md
+[read-write]: read_write_data.md
+[spark-bridge]: ../explanation/from_spark.md
+[sql-bridge]: ../explanation/from_sql.md
+[troubleshooting]: troubleshooting.md
 [typed-hll-sketches]: typed_hll_sketches.md
 [variant-payloads]: variant_payloads.md
 [window-columns]: window_columns.md

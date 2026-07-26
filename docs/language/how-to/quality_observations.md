@@ -2,6 +2,14 @@
 
 This how-to shows how to declare quality assertions and evaluate them through a `Session`. Quality checks produce observations; they do not filter the relation, quarantine rows, or stop a pipeline unless a caller decides to enforce the observation afterwards.
 
+## When to use this
+
+Use this guide when you need explicit evidence about relation-level or field-level quality and want the application to retain the final decision about whether a failed check blocks, warns, or quarantines.
+
+## Before you begin
+
+Prepare the relation you want to observe and a `Session` capable of materializing it. Quality observation executes the work needed to calculate metrics; it is not a plan-only inspection.
+
 ## Declare checks
 
 Use assertion helpers to describe the checks you want to observe. The first quality surface covers relation row counts, field null rates, field uniqueness, per-group row counts, and explicit cross-relation row-count equality.
@@ -154,3 +162,35 @@ Cross-relation observations reference both execution attempts and expose `left_r
 - Use `cross_relation_row_count_equal()` when two explicit relation inputs should have equal row counts.
 
 For the complete record and enum reference, see [Quality assertions and observations (Reference)](../reference/quality.md).
+
+## Verify the result
+
+Assert both the expected observation status and the metric that supports it. A status alone does not show why a check passed or failed.
+
+```incan
+from pub::incql import QualityObservationStatus
+
+observations = session.observe_quality(
+    orders,
+    [row_count(min_count=Some(1), max_count=Some(1000)).require()],
+)
+
+assert observations[0].status == QualityObservationStatus.Passed
+println(observations[0].metrics[0].value)
+```
+
+For negative-path tests, use a bounded fixture with a known violation and assert `Failed` rather than relying on rendered output.
+
+## Current support and failure boundaries
+
+- Quality checks record evidence; they do not automatically filter data, retry work, quarantine rows, or stop a pipeline.
+- Cross-relation assertions require `observe_quality_pair(...)`; passing one to `observe_quality(...)` yields `Unsupported`.
+- A failed execution needed to compute a metric yields `Errored`, which is distinct from a successfully evaluated assertion returning `Failed`.
+- The current helper set covers row count, null rate, uniqueness, group row count, and explicit cross-relation row-count equality.
+
+## Reference
+
+- [Quality assertions and observations](../reference/quality.md)
+- [Execution context](../reference/execution_context.md)
+- [Backend capability matrix](../reference/capabilities.md)
+- [Govern decisions with local evidence](governed_evidence.md)

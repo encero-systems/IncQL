@@ -1,6 +1,14 @@
 # Inspect governed evidence
 
+## When to use this
+
 Use governed attributes and policy checkpoints when you need local evidence about sensitive, classified, reviewed, or policy-relevant relational targets without making IncQL responsible for your organization’s policy engine.
+
+Use these records when a catalog, review, CI job, or governance tool needs interoperable local facts alongside plan targets and lineage.
+
+## Before you begin
+
+You need a Prism-backed `LazyFrame` or an existing semantic target, a clear authority for any caller-supplied attribute, and caller code that owns the response to warnings or denials. Decide whether each fact is inferred, asserted, observed, stale, rejected, or unsupported rather than collapsing absence into approval.
 
 ## Inspect inferred governed attributes
 
@@ -84,4 +92,22 @@ for checkpoint in inspection.policy_checkpoints:
     println(f"{checkpoint.checkpoint.value()}: {checkpoint.action.value()} {checkpoint.reason_code}")
 ```
 
-For the complete record and enum reference, see [Governed attributes and policy checkpoints (Reference)](../reference/governance.md).
+## Verify the result
+
+- Confirm every attribute and checkpoint targets the intended plan, relation, or field.
+- Retain authority, confidence, status, and evidence references for caller-supplied facts.
+- Confirm inspection-derived checkpoints use `Observe` unless another explicit authority made a policy decision.
+- Test caller behavior separately; the existence of a record does not prove enforcement.
+
+## Current support and failure boundaries
+
+IncQL creates and carries local governed evidence. It does not mask fields, filter rows, certify compliance, contact an external catalog, or replace an organization policy engine. Local inspection currently infers a bounded set of schema-derived attributes; missing evidence is not proof that no governed fact exists.
+
+## Reference
+
+Use [Governed attributes and policy checkpoints][governance] for complete record and enum contracts and [Inspection][inspection] for the plan-local evidence envelope.
+
+<!-- References -->
+
+[governance]: ../reference/governance.md
+[inspection]: ../reference/inspection.md

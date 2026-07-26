@@ -1,0 +1,710 @@
+/* MkDocs integration for the accepted IncQL crystal prototype. */
+
+.md-container {
+  min-height: calc(100vh - 86px);
+}
+
+body:has(.incql-architecture) .md-main__inner,
+body:has(.rfc-layout) .md-main__inner {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body:has(.incql-architecture) .md-sidebar,
+body:has(.rfc-layout) .md-sidebar,
+body:has(.incql-architecture) .md-content__button,
+body:has(.rfc-layout) .md-content__button {
+  display: none;
+}
+
+body:has(.incql-architecture) .md-content,
+body:has(.rfc-layout) .md-content,
+body:has(.incql-architecture) .md-content__inner,
+body:has(.rfc-layout) .md-content__inner {
+  width: 100%;
+  max-width: none;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body:has(.incql-architecture) .md-content__inner::before,
+body:has(.rfc-layout) .md-content__inner::before {
+  display: none;
+}
+
+.topbar .top-actions > .md-search {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.topbar .docs-search {
+  margin: 0;
+}
+
+.md-typeset .page-intro h1,
+.md-typeset .chapter-heading h2,
+.md-typeset .layer-inspector h3,
+.md-typeset .pp-rfc-reader__detail h2,
+.md-typeset .pp-rfc-reader__section h3 {
+  font-family: "Outfit", "Manrope", sans-serif;
+}
+
+/* Architecture -------------------------------------------------------- */
+
+body:has(.incql-architecture) {
+  background:
+    radial-gradient(circle at 78% 2%, rgba(64, 102, 223, 0.2), transparent 28rem),
+    radial-gradient(ellipse at 47% 50%, rgba(44, 203, 255, 0.08), transparent 38rem),
+    linear-gradient(128deg, #fcfdff 0%, #eef7ff 49%, #dceaff 100%);
+}
+
+.md-typeset .page-layout {
+  margin: 17px auto 22px;
+  padding: 0 !important;
+}
+
+body:has(.incql-architecture)::before {
+  top: 74px;
+  height: 640px;
+  opacity: 0.28;
+  filter: saturate(1.08) contrast(1.08) brightness(1.06);
+}
+
+body:has(.incql-architecture)::after {
+  inset: 47% 0 0;
+  opacity: 0.72;
+}
+
+.md-typeset .architecture-intro h1 {
+  margin: 0;
+  color: #072463;
+  font-size: clamp(36px, 3.6vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+}
+
+.md-typeset .architecture-intro > div > p:last-child {
+  margin: 8px 0 0;
+  color: #395b91;
+  font-size: 14.5px;
+}
+
+.md-typeset .architecture-intro nav {
+  padding-top: 43px;
+}
+
+.md-typeset .architecture-intro nav a {
+  color: #3650d1;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.md-typeset .chapter-heading h2 {
+  margin: 0;
+  color: #06235e;
+  font-size: clamp(29px, 3vw, 43px);
+  font-weight: 500;
+  letter-spacing: -0.042em;
+  line-height: 1.03;
+}
+
+.md-typeset .chapter-heading > p {
+  margin: 0 0 2px;
+  color: #294b7e;
+  font-size: clamp(13px, 0.92vw, 14.5px);
+  font-weight: 520;
+  line-height: 1.6;
+}
+
+.md-typeset .incql-architecture > .incql-architecture-chapter > .incql-architecture-heading h2 {
+  max-width: 17ch;
+  margin: 0;
+  color: #06235e;
+  font-family: "Outfit", "Manrope", sans-serif;
+  font-size: clamp(29px, 3vw, 43px);
+  font-weight: 500;
+  letter-spacing: -0.042em;
+  line-height: 1.03;
+}
+
+.md-typeset .incql-architecture :is(h3, h4) {
+  font-family: "Outfit", "Manrope", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.md-typeset .incql-layer-inspector h3 {
+  font-size: 27px;
+  line-height: 1.08;
+}
+
+.md-typeset .incql-evidence-lane h3 {
+  font-size: 20px;
+  line-height: 1.28;
+}
+
+.md-typeset .incql-architecture-chapter--query h3 {
+  font-size: 24px;
+  line-height: 1.24;
+}
+
+.incql-architecture-chapter--query .incql-query-entry .highlight pre > code {
+  font-size: 0.65rem;
+}
+
+.incql-architecture-chapter--query .incql-query-phase {
+  margin-top: 32px;
+  padding: clamp(18px, 2vw, 24px);
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 18px;
+  background:
+    linear-gradient(132deg, rgba(255, 255, 255, 0.84), rgba(237, 248, 255, 0.68) 58%, rgba(246, 241, 255, 0.66)),
+    rgba(247, 251, 255, 0.72) !important;
+  box-shadow:
+    0 18px 42px rgba(32, 61, 137, 0.1),
+    inset 0 1px #fff,
+    inset 1px 0 rgba(62, 211, 252, 0.42),
+    inset -1px -1px rgba(126, 78, 241, 0.2);
+}
+
+.incql-architecture-chapter--query .incql-query-phase__heading {
+  grid-template-columns: minmax(16rem, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(24px, 3vw, 42px);
+  align-items: start;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(70, 101, 171, 0.18);
+}
+
+.incql-architecture-chapter--query .incql-query-phase__heading > div {
+  padding-left: 14px;
+  border-left: 3px solid rgba(67, 102, 231, 0.64);
+}
+
+.md-typeset .incql-architecture-chapter--query .incql-query-phase__heading > p {
+  color: #294b7e;
+  font-weight: 520;
+}
+
+.incql-architecture-chapter--query .incql-rewrite-ledger {
+  gap: 8px;
+  margin-top: 18px;
+  border: 0;
+  background: transparent;
+}
+
+.incql-architecture-chapter--query .incql-rewrite-ledger div,
+.incql-architecture-chapter--query .incql-rewrite-ledger div:last-child {
+  padding: 13px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: inset 0 1px #fff, 0 7px 18px rgba(41, 70, 139, 0.06);
+}
+
+.incql-architecture-chapter--query .incql-rewrite-ledger dt {
+  color: #405b89;
+}
+
+.incql-architecture-chapter--query .incql-rewrite-ledger dd {
+  color: #112f69;
+}
+
+.incql-architecture-chapter--query .incql-query-table-wrap {
+  margin-top: 14px;
+  border-color: rgba(75, 108, 188, 0.22);
+  background: rgba(252, 254, 255, 0.86);
+  box-shadow:
+    0 14px 34px rgba(37, 66, 137, 0.08),
+    inset 0 1px #fff;
+}
+
+.incql-architecture-chapter--query .incql-query-matrix caption,
+.incql-architecture-chapter--query .incql-runtime-ledger caption {
+  padding: 14px 16px 13px;
+  color: #274875;
+  background: linear-gradient(90deg, rgba(226, 245, 255, 0.66), rgba(244, 239, 255, 0.54));
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.incql-architecture-chapter--query .incql-query-matrix th,
+.incql-architecture-chapter--query .incql-query-matrix td,
+.incql-architecture-chapter--query .incql-runtime-ledger th,
+.incql-architecture-chapter--query .incql-runtime-ledger td {
+  border-color: rgba(72, 101, 169, 0.18);
+}
+
+.incql-architecture-chapter--query .incql-query-matrix small,
+.incql-architecture-chapter--query .incql-runtime-ledger small {
+  color: #405d8c;
+  font-size: 14.5px;
+  line-height: 1.52;
+}
+
+.incql-architecture-chapter--query .incql-query-caption {
+  margin: 14px 2px 0;
+  color: #395783;
+  font-size: 14px;
+  line-height: 1.58;
+}
+
+.md-typeset .incql-architecture-chapter--ownership h3 {
+  font-size: 21px;
+  line-height: 1.24;
+}
+
+.md-typeset .incql-architecture-chapter--ownership h4 {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.md-typeset .incql-architecture-chapter--internals h3 {
+  font-size: 22px;
+  line-height: 1.24;
+}
+
+.incql-layer-inspector.layer-inspector {
+  height: 228px;
+  min-height: 228px;
+}
+
+.incql-crystal-path__art.system-path-art {
+  filter: none !important;
+}
+
+.system-chapter > .incql-architecture-explanation,
+.system-chapter > .incql-architecture-links {
+  display: none;
+}
+
+/* RFC context reader -------------------------------------------------- */
+
+.rfc-layout {
+  align-items: start;
+}
+
+.rfc-rail {
+  position: sticky;
+  top: 103px;
+  min-height: calc(100vh - 126px);
+}
+
+.rfc-content {
+  min-width: 0;
+  padding-bottom: 28px;
+}
+
+.md-typeset .pp-rfc-index-header h1 {
+  margin: 0;
+  color: #072463;
+  font-size: 42px;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.md-typeset .pp-rfc-index-lede {
+  margin: 8px 0 0;
+  color: #395b91;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.md-typeset .pp-rfc-index-links {
+  gap: 18px;
+  margin: 0;
+  padding-top: 43px;
+  font-size: 12px;
+}
+
+.md-typeset .pp-rfc-index-links a {
+  color: #3650d1;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pp-rfc-reader-host {
+  margin: 0;
+}
+
+.pp-rfc-reader {
+  height: calc(100vh - 244px);
+  min-height: 675px;
+  grid-template-columns: minmax(390px, 0.72fr) minmax(540px, 1.28fr);
+  gap: 18px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.pp-rfc-reader__index,
+.pp-rfc-reader__detail {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  border-radius: 18px;
+  background:
+    linear-gradient(116deg, rgba(255, 255, 255, 0.74) 0 18%, rgba(255, 255, 255, 0.32) 18.3% 45%, rgba(211, 234, 255, 0.15) 45.3% 57%, rgba(255, 255, 255, 0.5) 57.3% 76%, rgba(222, 235, 255, 0.17) 76.3% 100%),
+    rgba(239, 247, 255, 0.38);
+  box-shadow:
+    0 14px 34px rgba(19, 49, 113, 0.11),
+    0 2px 8px rgba(37, 75, 171, 0.08),
+    inset 0 1px #fff,
+    inset 1px 0 rgba(117, 220, 255, 0.7),
+    inset -1px 0 rgba(133, 90, 255, 0.25),
+    inset 0 -1px rgba(74, 120, 234, 0.22);
+  backdrop-filter: blur(10px) saturate(106%) brightness(1.06);
+  -webkit-backdrop-filter: blur(10px) saturate(106%) brightness(1.06);
+}
+
+.pp-rfc-reader__index {
+  grid-template-rows: auto auto minmax(0, 1fr);
+  border-right: 1px solid rgba(255, 255, 255, 0.96);
+}
+
+.pp-rfc-reader__toolbar {
+  gap: 0;
+  padding: 16px 16px 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px rgba(67, 103, 183, 0.13);
+}
+
+.pp-rfc-reader__search-shell {
+  display: grid;
+  min-height: 53px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 11px;
+  padding: 0 7px 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.94);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 8px 20px rgba(33, 66, 145, 0.09), inset 0 1px #fff, inset 1px 0 rgba(67, 205, 255, 0.52), inset -1px -1px rgba(113, 80, 255, 0.22);
+}
+
+.pp-rfc-reader__search-label {
+  padding-right: 11px;
+  border-right: 1px solid rgba(69, 105, 183, 0.15);
+  color: #506a9c;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pp-rfc-reader__active-tags[hidden] {
+  display: none;
+}
+
+.pp-rfc-reader__search input {
+  min-width: 0;
+  padding: 0;
+  color: #082762;
+  font-size: 14px;
+}
+
+.pp-rfc-reader__search kbd {
+  display: none;
+}
+
+.pp-rfc-reader__tag-menu-button {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 9px;
+  color: #344fbd;
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px #fff;
+  font-size: 12px;
+}
+
+.pp-rfc-reader__facets {
+  display: block;
+  margin-top: 12px;
+}
+
+.pp-rfc-segments {
+  display: flex;
+  gap: 3px;
+}
+
+.pp-rfc-segments label {
+  min-height: 34px;
+  padding: 0 9px;
+  color: #526b98;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pp-rfc-segments label span {
+  color: #5b709b;
+  font-size: 11px;
+}
+
+.pp-rfc-reader__statusbar {
+  min-height: 29px;
+  padding: 8px 4px 0;
+}
+
+.pp-rfc-reader__count {
+  color: #526b98;
+  font-size: 11.5px;
+}
+
+.pp-rfc-reader__hint {
+  display: none;
+}
+
+.pp-rfc-reader__master {
+  border-top: 0;
+  background: rgba(242, 249, 255, 0.18);
+}
+
+.pp-rfc-reader__list-header,
+.pp-rfc-row {
+  grid-template-columns: 56px 92px minmax(0, 1fr);
+  gap: 9px;
+}
+
+.pp-rfc-reader__list-header {
+  min-height: 39px;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.78);
+  color: #526b98;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+}
+
+.md-typeset details.pp-rfc-reader__status-filter > summary {
+  min-height: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.md-typeset details.pp-rfc-reader__status-filter > summary::after,
+.pp-rfc-reader__status-summary-state {
+  display: none;
+}
+
+.pp-rfc-row {
+  min-height: 72px;
+  padding: 7px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.73);
+  color: #314f84;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.pp-rfc-row__number {
+  color: #3153d4;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pp-rfc-row__status {
+  color: #526b98;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pp-rfc-row__title {
+  overflow: hidden;
+  color: #15366f;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pp-rfc-row[aria-selected="true"] {
+  background:
+    linear-gradient(129deg, rgba(255, 255, 255, 0.75) 0 33%, rgba(163, 220, 255, 0.17) 33.4% 63%, rgba(158, 108, 255, 0.12) 63.4%),
+    rgba(224, 238, 255, 0.34);
+  box-shadow: inset 3px 0 #43c8f0, inset -1px 0 rgba(117, 74, 255, 0.23), inset 0 1px #fff, 0 6px 16px rgba(42, 68, 153, 0.08);
+}
+
+.pp-rfc-reader__detail {
+  overflow-y: auto;
+}
+
+.pp-rfc-reader__detail-header {
+  position: sticky;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 18px;
+  align-items: start;
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid rgba(67, 103, 183, 0.13);
+  background:
+    linear-gradient(123deg, rgba(255, 255, 255, 0.88) 0 38%, rgba(211, 240, 255, 0.22) 38.4% 72%, rgba(242, 230, 255, 0.34) 72.4%),
+    rgba(249, 252, 255, 0.76);
+  backdrop-filter: blur(20px);
+}
+
+.pp-rfc-reader__eyebrow {
+  color: #526b98;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.md-typeset .pp-rfc-reader__detail h2 {
+  margin: 8px 0 0;
+  color: #082762;
+  font-size: clamp(27px, 2.3vw, 35px);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+}
+
+.md-typeset .pp-rfc-reader__open {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 11px;
+  color: #344fbd;
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: inset 0 1px #fff, 0 7px 18px rgba(31, 65, 145, 0.08);
+  font-size: 12px;
+}
+
+.pp-rfc-reader__metadata {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 0.9fr 1.8fr 1fr 1fr;
+  margin: 20px 0 0;
+}
+
+.pp-rfc-reader__metadata div {
+  min-width: 0;
+  padding: 0 16px;
+}
+
+.pp-rfc-reader__metadata div:first-child {
+  padding-left: 0;
+}
+
+.pp-rfc-reader__metadata div + div {
+  padding-left: 16px;
+  border-left: 1px solid rgba(67, 103, 183, 0.15);
+}
+
+.pp-rfc-reader__metadata dt {
+  color: #526b98;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pp-rfc-reader__metadata dd,
+.pp-rfc-reader__metadata a,
+.pp-rfc-reader__status-pill,
+.pp-rfc-reader__tag-chip {
+  font-size: 11.5px;
+}
+
+.pp-rfc-reader__status-pill,
+.pp-rfc-reader__tag-chip {
+  min-height: 25px;
+  padding: 3px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(71, 86, 221, 0.08);
+}
+
+.pp-rfc-reader__detail-body {
+  padding: 0 26px 26px;
+}
+
+.pp-rfc-reader__section {
+  margin-top: 0;
+  padding: 24px 0;
+  border-top: 1px solid rgba(67, 103, 183, 0.14);
+}
+
+.pp-rfc-reader__section:first-child {
+  border-top: 0;
+}
+
+.md-typeset .pp-rfc-reader__section h3 {
+  color: #102f68;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.md-typeset .pp-rfc-reader__section p {
+  max-width: 72ch;
+  margin: 10px 0 0;
+  color: #34568e;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.pp-rfc-reader__context-footer {
+  margin-top: 0;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow: inset 0 1px #fff;
+}
+
+.pp-rfc-reader__context-footer img {
+  width: 24px;
+  height: 24px;
+  filter: invert(25%) sepia(91%) saturate(2000%) hue-rotate(222deg) brightness(94%);
+}
+
+.pp-rfc-reader__context-footer span,
+.pp-rfc-reader__context-footer strong,
+.pp-rfc-reader__context-footer small {
+  display: block;
+}
+
+.pp-rfc-reader__context-footer strong {
+  color: #15366d;
+  font-size: 11.5px;
+}
+
+.pp-rfc-reader__context-footer small {
+  margin-top: 2px;
+  color: #526b98;
+  font-size: 10.5px;
+}
+
+@media (max-width: 1120px) {
+  body:has(.incql-architecture) .md-sidebar--primary,
+  body:has(.rfc-layout) .md-sidebar--primary {
+    display: block;
+  }
+
+  .pp-rfc-reader {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .rfc-rail,
+  .architecture-rail {
+    position: static;
+    min-height: auto;
+  }
+}

@@ -1,4 +1,10 @@
-# Dataset carriers (Explanation)
+<header class="pp-book-header pp-book-concept-header" markdown="1">
+<p>THE INCQL BOOK · CONCEPT</p>
+
+# Dataset carriers
+
+Understand the carrier types that keep materialized data, deferred work, and unbounded streams distinct.
+</header>
 
 This page explains how to think about and use IncQL's dataset carriers. It is intentionally conceptual. Exact method and builder signatures live in the reference pages.
 

@@ -1,7 +1,10 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { rfcReaderContract } = require("../../docs/javascripts/prismplane.js");
+const {
+  rfcReaderContract,
+  siteNavigationContract,
+} = require("../../docs/javascripts/prismplane.js");
 
 const defaults = {
   query: "",
@@ -18,6 +21,28 @@ const known = {
   tags: new Set(["evidence", "planning", "types"]),
   records: new Set(["000", "030"]),
 };
+
+const siteRoutes = [
+  { section: "home", prefixes: [], searchLabel: "Search" },
+  { section: "learn", prefixes: ["language/"], searchLabel: "Search learning paths" },
+  { section: "guides", prefixes: ["language/how-to/"], searchLabel: "Search guides" },
+  { section: "reference", prefixes: ["language/reference/"], searchLabel: "Search reference" },
+  { section: "architecture", prefixes: ["architecture/"], searchLabel: "Explore layers" },
+  {
+    section: "design-records",
+    prefixes: ["rfcs/", "design_records/", "whitepapers/"],
+    searchLabel: "Search RFCs",
+  },
+];
+
+test("site navigation uses the longest declared route prefix", () => {
+  assert.equal(siteNavigationContract.activeSection("", siteRoutes), "home");
+  assert.equal(siteNavigationContract.activeSection("architecture/", siteRoutes), "architecture");
+  assert.equal(siteNavigationContract.activeSection("rfcs/007/", siteRoutes), "design-records");
+  assert.equal(siteNavigationContract.activeSection("language/tutorials/book/", siteRoutes), "learn");
+  assert.equal(siteNavigationContract.activeSection("language/how-to/joins/", siteRoutes), "guides");
+  assert.equal(siteNavigationContract.activeSection("language/reference/query_blocks/", siteRoutes), "reference");
+});
 
 test("adjacent RFC selection skips hidden records and stops at the boundaries", () => {
   const records = [{ id: "007" }, { id: "030" }, { id: "045" }];

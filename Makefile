@@ -26,6 +26,8 @@ TUTORIAL_BOOK_RUNNABLES := \
 	src/chapter_08.incn \
 	src/chapter_09.incn
 
+QUICKSTART_DIR := examples/quickstart
+
 .DEFAULT_GOAL := help
 
 .PHONY: help
@@ -98,7 +100,7 @@ rfc-index-check: ## Validate RFC metadata and fail when the catalog is stale
 .PHONY: docs-test
 docs-test: ## Run documentation tooling unit tests
 	@python3 -m unittest discover -s tests/docs -p 'test_*.py'
-	@node --test tests/docs/test_rfc_reader.cjs
+	@node --test tests/docs/*.cjs
 
 .PHONY: docs-build
 docs-build: rfc-index-check docs-test ## Validate and build the documentation site strictly
@@ -119,6 +121,13 @@ tutorial-book: ## Type-check every tutorial chapter and run each complete learni
 		cd ../..; \
 	done
 
+.PHONY: quickstart
+quickstart: ## Check and run the exact ten-minute newcomer project
+	@echo "\033[1mChecking IncQL quickstart...\033[0m"
+	@cd $(QUICKSTART_DIR) && $(INCAN) lock >/dev/null
+	@cd $(QUICKSTART_DIR) && $(INCAN) --check src/main.incn
+	@cd $(QUICKSTART_DIR) && $(INCAN) run src/main.incn --locked
+
 # =============================================================================
 # Formatting (Incan source)
 # =============================================================================
@@ -129,7 +138,7 @@ tutorial-book: ## Type-check every tutorial chapter and run each complete learni
 # packages are listed by source directory so generated `target/` output stays
 # outside the formatting walk.
 
-INCQL_FMT_DIRS := src tests examples/advanced_retail_query_blocks/src examples/tutorial_book/src
+INCQL_FMT_DIRS := src tests examples/advanced_retail_query_blocks/src examples/quickstart/src examples/tutorial_book/src
 INCQL_FMT_FILES := examples/*.incn
 
 .PHONY: fmt

@@ -1,74 +1,86 @@
 # IncQL documentation map
 
-This page maps the public documentation for the IncQL project.
+IncQL's public documentation is organized by reader need rather than repository shape:
 
-Use the docs tree like this:
+- **Learn** builds a coherent mental model and offers a runnable first result.
+- **Guides** solve a bounded task and include verification and failure boundaries.
+- **Reference** defines exact contracts, signatures, clauses, and current capability.
+- **Architecture** explains ownership and system boundaries.
+- **Design records** preserve durable rationale and lifecycle state.
 
-- **Language reference:** current package/API contracts under [language/reference/][language-reference]
-- **Language how-to guides:** task-oriented workflows under [language/how-to/][language-how-to]
-- **Language explanation:** conceptual guidance and usage framing under [language/explanation/][language-explanation]
-- **Architecture:** repository and system boundaries in [architecture.md][architecture]
-- **RFCs:** design records and normative proposals in [rfcs/][rfcs]
-- **Whitepapers:** broader non-normative design papers in [whitepapers/][whitepapers]
-- **Release notes:** shipped and user-visible changes in [release_notes/][release-notes]
-- **Contributing:** contributor workflow, especially RFC process, in [contributing/writing_rfcs.md][contributing]
+## Choose by background
 
-## Recommended reading paths
+### I know SQL
 
-### Learn the current package surface
+Start with [IncQL for SQL users][sql]. It maps familiar clauses to checked `query { ... }` blocks, explains where IncQL deliberately differs from SQL text, and ends at the exact [query-block reference][query-reference]. Then complete the [quickstart][quickstart] and use [Join typed relations][joins] for a second realistic task.
 
-1. [Language overview][language-overview]
-2. [Dataset carriers (Explanation)][dataset-explanation]
-3. [Execution context (Explanation)][execution-explanation]
-4. [Build deferred dataset transformations (How-to)][dataset-transformations-how-to]
-5. [Normalize semi-structured fields (How-to)][normalize-semistructured-fields-how-to]
-6. [Work with nested row values (How-to)][nested-row-values-how-to]
-7. [Expand rows with generators (How-to)][generator-rows-how-to]
-8. [Add window columns (How-to)][window-columns-how-to]
-9. [Capture execution observations and adapter coverage (How-to)][execution-observations-how-to]
-10. [Observe data quality checks (How-to)][quality-observations-how-to]
-11. [Dataset carriers (Reference)][dataset-reference]
-12. [Dataset methods (Reference)][dataset-methods-reference]
-13. [Execution context (Reference)][execution-reference]
-14. [Inspect a plan and lineage graph (How-to)][inspect-plan-lineage-how-to]
-15. [Local inspection (Reference)][inspection-reference]
+### I know Spark or DataFrame APIs
 
-### Understand the system design
+Start with [IncQL for Spark and DataFrame users][spark]. It maps eager, deferred, and streaming carrier concepts; explains the role of `Session` and Prism; and calls out that `DataStream[T]` execution is future work. Continue with [Build deferred dataset transformations][transforms] and [Inspect a plan and lineage graph][inspection-guide].
 
-1. [IncQL architecture][architecture]
-2. [RFC index][rfcs-index]
-3. Relevant RFCs for deeper normative context
+### I know databases or query engines
 
-### Work on the spec
+Read [What IncQL is — and is not][ownership] before the quickstart. Then use the [Architecture][architecture] page to follow authoring, Prism, Substrait, Session, and adapter ownership, and consult the [backend capability matrix][capabilities] before assuming database, catalog, transaction, or optimizer behavior.
 
-1. [RFC index][rfcs-index]
-2. [How to write an RFC][writing-rfcs]
+### I build Incan applications
 
-The standalone MkDocs site uses `docs/` as the content root. The structure follows the same content model used in Incan: reference, how-to guides, explanation, architecture/contributing, RFCs, whitepapers, and release notes.
+Run the [ten-minute quickstart][quickstart], then follow [Read and write data][read-write], [Execution context][execution], and [Troubleshoot common failures][troubleshooting]. Use the [IncQL Book][book] when you want one cumulative project rather than independent tasks.
+
+## Choose by intent
+
+| I want to… | Start here | Exact contract |
+| --- | --- | --- |
+| get one checked result | [Ten-minute quickstart][quickstart] | [Query blocks][query-reference] |
+| read or write typed data | [Read and write data][read-write] | [Execution context][execution] |
+| filter, project, group, or sort | [Build deferred transformations][transforms] | [Dataset methods][methods] |
+| join two relations | [Join typed relations][joins] | [Dataset methods][methods] and [Query blocks][query-reference] |
+| inspect meaning before execution | [Inspect plan and lineage][inspection-guide] | [Inspection][inspection-reference] |
+| retain evidence from an attempt | [Execution observations][execution-observations] | [Execution context][execution] |
+| evaluate data quality | [Quality observations][quality-guide] | [Quality][quality-reference] |
+| diagnose a failure | [Troubleshooting][troubleshooting] | [Backend capability matrix][capabilities] |
+
+## Specialist tracks
+
+### Quality and governance
+
+Follow [Observe data quality checks][quality-guide], [Capture execution observations][execution-observations], and [Inspect governed evidence][governed-evidence]. These surfaces produce evidence; the application still owns enforcement, retries, publication, and write decisions.
+
+### Adapter and portability work
+
+Read [Architecture][architecture], the [backend capability matrix][capabilities], [Substrait conformance][substrait], and the [read-root binding contract][read-roots]. This path is advanced and is not a prerequisite for ordinary query authoring.
+
+### Analytics patterns
+
+Use the transformation, join, window, approximate metric, and generator guides from the [Guides overview][guides]. Capability-dependent guides state their adapter boundary before code.
+
+### Contributing to the specification
+
+Read the [RFC index][rfcs] and [How to write an RFC][writing-rfcs]. RFCs explain durable design decisions; they are not a substitute for the shipped API Reference.
 
 <!-- References -->
-[language-reference]: language/reference/dataset_carriers.md
-[language-how-to]: language/how-to/README.md
-[language-explanation]: language/explanation/dataset_carriers.md
+
 [architecture]: architecture.md
-[rfcs]: rfcs/README.md
-[whitepapers]: whitepapers/README.md
-[release-notes]: release_notes/v0_1.md
-[contributing]: contributing/writing_rfcs.md
-[language-overview]: language/README.md
-[window-columns-how-to]: language/how-to/window_columns.md
-[dataset-explanation]: language/explanation/dataset_carriers.md
-[execution-explanation]: language/explanation/execution_context.md
-[dataset-reference]: language/reference/dataset_carriers.md
-[dataset-methods-reference]: language/reference/dataset_methods.md
-[dataset-transformations-how-to]: language/how-to/dataset_transformations.md
-[generator-rows-how-to]: language/how-to/generator_rows.md
-[nested-row-values-how-to]: language/how-to/nested_row_values.md
-[normalize-semistructured-fields-how-to]: language/how-to/normalize_semistructured_fields.md
-[execution-reference]: language/reference/execution_context.md
-[execution-observations-how-to]: language/how-to/execution_observations.md
-[quality-observations-how-to]: language/how-to/quality_observations.md
-[inspect-plan-lineage-how-to]: language/how-to/inspect_plan_lineage.md
+[book]: language/tutorials/book/index.md
+[capabilities]: language/reference/capabilities.md
+[execution]: language/reference/execution_context.md
+[execution-observations]: language/how-to/execution_observations.md
+[governed-evidence]: language/how-to/governed_evidence.md
+[guides]: language/how-to/README.md
+[inspection-guide]: language/how-to/inspect_plan_lineage.md
 [inspection-reference]: language/reference/inspection.md
-[rfcs-index]: rfcs/README.md
+[joins]: language/how-to/joins.md
+[methods]: language/reference/dataset_methods.md
+[ownership]: language/explanation/what_incql_is.md
+[quality-guide]: language/how-to/quality_observations.md
+[quality-reference]: language/reference/quality.md
+[query-reference]: language/reference/query_blocks.md
+[quickstart]: language/quickstart.md
+[read-roots]: language/reference/substrait/read_root_binding_contract.md
+[read-write]: language/how-to/read_write_data.md
+[rfcs]: rfcs/README.md
+[spark]: language/explanation/from_spark.md
+[sql]: language/explanation/from_sql.md
+[substrait]: language/reference/substrait/conformance.md
+[transforms]: language/how-to/dataset_transformations.md
+[troubleshooting]: language/how-to/troubleshooting.md
 [writing-rfcs]: contributing/writing_rfcs.md

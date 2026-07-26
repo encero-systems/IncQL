@@ -1,0 +1,56 @@
+"""Ten-minute IncQL quickstart: read, plan, collect, and inspect rows."""
+
+import pub::incql
+from pub::incql import LazyFrame, Session, SessionError, desc, report_session_error
+
+
+@derive(Clone)
+model Order:
+    """Intended row shape for the CSV-backed source."""
+
+    order_id: int
+    customer_id: str
+    status: str
+    amount: float
+
+
+@derive(Clone)
+model PaidOrder:
+    """Projected row shape for the paid-order result."""
+
+    order_id: int
+    customer_id: str
+    amount: float
+
+
+def collect_paid_orders(mut session: Session) -> Result[None, SessionError]:
+    """
+    Register the bundled CSV, build deferred relational intent, and collect it.
+
+    Reading or collecting may return a typed `SessionError`; the caller owns
+    reporting that failure and deciding whether the process should continue.
+    """
+    orders: LazyFrame[Order] = session.read_csv("quickstart_orders", "orders.csv")?
+    paid_orders: LazyFrame[PaidOrder] = query {
+        FROM orders
+        WHERE .status == "paid"
+        SELECT
+            .order_id as order_id,
+            .customer_id as customer_id,
+            .amount as amount,
+        ORDER BY desc(.amount)
+    }
+
+    result = session.collect(paid_orders)?
+    println(f"columns: {result.resolved_columns():?}")
+    println(f"rows: {result.row_count()}")
+    println(result.preview_text())
+    return Ok(None)
+
+
+def main() -> None:
+    """Run the quickstart and report its typed Session result."""
+    mut session = Session.default()
+    match collect_paid_orders(session):
+        Ok(_) => println("IncQL quickstart completed")
+        Err(error) => report_session_error("quickstart", error)

@@ -7,7 +7,7 @@ from pub::incql import LazyFrame, Session, SessionError, desc, report_session_er
 
 
 def query_paid_orders(mut session: Session) -> Result[None, SessionError]:
-    """Run a SQL-familiar query block without using relational method chains."""
+    """Read tutorial orders, query paid rows, and print the typed result."""
     orders: LazyFrame[Order] = session.read_csv("tutorial_orders_query", "orders.csv")?
     paid_orders: LazyFrame[PaidOrderReview] = query {
         FROM orders
@@ -28,6 +28,7 @@ def query_paid_orders(mut session: Session) -> Result[None, SessionError]:
 
 
 def main() -> None:
+    """Run chapter 8 and report any typed session error."""
     mut session = Session.default()
     match query_paid_orders(session):
         Ok(_) => println("Chapter 8: query block completed")

@@ -2,7 +2,15 @@
 
 This how-to shows how to inspect a Prism-backed lazy plan without executing it.
 
+## When to use this
+
 Use `inspect_plan(...)` when you need the full inspection record. Use `inspect_lineage(...)` when you only need the lineage graph.
+
+Inspect before execution when a review, test, catalog, or diagnostic needs authored and rewritten plan evidence without binding a backend.
+
+## Before you begin
+
+You need a Prism-backed `LazyFrame[T]`. Build the plan far enough to include the transformations you want to inspect, and clone the carrier if later code also needs to consume it.
 
 ## Build a lazy plan
 
@@ -45,4 +53,23 @@ for edge in lineage.edges:
     println(edge.relationship.value())
 ```
 
-Lineage is plan-local evidence. It explains how the authored plan relates fields and relations before backend binding or execution. For exact record fields and current limits, see [Local inspection (Reference)](../reference/inspection.md).
+Lineage is plan-local evidence. It explains how the authored plan relates fields and relations before backend binding or execution.
+
+## Verify the result
+
+- Match output fields to the plan shape you authored.
+- Trace at least one filter, projection, aggregate, or join dependency back to its input.
+- Read confidence and unsupported-evidence markers; do not treat a missing edge as proof that no relationship exists.
+- Confirm that inspection did not require Session activation or backend execution.
+
+## Current support and failure boundaries
+
+Local inspection currently covers Prism-backed `LazyFrame[T]` plans. `DataFrame[T]` and `DataStream[T]` do not expose the same Prism-owned local inspection path. Evidence is plan-local and does not claim global catalog lineage, backend physical-plan lineage, or complete external metadata.
+
+## Reference
+
+Use [Local inspection][inspection] for exact record fields, confidence meanings, supported artifact families, and current limits.
+
+<!-- References -->
+
+[inspection]: ../reference/inspection.md

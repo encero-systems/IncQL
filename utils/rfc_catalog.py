@@ -589,15 +589,15 @@ def render_index_block(records: Sequence[RfcRecord]) -> str:
 
     ordered = sorted(records, key=lambda record: int(record.id))
     payload = json.dumps(catalog_data(ordered), ensure_ascii=False, indent=2, sort_keys=True)
-    # Source prose containing an HTML end tag must not be able to close the script.
+    # Source prose containing an HTML end tag must not be able to close the inert template.
     payload = payload.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
     with_tags = any(record.tags for record in ordered)
 
     lines = [
         BEGIN_MARKER,
-        '<script type="application/json" data-rfc-catalog>',
+        "<template data-rfc-catalog>",
         payload,
-        "</script>",
+        "</template>",
         "",
         '<div class="pp-rfc-fallback" data-rfc-fallback markdown="1">',
         "",

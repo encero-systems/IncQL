@@ -377,7 +377,7 @@ class RfcCatalogTests(unittest.TestCase):
             load_tag_mapping(self.tag_catalog({"0": ["planning"], "000": ["runtime"]}))
 
     def test_catalog_data_and_rendered_block_are_deterministic_and_safe(self) -> None:
-        self.write_rfc(0, summary="Avoid </script> termination & preserve safety.")
+        self.write_rfc(0, summary="Avoid </template> termination & preserve safety.")
         self.write_rfc(1, slug="second")
         records = build_catalog(
             self.rfc_dir,
@@ -408,11 +408,11 @@ class RfcCatalogTests(unittest.TestCase):
         )
         self.assertTrue(block.startswith(BEGIN_MARKER))
         self.assertTrue(block.endswith(END_MARKER))
-        self.assertIn('type="application/json" data-rfc-catalog', block)
+        self.assertIn("<template data-rfc-catalog>", block)
         self.assertIn('class="pp-rfc-fallback" data-rfc-fallback markdown="1"', block)
         self.assertNotIn("<noscript", block)
-        self.assertNotIn("</script> termination", block)
-        self.assertIn(r"\u003c/script\u003e termination \u0026 preserve safety", block)
+        self.assertNotIn("</template> termination", block)
+        self.assertIn(r"\u003c/template\u003e termination \u0026 preserve safety", block)
         self.assertIn(
             "| [000](000_test_rfc.md) | Draft | Authoring, Planning | A test RFC |",
             block,

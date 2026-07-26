@@ -1,4 +1,26 @@
-<header class="pp-rfc-index-header" markdown="1">
+<div class="page-layout rfc-layout" markdown="1">
+<aside class="docs-rail rfc-rail crystal-surface" aria-label="Design records navigation">
+<div class="rail-heading">
+<img src="../shared/icons/file-tree-outline.svg" alt="">
+<span><small>Documentation</small><strong>Design records</strong></span>
+</div>
+<nav class="rail-nav">
+<a href="../design_records/"><span>Overview</span><small>Start here</small></a>
+<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>50 durable records</small></a>
+<a href="#how-the-rfc-lifecycle-works"><span>Lifecycle guide</span><small>From draft to shipped</small></a>
+</nav>
+<div class="rail-section">
+<p>Whitepapers</p>
+<a href="../whitepapers/incql_db/"><img src="../shared/icons/database-cog-outline.svg" alt=""><span>IncQL-DB</span></a>
+</div>
+<div class="rail-note">
+<span class="health-light"></span>
+<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 50 records</small></div>
+</div>
+</aside>
+
+<main class="content rfc-content" id="reader" markdown="1">
+<header class="page-intro pp-rfc-index-header" markdown="1">
 <div class="pp-rfc-index-intro" markdown="1">
 # IncQL RFCs
 
@@ -11,7 +33,7 @@
 <div class="pp-rfc-reader-host" data-rfc-reader hidden></div>
 
 <!-- BEGIN GENERATED RFC CATALOG -->
-<script type="application/json" data-rfc-catalog>
+<template data-rfc-catalog>
 [
   {
     "authors": "Danny Meijer",
@@ -3193,7 +3215,7 @@
     "written_against": "Incan 0.4.0 and IncQL 0.1.0"
   }
 ]
-</script>
+</template>
 
 <div class="pp-rfc-fallback" data-rfc-fallback markdown="1">
 
@@ -3275,3 +3297,6 @@ Copy [TEMPLATE.md], name the file `NNN_short_slug.md`, choose the next available
 
 [TEMPLATE.md]: TEMPLATE.md
 [Writing IncQL RFCs]: ../contributing/writing_rfcs.md
+
+</main>
+</div>

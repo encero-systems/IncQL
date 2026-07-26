@@ -58,4 +58,5 @@ This page documents the current carrier method surface. Builder-function details
 
 - `join(...)` and `left_join(...)` are constrained to same-carrier inputs and the `ColumnExpr` predicate surface shown in the signature.
 - Query-block and scoped DSL surfaces lower into these carrier methods rather than defining separate method semantics.
-- For task-oriented examples, see [Build deferred dataset transformations](../how-to/dataset_transformations.md).
+- Method availability describes IncQL's authoring contract; adapter execution support remains a separate question. Check the [backend capability matrix](capabilities.md) before relying on a capability-dependent function family.
+- For task-oriented examples, see [Build deferred dataset transformations](../how-to/dataset_transformations.md) and [Join typed relations](../how-to/joins.md).

@@ -1,60 +1,95 @@
-<div class="incql-architecture-shell" markdown="1">
-<nav class="incql-architecture-rail" aria-label="Architecture sections">
-<span class="incql-architecture-rail__title">Architecture</span>
-<a href="#system-path" data-architecture-link="system-path">System path</a>
-<a href="#evidence" data-architecture-link="evidence">Evidence</a>
-<a href="#one-query" data-architecture-link="one-query">One query</a>
-<a href="#ownership" data-architecture-link="ownership">Ownership</a>
-<a href="#internals" data-architecture-link="internals">Internals</a>
+<div class="page-layout architecture-layout incql-architecture-shell" markdown="1">
+<aside class="docs-rail architecture-rail crystal-surface" aria-label="Architecture navigation">
+<div class="rail-heading">
+<img src="../shared/icons/vector-polyline.svg" alt="">
+<span><small>Documentation</small><strong>Architecture</strong></span>
+</div>
+<nav class="rail-nav architecture-rail-nav">
+<a class="is-active" href="#system-path" data-architecture-link="system-path" aria-current="location"><span>System path</span><small>Intent to execution</small></a>
+<a href="#evidence" data-architecture-link="evidence"><span>Evidence</span><small>Local correlation</small></a>
+<a href="#one-query" data-architecture-link="one-query"><span>One query</span><small>Boundary trace</small></a>
+<a href="#ownership" data-architecture-link="ownership"><span>Ownership</span><small>Clear seams</small></a>
+<a href="#internals" data-architecture-link="internals"><span>Internals</span><small>Repository seams</small></a>
 </nav>
+<div class="rail-section architecture-rail-section">
+<p>Also explore</p>
+<a href="../rfcs/"><img src="../shared/icons/file-tree-outline.svg" alt=""><span>RFC Context Reader</span></a>
+<a href="../contributing/architecture/"><img src="../shared/icons/code-braces-box.svg" alt=""><span>Contributor map</span></a>
+</div>
+<div class="rail-note architecture-rail-note">
+<span class="health-light"></span>
+<div><strong>Boundary model</strong><small>Backed by linked RFCs</small></div>
+</div>
+</aside>
 
-<article id="architecture" class="incql-architecture" data-incql-architecture markdown="1">
-<section id="system-path" class="incql-architecture-chapter incql-architecture-chapter--system" data-architecture-section="system-path" markdown="1">
-<header class="incql-architecture-heading">
-<p class="incql-architecture-kicker">From intent to execution</p>
+<main id="architecture" class="content architecture-content incql-architecture" data-incql-architecture markdown="1">
+<header class="page-intro architecture-intro incql-architecture-page-intro">
+<div>
+<p class="eyebrow incql-architecture-kicker">Architecture · system boundaries</p>
 <h1>One typed path through the system</h1>
-<p class="incql-architecture-lede">This is the Prism-backed <code>LazyFrame</code> path from checked intent to a materialized DataFusion result. Each boundary has one job, so changing a surface or backend cannot silently change the plan’s meaning.</p>
+<p>From checked intent to a materialized DataFusion result.</p>
+</div>
+<nav aria-label="Architecture resources"><a href="https://github.com/encero-systems/IncQL/blob/main/docs/architecture.md">Open source page</a><a href="#ownership">View ownership</a></nav>
 </header>
 
-<figure class="incql-system-path" aria-labelledby="incql-system-path-caption">
-<ol class="incql-system-path__stages">
-<li data-system-boundary="author"><span>01 · Author</span><strong>Authoring surfaces</strong><small>Checked <code>query {}</code> and <code>LazyFrame</code> intent.</small></li>
-<li class="incql-system-path__prism" data-system-boundary="prism"><span>02 · Plan</span><strong>Prism</strong><small>Semantic planning and canonical rewrites.</small></li>
-<li data-system-boundary="substrait"><span>03 · Exchange</span><strong>Substrait</strong><small>Portable logical plan; no runtime bindings.</small></li>
-<li data-system-boundary="session"><span>04 · Bind + dispatch</span><strong>Session</strong><small>Validate bindings and dispatch the selected adapter.</small></li>
-<li data-system-boundary="adapter"><span>05 · Plan + execute</span><strong>Backend adapter</strong><small>DataFusion planning, execution, and materialization.</small></li>
-</ol>
+<section id="system-path" class="architecture-chapter system-chapter crystal-surface incql-architecture-chapter incql-architecture-chapter--system incql-crystal-system" data-architecture-section="system-path" data-crystal-system-path markdown="1">
+<header class="chapter-heading incql-crystal-system__heading">
+<div>
+<p class="architecture-kicker incql-architecture-kicker">From intent to execution</p>
+<h2 id="system-path-title"><span>Five boundaries.</span><span>One semantic thread.</span></h2>
+</div>
+<p>The Prism-backed <code>LazyFrame</code> path keeps authoring, semantic planning, interchange, runtime binding, and engine execution deliberately separate.</p>
+</header>
 
-<div class="incql-system-path__visual" aria-hidden="true">
-<img class="incql-system-path__art" src="../shared/prismplane/architecture-system-path-v1.png" alt="">
-<span class="incql-system-path__flow-label incql-system-path__flow-label--forward">Typed intent</span>
-<span class="incql-system-path__flow-label incql-system-path__flow-label--return">Materialized result</span>
-<div class="incql-system-path__glyphs">
-<span><img src="../shared/icons/code-braces-box.svg" alt=""></span>
-<span class="incql-system-path__glyph--prism"></span>
-<span><img src="../shared/icons/file-tree-outline.svg" alt=""></span>
-<span><img src="../shared/icons/link-variant.svg" alt=""></span>
-<span><img src="../shared/icons/database-cog-outline.svg" alt=""></span>
+<div class="layer-tour-bar incql-layer-tour" aria-label="Automatic architecture tour controls">
+<p><span class="tour-pulse incql-layer-tour__pulse" aria-hidden="true"></span><span data-crystal-tour-status>Automatic layer tour</span></p>
+<button type="button" data-crystal-tour-toggle aria-controls="incql-layer-inspector">Stop automatic layer tour</button>
 </div>
+<p class="pp-sr-only" data-crystal-layer-announcer aria-live="polite"></p>
+
+<div class="stage-selector incql-layer-selector" role="tablist" aria-label="Architecture layers">
+<button type="button" role="tab" aria-selected="false" data-crystal-layer="author" tabindex="-1"><span>01 · Author</span><strong>Authoring</strong><small>Checked intent</small></button>
+<button type="button" role="tab" aria-selected="true" data-crystal-layer="prism"><span>02 · Plan</span><strong>Prism</strong><small>Semantic graph</small></button>
+<button type="button" role="tab" aria-selected="false" data-crystal-layer="substrait" tabindex="-1"><span>03 · Exchange</span><strong>Substrait</strong><small>Portable plan</small></button>
+<button type="button" role="tab" aria-selected="false" data-crystal-layer="session" tabindex="-1"><span>04 · Bind</span><strong>Session</strong><small>Runtime context</small></button>
+<button type="button" role="tab" aria-selected="false" data-crystal-layer="adapter" tabindex="-1"><span>05 · Execute</span><strong>Adapter</strong><small>Concrete engine</small></button>
 </div>
 
-<div class="incql-system-evidence" aria-label="Evidence correlated across planning and execution">
-<div class="incql-system-evidence__heading">
-<span>Evidence rail</span>
-<strong>One local <code>plan_target</code></strong>
+<figure class="system-path-figure incql-crystal-path" aria-labelledby="incql-crystal-path-caption">
+<div class="system-path-artboard incql-crystal-path__artboard">
+<img class="system-path-art incql-crystal-path__art" src="../shared/prismplane/architecture-system-path-v1.png" alt="Five transparent architecture planes connected by a luminous path, with a crystalline Prism in the planning plane">
+<div class="system-path-hotspots incql-crystal-path__hotspots" aria-label="Architecture boundaries in the system path">
+<button type="button" data-crystal-visual-layer="author" aria-label="Inspect Authoring surfaces"><span class="path-marker incql-path-marker" aria-hidden="true"><img src="../shared/icons/code-braces-box.svg" alt=""></span></button>
+<button type="button" data-crystal-visual-layer="prism" aria-label="Inspect Prism"></button>
+<button type="button" data-crystal-visual-layer="substrait" aria-label="Inspect Substrait"><span class="path-marker incql-path-marker" aria-hidden="true"><img src="../shared/icons/file-tree-outline.svg" alt=""></span></button>
+<button type="button" data-crystal-visual-layer="session" aria-label="Inspect Session"><span class="path-marker incql-path-marker" aria-hidden="true"><img src="../shared/icons/link-variant.svg" alt=""></span></button>
+<button type="button" data-crystal-visual-layer="adapter" aria-label="Inspect Backend adapter"><span class="path-marker incql-path-marker" aria-hidden="true"><img src="../shared/icons/database-cog-outline.svg" alt=""></span></button>
 </div>
-<div class="incql-system-evidence__rail">
+<figcaption id="incql-crystal-path-caption">Hover a boundary plane or use the labels above to inspect its seam.</figcaption>
+</div>
+</figure>
+
+<article class="layer-inspector crystal-inset incql-layer-inspector" id="incql-layer-inspector" role="tabpanel" aria-live="off">
+<header>
+<span data-crystal-layer-number>02 · Semantic planning</span>
+<div><img data-crystal-layer-icon src="../shared/icons/vector-polyline.svg" alt=""><h3 data-crystal-layer-title>Prism</h3></div>
+<p data-crystal-layer-summary>IncQL's immutable internal logical plan state and the local source of schema, lineage, rewrites, and authored-origin mappings.</p>
+</header>
+<div class="inspector-contracts incql-layer-inspector__contracts">
+<section><span>Decides / carries</span><ul data-crystal-layer-owns><li>Authored graph state</li><li>Canonical rewrites</li><li>Origin mappings</li></ul></section>
+<section><span>Does not own</span><ul data-crystal-layer-excludes><li>Public authoring syntax</li><li>Portable interchange</li><li>Runtime execution</li></ul></section>
+</div>
+<footer><span>Handoff</span><code data-crystal-layer-input>checked carrier calls</code><strong>→</strong><code data-crystal-layer-output>rewritten Prism view</code></footer>
+</article>
+
+<div class="evidence-rail incql-crystal-evidence-rail" aria-label="Evidence across planning and execution">
+<div><span>Evidence rail</span><strong>One local <code>plan_target</code></strong></div>
 <article><img src="../shared/icons/table-check.svg" alt=""><span><strong>Schema</strong><small>Fields and types</small></span></article>
 <article><img src="../shared/icons/vector-polyline.svg" alt=""><span><strong>Lineage + origin</strong><small>Authored meaning</small></span></article>
 <article><img src="../shared/icons/source-branch.svg" alt=""><span><strong>Rewrite</strong><small>Canonical derivation</small></span></article>
 <article><img src="../shared/icons/shield-check-outline.svg" alt=""><span><strong>Requirements</strong><small>Adapter boundary</small></span></article>
-<article class="incql-system-evidence__observation"><img src="../shared/icons/chart-timeline-variant.svg" alt=""><span><strong>Observation</strong><small>Concrete attempt</small></span></article>
+<article class="is-observation incql-crystal-evidence-rail__observation"><img src="../shared/icons/chart-timeline-variant.svg" alt=""><span><strong>Observation</strong><small>Concrete attempt</small></span></article>
 </div>
-<small class="incql-system-evidence__note">Local inspection artifacts and the runtime observation meet through the same local target; they are not serialized through the Substrait plan.</small>
-</div>
-
-<figcaption id="incql-system-path-caption">The representation path is not the literal public call stack: callers hand a Prism-backed <code>LazyFrame</code> to Session; Session triggers the Prism-to-Substrait handoff, validates logical reads, supplies registrations, and dispatches its configured adapter.</figcaption>
-</figure>
 
 <div class="incql-architecture-explanation" markdown="1">
 <p><strong>The separation is deliberate.</strong> Authoring surfaces express relational work. Prism is IncQL’s internal logical planning engine: it stores the authored plan, derives narrow semantics-preserving views, and keeps origin information intact. It is not the IncQL brand mark, the interchange format, or the execution engine.</p>
@@ -414,5 +449,5 @@ paid_by_region = orders
 <p class="incql-architecture-next__action"><a href="../contributing/architecture/">Open contributor architecture</a></p>
 </div>
 </section>
-</article>
+</main>
 </div>

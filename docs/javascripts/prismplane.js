@@ -88,12 +88,107 @@
     },
   };
 
+  const siteNavigationContract = {
+    activeSection(currentPath, routes, fallback = "home") {
+      return routes
+        .flatMap((route) => route.prefixes.map((prefix) => ({ ...route, prefix })))
+        .filter((route) => route.prefix && currentPath.startsWith(route.prefix))
+        .sort((left, right) => right.prefix.length - left.prefix.length)[0]?.section ?? fallback;
+    },
+
+    routeFromLink(link) {
+      return {
+        section: link.dataset.siteSection,
+        prefixes: (link.dataset.pathPrefixes ?? "").split(",").filter(Boolean),
+        searchLabel: link.dataset.searchLabel ?? "Search",
+      };
+    },
+  };
+
   if (typeof module !== "undefined" && module.exports) {
-    module.exports = { rfcReaderContract };
+    module.exports = { rfcReaderContract, siteNavigationContract };
   }
   if (typeof document === "undefined") {
     return;
   }
+
+  const initializeSiteNavigation = (root = document) => {
+    const navigation = root.querySelector(".site-nav");
+    if (!navigation) {
+      return;
+    }
+
+    const links = [...navigation.querySelectorAll("[data-site-section]")];
+    const homeLink = links.find((link) => link.dataset.siteSection === "home");
+    if (!homeLink) {
+      return;
+    }
+
+    const basePath = new URL(homeLink.href, window.location.href).pathname.replace(/\/?$/, "/");
+    const currentPath = window.location.pathname.startsWith(basePath)
+      ? window.location.pathname.slice(basePath.length)
+      : window.location.pathname.replace(/^\//, "");
+    const routes = links.map(siteNavigationContract.routeFromLink);
+    const activeSection = siteNavigationContract.activeSection(currentPath, routes);
+    const activeRoute = routes.find((route) => route.section === activeSection);
+
+    links.forEach((link) => {
+      const isActive = link.dataset.siteSection === activeSection;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+
+    const searchLabel = root.querySelector("[data-site-search-label]");
+    if (searchLabel) {
+      searchLabel.textContent = activeRoute?.searchLabel ?? "Search";
+    }
+  };
+
+  let disposeSiteDrawerToggle = () => {};
+
+  const initializeSiteDrawerToggle = (root = document) => {
+    disposeSiteDrawerToggle();
+    disposeSiteDrawerToggle = () => {};
+
+    const toggle = root.querySelector("[data-site-nav-toggle]");
+    const drawer = root.getElementById("__drawer");
+    if (!toggle || !drawer) {
+      return;
+    }
+
+    const sync = () => {
+      const expanded = drawer.checked;
+      toggle.setAttribute("aria-expanded", String(expanded));
+      toggle.setAttribute("aria-label", expanded ? "Close navigation" : "Open navigation");
+      toggle.title = expanded ? "Close navigation" : "Open navigation";
+    };
+    const handleToggle = () => {
+      drawer.checked = !drawer.checked;
+      drawer.dispatchEvent(new Event("change", { bubbles: true }));
+    };
+    const handleKeydown = (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+      event.preventDefault();
+      handleToggle();
+    };
+
+    toggle.addEventListener("click", handleToggle);
+    toggle.addEventListener("keydown", handleKeydown);
+    drawer.addEventListener("change", sync);
+    sync();
+
+    disposeSiteDrawerToggle = () => {
+      toggle.removeEventListener("click", handleToggle);
+      toggle.removeEventListener("keydown", handleKeydown);
+      drawer.removeEventListener("change", sync);
+    };
+  };
 
   const initializeSurfaceTabs = (root = document) => {
     root.querySelectorAll("[data-incql-surface-tabs]").forEach((group) => {
@@ -218,7 +313,7 @@
     disposeArchitectureNav();
     disposeArchitectureNav = () => {};
 
-    const nav = root.querySelector(".incql-architecture-rail");
+    const nav = root.querySelector(".architecture-rail-nav, .incql-architecture-rail");
     if (!nav) {
       return;
     }
@@ -330,14 +425,15 @@
       toggle = document.createElement("button");
       toggle.type = "button";
       toggle.className = "pp-primary-nav-toggle md-icon";
-      const icon = root.querySelector(".md-search__icon svg:nth-of-type(2)")
-        ?? root.querySelector('.md-header__button[for="__drawer"] svg');
-      if (icon) {
-        const clonedIcon = icon.cloneNode(true);
-        clonedIcon.setAttribute("aria-hidden", "true");
-        toggle.append(clonedIcon);
-      }
       sidebar.prepend(toggle);
+    }
+    let toggleIcon = toggle.querySelector(".pp-primary-nav-toggle__icon");
+    if (!toggleIcon) {
+      toggle.replaceChildren();
+      toggleIcon = document.createElement("span");
+      toggleIcon.className = "pp-primary-nav-toggle__icon md-nav__icon md-icon";
+      toggleIcon.setAttribute("aria-hidden", "true");
+      toggle.append(toggleIcon);
     }
     if (navRegion) {
       toggle.setAttribute("aria-controls", navRegion.id);
@@ -387,7 +483,7 @@
     disposeRfcReader = () => {};
 
     const host = root.querySelector("[data-rfc-reader]");
-    const dataNode = root.querySelector("script[data-rfc-catalog]");
+    const dataNode = root.querySelector("template[data-rfc-catalog]");
     const fallback = root.querySelector("[data-rfc-fallback]");
     if (!host || !dataNode || !fallback) {
       return;
@@ -395,7 +491,7 @@
 
     let records;
     try {
-      records = JSON.parse(dataNode.textContent ?? "");
+      records = JSON.parse(dataNode.content?.textContent ?? dataNode.textContent ?? "");
       if (!Array.isArray(records) || records.length === 0) {
         return;
       }
@@ -490,7 +586,7 @@
     searchInput.id = searchId;
     searchInput.type = "search";
     searchInput.autocomplete = "off";
-    searchInput.placeholder = "Search RFCs or choose tags";
+    searchInput.placeholder = "Title, topic, RFC…";
     searchInput.setAttribute("aria-controls", "pp-rfc-records");
     searchInput.setAttribute("aria-expanded", "false");
     const tagMenuButton = createElement("button", "pp-rfc-reader__tag-menu-button");
@@ -503,7 +599,8 @@
     tagMenuButton.append(tagMenuLabel, tagMenuCount);
     const shortcut = createElement("kbd", "", "/");
     shortcut.setAttribute("aria-hidden", "true");
-    searchShell.append(activeTags, searchInput, tagMenuButton, shortcut);
+    const searchPrefix = createElement("span", "pp-rfc-reader__search-label", "Search records");
+    searchShell.append(searchPrefix, activeTags, searchInput, tagMenuButton, shortcut);
 
     const facets = createElement("div", "pp-rfc-reader__facets");
     const scopeFieldset = createElement("fieldset", "pp-rfc-segments");
@@ -771,7 +868,7 @@
         window.requestAnimationFrame(() => focusList(state.selectedId));
       }, { signal });
 
-      const eyebrow = createElement("p", "pp-rfc-reader__eyebrow", `RFC ${record.id}`);
+      const eyebrow = createElement("p", "pp-rfc-reader__eyebrow", `RFC ${record.id} · ${record.lifecycle}`);
       const heading = createElement("h2", "", record.title);
       heading.id = "pp-rfc-detail-title";
       heading.tabIndex = -1;
@@ -803,25 +900,23 @@
       }
       appendMetadata(metadata, "Created", record.created);
       appendMetadata(metadata, "Issue", sourceLinks(record.issue_links));
-      appendMetadata(metadata, "RFC PR", sourceLinks(record.rfc_pr_links));
-
-      const openLink = createElement("a", "pp-rfc-reader__open", "Open full RFC →");
+      const openLink = createElement("a", "pp-rfc-reader__open", "Open full RFC");
       openLink.href = record.href;
 
       const summarySection = createElement("section", "pp-rfc-reader__section");
       summarySection.append(
         createElement("h3", "", "Summary"),
-        createElement("p", "", excerpt(record.summary, 430)),
+        createElement("p", "", record.summary),
       );
       const motivationSection = createElement("section", "pp-rfc-reader__section");
       motivationSection.append(
         createElement("h3", "", "Why it matters"),
-        createElement("p", "", excerpt(record.motivation, 540)),
+        createElement("p", "", record.motivation),
       );
       const headingGroup = createElement("div", "pp-rfc-reader__detail-heading");
       headingGroup.append(eyebrow, heading);
-      detailHeader.append(backButton, headingGroup, openLink);
-      detailBody.append(metadata, summarySection, motivationSection);
+      detailHeader.append(backButton, headingGroup, openLink, metadata);
+      detailBody.append(summarySection, motivationSection);
 
       const related = (record.related_ids ?? []).map((id) => recordById.get(id)).filter(Boolean);
       if (related.length > 0) {
@@ -835,6 +930,18 @@
         relatedSection.append(createElement("h3", "", "Related records"), relatedLinks);
         detailBody.append(relatedSection);
       }
+
+      const contextFooter = createElement("div", "pp-rfc-reader__context-footer");
+      const contextIcon = createElement("img");
+      contextIcon.src = new URL("../shared/icons/shield-check-outline.svg", window.location.href).href;
+      contextIcon.alt = "";
+      const contextCopy = createElement("span");
+      contextCopy.append(
+        createElement("strong", "", "Durable design context"),
+        createElement("small", "", "Source metadata, lifecycle, ownership, and evidence stay visible together."),
+      );
+      contextFooter.append(contextIcon, contextCopy);
+      detailBody.append(contextFooter);
 
       if (resetScroll) {
         detail.scrollTop = 0;
@@ -1253,6 +1360,8 @@
   };
 
   const initializePage = () => {
+    initializeSiteNavigation();
+    initializeSiteDrawerToggle();
     initializeSurfaceTabs();
     initializeBookParts();
     initializeArchitectureNav();
@@ -1260,11 +1369,23 @@
     initializeRfcReader();
   };
 
-  if (window.document$?.subscribe) {
-    window.document$.subscribe(initializePage);
-  } else if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializePage, { once: true });
-  } else {
+  let materialSubscriptionReady = false;
+  const subscribeToMaterialNavigation = () => {
+    if (!materialSubscriptionReady && window.document$?.subscribe) {
+      window.document$.subscribe(initializePage);
+      materialSubscriptionReady = true;
+    }
+  };
+  const initializeCurrentPage = () => {
     initializePage();
+    subscribeToMaterialNavigation();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeCurrentPage, { once: true });
+  } else {
+    initializeCurrentPage();
   }
+  subscribeToMaterialNavigation();
+  window.addEventListener("load", subscribeToMaterialNavigation, { once: true });
 })();

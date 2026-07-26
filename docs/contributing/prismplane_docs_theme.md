@@ -16,13 +16,46 @@ IncQL is also the reference implementation for a wider Encero documentation syst
 
 ## Implementation model
 
-The production theme is a light MkDocs Material adapter in `docs/stylesheets/prismplane.css`, with one shared light syntax system across ordinary docs and custom pages. Keep the implementation in Material-friendly CSS and normal Markdown first:
+The production theme is an ordered, explicit cascade rather than a two-file skin. Load order in `mkdocs.yml` is part of
+the contract:
+
+1. `prismplane.css` owns Material layout adaptation, landing-page structure, shared product components, and ordinary
+   reading-page structure.
+2. `crystalline.css` owns shared optical tokens, the global readable type scale, and common crystal material.
+3. `crystal-prototype.css` owns the accepted shell primitives (`topbar`, rails, and generic crystal surfaces).
+4. `crystal-architecture.css` owns the architecture story's component geometry and states.
+5. `crystal-integration.css` adapts the prototype components to MkDocs-generated markup and must follow the prototype
+   files it integrates.
+6. `crystal-learn.css` owns the Learn landing page.
+7. `crystal-book.css` owns Book navigation and book/concept-page refinements.
+
+Page-specific files may refine shared primitives only beneath their page root. Do not add a new global override when an
+existing owner can express the change, and do not reorder these files without browser QA of the landing, Learn, Book,
+Architecture, RFC reader, and an ordinary reference page.
+
+Manrope and Outfit are self-hosted under `docs/shared/fonts/` with their OFL license files. Keep the `@font-face`
+declarations and global font variables in `crystalline.css`; do not reintroduce a runtime Google Fonts import in a
+later stylesheet. Expressive landing imagery should ship an optimized WebP source with its original PNG as a fallback,
+and content images must declare intrinsic dimensions so they do not shift the page while loading.
+
+`docs/javascripts/crystalline.js` contains the progressive enhancement for the architecture boundary tour. Keep the
+implementation in Material-friendly CSS and normal Markdown first:
 
 - use Material navigation, search, code blocks, tables, admonitions, and task lists
 - keep custom landing-page classes limited to `docs/index.md`
 - avoid page-specific HTML when a normal Markdown heading, table, list, or admonition would work
 - prefer editing existing CSS sections over appending late override piles
 - use `mkdocs build --strict` before publishing docs changes
+
+Use three levels of optical intensity:
+
+- expressive crystal for landing-page heroes, primary diagrams, and selected states
+- matte glass for dense readers, technical cards, and explanatory panels
+- calm Material surfaces for long prose, code, tables, and reference detail
+
+Do not add decorative corner flares or repeated glowing dots to every surface. A crystal edge, subtle internal facet, and restrained shadow are enough; dense panels should not compete with their content. Keep supporting text at a comfortable 100% browser zoom, and treat any copy that needs 125% zoom as a typography defect rather than a user preference.
+
+Interactive optical treatments must remain progressive enhancements. The architecture path uses real buttons, tabs, reduced-motion behavior, keyboard navigation, and a fixed-height desktop inspector so changing boundaries does not shift the story below it. Hover can preview a boundary, while click makes the selection explicit and pauses the automatic tour.
 
 Interactive documentation components follow the same split:
 

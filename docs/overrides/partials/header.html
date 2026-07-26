@@ -1,0 +1,66 @@
+{# IncQL crystal shell: the accepted prototype header, adapted to MkDocs routes. #}
+{% set current = page.url if page else '' %}
+{% set site_sections = [
+  {'key': 'home', 'label': 'Home', 'href': '', 'prefixes': [], 'search': 'Search'},
+  {'key': 'learn', 'label': 'Learn', 'href': 'language/', 'prefixes': ['language/'], 'search': 'Search learning paths'},
+  {'key': 'guides', 'label': 'Guides', 'href': 'language/how-to/', 'prefixes': ['language/how-to/'], 'search': 'Search guides'},
+  {'key': 'reference', 'label': 'Reference', 'href': 'language/reference/', 'prefixes': ['language/reference/'], 'search': 'Search reference'},
+  {'key': 'architecture', 'label': 'Architecture', 'href': 'architecture/', 'prefixes': ['architecture/'], 'search': 'Explore layers'},
+  {'key': 'design-records', 'label': 'Design records', 'href': 'rfcs/', 'prefixes': ['rfcs/', 'design_records/', 'whitepapers/'], 'search': 'Search RFCs'},
+  {'key': 'project', 'label': 'Project', 'href': 'project/', 'prefixes': ['project/', 'docs_map/', 'release_notes/', 'contributing/'], 'search': 'Search project docs'}
+] %}
+{% set active = namespace(section='home', search='Search') %}
+{% for item in site_sections %}
+  {% for prefix in item.prefixes %}
+    {% if current.startswith(prefix) %}
+      {% set active.section = item.key %}
+      {% set active.search = item.search %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+<header class="topbar crystal-strip" data-md-component="header">
+  <a class="brand" href="{{ '' | url }}" aria-label="IncQL home">
+    <img src="{{ 'shared/brand/incql-logo-header.png' | url }}" alt="">
+    <span>
+      <strong>IncQL</strong>
+      <small>Incan Query Layer</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Documentation sections">
+    {% for item in site_sections %}
+      <a
+        data-site-section="{{ item.key }}"
+        data-path-prefixes="{{ item.prefixes | join(',') }}"
+        data-search-label="{{ item.search }}"
+        {% if item.key == active.section %}class="is-active" aria-current="page"{% endif %}
+        href="{{ item.href | url }}"
+      >{{ item.label }}</a>
+    {% endfor %}
+  </nav>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="site-nav-toggle md-icon"
+      aria-label="Open navigation"
+      aria-controls="__drawer"
+      aria-expanded="false"
+      data-site-nav-toggle
+    >
+      {% set icon = config.theme.icon.menu or "material/menu" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </button>
+    {% if "material/search" in config.plugins %}
+      <label class="docs-search" for="__search" aria-label="Search documentation">
+        <span data-site-search-label>{{ active.search }}</span>
+        <kbd>/</kbd>
+      </label>
+      {% include "partials/search.html" %}
+    {% endif %}
+    <a class="repo-chip" href="{{ config.repo_url }}" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
+      <img src="{{ 'shared/icons/source-branch.svg' | url }}" alt="">
+      <span>{{ config.repo_name }}</span>
+    </a>
+  </div>
+</header>
