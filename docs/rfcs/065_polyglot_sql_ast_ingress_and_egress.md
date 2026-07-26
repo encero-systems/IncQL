@@ -13,7 +13,7 @@
   - IncQL RFC 041 (Prism plan ingress and external client frontends)
   - IncQL RFC 066 (Prism relational reasoning and shared-work optimization)
 - **Issue:** —
-- **RFC PR:** —
+- **RFC PR:** [InQL #105](https://github.com/encero-systems/IncQL/pull/105)
 - **Written against:** Incan v0.5-era IncQL
 - **Shipped in:** —
 
