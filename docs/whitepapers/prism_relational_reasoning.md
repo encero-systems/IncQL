@@ -180,6 +180,80 @@ For each query, compare at least:
 
 No aggregate benchmark score is meaningful unless semantic-equivalence checks, hardware, data scale, target versions, and configuration are recorded.
 
+## Exploratory experiments
+
+The following experiments were run on 2026-07-26 to test specific architectural seams before this whitepaper was drafted. They used IncQL commit `9e642e5`, Incan `0.5.0-dev.29`, Polyglot `0.6.1` with its PostgreSQL parser and generator features, DataFusion `53.1.0`, and an isolated native PostgreSQL `16.14` instance on Apple silicon. The fixtures and bridge code were deliberately throwaway and are not part of this repository. The results are therefore preliminary observations with enough method and output recorded here to explain the research direction; they are not a substitute for the published harness required by the evidence program above.
+
+### Experiment 1: narrow Polyglot AST to Prism bridge
+
+The first probe tested one deliberately narrow bidirectional mapping:
+
+```sql
+SELECT id, amount FROM orders
+```
+
+Polyglot parsed the statement as a PostgreSQL AST. The experimental ingress mapper converted it into a two-node Prism graph: `ReadNamedTable("orders") → SelectProject(id, amount)`. The egress mapper inspected those Prism nodes, constructed a fresh Polyglot `Select` AST, and generated the same SQL text. Two focused tests passed: the round trip above and structured rejection of `SELECT id FROM orders WHERE amount > 100`, because no predicate mapping had been implemented. The generated SQL was also executed against PostgreSQL 16.14 and returned the seeded rows `1 | 12.50` and `2 | 25.00`.
+
+This established that the typed boundary is technically viable for a read/projection subset. It did not establish aliases, expressions, filtering, joins, aggregation, CTE bindings, dialect breadth, or a general semantic-equivalence mechanism.
+
+### Experiment 2: complex SQL carrying capacity
+
+The second probe isolated Polyglot's ability to preserve a query substantially beyond the bridge subset. The PostgreSQL input contained two dependent CTEs, a three-table join, a paid-order predicate, grouped arithmetic aggregation, `RANK() OVER (PARTITION BY ... ORDER BY ...)`, a nested `IN` subquery with `HAVING`, final ordering, and a limit. The first CTE, `order_totals`, was referenced both by `customer_rollup` and by the nested eligibility subquery.
+
+The synthetic fixture contained four customers, six orders, and six order items. Polyglot parsed the full query and generated normalized PostgreSQL SQL. The generated text was not byte-identical to the formatted input, but executing both forms against PostgreSQL 16.14 returned the same ordered result:
+
+```text
+customer_id | region | revenue | order_count | revenue_rank
+1           | north  | 150.00  | 2           | 1
+3           | south  | 220.00  | 1           | 1
+```
+
+The experimental Prism bridge rejected this query at `WITH`, as designed, because the bridge implemented only an unfiltered single-table projection. This result separates two facts that would otherwise be easy to conflate: Polyglot could carry the complex PostgreSQL AST faithfully, while IncQL did not yet have the scoped CTE-binding and relational mappings needed to turn that AST into Prism semantics.
+
+### Experiment 3: shared Prism subgraph and generated CTE egress
+
+The third probe started from a non-SQL, programmatically authored Prism graph:
+
+```text
+Read(delta_sales_orders)
+  → Filter(status = 'paid')
+      → Join(shared filter, shared filter)
+```
+
+A focused IncQL test asserted that the optimized view contained exactly three nodes and that both join input identifiers pointed to the same filter node. That test passed. Its reported `311.54 s` wall time was dominated by Incan provider preparation and generated-Rust compilation; it is not a query-performance measurement.
+
+A separate Rust prototype then manually mirrored that graph shape with fresh Polyglot AST builders under two egress policies. `inline` generated two derived tables containing the paid-order filter. `factor_shared` generated one `__incql_shared_1` CTE and referenced it twice. This prototype was not connected to the Prism test by an automatic Prism-to-Polyglot mapper, so it tested target representation rather than an end-to-end egress implementation.
+
+The PostgreSQL fixture was:
+
+| id | customer_id | status  | amount |
+| --- | ----------- | ------- | ------ |
+| 1  | 1           | paid    | 50.00  |
+| 2  | 1           | paid    | 70.00  |
+| 3  | 2           | paid    | 30.00  |
+| 4  | 2           | pending | 100.00 |
+
+Both generated statements returned the same five-row multiset: the four pairings of customer `1`'s two paid orders and the self-pairing of customer `2`'s paid order. Their row order differed because neither statement specified `ORDER BY`; comparison was therefore order-independent.
+
+`EXPLAIN (COSTS OFF)` showed materially different PostgreSQL plan shapes:
+
+| Egress form | Join shape | Source access |
+| ----------- | ---------- | ------------- |
+| Factored CTE | `Hash Join` | one `Seq Scan` on `delta_sales_orders`, followed by two `CTE Scan`s |
+| Inline derived tables | `Nested Loop` with `Materialize` | two `Seq Scan`s on `delta_sales_orders` |
+
+This is evidence that a generated CTE can encode a shared Prism-shaped relation and can change target plan structure. It is not evidence that the factored form is faster: the experiment recorded no stable elapsed-time, I/O, memory, spill, or scale measurements, and PostgreSQL's choice may change with statistics and data distribution.
+
+### Experiment 4: incomplete DataFusion execution lane
+
+A fourth test was written to register a three-row CSV source through IncQL, filter it to two rows, reuse that subframe in a join, and collect the expected four rows through DataFusion. The focused test run did not produce a completed DataFusion result. It was terminated after more than eight minutes spent in the Incan test preparation path, so neither success nor failure of the intended DataFusion plan was established. The provider-preparation delay is tracked publicly in [Incan issue 957][incan-provider-prep].
+
+No experiment completed the desired dbt-like path from CTE-heavy SQL through Polyglot AST, scoped Prism bindings, ordinary Substrait lowering, and DataFusion execution. No experiment implemented automatic Prism memo exploration or cost-based selection between inline and factored representations.
+
+### Interpretation
+
+The experiments support four bounded conclusions: Polyglot is capable of carrying the relevant complex SQL structure; a simple typed AST-to-Prism mapping is feasible; current Prism can represent one structurally shared authored subgraph; and Polyglot can encode the corresponding target relation as either inline SQL or a generated PostgreSQL CTE with observably different plan shapes. They do not establish a complete bidirectional bridge, CTE ingress, DataFusion execution, an optimizer, or a performance advantage. Those missing links are the reason this whitepaper proposes a reproducible corpus, explicit relational properties, memo-based alternatives, and target-specific cost evidence.
+
 ## Staged research direction
 
 1. **Research harness and corpus.** Publish fixtures, semantic-equivalence checks, plan capture, and reproducible target configurations before making performance claims.
@@ -223,6 +297,7 @@ RFC 066 records the north-star contract for authored intent, memo exploration, s
 [dbt-cte]: https://www.getdbt.com/blog/getting-started-with-cte
 [dbt-ephemeral]: https://materialize.com/docs/manage/dbt/get-started/
 [egg]: https://arxiv.org/abs/2004.03082
+[incan-provider-prep]: https://github.com/encero-systems/incan/issues/957
 [job]: https://15721.courses.cs.cmu.edu/spring2020/papers/22-costmodels/p204-leis.pdf
 [optd]: https://15721.courses.cs.cmu.edu/spring2024/project-showcase.html
 [provable-mqo]: https://arxiv.org/abs/1512.02568
