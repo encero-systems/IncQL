@@ -15,7 +15,7 @@
   - InQL RFC 041 (Prism plan ingress and external client frontends)
   - InQL RFC 065 (Polyglot SQL AST ingress and dialect-aware egress)
 - **Issue:** —
-- **RFC PR:** [InQL #105](https://github.com/encero-systems/IncQL/pull/105)
+- **RFC PR:** [IncQL #105](https://github.com/encero-systems/IncQL/pull/105)
 - **Written against:** Incan v0.5-era IncQL
 - **Shipped in:** —
 
