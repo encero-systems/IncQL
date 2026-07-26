@@ -56,6 +56,8 @@ IncQL uses its **own** RFC series (starting at 000), independent of the [Incan l
 | [047][rfc-047] | Draft       | Semantic evidence graph and agent query surface                                                   |     |
 | [048][rfc-048] | Draft       | Cluster execution backend mode                                                                    |     |
 | [050][rfc-050] | Draft       | Addon component registry and package contract                                                     |     |
+| [065][rfc-065] | Draft       | Polyglot SQL AST ingress and dialect-aware egress                                                 |     |
+| [066][rfc-066] | Draft       | Prism relational reasoning and shared-work optimization                                           |     |
 
 <!-- TODO: #7: auto populate this table (like how we do in incan) -->
 
@@ -117,4 +119,6 @@ New RFCs should follow [TEMPLATE.md] (aligned with Incan’s RFC structure, adap
 [rfc-047]: 047_semantic_evidence_graph_agent_surface.md
 [rfc-048]: 048_cluster_execution_backend_mode.md
 [rfc-050]: 050_addon_component_registry.md
+[rfc-065]: 065_polyglot_sql_ast_ingress_and_egress.md
+[rfc-066]: 066_prism_relational_reasoning_and_shared_work_optimization.md
 [incan-rfcs]: https://github.com/encero-systems/incan/tree/main/workspaces/docs-site/docs/RFCs

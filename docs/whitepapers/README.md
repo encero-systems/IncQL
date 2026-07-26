@@ -7,3 +7,4 @@ Whitepapers are intentionally broader than RFCs. They frame a problem, name a no
 ## Papers
 
 - [IncQL-DB: local ACID analytical memory for IncQL applications](incql_db.md)
+- [Prism: relational reasoning and shared-work optimization](prism_relational_reasoning.md)
