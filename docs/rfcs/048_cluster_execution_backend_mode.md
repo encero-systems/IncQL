@@ -12,8 +12,9 @@
   - IncQL RFC 032 (execution observations)
   - IncQL RFC 033 (adapter requirements and coverage)
   - IncQL RFC 041 (Prism plan ingress and external client frontends)
+  - IncQL RFC 066 (Prism relational reasoning and shared-work optimization)
 - **Issue:** —
-- **RFC PR:** —
+- **RFC PR:** [IncQL #105](https://github.com/encero-systems/IncQL/pull/105)
 - **Written against:** Incan 0.4.0-rc3 and IncQL's v0.3-era package migration context
 - **Shipped in:** —
 
@@ -110,7 +111,7 @@ alerts = important_events(events)
 handle = session.execute(alerts.write_to(alert_sink("ops_alerts")))
 ```
 
-The important difference is lifecycle rather than semantics. A bounded `LazyFrame[T]` cluster job can finish. A `DataStream[T]` cluster job may keep running, checkpoint state, recover from worker failure, and emit output continuously. Cluster mode must surface that lifecycle through execution handles and observations instead of pretending streaming execution is a finite `collect(...)`.
+The important difference is boundedness-specific relational properties and lifecycle, not a second query language. A bounded `LazyFrame[T]` cluster job can finish. A `DataStream[T]` cluster job may keep running, carry update, time, watermark, and bounded-state requirements, checkpoint state, recover from worker failure, and emit output continuously. Cluster mode must surface those requirements and that lifecycle through plan properties, execution handles, coverage, and observations instead of pretending streaming execution is a finite `collect(...)`.
 
 ## Reference-level explanation (precise rules)
 
@@ -248,7 +249,7 @@ Cluster mode changes execution placement and physical execution strategy. It doe
 - RFC 001 remains the source of `BoundedDataSet[T]` / `UnboundedDataSet[T]` capability gating. Streaming cluster execution must not loosen static `DataStream[T]` restrictions.
 - RFC 002 remains the Substrait interchange boundary. Cluster mode may use Substrait submission but must preserve IncQL metadata and binding contracts.
 - RFC 004 remains the session and backend-selection boundary. This RFC narrows how cluster mode fits under that boundary.
-- RFC 008 owns optimizer and adaptive-execution boundaries. Cluster mode may expose runtime facts used by the backend, but Prism remains the semantic logical planning owner.
+- RFCs 008 and 066 own optimizer and adaptive re-entry boundaries. Cluster mode may supply placement, exchange, locality, resource, boundedness, update, temporal-progress, state, and runtime facts, but Prism remains the semantic logical planning owner while the backend owns physical realization and lifecycle.
 - RFC 032 owns execution observations. Cluster-specific runtime facts should appear there.
 - RFC 033 owns adapter requirements and coverage. Cluster backend support must be reported through that model.
 - RFC 041 plan ingress frontends must keep cluster execution behind the same backend adapter boundary.
