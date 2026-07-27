@@ -4,6 +4,7 @@
 - **Created:** 2026-07-26
 - **Author(s):** Danny Meijer (@dannymeijer)
 - **Related:**
+  - IncQL RFC 001 (bounded and unbounded dataset carriers)
   - IncQL RFC 004 (execution context)
   - IncQL RFC 007 (Prism logical planning and optimization engine)
   - IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)
@@ -14,6 +15,8 @@
   - IncQL RFC 037 (plan diff and blast-radius inputs)
   - IncQL RFC 040 (interoperability semantic profiles)
   - IncQL RFC 041 (Prism plan ingress and external client frontends)
+  - IncQL RFC 047 (semantic evidence graph and agent query surface)
+  - IncQL RFC 048 (cluster execution backend mode)
   - IncQL RFC 065 (Polyglot SQL AST ingress and dialect-aware egress)
 - **Issue:** —
 - **RFC PR:** [IncQL #105](https://github.com/encero-systems/IncQL/pull/105)
@@ -22,22 +25,26 @@
 
 ## Summary
 
-This RFC makes Prism IncQL's standalone relational reasoning engine operating in two temporal modes: pre-execution planning and bounded adaptive re-entry. Both modes use the same authored graph, semantic rules, memo, property model, and explanation contract. Prism must preserve immutable authored relational intent while separately maintaining a bounded memo of semantically legal alternatives, their required properties, and the evidence that makes each alternative legal. Prism must produce a valid logical result without a `Session`, adapter, target context, or evidence provider. When any caller supplies a provider-neutral immutable planning context, Prism may additionally select target-aware logical, placement, exchange, and sharing alternatives. A coordinator may later invoke that same Prism engine with scoped runtime observations to reconsider unfinished work without mutating authored history or completed execution. Target lowerers, `Session`, adapters, and target optimizers remain responsible for representation-specific lowering, physical planning, runtime adaptation, and execution. This is a north-star optimizer contract across supported frontends, declared consumer sets, and heterogeneous targets; SQL CTEs, DataFusion plans, Spark plans, and other target representations are not Prism's semantic core.
+This RFC makes Prism IncQL's standalone relational reasoning engine operating in two temporal modes: pre-execution planning and bounded adaptive re-entry. Both modes use the same authored graph, semantic rules, memo, property model, and explanation contract across local, cluster, bounded, and continuous execution. Prism must preserve immutable authored relational intent while separately maintaining a bounded memo of semantically legal alternatives, their required properties, and the evidence that makes each alternative legal. Prism must produce a valid logical result without a `Session`, adapter, target context, or evidence provider. When any caller supplies a provider-neutral immutable planning context, Prism may additionally select target-aware logical, placement, exchange, and sharing alternatives. A coordinator may later invoke that same Prism engine with scoped runtime observations to reconsider unfinished bounded work or future continuous work without mutating authored history, committed progress, or completed execution. Target lowerers, `Session`, adapters, and target optimizers remain responsible for representation-specific lowering, physical planning, runtime adaptation, state lifecycle, and execution. Graph-shaped data may enter this model only through explicit typed graph and recursion semantics; Prism's plan DAG, memo, lineage graph, and evidence graph must not be mistaken for a graph-query data model. This is a north-star optimizer contract across supported frontends, declared consumer sets, and heterogeneous targets; SQL CTEs, DataFusion plans, Spark plans, streaming operator graphs, graph-engine plans, and other target representations are not Prism's semantic core.
 
 ## Core model
 
 1. **Authored Prism graph.** Immutable relational intent, source provenance, schema and lineage evidence, policy constraints, and author-visible names live here. This graph is never replaced by an optimizer choice.
 2. **Optimization memo.** The memo groups semantically equivalent relational expressions. Each alternative records its derivation, legality conditions, and required properties; it does not overwrite authored intent.
-3. **Planning scope.** Every optimization request declares its roots, consumer set, planning horizon, semantic and policy profile, and applicable resource budget. One query, several outputs, one scheduled run, and a recurring workload are distinct scopes.
+3. **Planning scope.** Every optimization request declares its roots, consumer set, bounded or continuous horizon, semantic and policy profile, and applicable resource budget. One query, several outputs, one scheduled run, a continuous execution, and a recurring workload are distinct scopes.
 4. **Planning evidence.** Declared or inferred facts, pre-execution estimates, and runtime observations remain distinct, immutable evidence classes with provenance, authority, scope, freshness, confidence, and invalidation state. Any caller may supply the provider-neutral context; Prism neither retrieves nor persists it.
 5. **Standalone logical selection.** Without target facts, Prism selects only alternatives whose legality follows from authored semantics and target-independent evidence. Unknown target capabilities constrain selection; they do not prevent planning.
 6. **Target-aware logical selection.** Given an optional immutable context containing target profiles, capabilities, budgets, statistics, policy facts, and candidate placements, Prism may select logical realization, placement, exchange, and sharing alternatives. Reuse may mean inlining, target-local sharing, transient materialization, durable reuse, or no sharing.
 7. **Target realization.** A coordinating caller and target lowerer realize the selected logical and placement plan through an interchange or adapter contract. A generated SQL CTE is one possible realization of selected sharing; SQL is neither required at ingress nor privileged at egress.
-8. **Bounded adaptive re-entry.** `Session` or another coordinator owns runtime observations and decides whether an explicit safe checkpoint permits replanning. It may invoke the same Prism engine over the unfinished graph with a new immutable planning context. The new selection must preserve completed work, snapshot and policy guarantees, and a legal fallback.
+8. **Bounded adaptive re-entry.** `Session` or another coordinator owns runtime observations and decides whether an explicit safe checkpoint permits replanning. It may invoke the same Prism engine over unfinished bounded work or the future portion of continuous work with a new immutable planning context. The new selection must preserve completed results or the committed stream frontier, compatible state, snapshot and policy guarantees, and a legal fallback.
 
 ## Motivation
 
 The same relational work can arrive from Incan carriers, query blocks, SQL, protocol clients, Delta-like sources, or future data-product interfaces. It can then be executed by an embedded engine, emitted as remote SQL, or split across sources. A fixed sequence of local rewrites cannot reliably choose among join order, predicate movement, sharing, materialization, source pushdown, placement, and exchange when these choices interact. Unbounded exploration is not an acceptable answer either: sufficiently large transformation graphs can make optimizer time and memory the dominant cost.
+
+Execution topology and data boundedness affect different parts of that problem. Local and cluster execution must preserve the same relational meaning, while distributed targets make placement, partitioning, exchange, locality, skew, and failure boundaries materially affect plan selection. Bounded and unbounded relations share one relational language, but an unbounded relation also carries temporal, update, state, and progress semantics that can make a batch-legal rewrite invalid for a stream.
+
+Graph-shaped data introduces another distinction. A Prism plan, lineage artifact, or evidence projection is structurally a graph, but that does not define property-graph or recursive-query semantics over user data. Graph pattern matching, traversal, reachability, path selection, and iterative algorithms require explicit node and edge identity, direction, labels or types, path semantics, recursion or fixpoint behavior, termination, and result-shape rules. Some can lower to relational work; none should be assumed equivalent merely because vertices and edges can be stored in tables.
 
 CTE-heavy transformation SQL makes the limitation visible. A CTE is an authoring and target-language construct, not proof that a relation should be materialized or even shared during execution. Conversely, an Incan-authored shared subframe may merit a generated CTE for PostgreSQL egress even though no SQL appeared at ingress. The optimizer needs to reason about relational equivalence and execution choices independently of either source or target syntax.
 
@@ -52,10 +59,13 @@ Prism already establishes immutable authored planning, structural sharing, and l
 - Require every planning request to declare its roots, consumer set, planning horizon, semantic profile, and applicable resource budget.
 - Require Prism to produce a valid target-independent logical result without a `Session`, adapter, or supplied target context.
 - Make shared-work selection a first-class optimizer decision across all frontends and targets.
+- Make local execution the one-placement case of the same target-aware model used for distributed placement and exchange.
+- Require boundedness, update mode, temporal progress, and state requirements to participate in legality for continuous work rather than enter as backend-only costs.
+- Preserve a deliberate boundary between graph-shaped Prism metadata and graph-query semantics, while allowing explicitly typed graph and recursive work to participate in the memo when its equivalence rules are proven.
 - Require rewrite legality to be backed by explicit semantic, profile, capability, policy, and property evidence.
 - Distinguish declared or inferred facts, pre-execution estimates, and scoped runtime observations without treating estimates or backend behavior as semantic truth.
 - Require an open, provider-neutral evidence-ingress contract that clients and tools may implement without giving Prism a live storage or service dependency.
-- Permit coordinator-owned adaptive replanning of unfinished work through a new immutable Prism planning context.
+- Permit coordinator-owned adaptive replanning of unfinished bounded work or future continuous work through a new immutable Prism planning context.
 - Require bounded search, inspectable pruning, graceful fallback, and planning-cost evidence as part of optimizer correctness.
 - Require an explainable path from the authored graph through considered alternatives to the selected logical or placement plan, its target realization, and any later adaptive selection.
 - Keep Substrait as interchange, Session and adapters as execution owners, and SQL AST tooling at frontend or egress boundaries.
@@ -72,6 +82,8 @@ Prism already establishes immutable authored planning, structural sharing, and l
 - Allowing a target parser, target execution result, or opaque backend rewrite to establish IncQL relational semantics.
 - Requiring Prism to depend on a live `Session`, adapter instance, catalog connection, or execution environment.
 - Giving Prism ownership of execution scheduling, safe-checkpoint detection, target-local physical adaptation, or completed execution state.
+- Defining a cluster scheduler, streaming runtime, state store, checkpoint transport, trigger API, or sink-commit implementation.
+- Defining a complete property-graph, RDF, or graph-query language; a graph storage engine; graph indexes; or a graph algorithm library.
 - Giving Prism ownership of cross-execution evidence storage, operational-cause interpretation, alerting, incident classification, or automated response.
 
 ## Guide-level explanation (how authors think about it)
@@ -118,15 +130,15 @@ Prism must support reproducible planning for the same authored graph, planning c
 
 ### Properties, requirements, and legality
 
-Every alternative considered for selection must carry, derive, or reference the properties required to use it correctly. The property vocabulary must be able to express, where relevant: output schema and nullability; key and uniqueness facts; ordering; partitioning or locality; source and connector capabilities; determinism and volatility; policy and admissibility constraints; dialect or adapter requirements; cardinality and size estimates; and the provenance of each fact.
+Every alternative considered for selection must carry, derive, or reference the properties required to use it correctly. The property vocabulary must be able to express, where relevant: output schema and nullability; key and uniqueness facts; ordering; partitioning or locality; boundedness; append, update, upsert, or retraction behavior; event-time and processing-time domains; watermark or other progress guarantees; bounded-state requirements; graph node and edge identity; direction, labels or types, path and recursion semantics; source and connector capabilities; determinism and volatility; policy and admissibility constraints; dialect or adapter requirements; cardinality, size, rate, degree, frontier, and iteration estimates; and the provenance of each fact.
 
-A rewrite must not rely on a property that is absent, unknown, contradicted, or valid only under a different semantic profile. A semantic profile must express every dimension on which a rewrite depends, including where relevant bag semantics and duplicates, null behavior, ordering and top-k, decimal and temporal behavior, collation and time zone, overflow and error behavior, function identity, parameter shape, volatility, transaction snapshot, and authorization context.
+A rewrite must not rely on a property that is absent, unknown, contradicted, or valid only under a different semantic profile. A semantic profile must express every dimension on which a rewrite depends, including where relevant bag semantics and duplicates, null behavior, ordering and top-k, decimal and temporal behavior, collation and time zone, overflow and error behavior, function identity, parameter shape, volatility, transaction snapshot, stream update mode, event-time and watermark behavior, late-data handling, replay and delivery guarantees, and authorization context.
 
 Planning evidence must distinguish:
 
 - **Declared or inferred facts:** authored declarations or properties derived logically from schemas, constraints, expressions, and policy.
-- **Pre-execution estimates:** catalog, source, profile, or target estimates such as row counts, distinct values, histograms, file sizes, partition metadata, and expected costs.
-- **Runtime observations:** actual execution evidence such as rows, bytes, selectivity, skew, shuffle, spill, memory, latency, failures, and realized target decisions.
+- **Pre-execution estimates:** catalog, source, profile, or target estimates such as row counts, distinct values, histograms, file sizes, partition metadata, event rates, state growth, and expected costs.
+- **Runtime observations:** actual execution evidence such as rows, bytes, rates, selectivity, skew, shuffle, spill, memory, state size, watermark progress, lag, backpressure, checkpoint behavior, failures, and realized target decisions.
 
 Estimated and observed facts may inform ranking, but they must not be reclassified as authored semantics. Every estimate or observation must identify its producer, plan or relation target, data snapshot or freshness boundary, parameter shape when relevant, semantic profile, target configuration, collection time, confidence or exactness class, and invalidation state. Unknown or stale evidence must remain explicit.
 
@@ -166,13 +178,33 @@ A target optimizer may revise the representation it receives. The execution evid
 
 Spark Catalyst and AQE are canonical examples of this boundary. Prism may select that a fragment execute on Spark and may require an exchange, ordering, partitioning, or sharing property. Catalyst remains responsible for Spark-local logical and physical refinement, and AQE remains responsible for Spark-local adaptive physical changes. IncQL may consume the resulting observations as later evidence without claiming that Prism selected those physical operators.
 
+### Distributed and continuous execution
+
+Cluster mode must not introduce a second Prism semantic model. A single-node target is the one-placement case: its planning context may establish that no network exchange is needed. A distributed target may expose eligible placements, locality, partitioning, exchange capabilities, resource envelopes, failure boundaries, and estimated network or serialization costs. Prism may use those facts to select logical placement and required exchanges, but scheduler topology, task assignment, shuffle realization, retries, recovery, and worker lifecycle remain target or coordinator responsibilities under RFC 048.
+
+Bounded and unbounded carriers likewise share one relational core, but boundedness is a semantic property rather than a target hint. A continuous plan must preserve the RFC 001 capability boundary and must record any update or changelog mode, time domain, watermark or other progress contract, state bound, late-data policy, replay behavior, and sink requirements on which legality depends. Prism must reject or leave unexplored a rewrite whose state remains unbounded, whose output-update behavior cannot satisfy its consumers, or whose movement across a temporal boundary changes observable results.
+
+Shared work over a stream may mean a shared target operator and evolving state, not a completed relation, SQL CTE, or reusable materialized result. Prism may select a logical sharing requirement only when consumer time, update, state, policy, and failure properties are compatible. The target runtime owns the physical operator, state store, checkpoint, backpressure, and recovery mechanisms and must report whether it can realize the selected requirements.
+
+Continuous adaptive re-entry occurs only at a coordinator-established barrier such as a compatible checkpoint, epoch, or watermark frontier. The planning request must identify the committed input and output frontier, state identities and schemas, future roots, and whether state can be reused, migrated, rebuilt, or must remain attached to the existing target plan. Prism may change only future processing. It must not reinterpret already committed output, silently discard state, or claim that a target checkpoint is semantically compatible without supplied evidence.
+
+### Graph-shaped data and recursive reasoning
+
+Prism's authored plan graph, optimization memo, RFC 030 lineage graph, and RFC 047 evidence graph are different graph-shaped artifacts with different authority. None of them is automatically a user-queryable property graph, RDF graph, or graph execution plan. Implementations must keep those identities and semantics separate.
+
+A graph frontend or API may map a graph view to typed vertex and edge relations plus explicit graph operators or recursion when its profile defines node and edge identity, direction, labels or types, property access, duplicate-edge behavior, null and missing-property behavior, path result shape, and the distinction among walks, trails, and simple paths. Reachability, shortest-path, pattern matching, and iterative algorithms must additionally define termination, cycle handling, ordering or tie behavior, and any approximate-result contract. If those facts are missing, Prism must report unsupported or unknown semantics rather than lower the request to ordinary joins and assume equivalence.
+
+Graph-aware memo rules may use relational joins, recursive or fixpoint operators, factorized intermediates, adjacency-aware access requirements, or a graph-target alternative. Legality and cost remain separate: an encoding may be relationally correct yet perform poorly because repeated joins lose adjacency, path, or frontier structure. Target-aware ranking may therefore consume degree distributions, frontier sizes, graph partitioning and cut estimates, iteration or convergence evidence, available graph indexes, and target recursion capabilities without making those estimates semantic truth.
+
+Shared graph work may mean reusing a graph projection, traversal frontier, reachability relation, iterative state, or target index. Each choice requires explicit identity, lifetime, update, freshness, policy, and failure semantics. For dynamic graphs, a continuous replan must preserve committed graph updates and any compatible fixpoint, frontier, visited-set, or path state; otherwise it must decline the replan or select an explicit rebuild.
+
 ### Runtime observations and bounded replanning
 
 `Session` or another coordinating caller owns execution attempts, runtime observations, safe-checkpoint detection, and the decision to request replanning. Prism must not monitor a live execution or mutate a running target plan directly.
 
-At a safe checkpoint, the coordinator may invoke Prism again with the original authored graph, the applicable unfinished roots and consumers, completed-work references, and a new immutable planning context containing runtime observations. The request must identify the plan and execution attempts from which observations came and must prove that their snapshot, freshness, parameter, semantic-profile, target, authorization, and policy scopes apply to the unfinished work.
+At a safe checkpoint, the coordinator may invoke Prism again with the original authored graph, the applicable unfinished roots and consumers or future continuous frontier, completed-work or committed-progress references, and a new immutable planning context containing runtime observations. The request must identify the plan and execution attempts from which observations came and must prove that their snapshot or stream frontier, freshness, parameter, semantic-profile, target, authorization, and policy scopes apply to the work being reconsidered.
 
-Prism may select a new logical, placement, exchange, sharing, or materialization alternative only for unfinished work. It must treat completed work as an immutable available result with explicit properties and lifecycle, preserve externally visible ordering and transaction guarantees, and retain the provenance path from the new selection to both authored intent and prior execution.
+Prism may select a new logical, placement, exchange, sharing, or materialization alternative only for unfinished bounded work or future continuous work. It must treat completed work as an immutable available result and committed streaming progress and compatible state as fixed inputs with explicit properties and lifecycle. It must preserve externally visible ordering, transaction, update, time, watermark, replay, and sink-commit guarantees and retain the provenance path from the new selection to both authored intent and prior execution.
 
 Every adaptive request must have a planning budget and a previously established legal fallback. If evidence is stale, contradictory, out of scope, or insufficient; if no safe checkpoint exists; or if the expected opportunity does not justify replanning cost, the coordinator must continue with the fallback or fail according to its execution contract. Declining to replan is an inspectable decision, not an optimizer failure.
 
@@ -182,7 +214,7 @@ Runtime observations may also inform a later planning invocation when a caller s
 
 For every selected logical or placement plan, IncQL must be able to produce inspectable evidence linking the selected relation to authored intent. The evidence must identify the declared roots, consumers, planning horizon, rule set, search budget, and whether planning context was absent or supplied. When context was supplied, it must identify its semantic profile, target identities, evidence producers and authority, evidence classes, and freshness or invalidation state. It must also identify equivalence alternatives considered, rules and evidence used to establish legality, required properties, estimated cost inputs and their provenance, selected sharing or materialization mode, pruned or unexplored alternatives, planning cost, and applicable execution observations when available.
 
-When a target realizes or adapts a plan, the evidence must distinguish the selected Prism requirements from the lowered target input, initial target plan, and adapted target plan where available. When Prism is invoked again, the evidence must identify the safe checkpoint, completed and unfinished work, observation snapshot, fallback, replan budget, and reason the new alternative was selected or replanning was declined.
+When a target realizes or adapts a plan, the evidence must distinguish the selected Prism requirements from the lowered target input, initial target plan, and adapted target plan where available. When Prism is invoked again, the evidence must identify the safe checkpoint or continuous or recursive frontier, completed or committed work, unfinished or future work, state disposition, observation snapshot, fallback, replan budget, and reason the new alternative was selected or replanning was declined.
 
 An implementation must distinguish semantic equivalence evidence from result-comparison evidence, plan-shape evidence, and performance evidence. Equal results on a fixture may support a test case but do not by themselves prove a general rewrite rule. A reduced source scan count in one target plan may support target-specific investigation but does not by itself establish a portable performance claim.
 
@@ -198,7 +230,7 @@ Prism has three conceptually distinct artifacts: authored intent, an optimizatio
 
 The memo may contain target-independent logical alternatives and, when a target context is supplied, target-realizable candidates. Logical equivalence is independent of a particular backend. Target-realizable candidates additionally satisfy the supplied capabilities and required properties. Missing target facts must constrain target-dependent selection rather than prevent standalone planning. If the realization layer cannot realize a selected sharing mode, it must request another legal alternative or report a structured unsupported diagnostic; it must not silently erase policy, profile, or semantic constraints.
 
-An adaptive Prism invocation is a new planning event over the original authored graph and explicitly identified unfinished work. It produces a new selected plan and explain record; it does not overwrite the authored graph, prior memo evidence, prior selection, completed-work record, or target execution observation.
+An adaptive Prism invocation is a new planning event over the original authored graph and explicitly identified unfinished bounded work or future continuous work. It produces a new selected plan and explain record; it does not overwrite the authored graph, prior memo evidence, prior selection, completed-work or committed-progress record, target state identity, or target execution observation.
 
 Names and scoped bindings from a frontend are preserved as authored or ingress provenance. They are not, by themselves, target plan nodes. In particular, SQL CTE bindings may lower to ordinary lexical Prism subframes while the memo independently explores their inlining, sharing, or materialization. Recursive or data-modifying CTE semantics remain governed by their frontend profile and are not implied by this RFC.
 
@@ -206,9 +238,11 @@ Names and scoped bindings from a frontend are preserved as authored or ingress p
 
 - **Prism and carriers:** RFC 007 remains authoritative for immutable carrier construction and structural sharing. This RFC specifies the stronger optimizer model over that authored state.
 - **Statistics and execution:** RFC 008 remains authoritative for the Prism versus Session execution boundary as amended by this RFC's provider-neutral evidence-ingress and adaptive re-entry contract. `Session` owns runtime-observation collection, safe-checkpoint policy, and the adaptive lifecycle. The memo may consume optionally supplied statistics and observations from any conforming provider through an immutable planning context; Prism does not require `Session` and does not own evidence storage, backend binding, physical planning, runtime monitoring, or mutation of running plans.
+- **Boundedness and cluster execution:** RFC 001 remains authoritative for bounded and unbounded carrier capability gating. RFC 048 remains authoritative for local and cluster backend lifecycle, scheduling, checkpoint, watermark, offset, recovery, and sink-commit responsibilities. This RFC makes the properties that affect relational legality and Prism selection explicit without moving those runtime responsibilities into Prism.
 - **Ingress:** RFC 041 remains authoritative for unresolved external plans and ingress coverage. All supported frontends must converge on Prism-authored semantics before memo exploration.
 - **SQL boundaries:** RFC 065 remains authoritative for Polyglot AST mapping, SQL profiles, and dialect coverage. This RFC governs selected logical sharing requirements; RFC 065 governs whether and how a SQL target lowerer can encode them, not Prism's semantic core.
 - **Evidence and inspection:** RFCs 027, 030, 032, and 033 govern complementary relational evidence, lineage, execution observations, and adapter coverage. RFC 032 observations remain session-owned execution artifacts. This RFC requires optimizer decisions and adaptive requests to link to those records rather than duplicate or replace them.
+- **Graph-shaped evidence:** RFC 030's lineage graph and RFC 047's semantic evidence graph are inspection and evidence artifacts, not graph-query semantics or target execution plans. A future graph frontend may consume or produce related identities only through an explicit mapping that preserves the authority of each artifact.
 - **Plan diff and blast radius:** RFC 037 governs local semantic plan diffs and blast-radius input artifacts. Prism explain and selected-plan evidence may feed those diffs, but organization-wide dependency discovery, production-impact interpretation, alerting, and response remain outside Prism.
 - **Interchange:** RFC 002 remains authoritative for Substrait as the emitted contract. A selected logical or placement choice must remain valid when a coordinating caller lowers it through the chosen interchange or adapter contract.
 
@@ -241,20 +275,22 @@ Serialized artifacts and inspection surfaces may need versioned additions for pl
 - Sharing and materialization require explicit resource, freshness, lifecycle, and cleanup policies that simple inlining avoids.
 - A cross-target optimizer can expose meaningful behavior differences between engines that were previously hidden behind one adapter.
 - Explainability records and reproducible benchmark harnesses impose storage and maintenance costs, but omitting them would make optimizer claims difficult to audit.
+- Distributed and continuous planning multiply the property combinations and make safe adaptation depend on target evidence about exchange, progress, state, recovery, and commit behavior.
+- Graph recursion, path semantics, and dynamic frontiers add rewrite and termination obligations that ordinary acyclic relational alternatives do not carry.
 
 ## Implementation architecture (non-normative)
 
 An implementation should keep authored graph construction, semantic analysis, bounded memo exploration, optional target-aware logical selection, external target realization, execution observation, evidence retention, and adaptive invocation as distinct responsibilities. The authored graph should remain persistent and structurally shared. The memo should retain equivalence groups, derivation evidence, required properties, alternatives, pruning decisions, and budget state without turning target-specific physical details into authored nodes. A planning context should be an immutable provider-neutral input value, not a live `Session`, adapter, catalog, or evidence-service dependency. Prism should consume that optional context to produce a selected logical or placement alternative, its required properties, planning-cost evidence, and an explain artifact; a coordinating caller and target lowerer should then realize it.
 
-For adaptive planning, the coordinator should retain completed-work references and establish a safe checkpoint before constructing a new immutable context from applicable observations. Re-entering Prism should produce another selected plan and explain artifact for unfinished work. The target engine may continue to make local physical changes independently, and IncQL should link those realized plans to the Prism selection when the target exposes them.
+For adaptive planning, the coordinator should retain completed-work or committed-progress references and establish a safe checkpoint before constructing a new immutable context from applicable observations. Re-entering Prism should produce another selected plan and explain artifact for unfinished bounded work or future continuous work. For streams, the context should also carry the committed frontier and target-supplied state compatibility or migration evidence. The target engine may continue to make local physical changes independently, and IncQL should link those realized plans to the Prism selection when the target exposes them.
 
-Research and implementation should use a reproducible corpus that includes dbt-like CTE-heavy transformations, controlled analytical queries, scalable optimizer-stress graphs, target-native Catalyst/AQE baselines, adaptive evidence studies, and cross-target result checks. Evidence must compare semantically equivalent results, authored and selected graph shapes, planning cost, target-realized and adapted plans, observed target metrics, and the provenance and invalidation state of estimates and observations. This architecture does not prescribe a single data structure or optimization algorithm.
+Research and implementation should use a reproducible corpus that includes dbt-like CTE-heavy transformations, controlled analytical queries, scalable optimizer-stress graphs, graph-pattern and recursive workloads, local and cluster target modes, bounded and unbounded sources, target-native Catalyst/AQE and graph-engine baselines, adaptive evidence studies, and cross-target result checks. Evidence must compare semantically equivalent results, stream traces, or graph paths under a declared profile; authored and selected plan shapes; planning cost; target-realized and adapted plans; observed target metrics; and the provenance and invalidation state of estimates and observations. This architecture does not prescribe a single data structure or optimization algorithm.
 
 ## Layers affected
 
 - **IncQL specification** — Prism must define authored intent, planning scope, memo alternatives, search budgets, property requirements, sharing modes, evidence classes, adaptive re-entry, selection evidence, and target-planning boundaries consistently with sibling RFCs.
 - **IncQL library package** — Prism-facing APIs and inspection artifacts must preserve immutable authored state, accept immutable planning contexts, and expose selected-plan and replanning explanations without forcing a backend-specific API into authoring surfaces.
-- **Execution / interchange** — `Session`, adapters, and external evidence providers may supply capability, statistics, and observation evidence with authority and provenance; coordinating callers own safe checkpoints, fallbacks, completed work, and adaptive invocation; target lowerers must receive selected Prism requirements without turning lowering behavior into semantic truth.
+- **Execution / interchange** — `Session`, adapters, and external evidence providers may supply capability, statistics, and observation evidence with authority and provenance; coordinating callers own safe checkpoints, fallbacks, completed work, committed progress, state lifecycle, and adaptive invocation; target lowerers must receive selected Prism requirements without turning lowering behavior into semantic truth.
 - **Frontend and egress integrations** — SQL, protocol, and other frontends must map to Prism before optimization; target emitters must realize selected plans only when their profile and coverage evidence permit it.
 - **Documentation and research artifacts** — capability claims, benchmarks, and plan comparisons must distinguish semantic correctness, target-plan shape, and measured performance.
 
@@ -266,7 +302,7 @@ Prism must construct, analyze, explore, and select a valid target-independent lo
 
 ### One engine, two temporal modes
 
-Pre-execution planning and bounded adaptive re-entry are two invocation modes of the same Prism reasoning engine. They share authored semantics, memo and property rules, evidence classification, bounded search, and explanation; adaptive re-entry differs only in its scoped observations, completed-work references, and unfinished planning surface.
+Pre-execution planning and bounded adaptive re-entry are two invocation modes of the same Prism reasoning engine. They share authored semantics, memo and property rules, evidence classification, bounded search, and explanation; adaptive re-entry differs only in its scoped observations, completed-work or committed-progress references, state compatibility evidence when applicable, and unfinished or future planning surface.
 
 ### Open planning-evidence ingress
 
@@ -282,19 +318,29 @@ Prism optimization must have an explicit, inspectable search budget and legal fa
 
 ### Coordinator-owned adaptive lifecycle
 
-`Session` or another coordinator owns runtime observations, safe checkpoints, completed work, target-local adaptation, and the decision to request replanning. Prism may be re-invoked with an immutable context to select unfinished logical or placement work, but it does not monitor or mutate live execution.
+`Session` or another coordinator owns runtime observations, safe checkpoints, completed work, committed progress, state lifecycle, target-local adaptation, and the decision to request replanning. Prism may be re-invoked with an immutable context to select unfinished bounded or future continuous logical or placement work, but it does not monitor or mutate live execution.
+
+### One semantic core across execution modes
+
+Local and cluster execution use the same Prism semantics; cluster facts expand placement, exchange, and cost choices without making scheduler mechanics portable semantics. Bounded and unbounded carriers also share the relational core, while boundedness, update, temporal-progress, and state requirements remain explicit legality properties. Continuous re-entry may change only future work at a supplied compatible frontier.
+
+### Graph semantics are explicit extensions
+
+Graph-shaped plans, lineage, and evidence do not by themselves establish graph-query semantics. Typed graph or recursive work may participate in Prism only through explicit identity, path, fixpoint, termination, and result contracts. Prism may compare relational and graph-target realizations when they satisfy the same declared semantics, but it must not flatten graph meaning into ordinary joins by assumption.
 
 ## Unresolved questions
 
 - Which relational rewrite families have sufficiently precise semantic profiles, property requirements, and test or proof obligations to enter the first audited memo rule set?
-- What is the minimum stable property vocabulary for ordering, partitioning, locality, keys, evaluation multiplicity, volatility, policy, and target capability without overcommitting to one engine's traits?
-- Which planning-scope vocabulary cleanly distinguishes a query, requested output set, transformation DAG, scheduled execution, and recurring workload?
+- What is the minimum stable property vocabulary for ordering, partitioning, locality, keys, boundedness, update mode, temporal progress, state, evaluation multiplicity, volatility, policy, and target capability without overcommitting to one engine's traits?
+- Which planning-scope vocabulary cleanly distinguishes a query, requested output set, transformation DAG, scheduled execution, continuous execution, and recurring workload?
 - Which deterministic resource budgets, pruning rules, and fallback contracts keep memo exploration tractable while preserving useful plan quality?
 - Which statistics and observation transport, confidence, and invalidation rules allow context evidence to be reused safely across planning sessions and targets?
-- Which safe-checkpoint and completed-work contracts permit a coordinator to re-enter Prism without violating transaction, snapshot, ordering, policy, or failure semantics?
+- Which safe-checkpoint, committed-frontier, state-compatibility, and completed-work contracts permit a coordinator to re-enter Prism without violating transaction, snapshot, ordering, temporal, update, sink-commit, policy, or failure semantics?
 - How should IncQL compare selected Prism requirements, lowered target input, initial target plan, and target-adapted plan across Catalyst/AQE, DataFusion, PostgreSQL, and future engines?
 - What resource, freshness, identity, authorization, and cleanup contract is required before transient or durable materialization can be selected automatically?
 - How should multi-fragment and cross-source sharing account for exchange cost, failure boundaries, and partial execution without importing orchestration semantics into Prism?
+- Which stream rewrite families and state-sharing choices can be proven legal across append, update, upsert, and retraction modes, and how should their trace equivalence be tested?
+- Which property-graph, recursive, and fixpoint semantics belong in Prism; which should remain frontend or target extensions; and what result, path, termination, and incremental-update evidence establishes equivalence across relational and graph-native realizations?
 - Which explain artifact schema can remain stable while still exposing a growing memo and target-specific selection evidence?
 - What reproducible workload scales, graph-complexity thresholds, target versions, and success criteria are required before an optimizer-tractability, target-specific sharing, adaptive-replanning, or CTE-factorization recommendation becomes a public performance claim?
 

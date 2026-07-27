@@ -4,9 +4,11 @@
 - **Created:** 2026-04-07
 - **Author(s):** Danny Meijer
 - **Related:**
+  - IncQL RFC 001 (bounded and unbounded dataset carriers)
   - IncQL RFC 004 (execution context — `Session` remains the execution and backend boundary)
   - IncQL RFC 007 (Prism planning engine — this RFC narrows optimizer-boundary ownership without replacing Prism adoption)
   - IncQL RFC 032 (execution observations)
+  - IncQL RFC 048 (cluster execution backend mode)
   - IncQL RFC 066 (Prism relational reasoning and shared-work optimization)
 - **Issue:** [IncQL #18](https://github.com/encero-systems/IncQL/issues/18)
 - **RFC PR:** [IncQL #105](https://github.com/encero-systems/IncQL/pull/105)
@@ -15,7 +17,7 @@
 
 ## Summary
 
-This RFC defines the optimizer boundary between **Prism** and **`Session`** as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and logical alternative ranking. `Session` remains the owner of backend capability discovery, physical planning, backend pushdown policy, runtime-observation collection, safe checkpoints, target-local adaptive execution, and execution metrics. Prism may consume provider-neutral immutable evidence before execution or when a coordinator explicitly re-invokes the same reasoning engine over unfinished work. External providers may retain applicable evidence across executions, but Prism does not retrieve, persist, or operationally interpret it. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004, while RFC 066 defines the stronger north-star memo and adaptive re-entry contract.
+This RFC defines the optimizer boundary between **Prism** and **`Session`** as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and logical alternative ranking. `Session` remains the owner of backend capability discovery, physical planning, backend pushdown policy, runtime-observation collection, safe checkpoints, target-local adaptive execution, and execution metrics. Prism may consume provider-neutral immutable evidence before execution or when a coordinator explicitly re-invokes the same reasoning engine over unfinished bounded work or future continuous work. External providers may retain applicable evidence across executions, but Prism does not retrieve, persist, or operationally interpret it. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004, while RFC 066 defines the stronger north-star memo, distributed and continuous planning properties, and adaptive re-entry contract.
 
 ## Motivation
 
@@ -157,7 +159,7 @@ This RFC distinguishes three statistics families:
 
 1. **Logical inferred facts** — bounds or properties Prism derives from schema, constraints, and expressions.
 2. **Pre-execution source statistics** — row counts, NDV estimates, histograms, file sizes, partition metadata, or equivalent facts supplied through `Session` and its backend or catalog integrations.
-3. **Runtime statistics** — observed row counts, partition sizes, skew signals, spill facts, and other execution-time measurements.
+3. **Runtime statistics** — observed row counts or rates, partition sizes, skew signals, spill facts, state size, watermark progress, lag, backpressure, checkpoint behavior, graph frontier or iteration size, convergence behavior, and other execution-time measurements.
 
 Ownership rules:
 
@@ -186,8 +188,8 @@ That means:
 
 - Prism may produce a preferred logical plan or ranked alternatives before execution.
 - `Session` or a target engine may revise target-local physical strategy during execution based on runtime statistics.
-- At an explicit safe checkpoint, `Session` or another coordinator may invoke the same Prism engine with an immutable snapshot of applicable observations, completed-work references, unfinished roots, a bounded planning budget, and a legal fallback.
-- Prism may return a new logical or placement selection only for unfinished work; it does not monitor execution or mutate a running target plan.
+- At an explicit safe checkpoint, `Session` or another coordinator may invoke the same Prism engine with an immutable snapshot of applicable observations, completed-work or committed-progress references, unfinished bounded roots or a future continuous frontier, a bounded planning budget, and a legal fallback.
+- Prism may return a new logical or placement selection only for unfinished bounded work or future continuous work. Streaming re-entry additionally requires target-supplied evidence for the committed frontier and any state reuse or migration; Prism does not monitor execution, operate checkpoints, or mutate a running target plan.
 - `Session` may record target-local adaptive decisions and coordinator-requested Prism selections in `executed_plan()` or equivalent explain surfaces.
 - Adaptive behavior **must not** mutate Prism-authored history or turn observations into authored semantics.
 
@@ -289,4 +291,6 @@ Existing prototype APIs that use vague names like `optimized_view` remain accept
 - **Statistics ownership split:** Prism may use logical inferred facts and estimates or observations supplied through the provider-neutral planning context. Runtime observations retain their execution producer's provenance and authority and must not become Prism-authored facts.
 - **Explain/API scope:** Distinct authored, analyzed, rewritten, session, and executed stages are part of the intended mental model, but the exact public API names and attachment points remain illustrative in this RFC.
 - **Cross-execution evidence boundary:** Runtime-derived information retains the collecting execution system's provenance and authority, while an external provider may retain and later supply it through the provider-neutral immutable planning-context contract. Prism does not own that storage, and retained evidence must not mutate authored history or be reclassified as semantic truth.
+- **Execution-mode boundary:** Local and cluster execution preserve one Prism semantic model, while supplied placement, exchange, locality, and resource facts may change target-aware ranking. Bounded and unbounded relations share that relational core, but boundedness, update, temporal-progress, and state requirements constrain rewrite legality. Session, coordinator, and target layers retain scheduling, checkpoint, state, recovery, backpressure, and sink-commit ownership.
+- **Graph-execution boundary:** Graph-shaped Prism plans, lineage, and evidence do not create graph-query semantics. Explicit graph or recursive semantics remain Prism legality concerns when supported; graph indexes, traversal kernels, iterative execution, frontier scheduling, and recovery remain target or coordinator concerns.
 - **Deferred follow-on design:** A follow-on contract may define the concrete planning-context transport, cost interfaces, memo machinery, adaptive checkpoint mechanics, and public explain surfaces without changing the ownership boundary settled here.

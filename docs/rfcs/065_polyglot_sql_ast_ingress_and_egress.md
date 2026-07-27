@@ -5,12 +5,14 @@
 - **Author(s):** Danny Meijer (@dannymeijer)
 - **Related:**
   - IncQL RFC 000 (core language model and layer boundaries)
+  - IncQL RFC 001 (bounded and unbounded dataset carriers)
   - IncQL RFC 004 (execution context)
   - IncQL RFC 007 (Prism logical planning and optimization engine)
   - IncQL RFC 012 (unified scalar expression surface)
   - IncQL RFC 033 (adapter requirements and coverage)
   - IncQL RFC 040 (interoperability semantic profiles)
   - IncQL RFC 041 (Prism plan ingress and external client frontends)
+  - IncQL RFC 048 (cluster execution backend mode)
   - IncQL RFC 066 (Prism relational reasoning and shared-work optimization)
 - **Issue:** —
 - **RFC PR:** [IncQL #105](https://github.com/encero-systems/IncQL/pull/105)
@@ -43,6 +45,8 @@ Polyglot provides a typed AST, dialect parser, generator, formatter, validator, 
 - Replacing Prism with Polyglot, SQL text, Substrait, DataFusion, or a backend engine as IncQL's semantic owner.
 - Carrying Polyglot AST nodes through Prism rewrite rules, cost evaluation, or row-by-row execution.
 - Treating this RFC as a guarantee of full SQL compatibility, generic transpilation, stored-procedure execution, or vendor session emulation.
+- Treating a dialect's batch SQL coverage as coverage for streaming SQL, continuous-query extensions, changelog semantics, watermarks, triggers, or stateful execution.
+- Treating ordinary SQL coverage as coverage for recursive graph traversal, SQL/PGQ, `MATCH`-style graph patterns, vendor graph extensions, or a graph-query language.
 - Guaranteeing byte-identical SQL on a parse-to-emit round trip.
 - Hiding unsupported syntax by silently delegating it to a backend.
 
@@ -76,7 +80,7 @@ For a dialect profile `d`, every IncQL SQL capability claim is the intersection 
 
 - Polyglot can parse or generate the relevant dialect construct for `d`.
 - IncQL can map the construct between Polyglot AST and Prism without losing required relational meaning.
-- The selected semantic profile records any dialect-specific constraints that affect the construct.
+- The selected semantic profile records any dialect-specific constraints that affect the construct, including whether the mapped relation is bounded or continuous and any required update, temporal-progress, or state semantics.
 - The evidence required for the published claim level is present.
 
 An `execution_supported` claim additionally requires coverage for the selected execution path. Ingress and egress claims do not imply that an adapter can execute the resulting Prism plan or generated SQL.
@@ -117,13 +121,21 @@ Common table expressions are a required design probe before the PostgreSQL core 
 
 SQL egress must not depend on a plan having originated as SQL, and it must not independently select whether relational work is shared. Given a Prism-selected inline alternative, the lowerer may emit eligible relations as derived tables. Given a Prism-selected target-local sharing requirement and eligible shared subgraph, the lowerer may assign generated local names, order definitions by dependency, construct a fresh Polyglot `WITH` AST, and emit references when the selected SQL profile establishes that a CTE preserves the required semantics and evaluation multiplicity. A source CTE name is provenance, not Prism semantic identity or an egress requirement. If the target profile cannot realize a selected requirement, egress must request another legal Prism alternative or return a structured unsupported diagnostic; it must not silently inline, duplicate, or materialize the relation. Target-plan and execution evidence may inform a later Prism selection, but the lowerer does not become the sharing optimizer.
 
-Recursive CTEs, data-modifying CTEs, volatile or otherwise profile-sensitive expressions, row-locking behavior, and dialect-specific materialization hints remain unsupported unless a later profile defines their semantics explicitly.
+Recursive CTEs, data-modifying CTEs, volatile or otherwise profile-sensitive expressions, row-locking behavior, dialect-specific materialization hints, SQL/PGQ, and vendor graph-pattern extensions remain unsupported unless a later profile defines their semantics explicitly.
+
+Streaming SQL and continuous-query extensions remain unsupported unless a dedicated profile defines their Polyglot AST coverage, Prism boundedness and update mapping, event-time or processing-time behavior, watermark and late-data semantics, state requirements, and target execution evidence. A batch `ingress_supported`, `egress_supported`, or `execution_supported` claim must not be reused as a streaming claim.
+
+Graph SQL and recursive-query extensions remain unsupported unless a dedicated profile defines their Polyglot AST coverage, node and edge identity, direction, label or type and property semantics, path rules, recursion or fixpoint behavior, termination, result shape, and mapping into explicit Prism semantics. Parser acceptance or generation of a graph syntax must not be reported as graph-query coverage.
 
 ### Coverage evidence
 
 Every declared ingress or egress feature must have a fixture corpus that names the dialect profile, SQL or Prism input, expected mapping result, and claim level. An ingress fixture must assert the Polyglot AST-to-Prism mapping rather than only accepting a parse. An egress fixture must assert the Prism-to-Polyglot AST mapping and dialect generation rather than only comparing strings. A bidirectional fixture must assert the declared semantic equivalence relation for its profile.
 
 Every unsupported feature family adjacent to a supported slice must have at least one rejection fixture. A declared read/projection slice, for example, must reject a filter, join, expression projection, alias, grouping, ordering, limit, qualified or aliased source relation, and CTE until each has explicit coverage. The CTE corpus must include a non-recursive CTE referenced once and one referenced more than once, so a future mapping proves binding and reuse rather than superficial syntax acceptance.
+
+A future streaming SQL fixture must additionally assert the emitted Prism boundedness, update mode, temporal-progress and state requirements, and an execution claim must compare output traces or committed sink effects under the declared watermark, late-data, replay, and delivery profile rather than compare one finite result table.
+
+A future graph SQL fixture must additionally assert node and edge identity, direction, labels or types, path and recursion semantics, termination, and result shape. An execution claim must compare bindings, paths, or graph results under the declared duplicate, cycle, ordering, and update profile rather than accept a target-specific graph plan as proof of equivalence.
 
 An `execution_supported` claim requires expected-result integration evidence for the selected execution target. It must not be inferred from parser acceptance, SQL generation, a successful AST round trip, or a successful backend compile alone. For CTE support, that evidence must include a dbt-like CTE-heavy fixture that flows through Polyglot AST ingress into Prism, lowers through IncQL's ordinary Substrait path, and executes through the selected adapter without calling that adapter's SQL parser on the source statement. Where the profile permits, separate Prism-selected inline and target-local sharing alternatives must be realizable as inline and generated-CTE SQL and must produce equivalent results under the declared semantic profile. Target-plan inspection or measured execution may inform a later policy selection, but a structural scan-count difference alone is not a portable performance claim.
 
@@ -132,6 +144,8 @@ An `execution_supported` claim requires expected-result integration evidence for
 SQL, `query {}` blocks, and method-chain authoring may produce comparable Prism plans when they express the same supported relational intent under the same profile. They must not converge by treating an engine-generated SQL string as the canonical plan.
 
 Semantic profiles from IncQL RFC 040 must record dialect-sensitive dimensions that affect a mapped construct, including identifier quoting and case handling, qualification, null semantics, type coercion, temporal and decimal behavior, function identity, and ordering where relevant. Missing profile evidence must produce `unknown`, not an assumption of portability.
+
+RFC 001 remains authoritative for bounded and unbounded carrier semantics, and RFC 048 remains authoritative for cluster and streaming execution lifecycle. Polyglot may carry a vendor SQL syntax only when its dedicated profile maps those semantics into Prism; neither parsing nor generation may bypass those RFC boundaries.
 
 Ingress coverage is frontend evidence. Adapter coverage remains execution evidence. Successful parsing by Polyglot must not be reported as successful IncQL execution, and successful egress generation must not be reported as compatibility with a target engine unless adapter and profile evidence establish that claim.
 

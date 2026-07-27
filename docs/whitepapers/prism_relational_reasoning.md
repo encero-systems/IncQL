@@ -10,7 +10,7 @@
 
 ## Thesis
 
-Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: one system operating in pre-execution and bounded adaptive re-entry modes, remaining tractable over large transformation graphs, recognizing equivalent and shared relational work, preserving the reasons a rewrite is legal, and selecting logical, sharing, placement, and exchange requirements before external target lowerers and execution engines choose their representations and physical plans. Both temporal modes use the same authored graph, semantic rules, memo, property model, and explanation contract.
+Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: one system operating in pre-execution and bounded adaptive re-entry modes across local, cluster, bounded, continuous, and explicitly modeled graph or recursive workloads, remaining tractable over large transformation graphs, recognizing equivalent and shared work, preserving the reasons a rewrite is legal, and selecting logical, sharing, placement, and exchange requirements before external target lowerers and execution engines choose their representations and physical plans. Both temporal modes use the same authored graph, semantic rules, memo, property model, and explanation contract.
 
 The goal is not to make SQL CTEs work, nor to replace Catalyst, DataFusion, PostgreSQL, Spark, or another target optimizer or execution engine. The goal is to give IncQL an optimizer-owned semantic graph that can improve plans arriving from Incan APIs, SQL, protocol frontends, Delta-like sources, and future data-product interfaces before target-specific optimization begins.
 
@@ -61,12 +61,12 @@ Substrait · SQL AST · multi-fragment          │
 DataFusion · PostgreSQL · Spark · others      │
                  │                            │
         scoped runtime observations ──────────┘
-        at a bounded adaptive checkpoint
+        at a bounded adaptive checkpoint or continuous frontier
 ```
 
 The authored graph and optimization memo must be distinct. The authored graph records what the author or frontend meant, including source provenance. The memo records semantically equivalent alternatives. An optimizer may choose a different alternative, but it must preserve a lineage and evidence path explaining why the alternative is valid and why it was selected. Prism must also produce a valid target-independent logical result when the optional planning-evidence input is absent. Any caller may construct that immutable input through the same open contract; Prism does not require or recognize a privileged evidence provider.
 
-Target realization and execution remain outside Prism. A target engine may refine or replace physical choices, and a coordinator may later invoke Prism again with an immutable observation snapshot at an explicit adaptive checkpoint. Replanning derives a new selection for unfinished work; it does not mutate authored history or completed execution.
+Target realization and execution remain outside Prism. A target engine may refine or replace physical choices, and a coordinator may later invoke Prism again with an immutable observation snapshot at an explicit adaptive checkpoint. Replanning derives a new selection for unfinished bounded work or future continuous work; it does not mutate authored history, completed execution, committed stream progress, or target state without an explicit compatibility or migration contract.
 
 This separation fits Prism's existing immutable, structurally shared planning model. It also prevents an optimizer implementation detail or runtime observation from becoming author-visible semantics.
 
@@ -78,7 +78,7 @@ The most relevant architectural foundation is the Volcano/Cascades family. Casca
 
 Apache Calcite's VolcanoPlanner is a useful implementation reference. It has equivalence sets, dynamic-programming optimization, relational traits, rule registration, and materialization substitution. Calcite is not an IncQL dependency proposal; its concepts are the relevant part. [Calcite VolcanoPlanner][calcite-volcano] [Calcite materialized views][calcite-materialized-views]
 
-The first Prism memo should be smaller than a full Cascades implementation. It should start with logical equivalence and required properties that IncQL can substantiate: schema, nullability, ordering, partitioning or locality, source capability, policy constraints, and target dialect or adapter requirements. Physical implementation alternatives belong only after those facts are trustworthy.
+The first Prism memo should be smaller than a full Cascades implementation. It should start with logical equivalence and required properties that IncQL can substantiate: schema, nullability, ordering, partitioning or locality, boundedness, update mode, temporal progress, bounded-state requirements, source capability, policy constraints, and target dialect or adapter requirements. Physical implementation alternatives belong only after those facts are trustworthy.
 
 ### Shared work is multi-query optimization, not syntax cleanup
 
@@ -122,6 +122,22 @@ Adaptive Query Execution strengthens that design with runtime statistics. Spark 
 Catalyst also sharpens Prism's differentiation. Building a typed relational graph before SQL or physical planning is not novel by itself. Catalyst is primarily responsible for producing and adapting Spark execution, whereas Prism's proposed responsibility spans declared transformation roots, workload-level reuse, heterogeneous candidate targets, policy and semantic evidence, and explicit placement or exchange before target-local optimization. When Spark is selected, Catalyst and AQE should remain authoritative for Spark-local physical decisions.
 
 The research must not assert that Catalyst fails on complex plans merely from practitioner experience. It should test that hypothesis. CTE-heavy and deeply composed workloads must measure optimizer wall time, rule iterations where observable, logical and physical plan growth, driver memory, generated-plan size, plan stability, and runtime quality as graph complexity increases. Spark is both a design reference and an adversarial baseline.
+
+### Distributed and continuous execution change the planning surface
+
+Cluster execution does not require another Prism semantic model. It expands the target-aware decision surface: data and compute locality, partitioning, exchange, serialization, skew, resource envelopes, failure boundaries, and partial execution all affect whether a legal logical alternative is attractive. A local engine is the one-placement case. Schedulers and target engines still own task placement, shuffle implementation, retry, recovery, and worker lifecycle.
+
+Streaming has a deeper effect because boundedness participates in legality. IncQL RFC 001 already distinguishes bounded and unbounded carriers, while RFC 048 keeps cluster and streaming lifecycle behind the `Session` backend boundary. Prism must connect those contracts by representing update or changelog mode, event time and processing time, watermark or other progress guarantees, late-data behavior, bounded state, replay, and sink requirements. A batch-equivalent rewrite is not necessarily trace-equivalent for an unbounded relation.
+
+Shared streaming work may be one evolving operator and state store serving several consumers rather than a completed relation or SQL CTE. Adaptive re-entry also cannot wait for end-of-input. A coordinator needs a compatible checkpoint, epoch, or watermark frontier and evidence about state identity, schema, reuse, migration, or rebuild. Prism may then reconsider future processing while committed output and progress remain fixed. This preserves the one-engine, two-temporal-mode model without making Prism a streaming runtime.
+
+### Graphs are not merely tables with unusual joins
+
+Prism already contains graph-shaped structures: the authored plan DAG, memo relationships, semantic lineage, and evidence projections. Those structures must remain distinct from graph-query semantics over user data. A graph frontend needs explicit node and edge identity, direction, labels or types, property access, duplicate-edge behavior, path semantics, recursion or fixpoint behavior, termination, and result-shape rules. Treating an edge table as proof of those semantics would repeat the same category error as treating a SQL CTE name as proof of materialization.
+
+Research nevertheless shows that relational and graph execution need not be separate worlds. GRainDB retains a relational core while adding graph-aware predefined joins and adjacency-like indexes; DuckPGQ adds SQL/PGQ property-graph queries to an analytical relational engine while identifying path finding, factorized execution, and graph-aware joins as distinct requirements. These are useful precedents for a Prism memo that may compare a relational realization with a graph-target realization without flattening their semantic contracts. [GRainDB][graindb] [DuckPGQ][duckpgq]
+
+Dynamic graphs connect the graph and streaming problems. Differential dataflow demonstrates incremental nested iteration over changing inputs, including graph computations. For Prism, the lesson is architectural rather than an adoption decision: a continuous graph replan must reason about update traces, fixpoint or frontier state, and compatibility at a committed progress boundary. Cardinality alone is not enough. [Differential dataflow][differential-dataflow]
 
 ### Cost models need humility, runtime evidence, and bounded adaptation
 
@@ -187,6 +203,8 @@ The property vocabulary should be evidence-driven:
 - output schema, nullability, and key facts;
 - semantic-profile dimensions that govern equivalence;
 - ordering and partitioning;
+- boundedness, update or changelog mode, temporal progress, and bounded-state requirements;
+- graph identity, direction, path, recursion, fixpoint, termination, and result-shape requirements;
 - source location and supported pushdowns;
 - data format and connector capabilities;
 - policy and admissibility constraints;
@@ -228,9 +246,17 @@ Research must establish a stable planning-context contract that gives locally bu
 
 Research should connect semantic plan diffs to stable deployed workload identities and relevant historical execution evidence. The goal is to test whether a proposed development plan's probable effects can be forecast with calibrated uncertainty and later backtested, not to make Prism infer operational causes, discover every downstream consumer, or automate a response.
 
+### 10. Which distributed and streaming properties affect legality and selection?
+
+Research must separate portable semantic requirements from target execution mechanics. For distributed batch work, it should determine which placement, locality, partitioning, exchange, resource, and failure facts Prism needs to rank alternatives without becoming a scheduler. For continuous work, it must define trace equivalence across append, update, upsert, and retraction modes; time and watermark behavior; bounded-state proofs; compatible shared state; committed frontiers; and the state reuse or migration evidence required before adaptive re-entry may change future processing.
+
+### 11. How should Prism represent graph and recursive work?
+
+Research must distinguish graph-shaped metadata from graph-query semantics and determine which property-graph, recursive, and fixpoint operators belong in Prism. Each supported family needs explicit identity, direction, label or type, path, duplicate, cycle, termination, ordering, result-shape, and incremental-update semantics. The memo should test when relational joins and recursion, factorized or adjacency-aware execution, and graph-native targets are equivalent; the cost model should measure degree distribution, frontier growth, graph cuts, iterations, convergence, state, and communication without turning them into legality facts.
+
 ## Evidence program
 
-The research program should combine semantic, optimizer-complexity, target-comparison, evidence-provider, adaptive-execution, and change-impact evidence.
+The research program should combine semantic, optimizer-complexity, target-comparison, evidence-provider, adaptive-execution, distributed-execution, streaming, graph-query, recursive-query, and change-impact evidence.
 
 ### dbt-like transformation graphs
 
@@ -260,6 +286,16 @@ Build graph families whose depth, breadth, expression size, join count, repeated
 
 Create controlled estimation errors, skew, changing selectivity, and partition distributions. Record the pre-execution estimate, runtime observation, target-local adaptation, any coordinator-requested Prism replan, and the resulting unfinished plan. Compare one-shot planning, target-local adaptation alone, Prism replanning without target observations, and Prism replanning with scoped observations. The study must include cases where replanning is correctly declined because its cost, freshness, snapshot, or policy preconditions are not met.
 
+### Distributed and streaming studies
+
+Run equivalent bounded workloads in local and cluster modes with controlled locality, partitioning, exchange cost, skew, worker loss, and resource envelopes. Compare target-native planning with Prism target-independent and target-aware selection while preserving the same relational semantics and recording planning overhead, network and serialization cost, retries, partial execution, and target realization.
+
+For continuous workloads, construct append, update, upsert, and retraction traces with event-time disorder, late data, watermark progress, state growth, backpressure, checkpoint recovery, and sink commits. Test rewrite and sharing candidates by trace or committed-effect equivalence, not one finite snapshot. Compare target-local adaptation with coordinator-requested Prism re-entry at compatible frontiers, including cases where replanning is correctly declined because state cannot be reused or migrated safely.
+
+### Graph and recursive-query studies
+
+Build property-graph and recursive workloads covering fixed-length patterns, variable-length reachability, cyclic graphs, shortest-path variants, repeated traversals, multi-root graph projections, and dynamic edge updates. Compare relational recursive or fixpoint plans, graph-aware relational techniques, and graph-native targets under one declared semantic profile. Record path or trace equivalence, duplicate and cycle behavior, degree and frontier distributions, iterations, convergence, intermediate growth, graph partition cuts, communication, state, planning cost, and target-specific indexes. Include cases where Prism must decline an equivalence or reuse claim because path, termination, or incremental-state semantics are insufficient.
+
 ### Development-to-production impact studies
 
 For controlled workload changes, compare the semantic before-and-after plan diff, affected deployed workload identities, relevant historical executions, and predicted target effects before promotion. Record confidence, evidence coverage, alternative explanations, and unknown dependencies. After promotion, compare the forecast with observed latency, rows, bytes, scans, shuffles, spill, memory, and target-plan changes. The study must include correctly uncertain or declined forecasts when identity, history, or operational context is insufficient.
@@ -274,6 +310,7 @@ For each query, compare at least:
 - DataFusion logical and physical plans;
 - PostgreSQL generated SQL and `EXPLAIN`/`EXPLAIN ANALYZE` output;
 - Spark analyzed, optimized, initial physical, and final adaptive plans where exposed;
+- graph-native or graph-aware target plans where a graph profile makes the comparison meaningful;
 - selected Prism requirements versus target-realized and target-adapted plans;
 - result equivalence under controlled fixtures; and
 - observed scans, bytes, shuffles, memory, elapsed time, and spill behavior where each target exposes them.
@@ -360,12 +397,14 @@ The experiments support four bounded conclusions: Polyglot is capable of carryin
 2. **Semantic and planning scope.** Define relational equivalence profiles, evaluation multiplicity, declared roots, consumer sets, planning horizons, and result lifetimes before comparing alternatives.
 3. **Relational completeness.** Strengthen Prism's relation identity, aliases, subqueries, joins, aggregates, windows, scoped bindings, and schema/property derivation.
 4. **Tractable memo exploration.** Add a separate memo over the authored graph with an audited rule set, explicit property requirements, search budgets, pruning, graceful fallback, and measured planning cost.
-5. **Reuse and placement selection.** Evaluate inline, target-local sharing, generated SQL CTEs, transient or durable materialization, placement, and exchange without assigning representation-specific lowering to Prism.
+5. **Reuse and placement selection.** Evaluate inline, target-local sharing, generated SQL CTEs, transient or durable materialization, placement, and exchange across local and cluster targets without assigning representation-specific lowering to Prism.
 6. **Provider-neutral evidence ingress.** Validate one immutable planning-context contract across session, adapter, offline, test, and independently built evidence providers without giving Prism storage or retrieval responsibilities.
-7. **Runtime evidence loop.** Transport scoped target observations into immutable planning contexts, distinguish target-local adaptation from coordinator-owned replanning, and preserve completed work and authored history.
-8. **Change-impact evidence.** Connect semantic plan diffs, deployed workload identity, and historical observations in controlled development-to-production forecasting and backtesting studies while keeping operational interpretation outside Prism.
-9. **Catalyst and target baselines.** Stress native Spark Catalyst/AQE, DataFusion, and PostgreSQL alongside Prism, including cases where target-local optimization is already sufficient.
-10. **Focused RFCs.** Promote stable rule families, planning-context transport, adaptive checkpoints, materialization lifecycle, and target-realization contracts only after the research harness establishes them.
+7. **Runtime evidence loop.** Transport scoped target observations into immutable planning contexts, distinguish target-local adaptation from coordinator-owned replanning, and preserve completed work, committed stream progress, state identity, and authored history.
+8. **Distributed and streaming semantics.** Establish local-versus-cluster placement evidence, bounded-versus-unbounded legality, update and time properties, bounded-state requirements, trace-equivalence tests, and compatible continuous frontiers before optimizing streaming plans.
+9. **Graph and recursive semantics.** Separate plan, lineage, and evidence graphs from user graph semantics; establish identity, path, recursion, fixpoint, termination, graph-sharing, and dynamic-update contracts before comparing relational and graph-native realizations.
+10. **Change-impact evidence.** Connect semantic plan diffs, deployed workload identity, and historical observations in controlled development-to-production forecasting and backtesting studies while keeping operational interpretation outside Prism.
+11. **Catalyst and target baselines.** Stress native Spark Catalyst/AQE, DataFusion, PostgreSQL, and declared graph targets alongside Prism, including cases where target-local optimization is already sufficient.
+12. **Focused RFCs.** Promote stable rule families, planning-context transport, adaptive checkpoints, stream-property and state-migration contracts, graph and recursion contracts, materialization lifecycle, and target-realization contracts only after the research harness establishes them.
 
 ## Non-goals
 
@@ -375,9 +414,11 @@ This whitepaper does not propose:
 - replacing Catalyst, DataFusion, PostgreSQL, Spark, dbt, Calcite, or another database engine;
 - treating every CTE as materialized or every shared graph as beneficial to factor;
 - introducing a general optimizer framework before relational semantics and evidence are ready;
-- making a public compatibility claim from parser, AST, or plan-shape evidence alone; or
+- building a cluster scheduler, streaming runtime, checkpoint store, state backend, backpressure controller, or sink-commit protocol inside Prism;
+- defining a complete property-graph, RDF, or graph-query language, graph database, graph index family, or graph algorithm library;
+- making a public compatibility claim from parser, AST, or plan-shape evidence alone;
 - collapsing policy, source locality, and target execution details into an untyped cost number;
-- defining a required longitudinal evidence service or product package; or
+- defining a required longitudinal evidence service or product package;
 - making Prism infer operational causes, own organization-wide blast radius, issue alerts, or automate incident response.
 
 ## What success would look like
@@ -387,14 +428,16 @@ The research succeeds when IncQL can show, with reproducible evidence, that it:
 - understands a complex multi-root transformation graph independently of its source syntax;
 - remains within declared planning-time and memory budgets as graph complexity grows;
 - preserves semantic and policy constraints while exploring alternatives;
+- preserves distributed placement requirements and bounded or continuous semantics without turning scheduler or streaming-runtime mechanics into Prism semantics;
+- distinguishes graph-shaped plans and evidence from graph-query semantics and proves any relational-to-graph realization equivalence under an explicit profile;
 - accepts equivalent immutable planning evidence from independent providers and explains how it influenced selection;
 - explains why a logical, sharing, placement, or exchange plan was selected and how the target realized it;
-- improves or safely retains unfinished work when scoped runtime evidence becomes available;
+- improves or safely retains unfinished bounded work or future continuous work when scoped runtime evidence and any required state-compatibility proof become available;
 - emits plan-diff and execution evidence suitable for calibrated external change-impact studies without claiming operational cause;
 - produces equivalent results across declared execution targets; and
 - demonstrates workload-level or target-specific improvements over intact native baselines without overstating them.
 
-RFC 066 records the north-star contract for authored intent, memo exploration, bounded search, shared-work and placement selection, provider-neutral evidence ingress, evidence progression, and coordinator-owned adaptive replanning. Focused follow-on RFCs can stabilize individual rule families, planning-context transport, materialization lifecycle, adaptive checkpoints, target-plan contracts, and SQL ingress/egress profiles as the evidence program resolves them.
+RFC 066 records the north-star contract for authored intent, memo exploration, bounded search, shared-work and placement selection, distributed and continuous properties, explicit graph and recursion semantics, provider-neutral evidence ingress, evidence progression, and coordinator-owned adaptive replanning. Focused follow-on RFCs can stabilize individual rule families, planning-context transport, materialization lifecycle, continuous-frontier and state-migration contracts, graph and fixpoint contracts, adaptive checkpoints, target-plan contracts, and SQL ingress/egress profiles as the evidence program resolves them.
 
 ## Acknowledgements
 
@@ -412,7 +455,10 @@ IncQL's proposed SQL boundary builds directly on the typed parsing and generatio
 [datafusion-optimizer]: https://datafusion.apache.org/library-user-guide/query-optimizer.html
 [dbt-cte]: https://www.getdbt.com/blog/getting-started-with-cte
 [dbt-ephemeral]: https://docs.getdbt.com/docs/build/materializations#ephemeral
+[differential-dataflow]: https://www.microsoft.com/en-us/research/publication/differential-dataflow/
+[duckpgq]: https://vldb.org/cidrdb/papers/2023/p66-wolde.pdf
 [egg]: https://arxiv.org/abs/2004.03082
+[graindb]: https://www.cidrdb.org/cidr2022/papers/p57-jin.pdf
 [incan-provider-prep]: https://github.com/encero-systems/incan/issues/957
 [job]: https://15721.courses.cs.cmu.edu/spring2020/papers/22-costmodels/p204-leis.pdf
 [oasis]: https://www.microsoft.com/en-us/research/publication/query-optimizer-as-a-service-an-idea-whose-time-has-come/
