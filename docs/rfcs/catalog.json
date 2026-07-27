@@ -238,11 +238,111 @@
       "interoperability",
       "evidence"
     ],
+    "049": [
+      "authoring",
+      "evidence",
+      "governance"
+    ],
     "050": [
       "execution",
       "data-access",
       "interoperability",
       "extensibility"
+    ],
+    "051": [
+      "authoring",
+      "data-access",
+      "execution",
+      "interoperability"
+    ],
+    "052": [
+      "authoring",
+      "data-access",
+      "interoperability",
+      "extensibility"
+    ],
+    "053": [
+      "types",
+      "data-access",
+      "evidence",
+      "governance"
+    ],
+    "054": [
+      "data-access",
+      "execution",
+      "evidence",
+      "governance"
+    ],
+    "055": [
+      "data-access",
+      "execution",
+      "evidence",
+      "interoperability"
+    ],
+    "056": [
+      "data-access",
+      "execution",
+      "evidence",
+      "governance"
+    ],
+    "057": [
+      "authoring",
+      "data-access",
+      "execution",
+      "evidence"
+    ],
+    "058": [
+      "authoring",
+      "planning",
+      "evidence",
+      "governance"
+    ],
+    "059": [
+      "planning",
+      "execution",
+      "data-access",
+      "evidence"
+    ],
+    "060": [
+      "planning",
+      "execution",
+      "data-access",
+      "governance"
+    ],
+    "061": [
+      "types",
+      "interoperability",
+      "evidence",
+      "governance"
+    ],
+    "062": [
+      "authoring",
+      "planning",
+      "execution",
+      "evidence"
+    ],
+    "063": [
+      "authoring",
+      "types",
+      "evidence",
+      "verification"
+    ],
+    "064": [
+      "planning",
+      "execution",
+      "data-access",
+      "interoperability"
+    ],
+    "065": [
+      "authoring",
+      "planning",
+      "interoperability"
+    ],
+    "066": [
+      "planning",
+      "execution",
+      "interoperability",
+      "evidence"
     ]
   }
 }

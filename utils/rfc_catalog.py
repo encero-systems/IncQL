@@ -37,7 +37,7 @@ REQUIRED_METADATA = (
 ACTIVE_STATUSES = frozenset({"Draft", "Planned", "In Progress", "Blocked", "Deferred"})
 TERMINAL_STATUSES = frozenset({"Implemented", "Superseded", "Rejected", "Withdrawn"})
 DEFAULT_PROJECT_LABEL = "IncQL"
-ALLOWED_GAPS = frozenset({49})
+ALLOWED_GAPS = frozenset()
 MAX_TAGS_PER_RECORD = 4
 
 _RFC_FILENAME_RE = re.compile(r"^(?P<id>\d{3})_(?P<slug>[a-z0-9][a-z0-9_]*)\.md$")

@@ -127,12 +127,6 @@ class RfcCatalogTests(unittest.TestCase):
             "This matters because the current behavior is incomplete.",
         )
 
-    def test_allows_the_deliberate_049_gap(self) -> None:
-        self.write_rfc(48, slug="before_gap")
-        self.write_rfc(50, slug="after_gap")
-
-        self.assertEqual([record.id for record in build_catalog(self.rfc_dir)], ["048", "050"])
-
     def test_project_label_and_allowed_gaps_are_configurable(self) -> None:
         self.write_rfc(0, project_label="Incan")
         self.write_rfc(2, slug="after_gap", project_label="Incan")
@@ -493,11 +487,16 @@ class RfcCatalogTests(unittest.TestCase):
             tags=repository_root / "docs" / "rfcs" / "catalog.json",
         )
 
-        self.assertEqual(len(records), 50)
+        self.assertEqual(len(records), 67)
         self.assertEqual(records[0].id, "000")
-        self.assertEqual(records[-1].id, "050")
-        self.assertNotIn("049", {record.id for record in records})
+        self.assertEqual(records[-1].id, "066")
+        self.assertIn("049", {record.id for record in records})
         self.assertTrue(all(1 <= len(record.tags) <= 4 for record in records))
+        readme = (repository_root / "docs" / "rfcs" / "README.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(f"{len(records)} durable records", readme)
+        self.assertIn(f"· {len(records)} records", readme)
 
 
 if __name__ == "__main__":

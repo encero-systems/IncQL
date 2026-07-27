@@ -6,7 +6,7 @@
 </div>
 <nav class="rail-nav">
 <a href="../design_records/"><span>Overview</span><small>Start here</small></a>
-<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>50 durable records</small></a>
+<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>67 durable records</small></a>
 <a href="#how-the-rfc-lifecycle-works"><span>Lifecycle guide</span><small>From draft to shipped</small></a>
 </nav>
 <div class="rail-section">
@@ -15,7 +15,7 @@
 </div>
 <div class="rail-note">
 <span class="health-light"></span>
-<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 50 records</small></div>
+<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 67 records</small></div>
 </div>
 </aside>
 
@@ -462,22 +462,35 @@
     "lifecycle": "active",
     "motivation": "RFC 007 was intentionally written to get Prism named, scoped, and implemented as a real planning substrate. That was the right move for the first Prism adoption slice. However, once IncQL aims for stronger optimization, the remaining ambiguity becomes a liability:",
     "related": [
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
       "IncQL RFC 004 (execution context — Session remains the execution and backend boundary)",
-      "IncQL RFC 007 (Prism planning engine — this RFC narrows optimizer-boundary ownership without replacing Prism adoption)"
+      "IncQL RFC 007 (Prism planning engine — this RFC narrows optimizer-boundary ownership without replacing Prism adoption)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
     ],
     "related_ids": [
+      "001",
       "004",
-      "007"
+      "007",
+      "032",
+      "048",
+      "066"
     ],
-    "rfc_pr": "—",
-    "rfc_pr_label": null,
-    "rfc_pr_links": [],
-    "rfc_pr_url": null,
+    "rfc_pr": "[IncQL #105](https://github.com/encero-systems/IncQL/pull/105)",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
     "shipped_in": "—",
     "source_path": "008_optimizer_boundary_stats_cbo_aqe.md",
     "status": "Planned",
     "status_key": "planned",
-    "summary": "This RFC defines the optimizer boundary between Prism and Session as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and any static planning facts that do not depend on runtime feedback. Session remains the owner of backend capabilities, physical planning, backend pushdown policy, runtime statistics, execution metrics, and adaptive re-planning during execution. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004 and defers deeper statistics, CBO, and AQE mechanics until the execution side is better grounded.",
+    "summary": "This RFC defines the optimizer boundary between Prism and Session as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and logical alternative ranking. Session remains the owner of backend capability discovery, physical planning, backend pushdown policy, runtime-observation collection, safe checkpoints, target-local adaptive execution, and execution metrics. Prism may consume provider-neutral immutable evidence before execution or when a coordinator explicitly re-invokes the same reasoning engine over unfinished bounded work or future continuous work. External providers may retain applicable evidence across executions, but Prism does not retrieve, persist, or operationally interpret it. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004, while RFC 066 defines the stronger north-star memo, distributed and continuous planning properties, and adaptive re-entry contract.",
     "tags": [
       {
         "key": "evidence",
@@ -3099,7 +3112,8 @@
       "IncQL RFC 008 (optimizer boundary, statistics, CBO, and adaptive execution)",
       "IncQL RFC 032 (execution observations)",
       "IncQL RFC 033 (adapter requirements and coverage)",
-      "IncQL RFC 041 (Prism plan ingress and external client frontends)"
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
     ],
     "related_ids": [
       "001",
@@ -3109,12 +3123,18 @@
       "008",
       "032",
       "033",
-      "041"
+      "041",
+      "066"
     ],
-    "rfc_pr": "—",
-    "rfc_pr_label": null,
-    "rfc_pr_links": [],
-    "rfc_pr_url": null,
+    "rfc_pr": "[IncQL #105](https://github.com/encero-systems/IncQL/pull/105)",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
     "shipped_in": "—",
     "source_path": "048_cluster_execution_backend_mode.md",
     "status": "Draft",
@@ -3136,6 +3156,71 @@
     ],
     "title": "Cluster execution backend mode",
     "written_against": "Incan 0.4.0-rc3 and IncQL's v0.3-era package migration context"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-06",
+    "href": "closed/implemented/049_declarative_quality_block_vocabulary/",
+    "id": "049",
+    "issue": "[IncQL #96](https://github.com/encero-systems/IncQL/issues/96)",
+    "issue_label": "IncQL #96",
+    "issue_links": [
+      {
+        "label": "IncQL #96",
+        "url": "https://github.com/encero-systems/IncQL/issues/96"
+      }
+    ],
+    "issue_url": "https://github.com/encero-systems/IncQL/issues/96",
+    "lifecycle": "implemented",
+    "motivation": "RFC 034 established the right semantic boundary: quality helpers declare checks, and session observation APIs produce evidence. The first quality syntax was intentionally close to the helper API, which made the implementation small but left the authoring experience too mechanical for real suites. Quality declarations should read like checks over a relation without hiding the fact that execution remains an explicit session operation.",
+    "related": [
+      "IncQL RFC 003 (query blocks)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 042 (async verification evidence)"
+    ],
+    "related_ids": [
+      "003",
+      "027",
+      "028",
+      "032",
+      "033",
+      "034",
+      "042"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "v0.1",
+    "source_path": "closed/implemented/049_declarative_quality_block_vocabulary.md",
+    "status": "Implemented",
+    "status_key": "implemented",
+    "summary": "This RFC adds a declarative quality block vocabulary on top of RFC 034. Authors can write FROM, EXPECT, REQUIRE, and GROUP BY clauses inside quality blocks, use threshold operators such as row_count() \u003e= 1, and attach stable assertion names with as \u003cname\u003e. The syntax still lowers to ordinary QualityAssertion helper values and does not execute, filter, quarantine, or mutate relations by itself.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      }
+    ],
+    "title": "Declarative quality block vocabulary",
+    "written_against": "Incan v0.4-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
@@ -3213,6 +3298,1242 @@
     ],
     "title": "Addon component registry and package contract",
     "written_against": "Incan 0.4.0 and IncQL 0.1.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "051_native_ingestion_program/",
+    "id": "051",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL already owns typed read roots, schema-aware relational plans, session binding, writes, execution observations, adapter coverage, and local evidence. Its current file-oriented read surface is not enough for authors who need to pull records from APIs, databases, object stores, event systems, and other external sources. Requiring those authors to write and deploy a separate Python extraction program would split the type system, schema contract, state model, and evidence chain at the exact boundary where IncQL should be strongest.",
+    "related": [
+      "IncQL RFC 000 (core language model and layer boundaries)",
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 009 (session format handler registry)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 050 (add-on component registry)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)",
+      "IncQL RFC 057 (local ingestion inspection and CLI lifecycle)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "004",
+      "009",
+      "011",
+      "027",
+      "048",
+      "050",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056",
+      "057"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "051_native_ingestion_program.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC establishes IncQL's native ingestion program and its ownership boundary. IncQL must let authors declare, inspect, and execute typed source-to-destination ingestion without requiring Python, Spark or another cluster runtime, an external ingestion service, or an operational pipeline framework. The program adds source and resource declarations, connector contracts, schema reconciliation, incremental state, destination commit semantics, and portable load receipts around the existing Session execution boundary. Higher operational layers may schedule, retry, deploy, backfill, and monitor the resulting ingestion plans, but they must not redefine their data semantics.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      }
+    ],
+    "title": "Native ingestion program and ownership boundary",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "052_declarative_sources_resources_connectors/",
+    "id": "052",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL's current source model is a closed file-format descriptor with CSV, Parquet, and Arrow variants. That is enough for local file reads but cannot describe an API with multiple endpoints, a reflected database with selectable tables, a paginated resource, or a source whose child resource depends on identifiers produced by a parent resource.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 009 (session format handler registry)",
+      "IncQL RFC 010 (CSV dialect and interpretation contract)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 050 (add-on component registry)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 064 (federated placement, execution targets, and explicit data exchange)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "009",
+      "010",
+      "011",
+      "028",
+      "033",
+      "048",
+      "050",
+      "051",
+      "053",
+      "054",
+      "064"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "052_declarative_sources_resources_connectors.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines IncQL's declarative source, resource, and connector-package model. A source groups related resources behind one connector and shared configuration; a resource identifies one typed, selectable record-producing unit; and a connector package implements the protocol-specific discovery and extraction contract. Source declarations contain stable intent, binding references, and policies rather than executable Python generators or resolved credentials. The model must support generic REST/OpenAPI, SQL, and filesystem connectors while remaining extensible through versioned package components and explicit capability coverage.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "extensibility",
+        "label": "Extensibility"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      }
+    ],
+    "title": "Declarative sources, resources, and connector packages",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "053_schema_reconciliation_normalization/",
+    "id": "053",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Ingestion begins at an unstable boundary. APIs add fields, databases change column types, files contain mixed representations, and nested objects do not always map naturally to one table. A system that automatically evolves destination schema from whatever it most recently observed is convenient, but it weakens IncQL's typed contract and makes schema changes difficult to review before they affect consumers.",
+    "related": [
+      "IncQL RFC 000 (core schema shapes and layer boundaries)",
+      "IncQL RFC 001 (dataset carriers and schema surfaces)",
+      "IncQL RFC 010 (CSV dialect and interpretation contract)",
+      "IncQL RFC 020 (nested data functions)",
+      "IncQL RFC 026 (semi-structured variant logical values)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "010",
+      "020",
+      "026",
+      "028",
+      "029",
+      "034",
+      "036",
+      "043",
+      "045",
+      "046",
+      "051",
+      "052",
+      "055"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "053_schema_reconciliation_normalization.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines how native IncQL ingestion observes source shape, reconciles it with declared types and imported contracts, and deterministically normalizes records into relational outputs. Schema inference is evidence about sampled or extracted data; it must not silently become type authority. The contract distinguishes declared, planned, observed, normalized, and destination schemas; defines exact, minimum-guarantee, evolve-by-decision, and discovery-only modes; and requires explicit treatment of additional fields, incompatible values, nested structures, dynamic tables, and schema migration proposals.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      }
+    ],
+    "title": "Schema observation, reconciliation, and normalization",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "054_incremental_extraction_state_checkpoints/",
+    "id": "054",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Incremental ingestion is where convenience becomes correctness-sensitive. A timestamp or integer cursor seems simple until records arrive late, multiple rows share one cursor value, a destination partially commits, two runs overlap, a backfill should not move the live cursor, or the source mutates records behind a previously observed timestamp.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "011",
+      "028",
+      "032",
+      "033",
+      "036",
+      "043",
+      "048",
+      "051",
+      "052",
+      "055",
+      "056"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "054_incremental_extraction_state_checkpoints.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines incremental extraction and durable checkpoint state for native IncQL ingestion. Incremental state must be typed, versioned, scoped to stable source and resource identities, and advanced through an explicit proposal-and-commit protocol. A resource reads one committed checkpoint, extracts a bounded increment, and proposes a successor checkpoint; the runtime commits that successor only after the corresponding destination outcome satisfies the selected commit policy. Cursor-based incremental batch extraction remains bounded work for one run and must not be conflated with unbounded DataStream[T] execution.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      }
+    ],
+    "title": "Incremental extraction, state, and checkpoints",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "055_destination_loading_commit_semantics/",
+    "id": "055",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Writing a file or inserting rows is easy; defining what happens under schema drift, retries, partial failure, and multi-table normalization is not. A destination may support one transaction across all affected tables, transactions only within one table, staged replacement, merge through temporary tables, append with no rollback, or an object-store manifest that makes a set of files visible only after publication.",
+    "related": [
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
+      "IncQL RFC 004 (execution context and Session writes)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "028",
+      "032",
+      "033",
+      "034",
+      "035",
+      "043",
+      "048",
+      "051",
+      "053",
+      "054",
+      "056"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "055_destination_loading_commit_semantics.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines destination loading for native IncQL ingestion: typed destination descriptors, append, replace, and merge dispositions, schema migration boundaries, load-job chunking, idempotency, staging, completion markers, atomicity classes, and partial-failure evidence. Destination adapters must either satisfy the requested semantics or reject the plan before mutation where possible. A successful extraction does not authorize checkpoint advancement; IncQL RFC 054 may commit a proposed checkpoint only after the destination outcome reported under this RFC satisfies the selected commit policy.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      }
+    ],
+    "title": "Destination loading, write dispositions, and commit semantics",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "056_ingestion_runs_load_receipts/",
+    "id": "056",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Data appearing in a destination is not enough to explain what happened. Operators and tools need to know which source and resource versions ran, what schema was declared and observed, which checkpoint was read and proposed, whether destination writes were atomic or partial, which rows were rejected, which quality checks ran, and whether raw payloads were retained.",
+    "related": [
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 038 (evidence exchange bridges)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)"
+    ],
+    "related_ids": [
+      "027",
+      "028",
+      "029",
+      "030",
+      "031",
+      "032",
+      "033",
+      "034",
+      "035",
+      "036",
+      "038",
+      "043",
+      "051",
+      "054",
+      "055"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "056_ingestion_runs_load_receipts.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the portable evidence model for native ingestion runs, phase attempts, load packages, load jobs, and final load receipts. A receipt must identify the immutable ingestion plan, connector and adapter versions, selected source resources, schema decisions, checkpoint lifecycle, destination effect, commit guarantee, counts, timings, diagnostics, quality and policy evidence, and payload-retention posture. Receipts must remain useful locally and across higher operational layers without embedding raw records, credentials, product-specific review state, or workflow semantics into the base IncQL contract.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      }
+    ],
+    "title": "Ingestion runs, load packages, and receipts",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "057_ingestion_inspection_cli_lifecycle/",
+    "id": "057",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Native ingestion is not credible if the only interface is \"run this program and inspect the destination.\" Source integrations fail at many earlier boundaries: credentials are missing, an API changed pagination, discovery returns unexpected resources, schema drift is incompatible, state is stale, destination merge is unsupported, or a reset would delete more data than intended.",
+    "related": [
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)"
+    ],
+    "related_ids": [
+      "004",
+      "011",
+      "031",
+      "036",
+      "037",
+      "043",
+      "046",
+      "051",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "057_ingestion_inspection_cli_lifecycle.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the local authoring, inspection, validation, execution, and maintenance lifecycle for native IncQL ingestion. Authors and tools must be able to scaffold a source, discover resources, take a bounded redacted sample, generate and compare candidate schemas, inspect an immutable ingestion plan, validate connector and destination coverage, execute one local run, inspect receipts and state, and preview destructive reset operations through structured artifacts. Deployment, schedules, backfills across environments, and centralized monitoring remain operational-layer concerns.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      }
+    ],
+    "title": "Local ingestion inspection and CLI lifecycle",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "058_data_projects_named_relational_assets/",
+    "id": "058",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL currently gives authors typed relational carriers, Prism logical plans, Substrait interchange, Session execution, ingestion plans, and a rich evidence model. Those pieces describe one relational computation or one ingestion operation well, but they do not yet define how a repository names many reusable data outputs, declares dependencies between them, inspects them together, or selects a coherent subset to build.",
+    "related": [
+      "IncQL RFC 000 (core language model and layer boundaries)",
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 050 (addon component registry and package contract)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)",
+      "IncQL RFC 063 (typed relational fixtures and expected-result testing)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "004",
+      "007",
+      "027",
+      "028",
+      "030",
+      "031",
+      "046",
+      "050",
+      "051",
+      "052",
+      "059",
+      "061",
+      "062",
+      "063"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "058_data_projects_named_relational_assets.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines an IncQL data project as a statically discoverable collection of named relational assets, external relations, ingestion assets, assertions, and product-topology records connected by a typed inter-asset dependency graph. A named relational asset is a stable project resource whose implementation produces one typed IncQL relation through Prism. The project graph must be available without executing user data logic, opening external connections, resolving secrets, or evaluating template code. It is distinct from both the Prism graph inside one relational asset and any operational run graph used to schedule attempts.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Data projects, named relational assets, and the asset graph",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "059_materialization_applied_asset_lifecycle/",
+    "id": "059",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Named relational logic and physical persistence are different decisions. The same typed asset may be computed locally for exploration, exposed as a view in a warehouse, replaced as a table in a lakehouse, incrementally refreshed, or compiled into a downstream asset without an independent physical object. If persistence is encoded inside the relational body, the logical plan becomes tied to one destination and cannot be inspected or reused independently.",
+    "related": [
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 050 (addon component registry and package contract)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "004",
+      "007",
+      "028",
+      "032",
+      "033",
+      "036",
+      "040",
+      "050",
+      "055",
+      "058",
+      "060",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "059_materialization_applied_asset_lifecycle.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines how a named relational asset declares whether and how its logical result should become an independently applied physical asset. Materialization intent is typed, backend-neutral policy attached to an immutable relational asset version; it is not arbitrary SQL or a runtime hook. Session resolves that intent against one destination binding and capability snapshot, produces an inspectable materialization plan before mutation, and records the committed, partial, unknown, or abandoned outcome as an applied asset record. Logical asset identity, physical destination identity, and one materialization attempt must remain distinct.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Materialization intent and applied asset lifecycle",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "060_incremental_transformation_temporal_history/",
+    "id": "060",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Incremental transformation is attractive because rebuilding a large derived table can be unnecessarily expensive. The apparent shortcut is to filter for rows newer than a timestamp and append or merge them into the target. That becomes unsafe when rows arrive late, timestamps tie, keys are null or duplicated, upstream data is corrected, partitions are rewritten, deletes occur, a destination partially commits, or the transformation logic changes.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "028",
+      "032",
+      "034",
+      "040",
+      "043",
+      "045",
+      "054",
+      "055",
+      "058",
+      "059",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "060_incremental_transformation_temporal_history.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines incremental refresh and temporal history as explicit materialization semantics for named relational assets. Every incremental asset must retain a full-result definition, declare how changed input is selected, state how incoming rows affect prior applied output, and commit successor state only after the destination outcome is known. Incremental transformation state is applied-asset state, not an ingestion checkpoint or generic workflow variable. Temporal history must declare entity keys, change detection, valid-time and observation-time behavior, current-row representation, deletion handling, late-arrival policy, and interval semantics rather than relying on destination-specific SCD macros.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Incremental transformation and temporal history semantics",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "061_asset_interfaces_contracts_access_versions/",
+    "id": "061",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "A named asset becomes an interface as soon as another transformation, application, dashboard, model-training job, or package depends on it. A field rename, type change, grain change, key change, semantic reinterpretation, or removal can break consumers even when the producing query still runs successfully.",
+    "related": [
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)",
+      "IncQL RFC 063 (typed relational fixtures and expected-result testing)"
+    ],
+    "related_ids": [
+      "028",
+      "029",
+      "030",
+      "034",
+      "035",
+      "037",
+      "040",
+      "045",
+      "046",
+      "058",
+      "059",
+      "060",
+      "062",
+      "063"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "061_asset_interfaces_contracts_access_versions.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the stable interface of a named relational asset: its typed output contract, semantic declarations, dependency access level, owning group, independently addressable versions, compatibility classification, and deprecation lifecycle. The structural contract must derive from the asset's checked output type and stable field identities rather than duplicate warehouse-specific YAML. Declared, destination-enforced, observed, verified, and proven guarantees must remain distinct. Asset access controls which project resources may take a dependency; it is not user authorization or a database grant. Breaking versions may coexist so consumers can migrate deliberately.",
+    "tags": [
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      }
+    ],
+    "title": "Asset interfaces, contracts, access, ownership, versions, and deprecation",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "062_project_build_lifecycle_selectors_state/",
+    "id": "062",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "A project graph is useful only if authors and tools can build a deliberate subset, understand what will run, distinguish unchanged resources from reusable physical results, and explain why downstream work ran or skipped. A generic run everything operation is too expensive for large projects and too weak for CI, local iteration, impact analysis, recovery, and operational delegation.",
+    "related": [
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 047 (semantic evidence graph and agent query surface)",
+      "IncQL RFC 057 (local ingestion inspection and CLI lifecycle)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 063 (typed relational fixtures and expected-result testing)"
+    ],
+    "related_ids": [
+      "004",
+      "027",
+      "028",
+      "030",
+      "031",
+      "032",
+      "034",
+      "035",
+      "036",
+      "037",
+      "040",
+      "043",
+      "047",
+      "057",
+      "058",
+      "059",
+      "060",
+      "061",
+      "063"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "062_project_build_lifecycle_selectors_state.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the reproducible build lifecycle for an IncQL data project. Project compilation produces a complete project manifest; structured selectors resolve to an immutable build set; Session validates bindings and capabilities, runs pre-materialization fixture tests, executes selected assets in dependency order, evaluates post-materialization evidence, commits applied state, and emits an append-only build receipt. Logical project state, applied asset state, and invocation results must remain separate. State comparison and deferred reuse must operate on explicit semantic and applied artifacts, with mixed-environment provenance visible. A higher operational layer may schedule or place build nodes from the immutable build set, but it must not redefine IncQL asset dependencies, materialization semantics, admissible transitions, or receipts.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Project build lifecycle, selectors, state, artifacts, and delegated execution",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "063_typed_relational_fixtures_expected_results/",
+    "id": "063",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Data quality tests over materialized tables are necessary but late. A transformation can be logically wrong, materialize successfully, and only then reveal an error through carefully chosen production data. Authors need fast examples that prove joins, filters, null handling, aggregations, windows, nested values, and edge cases before a destination is mutated.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 042 (async verification evidence)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 044 (verifier statements and proof artifacts)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "007",
+      "028",
+      "030",
+      "032",
+      "034",
+      "040",
+      "042",
+      "043",
+      "044",
+      "045",
+      "058",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "063_typed_relational_fixtures_expected_results.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines pre-materialization unit testing for named relational assets using typed input fixtures, the same Prism plan as production, explicit environment and nondeterminism bindings, typed expected results or verifier statements, canonical comparison profiles, and immutable test observations. A fixture test must declare every substituted direct input and must reject unresolved live dependencies by default. Exact, unordered, ordered, subset, predicate, digest, and verifier-backed expectations must remain distinct. Fixture tests validate transformation behavior for bounded examples; they do not replace post-build data quality assertions, integration tests against live systems, destination contract coverage, or universal semantic proof.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      },
+      {
+        "key": "verification",
+        "label": "Verification"
+      }
+    ],
+    "title": "Typed relational fixtures and expected-result testing",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-14",
+    "href": "064_federated_placement_execution_targets_and_explicit_data_exchange/",
+    "id": "064",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL already separates typed relational meaning, logical planning, and execution. That separation is insufficient once a plan can read from a database, warehouse, lakehouse, cluster, or local files while more than one of those systems can perform useful computation. A connector that only retrieves rows into the default local engine wastes source-local indexes, statistics, storage layout, and compute capacity. A backend that silently copies data to make a plan work creates avoidable cost, latency, governance risk, and surprising data egress.",
+    "related": [
+      "IncQL RFC 002 (Apache Substrait integration)",
+      "IncQL RFC 004 (execution context)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)"
+    ],
+    "related_ids": [
+      "002",
+      "004",
+      "007",
+      "008",
+      "032",
+      "033",
+      "040",
+      "048",
+      "052"
+    ],
+    "rfc_pr": "[IncQL #98](https://github.com/encero-systems/IncQL/pull/98)",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "064_federated_placement_execution_targets_and_explicit_data_exchange.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines federated placement for IncQL relational plans. Prism must choose eligible execution-target fragments and explicit data exchanges from source locality, adapter capabilities, statistics, and movement policy supplied through a Session. The default policy is to preserve semantics and policy, avoid data movement, minimise transferred bytes when movement is required, and prefer computation where the relevant data already exists. Backends realise the selected fragments and report actual movement; they must not silently pull remote data into a local engine or upload local data to a remote engine as a fallback.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Federated placement, execution targets, and explicit data exchange",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-26",
+    "href": "065_polyglot_sql_ast_ingress_and_egress/",
+    "id": "065",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "SQL is an important interoperability surface, but SQL text must not become IncQL's internal planning language. Sending dialect text directly to an execution engine would make that engine the accidental semantic owner. Translating text through ad-hoc strings would make schema, lineage, profile, and unsupported-feature diagnostics unreliable.",
+    "related": [
+      "IncQL RFC 000 (core language model and layer boundaries)",
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
+      "IncQL RFC 004 (execution context)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 012 (unified scalar expression surface)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "004",
+      "007",
+      "012",
+      "033",
+      "040",
+      "041",
+      "048",
+      "066"
+    ],
+    "rfc_pr": "[IncQL #105](https://github.com/encero-systems/IncQL/pull/105)",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
+    "shipped_in": "—",
+    "source_path": "065_polyglot_sql_ast_ingress_and_egress.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines an optional SQL frontend and egress boundary based on Polyglot, the open-source typed SQL AST project maintained by tobilg. Polyglot parses and generates SQL for more than 30 documented dialects; IncQL will use that breadth at the edge while Prism remains the owner of relational semantics. IncQL must advertise a dialect or SQL feature only at the most specific level for which its Polyglot AST shape, Prism mapping, semantic profile, and required ingress, egress, or execution evidence are covered.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Polyglot SQL AST ingress and dialect-aware egress",
+    "written_against": "Incan v0.5-era IncQL"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-26",
+    "href": "066_prism_relational_reasoning_and_shared_work_optimization/",
+    "id": "066",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "The same relational work can arrive from Incan carriers, query blocks, SQL, protocol clients, Delta-like sources, or future data-product interfaces. It can then be executed by an embedded engine, emitted as remote SQL, or split across sources. A fixed sequence of local rewrites cannot reliably choose among join order, predicate movement, sharing, materialization, source pushdown, placement, and exchange when these choices interact. Unbounded exploration is not an acceptable answer either: sufficiently large transformation graphs can make optimizer time and memory the dominant cost.",
+    "related": [
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
+      "IncQL RFC 004 (execution context)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "IncQL RFC 047 (semantic evidence graph and agent query surface)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 065 (Polyglot SQL AST ingress and dialect-aware egress)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "007",
+      "008",
+      "027",
+      "030",
+      "032",
+      "033",
+      "037",
+      "040",
+      "041",
+      "047",
+      "048",
+      "065"
+    ],
+    "rfc_pr": "[IncQL #105](https://github.com/encero-systems/IncQL/pull/105)",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
+    "shipped_in": "—",
+    "source_path": "066_prism_relational_reasoning_and_shared_work_optimization.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC makes Prism IncQL's standalone relational reasoning engine operating in two temporal modes: pre-execution planning and bounded adaptive re-entry. Both modes use the same authored graph, semantic rules, memo, property model, and explanation contract across local, cluster, bounded, and continuous execution. Prism must preserve immutable authored relational intent while separately maintaining a bounded memo of semantically legal alternatives, their required properties, and the evidence that makes each alternative legal. Prism must produce a valid logical result without a Session, adapter, target context, or evidence provider. When any caller supplies a provider-neutral immutable planning context, Prism may additionally select target-aware logical, placement, exchange, and sharing alternatives. A coordinator may later invoke that same Prism engine with scoped runtime observations to reconsider unfinished bounded work or future continuous work without mutating authored history, committed progress, or completed execution. Target lowerers, Session, adapters, and target optimizers remain responsible for representation-specific lowering, physical planning, runtime adaptation, state lifecycle, and execution. Graph-shaped data may enter this model only through explicit typed graph and recursion semantics; Prism's plan DAG, memo, lineage graph, and evidence graph must not be mistaken for a graph-query data model. This is a north-star optimizer contract across supported frontends, declared consumer sets, and heterogeneous targets; SQL CTEs, DataFusion plans, Spark plans, streaming operator graphs, graph-engine plans, and other target representations are not Prism's semantic core.",
+    "tags": [
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Prism relational reasoning and shared-work optimization",
+    "written_against": "Incan v0.5-era IncQL"
   }
 ]
 </template>
@@ -3270,7 +4591,24 @@
 | [046](046_data_contract_ingress.md) | Draft | Evidence, Governance, Interoperability | Data contract ingress and product topology |
 | [047](047_semantic_evidence_graph_agent_surface.md) | Draft | Evidence, Interoperability | Semantic evidence graph and agent query surface |
 | [048](048_cluster_execution_backend_mode.md) | Draft | Evidence, Execution, Interoperability | Cluster execution backend mode |
+| [049](closed/implemented/049_declarative_quality_block_vocabulary.md) | Implemented | Authoring, Evidence, Governance | Declarative quality block vocabulary |
 | [050](050_addon_component_registry.md) | Draft | Data access, Execution, Extensibility, Interoperability | Addon component registry and package contract |
+| [051](051_native_ingestion_program.md) | Draft | Authoring, Data access, Execution, Interoperability | Native ingestion program and ownership boundary |
+| [052](052_declarative_sources_resources_connectors.md) | Draft | Authoring, Data access, Extensibility, Interoperability | Declarative sources, resources, and connector packages |
+| [053](053_schema_reconciliation_normalization.md) | Draft | Data access, Evidence, Governance, Types | Schema observation, reconciliation, and normalization |
+| [054](054_incremental_extraction_state_checkpoints.md) | Draft | Data access, Evidence, Execution, Governance | Incremental extraction, state, and checkpoints |
+| [055](055_destination_loading_commit_semantics.md) | Draft | Data access, Evidence, Execution, Interoperability | Destination loading, write dispositions, and commit semantics |
+| [056](056_ingestion_runs_load_receipts.md) | Draft | Data access, Evidence, Execution, Governance | Ingestion runs, load packages, and receipts |
+| [057](057_ingestion_inspection_cli_lifecycle.md) | Draft | Authoring, Data access, Evidence, Execution | Local ingestion inspection and CLI lifecycle |
+| [058](058_data_projects_named_relational_assets.md) | Draft | Authoring, Evidence, Governance, Planning | Data projects, named relational assets, and the asset graph |
+| [059](059_materialization_applied_asset_lifecycle.md) | Draft | Data access, Evidence, Execution, Planning | Materialization intent and applied asset lifecycle |
+| [060](060_incremental_transformation_temporal_history.md) | Draft | Data access, Execution, Governance, Planning | Incremental transformation and temporal history semantics |
+| [061](061_asset_interfaces_contracts_access_versions.md) | Draft | Evidence, Governance, Interoperability, Types | Asset interfaces, contracts, access, ownership, versions, and deprecation |
+| [062](062_project_build_lifecycle_selectors_state.md) | Draft | Authoring, Evidence, Execution, Planning | Project build lifecycle, selectors, state, artifacts, and delegated execution |
+| [063](063_typed_relational_fixtures_expected_results.md) | Draft | Authoring, Evidence, Types, Verification | Typed relational fixtures and expected-result testing |
+| [064](064_federated_placement_execution_targets_and_explicit_data_exchange.md) | Draft | Data access, Execution, Interoperability, Planning | Federated placement, execution targets, and explicit data exchange |
+| [065](065_polyglot_sql_ast_ingress_and_egress.md) | Draft | Authoring, Interoperability, Planning | Polyglot SQL AST ingress and dialect-aware egress |
+| [066](066_prism_relational_reasoning_and_shared_work_optimization.md) | Draft | Evidence, Execution, Interoperability, Planning | Prism relational reasoning and shared-work optimization |
 
 </div>
 <!-- END GENERATED RFC CATALOG -->
