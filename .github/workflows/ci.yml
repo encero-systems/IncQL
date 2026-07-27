@@ -19,8 +19,11 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
-  INCAN_REF: release/v0.3
-  EXPECTED_INCAN_VERSION: 0.3.0
+  # Current Incan 0.5 development baseline (main at 2026-07-27).
+  # Keep INCAN_REF in every compiler-dependent cache key: multiple commits can
+  # report the same development version.
+  INCAN_REF: fe8c9d77caf7000ba8968cd0b07febab71dc6283
+  EXPECTED_INCAN_VERSION: 0.5.0-dev.32
   RUST_BACKTRACE: 1
   INCAN_NO_BANNER: 1
   INCAN_GENERATED_CARGO_TARGET_DIR: ${{ github.workspace }}/.incan-generated-cargo-target
@@ -50,15 +53,15 @@ jobs:
         uses: ./incan/.github/actions/install-incan
         with:
           profile: debug
-          cache-shared-key: incql-incan-${{ runner.os }}-${{ env.EXPECTED_INCAN_VERSION }}
+          cache-shared-key: incql-incan-${{ runner.os }}-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}
 
       - name: Cache generated IncQL Cargo artifacts
         uses: actions/cache@v4
         with:
           path: .incan-generated-cargo-target
-          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
           restore-keys: |
-            incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
+            incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
 
       - name: Cache generated IncQL Rust metadata
         uses: actions/cache@v4
@@ -69,10 +72,10 @@ jobs:
             target/incan_lock/rust_inspect/**/src/main.rs
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
-          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
           restore-keys: |
-            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
-            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
+            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
+            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
 
       - name: Show toolchain
         run: |

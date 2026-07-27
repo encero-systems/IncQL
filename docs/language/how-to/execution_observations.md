@@ -4,6 +4,14 @@ This how-to shows how to collect runtime evidence for a Session operation and ho
 
 Use the observed Session methods when you need an auditable execution attempt record. Use `check_coverage(...)` when a tool, policy, or review step already knows which adapter capability needs to be checked.
 
+## When to use this
+
+Use this guide when the execution attempt itself must remain inspectable: whether a collect or write succeeded, which plan target it used, what diagnostics were returned, and whether the selected adapter covered explicit requirements.
+
+## Before you begin
+
+Prepare a `Session` and a typed `LazyFrame[T]`. Decide whether you need materialized data, a validation-only attempt, or a sink write; that choice determines which observed method is appropriate.
+
 ## Collect with an observation
 
 Use `collect_observed(...)` when you need materialized data and execution evidence from the same attempt.
@@ -123,3 +131,32 @@ Treat `Unknown` as non-enforcing. It means IncQL has not classified that adapter
 - Use `check_coverage(...)` for explicit adapter requirements that come from policy or workflow context outside the plan.
 
 For the complete field and enum reference, see [Execution context (Reference)](../reference/execution_context.md).
+
+## Verify the result
+
+For every observed operation, assert the status you expect and retain the observation identifier alongside any downstream artifact:
+
+```incan
+from pub::incql import ExecutionObservationStatus
+
+attempt = session.collect_observed(orders)
+assert attempt.observation.status == ExecutionObservationStatus.Success
+assert attempt.data.is_some()
+println(attempt.observation.observation_id)
+```
+
+When testing a failure path, verify the diagnostic and the absence of `data`; do not treat the presence of an observation record as proof that execution succeeded.
+
+## Current support and failure boundaries
+
+- Observation records describe concrete attempts; they do not replace application-owned retry, enforcement, or write-decision policy.
+- `Unknown` coverage is non-enforcing and is not evidence of adapter support.
+- `execute_observed(...)` validates the execution boundary without materializing local rows, so it does not report a materialized row count.
+- Coverage results are only as complete as the requirements visible in the plan or supplied explicitly by the caller.
+
+## Reference
+
+- [Execution context](../reference/execution_context.md)
+- [Inspection and plan evidence](../reference/inspection.md)
+- [Backend capability matrix](../reference/capabilities.md)
+- [Govern decisions with local evidence](governed_evidence.md)

@@ -1,4 +1,10 @@
-# Dataset carriers (Explanation)
+<header class="pp-book-header pp-book-concept-header" markdown="1">
+<p>THE INCQL BOOK · CONCEPT</p>
+
+# Dataset carriers
+
+Understand the carrier types that keep materialized data, deferred work, and unbounded streams distinct.
+</header>
 
 This page explains how to think about and use IncQL's dataset carriers. It is intentionally conceptual. Exact method and builder signatures live in the reference pages.
 
@@ -193,7 +199,7 @@ def summarize_orders(orders: LazyFrame[Order]) -> LazyFrame[Order]:
 
 ### Runnable Session example
 
-The runnable example at [session_grouped_aggregate_csv.incn](../../../examples/session_grouped_aggregate_csv.incn) uses the real fixture in `tests/fixtures/aggregate_orders.csv`:
+The runnable example at [`examples/session_grouped_aggregate_csv.incn`][session-grouped-aggregate-csv] uses the real fixture in `tests/fixtures/aggregate_orders.csv`:
 
 ```text
 customer_id,amount
@@ -218,6 +224,10 @@ Run it from the repository root:
 ```bash
 incan run examples/session_grouped_aggregate_csv.incn
 ```
+
+<!-- References -->
+
+[session-grouped-aggregate-csv]: https://github.com/encero-systems/IncQL/blob/main/examples/session_grouped_aggregate_csv.incn
 
 It will:
 

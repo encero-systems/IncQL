@@ -1,4 +1,10 @@
-# Execution context (Explanation)
+<header class="pp-book-header pp-book-concept-header" markdown="1">
+<p>THE INCQL BOOK · CONCEPT</p>
+
+# Execution context
+
+See where deferred plans meet Session-owned binding, execution, materialization, and evidence.
+</header>
 
 This page explains how to think about IncQL's execution model as it works today.
 

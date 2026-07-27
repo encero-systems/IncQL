@@ -2,6 +2,14 @@
 
 This how-to shows how to combine common carrier methods while keeping work deferred until a Session executes it.
 
+## When to use this
+
+Use this guide when you already have a `LazyFrame[T]` and want to compose projection, filtering, grouping, ordering, or limiting without executing the plan yet.
+
+## Before you begin
+
+Start with a typed lazy relation such as one returned by `Session.read_csv(...)`. If you need to create that relation first, follow [Read and write data](read_write_data.md).
+
 ## Add computed columns
 
 Use `with_column(...)` to append a new computed column or replace an existing column by name.
@@ -56,3 +64,30 @@ top_orders = (
 ```
 
 These transforms stay deferred for `LazyFrame[T]`. Use a `Session` to execute, collect, or write the result. For exact method signatures and schema behavior, see [Dataset methods (Reference)](../reference/dataset_methods.md).
+
+## Verify the result
+
+Inspect the plan before execution when you want to confirm the authored transformations, then collect a bounded fixture and check its resolved columns, row count, and preview:
+
+```incan
+inspection = inspect_plan(top_orders)
+println(inspection.output_fields)
+
+result = session.collect(top_orders)?
+println(result.columns)
+println(result.row_count())
+println(result.preview_text())
+```
+
+## Current support and failure boundaries
+
+- These methods build deferred plan state; they do not execute work until a `Session` operation runs it.
+- Column resolution is schema-aware. Unknown or ambiguous fields are rejected rather than guessed.
+- Backend execution depends on the selected adapter. The bundled DataFusion adapter covers the core transforms shown here; consult the capability matrix before relying on a specialized function.
+
+## Reference
+
+- [Dataset methods](../reference/dataset_methods.md)
+- [Function catalog](../reference/functions/index.md)
+- [Backend capability matrix](../reference/capabilities.md)
+- [Inspect a plan and lineage graph](inspect_plan_lineage.md)
