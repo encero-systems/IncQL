@@ -7,7 +7,7 @@ from pub::incql import LazyFrame, Session, SessionError, count, desc, report_ses
 
 
 def summarize_statuses(mut session: Session) -> Result[None, SessionError]:
-    """Read tutorial orders, group them by status, and print the typed summary."""
+    """Group order rows and collect a typed summary without method chains."""
     orders: LazyFrame[Order] = session.read_csv("tutorial_orders_summary", "orders.csv")?
     summaries: LazyFrame[StatusSummary] = query {
         FROM orders
@@ -27,7 +27,6 @@ def summarize_statuses(mut session: Session) -> Result[None, SessionError]:
 
 
 def main() -> None:
-    """Run chapter 9 and report any typed session error."""
     mut session = Session.default()
     match summarize_statuses(session):
         Ok(_) => println("Chapter 9: grouped query block completed")

@@ -315,7 +315,7 @@
       "IncQL RFC 000 (language specification — naming and query schema; must stay aligned)",
       "IncQL RFC 001 (dataset types — carriers and method APIs)",
       "IncQL RFC 003 (query {} — primary clause surface)",
-      "Incan RFC 040 (Scoped DSL Glyph Surfaces — prerequisite for |\u003e support)"
+      "Incan RFC 040 (Scoped DSL Surface Forms — implemented prerequisite for |\u003e support)"
     ],
     "related_ids": [
       "000",
@@ -329,8 +329,8 @@
     "rfc_pr_url": null,
     "shipped_in": "-",
     "source_path": "005_incql_pipe_forward.md",
-    "status": "Blocked",
-    "status_key": "blocked",
+    "status": "Planned",
+    "status_key": "planned",
     "summary": "This RFC specifies an optional pipe-forward surface for IncQL relational pipelines: |\u003e-chained stages applied to an existing DataSet[T] expression, with grammar, precedence, and desugaring to the same relational semantics as query {} and collection method chains. Identifier resolution and current query schema behavior must match IncQL RFC 000 §§2–4; this RFC does not redefine naming rules.",
     "tags": [
       {
@@ -3226,7 +3226,7 @@
 | [002](002_apache_substrait_integration.md) | In Progress | Extensibility, Interoperability, Planning | Apache Substrait integration |
 | [003](closed/implemented/003_incql_query_blocks.md) | Implemented | Authoring, Interoperability, Planning | query {} blocks — syntax, typing, Substrait |
 | [004](004_incql_execution_context.md) | In Progress | Data access, Execution, Interoperability | Execution context and DataFusion |
-| [005](005_incql_pipe_forward.md) | Blocked | Authoring, Planning | Pipe-forward relational syntax (\|>) |
+| [005](005_incql_pipe_forward.md) | Planned | Authoring, Planning | Pipe-forward relational syntax (\|>) |
 | [006](006_unnest_core_substrait.md) | Blocked | Interoperability, Planning | Promote unnest/explode to core Substrait lowering |
 | [007](007_prism_planning_engine.md) | In Progress | Evidence, Planning | Prism logical planning and optimization engine |
 | [008](008_optimizer_boundary_stats_cbo_aqe.md) | Planned | Evidence, Execution, Planning | Optimizer boundary, statistics, cost-based optimization, and adaptive execution |
