@@ -15,7 +15,7 @@
       
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
@@ -40,7 +40,19 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260719-query-block-part-34">
+      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260722-nav-chevron-35">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260726-landing-polish-10">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260723-architecture-readability-4">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -80,56 +92,133 @@
     
       
 
+
+
+
   
 
-<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="IncQL" class="md-header__button md-logo" aria-label="IncQL" data-md-component="logo">
-      
-  <img src="../../shared/brand/incql-mark.png" alt="logo">
+  
+    
+  
 
-    </a>
-    <label class="md-header__button md-icon" for="__drawer">
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+      
+    
+  
+    
+  
+    
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+<header class="topbar crystal-strip" data-md-component="header">
+  <a class="brand" href="../.." aria-label="IncQL home">
+    <img src="../../shared/brand/incql-logo-header.png" alt="">
+    <span>
+      <strong>IncQL</strong>
+      <small>Incan Query Layer</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Documentation sections">
+    
+      <a
+        data-site-section="home"
+        data-path-prefixes=""
+        data-search-label="Search"
+        
+        href="../.."
+      >Home</a>
+    
+      <a
+        data-site-section="learn"
+        data-path-prefixes="language/"
+        data-search-label="Search learning paths"
+        
+        href="../../language/"
+      >Learn</a>
+    
+      <a
+        data-site-section="guides"
+        data-path-prefixes="language/how-to/"
+        data-search-label="Search guides"
+        
+        href="../../language/how-to/"
+      >Guides</a>
+    
+      <a
+        data-site-section="reference"
+        data-path-prefixes="language/reference/"
+        data-search-label="Search reference"
+        
+        href="../../language/reference/"
+      >Reference</a>
+    
+      <a
+        data-site-section="architecture"
+        data-path-prefixes="architecture/"
+        data-search-label="Explore layers"
+        
+        href="../../architecture/"
+      >Architecture</a>
+    
+      <a
+        data-site-section="design-records"
+        data-path-prefixes="rfcs/,design_records/,whitepapers/"
+        data-search-label="Search RFCs"
+        class="is-active" aria-current="page"
+        href="../"
+      >Design records</a>
+    
+      <a
+        data-site-section="project"
+        data-path-prefixes="project/,docs_map/,release_notes/,contributing/"
+        data-search-label="Search project docs"
+        
+        href="../../project/"
+      >Project</a>
+    
+  </nav>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="site-nav-toggle md-icon"
+      aria-label="Open navigation"
+      aria-controls="__drawer"
+      aria-expanded="false"
+      data-site-nav-toggle
+    >
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-    </label>
-    <div class="md-header__title" data-md-component="header-title">
-      <div class="md-header__ellipsis">
-        <div class="md-header__topic">
-          <span class="md-ellipsis">
-            IncQL
-          </span>
-        </div>
-        <div class="md-header__topic" data-md-component="header-topic">
-          <span class="md-ellipsis">
-            
-              IncQL RFC 008: Optimizer boundary, statistics, cost-based optimization, and adaptive execution
-            
-          </span>
-        </div>
-      </div>
-    </div>
+    </button>
     
-      
-        <form class="md-header__option" data-md-component="palette">
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="cyan"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
-    
-  
-</form>
-      
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-    
-    
-    
-      <label class="md-header__button md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      <label class="docs-search" for="__search" aria-label="Search documentation">
+        <span data-site-search-label>Search RFCs</span>
+        <kbd>/</kbd>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -164,166 +253,11 @@
   </div>
 </div>
     
-    
-      <div class="md-header__source">
-        <a href="https://github.com/encero-systems/IncQL" title="Go to repository" class="md-source" data-md-component="source">
-  <div class="md-source__icon md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+    <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
+      <img src="../../shared/icons/source-branch.svg" alt="">
+      <span>encero-systems/IncQL</span>
+    </a>
   </div>
-  <div class="md-source__repository">
-    encero-systems/IncQL
-  </div>
-</a>
-      </div>
-    
-  </nav>
-  
-    
-      
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
-        
-  
-    
-  
-  Home
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../language/" class="md-tabs__link">
-          
-  
-    
-  
-  Learn
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../language/how-to/" class="md-tabs__link">
-          
-  
-    
-  
-  Guides
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../language/reference/" class="md-tabs__link">
-          
-  
-    
-  
-  Reference
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../architecture/" class="md-tabs__link">
-        
-  
-    
-  
-  Architecture
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../design_records/" class="md-tabs__link">
-          
-  
-    
-  
-  Design records
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../project/" class="md-tabs__link">
-          
-  
-    
-  
-  Project
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ul>
-  </div>
-</nav>
-    
-  
 </header>
     
     <div class="md-container" data-md-component="container">
@@ -349,7 +283,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../../shared/brand/incql-mark.png" alt="logo">
+  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -406,6 +340,10 @@
       
         
       
+        
+      
+        
+      
     
     
       
@@ -455,6 +393,146 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../language/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ten-minute quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Choose by background
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Choose by background
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From SQL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From Spark and DataFrame APIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What IncQL is and is not
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
@@ -482,7 +560,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
         
           
           
@@ -498,14 +576,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
             <span class="md-nav__icon md-icon"></span>
             The IncQL Book
           </label>
@@ -538,10 +616,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -552,8 +630,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_2">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
             <span class="md-nav__icon md-icon"></span>
             Part I · Model the work
           </label>
@@ -636,10 +714,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_3" id="__nav_2_2_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -650,8 +728,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_3">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
             <span class="md-nav__icon md-icon"></span>
             Part II · Explain and execute it
           </label>
@@ -753,10 +831,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_4" id="__nav_2_2_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -767,8 +845,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_4">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
             <span class="md-nav__icon md-icon"></span>
             Part III · Decide what happens next
           </label>
@@ -849,10 +927,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_5" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_5" id="__nav_2_2_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_5" id="__nav_2_4_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -863,8 +941,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_5">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_5">
             <span class="md-nav__icon md-icon"></span>
             Part IV · Query blocks
           </label>
@@ -953,10 +1031,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
         
           
-          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -967,8 +1045,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
             <span class="md-nav__icon md-icon"></span>
             Concepts
           </label>
@@ -1052,22 +1130,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
     
     
       
@@ -1117,12 +1179,183 @@
   
   
   
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Start and connect
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Start and connect
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read and write data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Transform and query
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transform and query
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Dataset transformations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/joins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Join typed relations
   </span>
   
 
@@ -1216,22 +1449,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Approximate metrics
-  </span>
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1243,20 +1463,49 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+    
+    
+      
         
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
-    Typed HLL sketches
+    Inspect and trust
   </span>
   
 
-      </a>
-    </li>
-  
-
-              
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspect and trust
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1265,11 +1514,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Variant payloads
+    Inspect plan lineage
   </span>
   
 
@@ -1342,6 +1591,62 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced and capability-dependent
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced and capability-dependent
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1349,15 +1654,65 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Inspect plan lineage
+    Approximate metrics
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Typed HLL sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variant payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1381,6 +1736,8 @@
       
         
           
+        
+      
         
       
         
@@ -1451,12 +1808,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
     
     
       
@@ -1476,7 +1827,7 @@
             
   
   <span class="md-ellipsis">
-    Core
+    Language and relational authoring
   </span>
   
 
@@ -1486,7 +1837,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_2">
             <span class="md-nav__icon md-icon"></span>
-            Core
+            Language and relational authoring
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1559,6 +1910,179 @@
   
   
   
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2_4" id="__nav_4_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Builders
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Builders
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Filters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projections
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Runtime and I/O
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Runtime and I/O
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../language/reference/execution_context/" class="md-nav__link">
         
@@ -1573,6 +2097,83 @@
   
 
               
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/capabilities/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backend capability matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspection, quality, and governance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspection, quality, and governance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1655,125 +2256,6 @@
     
       
         
-      
-        
-      
-        
-      
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Builders
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
-            <span class="md-nav__icon md-icon"></span>
-            Builders
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../language/reference/builders/filters/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Filters
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../language/reference/builders/projections/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Projections
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Aggregates
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
           
         
       
@@ -1803,7 +2285,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
         
           
           
@@ -1812,23 +2294,23 @@
               
   
   <span class="md-ellipsis">
-    Functions
+    Function catalog
   </span>
   
 
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
             <span class="md-nav__icon md-icon"></span>
-            Functions
+            Function catalog
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2018,24 +2500,24 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
-    Substrait
+    Interchange and adapter authoring
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
-            Substrait
+            Interchange and adapter authoring
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2168,9 +2650,9 @@
     
       
         
-      
-        
           
+        
+      
         
       
         
@@ -2217,6 +2699,8 @@
           <ul class="md-nav__list" data-md-scrollfix>
             
               
+            
+              
                 
   
   
@@ -2235,8 +2719,6 @@
     </li>
   
 
-              
-            
               
             
               
@@ -2756,9 +3238,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#4-adaptive-execution" class="md-nav__link">
+  <a href="#4-adaptive-execution-and-prism-re-entry" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Adaptive execution
+      4. Adaptive execution and Prism re-entry
     </span>
   </a>
   
@@ -2839,15 +3321,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-decisions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Design Decisions
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#alternatives-considered" class="md-nav__link">
     <span class="md-ellipsis">
       Alternatives considered
@@ -2875,9 +3348,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deferred-follow-on-work" class="md-nav__link">
+  <a href="#design-decisions" class="md-nav__link">
     <span class="md-ellipsis">
-      Deferred follow-on work
+      Design Decisions
     </span>
   </a>
   
@@ -2907,15 +3380,19 @@
 <li><strong>Created:</strong> 2026-04-07</li>
 <li><strong>Author(s):</strong> Danny Meijer</li>
 <li><strong>Related:</strong></li>
+<li>IncQL RFC 001 (bounded and unbounded dataset carriers)</li>
 <li>IncQL RFC 004 (execution context — <code>Session</code> remains the execution and backend boundary)</li>
 <li>IncQL RFC 007 (Prism planning engine — this RFC narrows optimizer-boundary ownership without replacing Prism adoption)</li>
+<li>IncQL RFC 032 (execution observations)</li>
+<li>IncQL RFC 048 (cluster execution backend mode)</li>
+<li>IncQL RFC 066 (Prism relational reasoning and shared-work optimization)</li>
 <li><strong>Issue:</strong> <a href="https://github.com/encero-systems/IncQL/issues/18">IncQL #18</a></li>
-<li><strong>RFC PR:</strong> —</li>
+<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/105">IncQL #105</a></li>
 <li><strong>Written against:</strong> Incan v0.2</li>
 <li><strong>Shipped in:</strong> —</li>
 </ul>
 <h2 id="summary">Summary</h2>
-<p>This RFC defines the optimizer boundary between <strong>Prism</strong> and <strong><code>Session</code></strong> as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and any static planning facts that do not depend on runtime feedback. <code>Session</code> remains the owner of backend capabilities, physical planning, backend pushdown policy, runtime statistics, execution metrics, and adaptive re-planning during execution. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004 and defers deeper statistics, CBO, and AQE mechanics until the execution side is better grounded.</p>
+<p>This RFC defines the optimizer boundary between <strong>Prism</strong> and <strong><code>Session</code></strong> as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and logical alternative ranking. <code>Session</code> remains the owner of backend capability discovery, physical planning, backend pushdown policy, runtime-observation collection, safe checkpoints, target-local adaptive execution, and execution metrics. Prism may consume provider-neutral immutable evidence before execution or when a coordinator explicitly re-invokes the same reasoning engine over unfinished bounded work or future continuous work. External providers may retain applicable evidence across executions, but Prism does not retrieve, persist, or operationally interpret it. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004, while RFC 066 defines the stronger north-star memo, distributed and continuous planning properties, and adaptive re-entry contract.</p>
 <h2 id="motivation">Motivation</h2>
 <p>RFC 007 was intentionally written to get Prism named, scoped, and implemented as a real planning substrate. That was the right move for the first Prism adoption slice. However, once IncQL aims for stronger optimization, the remaining ambiguity becomes a liability:</p>
 <ul>
@@ -2941,14 +3418,14 @@
 <li>Define which optimizer responsibilities belong to Prism versus <code>Session</code>.</li>
 <li>Establish <strong>statistics ownership</strong> clearly enough to support cost-based optimization without collapsing the Prism / <code>Session</code> boundary.</li>
 <li>Define the minimum optimizer artifacts Prism should expose as IncQL moves past the initial identity-shaped optimized view.</li>
-<li>Reserve adaptive query re-planning as a <code>Session</code> concern rather than a Prism concern.</li>
+<li>Reserve the adaptive execution lifecycle, safe checkpoints, runtime-observation collection, and target-local physical changes as <code>Session</code> or coordinator concerns while allowing bounded Prism re-entry over immutable inputs.</li>
 <li>Make precedence against RFC 007 explicit so future work does not rely on ambiguous wording.</li>
 </ul>
 <h2 id="non-goals">Non-Goals</h2>
 <ul>
 <li>Replacing RFC 007 as the historical record of the first Prism adoption slice.</li>
 <li>Standardizing one exact memo structure, cost formula, or join enumeration algorithm.</li>
-<li>Requiring adaptive execution in v0.1.</li>
+<li>Requiring adaptive execution in the current implementation.</li>
 <li>Defining backend-specific tuning knobs for DataFusion or any other engine.</li>
 <li>Defining new author-facing query syntax.</li>
 </ul>
@@ -2958,7 +3435,8 @@
   -&gt; Prism raw plan
   -&gt; Prism analyzed / optimized logical plan
   -&gt; Session physical planning and execution
-  -&gt; optional Session adaptive re-planning while executing
+  -&gt; optional target-local adaptive execution
+  -&gt; optional coordinator-owned Prism re-entry over unfinished work
 </code></pre></div>
 <p>The important mental model is:</p>
 <ul>
@@ -2966,6 +3444,7 @@
 <li>Prism can prefer one logical alternative over another using inferred properties and cost-model hooks.</li>
 <li><code>Session</code> decides what the selected backend can actually do well.</li>
 <li><code>Session</code> can change physical strategy when runtime facts prove the original assumptions wrong.</li>
+<li>At a safe checkpoint, <code>Session</code> or another coordinator can supply scoped observations through the same immutable planning-context contract and ask Prism to reconsider unfinished logical work.</li>
 </ul>
 <p>Conceptual example; exact explain API names may differ:</p>
 <div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">Session</span><span class="o">,</span><span class="w"> </span><span class="nn">LazyFrame</span><span class="o">,</span><span class="w"> </span><span class="nn">DataFrame</span>
@@ -3024,45 +3503,53 @@
 <li>pushdown policy into concrete scans or remote engines</li>
 <li>physical operator selection</li>
 <li>runtime statistics gathered during execution</li>
-<li>adaptive re-planning during execution</li>
+<li>safe-checkpoint and completed-work tracking</li>
+<li>the decision to request bounded Prism re-entry</li>
+<li>target-local adaptive planning and physical changes during execution</li>
 </ul>
 <p>Prism <strong>must not</strong> own:</p>
 <ul>
 <li>backend-specific pushdown outcomes</li>
 <li>physical operator choice</li>
-<li>runtime adaptive plan changes</li>
+<li>runtime observation collection</li>
+<li>safe-checkpoint detection or direct mutation of a running target plan</li>
 <li>direct catalog I/O for statistics discovery as a normative responsibility</li>
+<li>longitudinal evidence storage, operational-cause interpretation, alerting, or automated response</li>
 </ul>
 <h3 id="2-statistics-model">2. Statistics model</h3>
 <p>This RFC distinguishes three statistics families:</p>
 <ol>
 <li><strong>Logical inferred facts</strong> — bounds or properties Prism derives from schema, constraints, and expressions.</li>
 <li><strong>Pre-execution source statistics</strong> — row counts, NDV estimates, histograms, file sizes, partition metadata, or equivalent facts supplied through <code>Session</code> and its backend or catalog integrations.</li>
-<li><strong>Runtime statistics</strong> — observed row counts, partition sizes, skew signals, spill facts, and other execution-time measurements.</li>
+<li><strong>Runtime statistics</strong> — observed row counts or rates, partition sizes, skew signals, spill facts, state size, watermark progress, lag, backpressure, checkpoint behavior, graph frontier or iteration size, convergence behavior, and other execution-time measurements.</li>
 </ol>
 <p>Ownership rules:</p>
 <ul>
-<li>Prism <strong>may</strong> consume logical inferred facts and pre-execution source statistics when they are available.</li>
+<li>Prism <strong>may</strong> consume all three evidence families through a provider-neutral immutable planning context when they are available and applicable to the planning request.</li>
 <li>Prism <strong>must</strong> be able to produce a valid logical result even when only logical inferred facts are available.</li>
-<li><code>Session</code> <strong>may</strong> supply pre-execution source statistics to Prism when the chosen backend or catalog can provide them.</li>
-<li>Runtime statistics <strong>must</strong> remain session-owned execution artifacts even when they later inform planning.</li>
+<li><code>Session</code>, adapters, compilers, offline tools, test harnesses, and client-built evidence providers <strong>may</strong> supply the same planning-context contract.</li>
+<li>Runtime statistics <strong>must</strong> retain the provenance and authority of the session or execution system that collected them even when an external provider later retains and supplies them.</li>
+<li>External providers <strong>may</strong> retain estimates and observations across executions or sessions, but every supplied item <strong>must</strong> preserve producer, authority, plan or relation identity, target and configuration, parameter and data scope, freshness, confidence, and invalidation state.</li>
+<li>Prism <strong>must not</strong> retrieve or persist planning evidence, special-case a provider's identity, or reclassify estimates and observations as authored semantic truth.</li>
 </ul>
 <h3 id="3-cost-based-optimization">3. Cost-based optimization</h3>
 <p>Cost-based optimization in IncQL is split across Prism and <code>Session</code>:</p>
 <ul>
 <li>Prism <strong>should</strong> compare logical alternatives using a stable cost interface over logical properties, available statistics, and backend capability hints.</li>
-<li><code>Session</code> <strong>may</strong> provide the statistics and capability inputs Prism needs to make better logical choices.</li>
+<li>Any conforming planning-context provider <strong>may</strong> provide the statistics and capability inputs Prism needs to make better logical choices.</li>
 <li>The exact cost model is not standardized by this RFC, but the ownership boundary is.</li>
 </ul>
 <p>Inference from this boundary: if IncQL later adds join reordering, memo-based exploration, or reuse/materialization decisions, those features belong primarily in Prism, but they rely on inputs that <code>Session</code> can provide.</p>
-<h3 id="4-adaptive-execution">4. Adaptive execution</h3>
-<p>Adaptive re-planning during execution is a <code>Session</code> concern.</p>
+<h3 id="4-adaptive-execution-and-prism-re-entry">4. Adaptive execution and Prism re-entry</h3>
+<p>The adaptive execution lifecycle is a <code>Session</code> or coordinator concern. Relational reasoning over newly supplied evidence remains a Prism concern.</p>
 <p>That means:</p>
 <ul>
 <li>Prism may produce a preferred logical plan or ranked alternatives before execution.</li>
-<li><code>Session</code> may revise physical strategy during execution based on runtime statistics.</li>
-<li><code>Session</code> may record those adaptive decisions in <code>executed_plan()</code> or equivalent explain surfaces.</li>
-<li>Adaptive behavior <strong>must not</strong> mutate Prism-authored history.</li>
+<li><code>Session</code> or a target engine may revise target-local physical strategy during execution based on runtime statistics.</li>
+<li>At an explicit safe checkpoint, <code>Session</code> or another coordinator may invoke the same Prism engine with an immutable snapshot of applicable observations, completed-work or committed-progress references, unfinished bounded roots or a future continuous frontier, a bounded planning budget, and a legal fallback.</li>
+<li>Prism may return a new logical or placement selection only for unfinished bounded work or future continuous work. Streaming re-entry additionally requires target-supplied evidence for the committed frontier and any state reuse or migration; Prism does not monitor execution, operate checkpoints, or mutate a running target plan.</li>
+<li><code>Session</code> may record target-local adaptive decisions and coordinator-requested Prism selections in <code>executed_plan()</code> or equivalent explain surfaces.</li>
+<li>Adaptive behavior <strong>must not</strong> mutate Prism-authored history or turn observations into authored semantics.</li>
 </ul>
 <h3 id="5-illustrative-plan-stage-vocabulary">5. Illustrative plan-stage vocabulary</h3>
 <p>Implementations <strong>should</strong> expose distinct names for plan stages rather than one ambiguous “optimized plan” API, but this RFC does <strong>not</strong> standardize one exact public explain surface yet.</p>
@@ -3091,6 +3578,7 @@
 <li>backend abstraction and DataFusion as the default reference backend</li>
 </ul>
 <p>This RFC narrows RFC 004 by making the optimizer boundary more explicit; where optimizer ownership is discussed, this RFC governs.</p>
+<p>RFC 066 is the follow-on north-star contract for one Prism reasoning engine operating in pre-execution and adaptive re-entry modes, provider-neutral planning evidence, bounded memo exploration, and coordinator-owned adaptive invocation. This RFC remains authoritative for the execution ownership split; RFC 066 governs the stronger Prism reasoning and evidence-ingress contract.</p>
 <h2 id="design-details">Design details</h2>
 <h3 id="syntax">Syntax</h3>
 <p>This RFC introduces no new author-facing syntax.</p>
@@ -3104,7 +3592,7 @@
 <li><code>Session</code> handoff for backend planning and execution</li>
 </ul>
 <p>Prism's optimizer legality <strong>must</strong> continue to derive from IncQL semantics, schema facts, and expression rules rather than backend quirks.</p>
-<p><code>Session</code> <strong>may</strong> pass backend capability hints and statistics into Prism before execution, but those inputs <strong>must not</strong> collapse the ownership boundary defined above.</p>
+<p>Any conforming caller <strong>may</strong> pass backend capability hints, estimates, and applicable observations into Prism through an immutable planning context, but those inputs <strong>must not</strong> collapse the ownership boundary defined above.</p>
 <h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
 <ul>
 <li><strong><code>DataSet[T]</code> APIs:</strong> carrier method chains continue to build Prism-managed authored state. Stronger optimization does not change carrier immutability rules.</li>
@@ -3120,19 +3608,11 @@
 <li>It may require documentation and future implementation work to stop referring to all optimization as one undifferentiated Prism responsibility.</li>
 </ul>
 <p>Existing prototype APIs that use vague names like <code>optimized_view</code> remain acceptable as transitional implementation details, but future public-facing documentation <strong>should</strong> migrate to more precise stage names.</p>
-<h2 id="design-decisions">Design Decisions</h2>
-<ul>
-<li><strong>Boundary-first scope:</strong> RFC 008 settles Prism vs <code>Session</code> ownership first. It does not attempt to finish the statistics, CBO, or AQE architecture before RFC 004 begins.</li>
-<li><strong>Statistics ownership split:</strong> Prism may use logical inferred facts and any pre-execution source statistics that <code>Session</code> chooses to provide. Runtime-observed statistics remain session-owned and must not become Prism-authored facts.</li>
-<li><strong>Explain/API scope:</strong> Distinct authored, analyzed, rewritten, session, and executed stages are part of the intended mental model, but the exact public API names and attachment points remain illustrative in this RFC.</li>
-<li><strong>Cross-execution reuse boundary:</strong> Runtime-derived information may be cached only as session-scoped or execution-scoped metadata. It must not mutate authored Prism history or be reclassified as authored semantic truth.</li>
-<li><strong>Deferred follow-on design:</strong> Detailed statistics transport, concrete cost interfaces, memo/CBO design, and AQE mechanics are intentionally deferred until after RFC 004 gives the execution side a firmer shape.</li>
-</ul>
 <h2 id="alternatives-considered">Alternatives considered</h2>
 <ul>
 <li><strong>Keep RFC 007 as the only optimizer RFC</strong> — rejected; RFC 007 already serves as the Prism adoption record for the first implementation slice, and retrofitting a more detailed optimizer boundary into it would mix historical adoption work with the follow-on architecture.</li>
 <li><strong>Move all optimization to <code>Session</code></strong> — rejected; that would reduce Prism to a plan container and make IncQL-owned semantic optimization too backend-dependent.</li>
-<li><strong>Move AQE into Prism</strong> — rejected; adaptive re-planning depends on runtime execution facts and should remain session-owned.</li>
+<li><strong>Move the adaptive execution lifecycle into Prism</strong> — rejected; observation collection, safe checkpoints, completed work, failure handling, and physical mutation remain session-, coordinator-, or target-owned. Prism may be explicitly re-invoked as the logical reasoning engine over immutable unfinished work.</li>
 <li><strong>Treat statistics as purely backend-private</strong> — rejected; Prism needs a clean way to consume statistics if it is going to perform serious cost-based logical optimization.</li>
 </ul>
 <h2 id="drawbacks">Drawbacks</h2>
@@ -3145,15 +3625,18 @@
 <ul>
 <li><strong>IncQL specification</strong> — RFC 004 and RFC 007 references to optimization ownership <strong>should</strong> stay consistent with this boundary.</li>
 <li><strong>IncQL library package</strong> — future Prism internals <strong>should</strong> separate authored, analyzed, and rewritten artifacts more explicitly than the current prototype does.</li>
-<li><strong>Execution / interchange</strong> — <code>Session</code> and backend integration layers <strong>must</strong> own physical planning, runtime stats, and adaptive re-planning policy.</li>
+<li><strong>Execution / interchange</strong> — <code>Session</code> and backend integration layers <strong>must</strong> own physical planning, runtime-observation collection, safe checkpoints, and target-local adaptation; Prism may consume provider-neutral immutable evidence when invoked.</li>
 <li><strong>Documentation</strong> — explain surfaces and architecture notes <strong>should</strong> stop using “optimized plan” as an undifferentiated term.</li>
 </ul>
-<h2 id="deferred-follow-on-work">Deferred follow-on work</h2>
+<h2 id="design-decisions">Design Decisions</h2>
 <ul>
-<li>Define the concrete statistics handoff shape when RFC 004 and the execution side are better grounded.</li>
-<li>Specify cost-based optimization machinery on the Prism side.</li>
-<li>Specify adaptive execution and runtime feedback mechanics on the <code>Session</code> side.</li>
-<li>Decide the final public explain surface for authored, analyzed, rewritten, session, and executed plan stages.</li>
+<li><strong>Boundary-first scope:</strong> RFC 008 settles Prism versus <code>Session</code> ownership first. It does not attempt to finish the statistics, CBO, or adaptive execution architecture before RFC 004 begins.</li>
+<li><strong>Statistics ownership split:</strong> Prism may use logical inferred facts and estimates or observations supplied through the provider-neutral planning context. Runtime observations retain their execution producer's provenance and authority and must not become Prism-authored facts.</li>
+<li><strong>Explain/API scope:</strong> Distinct authored, analyzed, rewritten, session, and executed stages are part of the intended mental model, but the exact public API names and attachment points remain illustrative in this RFC.</li>
+<li><strong>Cross-execution evidence boundary:</strong> Runtime-derived information retains the collecting execution system's provenance and authority, while an external provider may retain and later supply it through the provider-neutral immutable planning-context contract. Prism does not own that storage, and retained evidence must not mutate authored history or be reclassified as semantic truth.</li>
+<li><strong>Execution-mode boundary:</strong> Local and cluster execution preserve one Prism semantic model, while supplied placement, exchange, locality, and resource facts may change target-aware ranking. Bounded and unbounded relations share that relational core, but boundedness, update, temporal-progress, and state requirements constrain rewrite legality. Session, coordinator, and target layers retain scheduling, checkpoint, state, recovery, backpressure, and sink-commit ownership.</li>
+<li><strong>Graph-execution boundary:</strong> Graph-shaped Prism plans, lineage, and evidence do not create graph-query semantics. Explicit graph or recursive semantics remain Prism legality concerns when supported; graph indexes, traversal kernels, iterative execution, frontier scheduling, and recovery remain target or coordinator concerns.</li>
+<li><strong>Deferred follow-on design:</strong> A follow-on contract may define the concrete planning-context transport, cost interfaces, memo machinery, adaptive checkpoint mechanics, and public explain surfaces without changing the ownership boundary settled here.</li>
 </ul>
 
 
@@ -3206,7 +3689,9 @@
     
       <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../../javascripts/prismplane.js?v=20260719-book-parts-24"></script>
+        <script src="../../javascripts/prismplane.js?v=20260723-architecture-nav-28"></script>
+      
+        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>

@@ -13,13 +13,13 @@
         <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/">
       
       
-        <link rel="prev" href="../design_records/">
+        <link rel="prev" href="../architecture/">
       
       
-        <link rel="next" href="../whitepapers/">
+        <link rel="next" href="../design_records/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
@@ -44,7 +44,19 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/prismplane.css?v=20260719-query-block-part-34">
+      <link rel="stylesheet" href="../stylesheets/prismplane.css?v=20260722-nav-chevron-35">
+    
+      <link rel="stylesheet" href="../stylesheets/crystalline.css?v=20260726-landing-polish-10">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-integration.css?v=20260723-architecture-readability-4">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -84,56 +96,133 @@
     
       
 
+
+
+
   
 
-<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="IncQL" class="md-header__button md-logo" aria-label="IncQL" data-md-component="logo">
-      
-  <img src="../shared/brand/incql-mark.png" alt="logo">
+  
+    
+  
 
-    </a>
-    <label class="md-header__button md-icon" for="__drawer">
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+      
+    
+  
+    
+  
+    
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+<header class="topbar crystal-strip" data-md-component="header">
+  <a class="brand" href=".." aria-label="IncQL home">
+    <img src="../shared/brand/incql-logo-header.png" alt="">
+    <span>
+      <strong>IncQL</strong>
+      <small>Incan Query Layer</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Documentation sections">
+    
+      <a
+        data-site-section="home"
+        data-path-prefixes=""
+        data-search-label="Search"
+        
+        href=".."
+      >Home</a>
+    
+      <a
+        data-site-section="learn"
+        data-path-prefixes="language/"
+        data-search-label="Search learning paths"
+        
+        href="../language/"
+      >Learn</a>
+    
+      <a
+        data-site-section="guides"
+        data-path-prefixes="language/how-to/"
+        data-search-label="Search guides"
+        
+        href="../language/how-to/"
+      >Guides</a>
+    
+      <a
+        data-site-section="reference"
+        data-path-prefixes="language/reference/"
+        data-search-label="Search reference"
+        
+        href="../language/reference/"
+      >Reference</a>
+    
+      <a
+        data-site-section="architecture"
+        data-path-prefixes="architecture/"
+        data-search-label="Explore layers"
+        
+        href="../architecture/"
+      >Architecture</a>
+    
+      <a
+        data-site-section="design-records"
+        data-path-prefixes="rfcs/,design_records/,whitepapers/"
+        data-search-label="Search RFCs"
+        class="is-active" aria-current="page"
+        href="./"
+      >Design records</a>
+    
+      <a
+        data-site-section="project"
+        data-path-prefixes="project/,docs_map/,release_notes/,contributing/"
+        data-search-label="Search project docs"
+        
+        href="../project/"
+      >Project</a>
+    
+  </nav>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="site-nav-toggle md-icon"
+      aria-label="Open navigation"
+      aria-controls="__drawer"
+      aria-expanded="false"
+      data-site-nav-toggle
+    >
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-    </label>
-    <div class="md-header__title" data-md-component="header-title">
-      <div class="md-header__ellipsis">
-        <div class="md-header__topic">
-          <span class="md-ellipsis">
-            IncQL
-          </span>
-        </div>
-        <div class="md-header__topic" data-md-component="header-topic">
-          <span class="md-ellipsis">
-            
-              RFCs
-            
-          </span>
-        </div>
-      </div>
-    </div>
+    </button>
     
-      
-        <form class="md-header__option" data-md-component="palette">
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="cyan"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
-    
-  
-</form>
-      
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-    
-    
-    
-      <label class="md-header__button md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      <label class="docs-search" for="__search" aria-label="Search documentation">
+        <span data-site-search-label>Search RFCs</span>
+        <kbd>/</kbd>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -168,168 +257,11 @@
   </div>
 </div>
     
-    
-      <div class="md-header__source">
-        <a href="https://github.com/encero-systems/IncQL" title="Go to repository" class="md-source" data-md-component="source">
-  <div class="md-source__icon md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+    <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
+      <img src="../shared/icons/source-branch.svg" alt="">
+      <span>encero-systems/IncQL</span>
+    </a>
   </div>
-  <div class="md-source__repository">
-    encero-systems/IncQL
-  </div>
-</a>
-      </div>
-    
-  </nav>
-  
-    
-      
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
-        
-  
-    
-  
-  Home
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../language/" class="md-tabs__link">
-          
-  
-    
-  
-  Learn
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../language/how-to/" class="md-tabs__link">
-          
-  
-    
-  
-  Guides
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../language/reference/" class="md-tabs__link">
-          
-  
-    
-  
-  Reference
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../architecture/" class="md-tabs__link">
-        
-  
-    
-  
-  Architecture
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-    
-  
-  
-    
-    
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../design_records/" class="md-tabs__link">
-          
-  
-    
-  
-  Design records
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../project/" class="md-tabs__link">
-          
-  
-    
-  
-  Project
-
-        </a>
-      </li>
-    
-  
-
-      
-    </ul>
-  </div>
-</nav>
-    
-  
 </header>
     
     <div class="md-container" data-md-component="container">
@@ -355,7 +287,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../shared/brand/incql-mark.png" alt="logo">
+  <img src="../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -412,6 +344,10 @@
       
         
       
+        
+      
+        
+      
     
     
       
@@ -461,6 +397,146 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../language/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ten-minute quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Choose by background
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Choose by background
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/from_sql/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From SQL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/from_spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From Spark and DataFrame APIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/what_incql_is/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What IncQL is and is not
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
       
@@ -488,7 +564,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
         
           
           
@@ -504,14 +580,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
             <span class="md-nav__icon md-icon"></span>
             The IncQL Book
           </label>
@@ -544,10 +620,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -558,8 +634,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_2">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
             <span class="md-nav__icon md-icon"></span>
             Part I · Model the work
           </label>
@@ -642,10 +718,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_3" id="__nav_2_2_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -656,8 +732,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_3">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
             <span class="md-nav__icon md-icon"></span>
             Part II · Explain and execute it
           </label>
@@ -759,10 +835,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_4" id="__nav_2_2_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -773,8 +849,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_4">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
             <span class="md-nav__icon md-icon"></span>
             Part III · Decide what happens next
           </label>
@@ -855,10 +931,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_5" >
         
           
-          <label class="md-nav__link" for="__nav_2_2_5" id="__nav_2_2_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_5" id="__nav_2_4_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -869,8 +945,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2_5">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_5">
             <span class="md-nav__icon md-icon"></span>
             Part IV · Query blocks
           </label>
@@ -959,10 +1035,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
         
           
-          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -973,8 +1049,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
             <span class="md-nav__icon md-icon"></span>
             Concepts
           </label>
@@ -1058,22 +1134,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
     
     
       
@@ -1123,12 +1183,183 @@
   
   
   
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Start and connect
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Start and connect
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/read_write_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read and write data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Transform and query
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transform and query
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../language/how-to/dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Dataset transformations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/joins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Join typed relations
   </span>
   
 
@@ -1222,22 +1453,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../language/how-to/approximate_metrics/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Approximate metrics
-  </span>
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1249,20 +1467,49 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../language/how-to/typed_hll_sketches/" class="md-nav__link">
+    
+    
+      
         
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
-    Typed HLL sketches
+    Inspect and trust
   </span>
   
 
-      </a>
-    </li>
-  
-
-              
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspect and trust
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1271,11 +1518,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../language/how-to/inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Variant payloads
+    Inspect plan lineage
   </span>
   
 
@@ -1348,6 +1595,62 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced and capability-dependent
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced and capability-dependent
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1355,15 +1658,65 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../language/how-to/approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Inspect plan lineage
+    Approximate metrics
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/typed_hll_sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Typed HLL sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/variant_payloads/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variant payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1387,6 +1740,8 @@
       
         
           
+        
+      
         
       
         
@@ -1457,12 +1812,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
     
     
       
@@ -1482,7 +1831,7 @@
             
   
   <span class="md-ellipsis">
-    Core
+    Language and relational authoring
   </span>
   
 
@@ -1492,7 +1841,7 @@
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4_2">
             <span class="md-nav__icon md-icon"></span>
-            Core
+            Language and relational authoring
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1565,6 +1914,179 @@
   
   
   
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2_4" id="__nav_4_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Builders
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Builders
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/builders/filters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Filters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/builders/projections/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projections
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/builders/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Runtime and I/O
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Runtime and I/O
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../language/reference/execution_context/" class="md-nav__link">
         
@@ -1579,6 +2101,83 @@
   
 
               
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/capabilities/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backend capability matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspection, quality, and governance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspection, quality, and governance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1661,125 +2260,6 @@
     
       
         
-      
-        
-      
-        
-      
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Builders
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
-            <span class="md-nav__icon md-icon"></span>
-            Builders
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../language/reference/builders/filters/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Filters
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../language/reference/builders/projections/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Projections
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../language/reference/builders/aggregates/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Aggregates
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
           
         
       
@@ -1809,7 +2289,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
         
           
           
@@ -1818,23 +2298,23 @@
               
   
   <span class="md-ellipsis">
-    Functions
+    Function catalog
   </span>
   
 
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
             <span class="md-nav__icon md-icon"></span>
-            Functions
+            Function catalog
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2024,24 +2504,24 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
             
   
   <span class="md-ellipsis">
-    Substrait
+    Interchange and adapter authoring
   </span>
   
 
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_5">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
             <span class="md-nav__icon md-icon"></span>
-            Substrait
+            Interchange and adapter authoring
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2176,9 +2656,9 @@
     
       
         
-      
-        
           
+        
+      
         
       
         
@@ -2228,6 +2708,8 @@
           <ul class="md-nav__list" data-md-scrollfix>
             
               
+            
+              
                 
   
   
@@ -2246,8 +2728,6 @@
     </li>
   
 
-              
-            
               
             
               
@@ -2723,24 +3203,44 @@
   
 
 
-<header class="pp-rfc-index-header">
+<div class="page-layout rfc-layout">
+<aside aria-label="Design records navigation" class="docs-rail rfc-rail crystal-surface">
+<div class="rail-heading">
+<img src="../shared/icons/file-tree-outline.svg" alt="">
+<span><small>Documentation</small><strong>Design records</strong></span>
+</div>
+<nav class="rail-nav">
+<a href="../design_records/"><span>Overview</span><small>Start here</small></a>
+<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>67 durable records</small></a>
+<a href="#how-the-rfc-lifecycle-works"><span>Lifecycle guide</span><small>From draft to shipped</small></a>
+</nav>
+<div class="rail-section">
+<p>Whitepapers</p>
+<a href="../whitepapers/incql_db/"><img src="../shared/icons/database-cog-outline.svg" alt=""><span>IncQL-DB</span></a>
+</div>
+<div class="rail-note">
+<span class="health-light"></span>
+<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 67 records</small></div>
+</div>
+</aside>
+<main class="content rfc-content" id="reader">
+<header class="page-intro pp-rfc-index-header">
 <div class="pp-rfc-index-intro">
 <h1 id="incql-rfcs">IncQL RFCs</h1>
 <p class="pp-rfc-index-lede">Search and inspect IncQL's durable design records.</p>
 </div>
 <nav aria-label="RFC resources" class="pp-rfc-index-links"><a href="../contributing/writing_rfcs/">Write an RFC</a><a href="#how-the-rfc-lifecycle-works">Lifecycle guide</a></nav>
 </header>
-<div class="pp-rfc-reader-host" data-rfc-reader hidden></div>
-
+<div class="pp-rfc-reader-host" data-rfc-reader="data-rfc-reader" hidden="hidden"></div>
 <!-- BEGIN GENERATED RFC CATALOG -->
-<script type="application/json" data-rfc-catalog>
+<p><template data-rfc-catalog>
 [
   {
     "authors": "Danny Meijer",
     "created": "2026-03-18",
     "href": "000_incql_syntax/",
     "id": "000",
-    "issue": "[IncQL #1](https://github.com/encero-systems/IncQL/issues/1)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/1">IncQL #1</a>",
     "issue_label": "IncQL #1",
     "issue_links": [
       {
@@ -2784,7 +3284,7 @@
     "created": "2026-03-22",
     "href": "001_incql_dataset/",
     "id": "001",
-    "issue": "[IncQL #2](https://github.com/encero-systems/IncQL/issues/2)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/2">IncQL #2</a>",
     "issue_label": "IncQL #2",
     "issue_links": [
       {
@@ -2835,7 +3335,7 @@
     "created": "2026-03-23",
     "href": "002_apache_substrait_integration/",
     "id": "002",
-    "issue": "[IncQL #3](https://github.com/encero-systems/IncQL/issues/3)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/3">IncQL #3</a>",
     "issue_label": "IncQL #3",
     "issue_links": [
       {
@@ -2885,7 +3385,7 @@
     "created": "2026-03-22",
     "href": "closed/implemented/003_incql_query_blocks/",
     "id": "003",
-    "issue": "[IncQL #4](https://github.com/encero-systems/IncQL/issues/4)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/4">IncQL #4</a>",
     "issue_label": "IncQL #4",
     "issue_links": [
       {
@@ -2906,7 +3406,7 @@
       "001",
       "002"
     ],
-    "rfc_pr": "[IncQL #59](https://github.com/encero-systems/IncQL/pull/59)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/59">IncQL #59</a>",
     "rfc_pr_label": "IncQL #59",
     "rfc_pr_links": [
       {
@@ -2942,7 +3442,7 @@
     "created": "2026-03-24",
     "href": "004_incql_execution_context/",
     "id": "004",
-    "issue": "[IncQL #5](https://github.com/encero-systems/IncQL/issues/5)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/5">IncQL #5</a>",
     "issue_label": "IncQL #5",
     "issue_links": [
       {
@@ -3000,7 +3500,7 @@
     "created": "2026-03-18",
     "href": "005_incql_pipe_forward/",
     "id": "005",
-    "issue": "[IncQL #6](https://github.com/encero-systems/IncQL/issues/6)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/6">IncQL #6</a>",
     "issue_label": "IncQL #6",
     "issue_links": [
       {
@@ -3015,7 +3515,7 @@
       "IncQL RFC 000 (language specification — naming and query schema; must stay aligned)",
       "IncQL RFC 001 (dataset types — carriers and method APIs)",
       "IncQL RFC 003 (query {} — primary clause surface)",
-      "Incan RFC 040 (Scoped DSL Glyph Surfaces — prerequisite for |\u003e support)"
+      "Incan RFC 040 (Scoped DSL Surface Forms — implemented prerequisite for |\u003e support)"
     ],
     "related_ids": [
       "000",
@@ -3029,8 +3529,8 @@
     "rfc_pr_url": null,
     "shipped_in": "-",
     "source_path": "005_incql_pipe_forward.md",
-    "status": "Blocked",
-    "status_key": "blocked",
+    "status": "Planned",
+    "status_key": "planned",
     "summary": "This RFC specifies an optional pipe-forward surface for IncQL relational pipelines: |\u003e-chained stages applied to an existing DataSet[T] expression, with grammar, precedence, and desugaring to the same relational semantics as query {} and collection method chains. Identifier resolution and current query schema behavior must match IncQL RFC 000 §§2–4; this RFC does not redefine naming rules.",
     "tags": [
       {
@@ -3050,7 +3550,7 @@
     "created": "2026-03-27",
     "href": "006_unnest_core_substrait/",
     "id": "006",
-    "issue": "[IncQL #14](https://github.com/encero-systems/IncQL/issues/14)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/14">IncQL #14</a>",
     "issue_label": "IncQL #14",
     "issue_links": [
       {
@@ -3098,7 +3598,7 @@
     "created": "2026-04-02",
     "href": "007_prism_planning_engine/",
     "id": "007",
-    "issue": "[IncQL #16](https://github.com/encero-systems/IncQL/issues/16)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/16">IncQL #16</a>",
     "issue_label": "IncQL #16",
     "issue_links": [
       {
@@ -3150,7 +3650,7 @@
     "created": "2026-04-07",
     "href": "008_optimizer_boundary_stats_cbo_aqe/",
     "id": "008",
-    "issue": "[IncQL #18](https://github.com/encero-systems/IncQL/issues/18)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/18">IncQL #18</a>",
     "issue_label": "IncQL #18",
     "issue_links": [
       {
@@ -3162,22 +3662,35 @@
     "lifecycle": "active",
     "motivation": "RFC 007 was intentionally written to get Prism named, scoped, and implemented as a real planning substrate. That was the right move for the first Prism adoption slice. However, once IncQL aims for stronger optimization, the remaining ambiguity becomes a liability:",
     "related": [
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
       "IncQL RFC 004 (execution context — Session remains the execution and backend boundary)",
-      "IncQL RFC 007 (Prism planning engine — this RFC narrows optimizer-boundary ownership without replacing Prism adoption)"
+      "IncQL RFC 007 (Prism planning engine — this RFC narrows optimizer-boundary ownership without replacing Prism adoption)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
     ],
     "related_ids": [
+      "001",
       "004",
-      "007"
+      "007",
+      "032",
+      "048",
+      "066"
     ],
-    "rfc_pr": "—",
-    "rfc_pr_label": null,
-    "rfc_pr_links": [],
-    "rfc_pr_url": null,
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/105">IncQL #105</a>",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
     "shipped_in": "—",
     "source_path": "008_optimizer_boundary_stats_cbo_aqe.md",
     "status": "Planned",
     "status_key": "planned",
-    "summary": "This RFC defines the optimizer boundary between Prism and Session as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and any static planning facts that do not depend on runtime feedback. Session remains the owner of backend capabilities, physical planning, backend pushdown policy, runtime statistics, execution metrics, and adaptive re-planning during execution. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004 and defers deeper statistics, CBO, and AQE mechanics until the execution side is better grounded.",
+    "summary": "This RFC defines the optimizer boundary between Prism and Session as IncQL grows beyond the first Prism adoption slice. Prism remains the owner of analyzed logical planning, semantic rewrites, canonicalization, schema-preserving logical optimization, and logical alternative ranking. Session remains the owner of backend capability discovery, physical planning, backend pushdown policy, runtime-observation collection, safe checkpoints, target-local adaptive execution, and execution metrics. Prism may consume provider-neutral immutable evidence before execution or when a coordinator explicitly re-invokes the same reasoning engine over unfinished bounded work or future continuous work. External providers may retain applicable evidence across executions, but Prism does not retrieve, persist, or operationally interpret it. This RFC does not replace RFC 007's role in establishing Prism as the internal planning substrate; it settles the ownership boundary needed for RFC 004, while RFC 066 defines the stronger north-star memo, distributed and continuous planning properties, and adaptive re-entry contract.",
     "tags": [
       {
         "key": "evidence",
@@ -3326,7 +3839,7 @@
     "created": "2026-04-22",
     "href": "closed/implemented/012_unified_scalar_expression_surface/",
     "id": "012",
-    "issue": "[IncQL #25](https://github.com/encero-systems/IncQL/issues/25)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/25">IncQL #25</a>",
     "issue_label": "IncQL #25",
     "issue_links": [
       {
@@ -3390,7 +3903,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/013_function_catalog_program/",
     "id": "013",
-    "issue": "[IncQL #30](https://github.com/encero-systems/IncQL/issues/30)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/30">IncQL #30</a>",
     "issue_label": "IncQL #30",
     "issue_links": [
       {
@@ -3433,7 +3946,7 @@
       "025",
       "026"
     ],
-    "rfc_pr": "[IncQL #59](https://github.com/encero-systems/IncQL/pull/59)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/59">IncQL #59</a>",
     "rfc_pr_label": "IncQL #59",
     "rfc_pr_links": [
       {
@@ -3469,7 +3982,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/014_function_registry/",
     "id": "014",
-    "issue": "[IncQL #31](https://github.com/encero-systems/IncQL/issues/31)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/31">IncQL #31</a>",
     "issue_label": "IncQL #31",
     "issue_links": [
       {
@@ -3506,7 +4019,7 @@
       "013",
       "048"
     ],
-    "rfc_pr": "[IncQL #42](https://github.com/encero-systems/IncQL/pull/42)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/42">IncQL #42</a>",
     "rfc_pr_label": "IncQL #42",
     "rfc_pr_links": [
       {
@@ -3542,7 +4055,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/015_core_scalar_functions/",
     "id": "015",
-    "issue": "[IncQL #32](https://github.com/encero-systems/IncQL/issues/32)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/32">IncQL #32</a>",
     "issue_label": "IncQL #32",
     "issue_links": [
       {
@@ -3565,7 +4078,7 @@
       "014",
       "003"
     ],
-    "rfc_pr": "[IncQL #43](https://github.com/encero-systems/IncQL/pull/43)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/43">IncQL #43</a>",
     "rfc_pr_label": "IncQL #43",
     "rfc_pr_links": [
       {
@@ -3601,7 +4114,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/016_core_aggregate_functions/",
     "id": "016",
-    "issue": "[IncQL #33](https://github.com/encero-systems/IncQL/issues/33)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/33">IncQL #33</a>",
     "issue_label": "IncQL #33",
     "issue_links": [
       {
@@ -3626,7 +4139,7 @@
       "013",
       "014"
     ],
-    "rfc_pr": "[IncQL #44](https://github.com/encero-systems/IncQL/pull/44)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/44">IncQL #44</a>",
     "rfc_pr_label": "IncQL #44",
     "rfc_pr_links": [
       {
@@ -3662,7 +4175,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/017_aggregate_modifiers/",
     "id": "017",
-    "issue": "[IncQL #34](https://github.com/encero-systems/IncQL/issues/34)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/34">IncQL #34</a>",
     "issue_label": "IncQL #34",
     "issue_links": [
       {
@@ -3687,7 +4200,7 @@
       "014",
       "016"
     ],
-    "rfc_pr": "[IncQL #45](https://github.com/encero-systems/IncQL/pull/45)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/45">IncQL #45</a>",
     "rfc_pr_label": "IncQL #45",
     "rfc_pr_links": [
       {
@@ -3723,7 +4236,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/018_common_scalar_function_catalog/",
     "id": "018",
-    "issue": "[IncQL #35](https://github.com/encero-systems/IncQL/issues/35)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/35">IncQL #35</a>",
     "issue_label": "IncQL #35",
     "issue_links": [
       {
@@ -3746,7 +4259,7 @@
       "014",
       "015"
     ],
-    "rfc_pr": "[IncQL #44](https://github.com/encero-systems/IncQL/pull/44) (initial math slice); [IncQL #54](https://github.com/encero-systems/IncQL/pull/54) (full implementation)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/44">IncQL #44</a> (initial math slice); <a href="https://github.com/encero-systems/IncQL/pull/54">IncQL #54</a> (full implementation)",
     "rfc_pr_label": "IncQL #44",
     "rfc_pr_links": [
       {
@@ -3786,7 +4299,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/019_window_functions/",
     "id": "019",
-    "issue": "[IncQL #36](https://github.com/encero-systems/IncQL/issues/36)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/36">IncQL #36</a>",
     "issue_label": "IncQL #36",
     "issue_links": [
       {
@@ -3811,7 +4324,7 @@
       "014",
       "016"
     ],
-    "rfc_pr": "[IncQL #48](https://github.com/encero-systems/IncQL/pull/48)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/48">IncQL #48</a>",
     "rfc_pr_label": "IncQL #48",
     "rfc_pr_links": [
       {
@@ -3847,7 +4360,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/020_nested_data_functions/",
     "id": "020",
-    "issue": "[IncQL #37](https://github.com/encero-systems/IncQL/issues/37)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/37">IncQL #37</a>",
     "issue_label": "IncQL #37",
     "issue_links": [
       {
@@ -3872,7 +4385,7 @@
       "014",
       "021"
     ],
-    "rfc_pr": "[IncQL #46](https://github.com/encero-systems/IncQL/pull/46)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/46">IncQL #46</a>",
     "rfc_pr_label": "IncQL #46",
     "rfc_pr_links": [
       {
@@ -3908,7 +4421,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/021_generator_table_functions/",
     "id": "021",
-    "issue": "[IncQL #38](https://github.com/encero-systems/IncQL/issues/38)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/38">IncQL #38</a>",
     "issue_label": "IncQL #38",
     "issue_links": [
       {
@@ -3935,7 +4448,7 @@
       "014",
       "020"
     ],
-    "rfc_pr": "[IncQL #47](https://github.com/encero-systems/IncQL/pull/47)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/47">IncQL #47</a>",
     "rfc_pr_label": "IncQL #47",
     "rfc_pr_links": [
       {
@@ -3971,7 +4484,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/022_semi_structured_format_functions/",
     "id": "022",
-    "issue": "[IncQL #39](https://github.com/encero-systems/IncQL/issues/39)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/39">IncQL #39</a>",
     "issue_label": "IncQL #39",
     "issue_links": [
       {
@@ -4000,7 +4513,7 @@
       "020",
       "026"
     ],
-    "rfc_pr": "[IncQL #49](https://github.com/encero-systems/IncQL/pull/49)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/49">IncQL #49</a>",
     "rfc_pr_label": "IncQL #49",
     "rfc_pr_links": [
       {
@@ -4036,7 +4549,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/023_approximate_sketch_functions/",
     "id": "023",
-    "issue": "[IncQL #40](https://github.com/encero-systems/IncQL/issues/40)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/40">IncQL #40</a>",
     "issue_label": "IncQL #40",
     "issue_links": [
       {
@@ -4063,7 +4576,7 @@
       "024",
       "025"
     ],
-    "rfc_pr": "[IncQL #53](https://github.com/encero-systems/IncQL/pull/53)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/53">IncQL #53</a>",
     "rfc_pr_label": "IncQL #53",
     "rfc_pr_links": [
       {
@@ -4099,7 +4612,7 @@
     "created": "2026-04-27",
     "href": "closed/implemented/024_function_extension_policy/",
     "id": "024",
-    "issue": "[IncQL #41](https://github.com/encero-systems/IncQL/issues/41)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/41">IncQL #41</a>",
     "issue_label": "IncQL #41",
     "issue_links": [
       {
@@ -4124,7 +4637,7 @@
       "022",
       "023"
     ],
-    "rfc_pr": "[IncQL #44](https://github.com/encero-systems/IncQL/pull/44)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/44">IncQL #44</a>",
     "rfc_pr_label": "IncQL #44",
     "rfc_pr_links": [
       {
@@ -4160,7 +4673,7 @@
     "created": "2026-05-28",
     "href": "closed/implemented/025_typed_sketch_logical_values/",
     "id": "025",
-    "issue": "[IncQL #51](https://github.com/encero-systems/IncQL/issues/51)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/51">IncQL #51</a>",
     "issue_label": "IncQL #51",
     "issue_links": [
       {
@@ -4185,7 +4698,7 @@
       "023",
       "024"
     ],
-    "rfc_pr": "[IncQL #55](https://github.com/encero-systems/IncQL/pull/55)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/55">IncQL #55</a>",
     "rfc_pr_label": "IncQL #55",
     "rfc_pr_links": [
       {
@@ -4217,7 +4730,7 @@
     "created": "2026-05-28",
     "href": "closed/implemented/026_semi_structured_variant_values/",
     "id": "026",
-    "issue": "[IncQL #52](https://github.com/encero-systems/IncQL/issues/52)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/52">IncQL #52</a>",
     "issue_label": "IncQL #52",
     "issue_links": [
       {
@@ -4242,7 +4755,7 @@
       "022",
       "024"
     ],
-    "rfc_pr": "[IncQL #56](https://github.com/encero-systems/IncQL/pull/56)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/56">IncQL #56</a>",
     "rfc_pr_label": "IncQL #56",
     "rfc_pr_links": [
       {
@@ -4274,7 +4787,7 @@
     "created": "2026-05-29",
     "href": "027_relational_evidence_program/",
     "id": "027",
-    "issue": "[IncQL #61](https://github.com/encero-systems/IncQL/issues/61)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/61">IncQL #61</a>",
     "issue_label": "IncQL #61",
     "issue_links": [
       {
@@ -4339,7 +4852,7 @@
       "046",
       "047"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4383,7 +4896,7 @@
     "created": "2026-05-29",
     "href": "028_semantic_identity_targets/",
     "id": "028",
-    "issue": "[IncQL #62](https://github.com/encero-systems/IncQL/issues/62)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/62">IncQL #62</a>",
     "issue_label": "IncQL #62",
     "issue_links": [
       {
@@ -4408,7 +4921,7 @@
       "027",
       "041"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4436,7 +4949,7 @@
     "created": "2026-05-29",
     "href": "029_metadata_attachments/",
     "id": "029",
-    "issue": "[IncQL #63](https://github.com/encero-systems/IncQL/issues/63)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/63">IncQL #63</a>",
     "issue_label": "IncQL #63",
     "issue_links": [
       {
@@ -4457,7 +4970,7 @@
       "027",
       "028"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4489,7 +5002,7 @@
     "created": "2026-05-29",
     "href": "030_prism_lineage_graph/",
     "id": "030",
-    "issue": "[IncQL #64](https://github.com/encero-systems/IncQL/issues/64)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/64">IncQL #64</a>",
     "issue_label": "IncQL #64",
     "issue_links": [
       {
@@ -4524,7 +5037,7 @@
       "028",
       "041"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4556,7 +5069,7 @@
     "created": "2026-05-29",
     "href": "031_inspection_artifacts/",
     "id": "031",
-    "issue": "[IncQL #65](https://github.com/encero-systems/IncQL/issues/65)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/65">IncQL #65</a>",
     "issue_label": "IncQL #65",
     "issue_links": [
       {
@@ -4585,7 +5098,7 @@
       "040",
       "041"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4617,7 +5130,7 @@
     "created": "2026-05-29",
     "href": "closed/implemented/032_execution_observations/",
     "id": "032",
-    "issue": "[IncQL #66](https://github.com/encero-systems/IncQL/issues/66)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/66">IncQL #66</a>",
     "issue_label": "IncQL #66",
     "issue_links": [
       {
@@ -4642,7 +5155,7 @@
       "031",
       "040"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #85](https://github.com/encero-systems/IncQL/pull/85); [IncQL #87](https://github.com/encero-systems/IncQL/pull/87)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/85">IncQL #85</a>; <a href="https://github.com/encero-systems/IncQL/pull/87">IncQL #87</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4682,7 +5195,7 @@
     "created": "2026-05-29",
     "href": "closed/implemented/033_adapter_requirements_coverage/",
     "id": "033",
-    "issue": "[IncQL #67](https://github.com/encero-systems/IncQL/issues/67)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/67">IncQL #67</a>",
     "issue_label": "IncQL #67",
     "issue_links": [
       {
@@ -4721,7 +5234,7 @@
       "044",
       "045"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83); [IncQL #86](https://github.com/encero-systems/IncQL/pull/86); [IncQL #87](https://github.com/encero-systems/IncQL/pull/87)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>; <a href="https://github.com/encero-systems/IncQL/pull/86">IncQL #86</a>; <a href="https://github.com/encero-systems/IncQL/pull/87">IncQL #87</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4769,7 +5282,7 @@
     "created": "2026-05-29",
     "href": "closed/implemented/034_quality_assertions_observations/",
     "id": "034",
-    "issue": "[IncQL #68](https://github.com/encero-systems/IncQL/issues/68)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/68">IncQL #68</a>",
     "issue_label": "IncQL #68",
     "issue_links": [
       {
@@ -4802,7 +5315,7 @@
       "033",
       "042"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83); [IncQL #88](https://github.com/encero-systems/IncQL/pull/88)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>; <a href="https://github.com/encero-systems/IncQL/pull/88">IncQL #88</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4846,7 +5359,7 @@
     "created": "2026-05-29",
     "href": "closed/implemented/035_governed_attributes_policy_checkpoints/",
     "id": "035",
-    "issue": "[IncQL #69](https://github.com/encero-systems/IncQL/issues/69)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/69">IncQL #69</a>",
     "issue_label": "IncQL #69",
     "issue_links": [
       {
@@ -4873,7 +5386,7 @@
       "030",
       "033"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #89](https://github.com/encero-systems/IncQL/pull/89)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/89">IncQL #89</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -4913,7 +5426,7 @@
     "created": "2026-05-29",
     "href": "036_governed_plan_bundle/",
     "id": "036",
-    "issue": "[IncQL #70](https://github.com/encero-systems/IncQL/issues/70)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/70">IncQL #70</a>",
     "issue_label": "IncQL #70",
     "issue_links": [
       {
@@ -4960,7 +5473,7 @@
       "046",
       "047"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -5000,7 +5513,7 @@
     "created": "2026-05-29",
     "href": "037_plan_diff_blast_radius_inputs/",
     "id": "037",
-    "issue": "[IncQL #71](https://github.com/encero-systems/IncQL/issues/71)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/71">IncQL #71</a>",
     "issue_label": "IncQL #71",
     "issue_links": [
       {
@@ -5029,7 +5542,7 @@
       "036",
       "040"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -5061,7 +5574,7 @@
     "created": "2026-05-29",
     "href": "038_evidence_exchange_bridges/",
     "id": "038",
-    "issue": "[IncQL #72](https://github.com/encero-systems/IncQL/issues/72)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/72">IncQL #72</a>",
     "issue_label": "IncQL #72",
     "issue_links": [
       {
@@ -5104,7 +5617,7 @@
       "046",
       "047"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -5144,7 +5657,7 @@
     "created": "2026-05-30",
     "href": "039_pandas_familiar_exploration_api/",
     "id": "039",
-    "issue": "[IncQL #73](https://github.com/encero-systems/IncQL/issues/73)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/73">IncQL #73</a>",
     "issue_label": "IncQL #73",
     "issue_links": [
       {
@@ -5169,7 +5682,7 @@
       "005",
       "012"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -5197,7 +5710,7 @@
     "created": "2026-05-30",
     "href": "040_interoperability_semantic_profiles/",
     "id": "040",
-    "issue": "[IncQL #74](https://github.com/encero-systems/IncQL/issues/74)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/74">IncQL #74</a>",
     "issue_label": "IncQL #74",
     "issue_links": [
       {
@@ -5248,7 +5761,7 @@
       "038",
       "041"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -5280,7 +5793,7 @@
     "created": "2026-05-30",
     "href": "041_prism_plan_ingress_frontends/",
     "id": "041",
-    "issue": "[IncQL #75](https://github.com/encero-systems/IncQL/issues/75)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/75">IncQL #75</a>",
     "issue_label": "IncQL #75",
     "issue_links": [
       {
@@ -5319,7 +5832,7 @@
       "033",
       "040"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -5355,7 +5868,7 @@
     "created": "2026-06-20",
     "href": "042_async_verification_evidence/",
     "id": "042",
-    "issue": "[IncQL #77](https://github.com/encero-systems/IncQL/issues/77)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/77">IncQL #77</a>",
     "issue_label": "IncQL #77",
     "issue_links": [
       {
@@ -5396,7 +5909,7 @@
       "044",
       "045"
     ],
-    "rfc_pr": "[IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #83",
     "rfc_pr_links": [
       {
@@ -5428,7 +5941,7 @@
     "created": "2026-06-20",
     "href": "043_canonical_equality_digest_profiles/",
     "id": "043",
-    "issue": "[IncQL #78](https://github.com/encero-systems/IncQL/issues/78)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/78">IncQL #78</a>",
     "issue_label": "IncQL #78",
     "issue_links": [
       {
@@ -5459,7 +5972,7 @@
       "040",
       "042"
     ],
-    "rfc_pr": "[IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #83",
     "rfc_pr_links": [
       {
@@ -5495,7 +6008,7 @@
     "created": "2026-06-20",
     "href": "044_verifier_statements_proof_artifacts/",
     "id": "044",
-    "issue": "[IncQL #79](https://github.com/encero-systems/IncQL/issues/79)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/79">IncQL #79</a>",
     "issue_label": "IncQL #79",
     "issue_links": [
       {
@@ -5526,7 +6039,7 @@
       "042",
       "043"
     ],
-    "rfc_pr": "[IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #83",
     "rfc_pr_links": [
       {
@@ -5558,7 +6071,7 @@
     "created": "2026-06-20",
     "href": "045_constraint_evidence_verification_planning/",
     "id": "045",
-    "issue": "[IncQL #80](https://github.com/encero-systems/IncQL/issues/80)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/80">IncQL #80</a>",
     "issue_label": "IncQL #80",
     "issue_links": [
       {
@@ -5593,7 +6106,7 @@
       "043",
       "044"
     ],
-    "rfc_pr": "[IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #83",
     "rfc_pr_links": [
       {
@@ -5629,7 +6142,7 @@
     "created": "2026-06-20",
     "href": "046_data_contract_ingress/",
     "id": "046",
-    "issue": "[IncQL #81](https://github.com/encero-systems/IncQL/issues/81)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/81">IncQL #81</a>",
     "issue_label": "IncQL #81",
     "issue_links": [
       {
@@ -5668,7 +6181,7 @@
       "045",
       "047"
     ],
-    "rfc_pr": "[IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #83",
     "rfc_pr_links": [
       {
@@ -5704,7 +6217,7 @@
     "created": "2026-06-20",
     "href": "047_semantic_evidence_graph_agent_surface/",
     "id": "047",
-    "issue": "[IncQL #82](https://github.com/encero-systems/IncQL/issues/82)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/82">IncQL #82</a>",
     "issue_label": "IncQL #82",
     "issue_links": [
       {
@@ -5753,7 +6266,7 @@
       "045",
       "046"
     ],
-    "rfc_pr": "[IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a>",
     "rfc_pr_label": "IncQL #83",
     "rfc_pr_links": [
       {
@@ -5799,7 +6312,8 @@
       "IncQL RFC 008 (optimizer boundary, statistics, CBO, and adaptive execution)",
       "IncQL RFC 032 (execution observations)",
       "IncQL RFC 033 (adapter requirements and coverage)",
-      "IncQL RFC 041 (Prism plan ingress and external client frontends)"
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
     ],
     "related_ids": [
       "001",
@@ -5809,12 +6323,18 @@
       "008",
       "032",
       "033",
-      "041"
+      "041",
+      "066"
     ],
-    "rfc_pr": "—",
-    "rfc_pr_label": null,
-    "rfc_pr_links": [],
-    "rfc_pr_url": null,
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/105">IncQL #105</a>",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
     "shipped_in": "—",
     "source_path": "048_cluster_execution_backend_mode.md",
     "status": "Draft",
@@ -5839,10 +6359,75 @@
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-06",
+    "href": "closed/implemented/049_declarative_quality_block_vocabulary/",
+    "id": "049",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/96">IncQL #96</a>",
+    "issue_label": "IncQL #96",
+    "issue_links": [
+      {
+        "label": "IncQL #96",
+        "url": "https://github.com/encero-systems/IncQL/issues/96"
+      }
+    ],
+    "issue_url": "https://github.com/encero-systems/IncQL/issues/96",
+    "lifecycle": "implemented",
+    "motivation": "RFC 034 established the right semantic boundary: quality helpers declare checks, and session observation APIs produce evidence. The first quality syntax was intentionally close to the helper API, which made the implementation small but left the authoring experience too mechanical for real suites. Quality declarations should read like checks over a relation without hiding the fact that execution remains an explicit session operation.",
+    "related": [
+      "IncQL RFC 003 (query blocks)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 042 (async verification evidence)"
+    ],
+    "related_ids": [
+      "003",
+      "027",
+      "028",
+      "032",
+      "033",
+      "034",
+      "042"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "v0.1",
+    "source_path": "closed/implemented/049_declarative_quality_block_vocabulary.md",
+    "status": "Implemented",
+    "status_key": "implemented",
+    "summary": "This RFC adds a declarative quality block vocabulary on top of RFC 034. Authors can write FROM, EXPECT, REQUIRE, and GROUP BY clauses inside quality blocks, use threshold operators such as row_count() \u003e= 1, and attach stable assertion names with as \u003cname\u003e. The syntax still lowers to ordinary QualityAssertion helper values and does not execute, filter, quarantine, or mutate relations by itself.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      }
+    ],
+    "title": "Declarative quality block vocabulary",
+    "written_against": "Incan v0.4-era IncQL"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-07-11",
     "href": "050_addon_component_registry/",
     "id": "050",
-    "issue": "[IncQL #101](https://github.com/encero-systems/IncQL/issues/101)",
+    "issue": "<a href="https://github.com/encero-systems/IncQL/issues/101">IncQL #101</a>",
     "issue_label": "IncQL #101",
     "issue_links": [
       {
@@ -5879,7 +6464,7 @@
       "041",
       "048"
     ],
-    "rfc_pr": "[IncQL #102](https://github.com/encero-systems/IncQL/pull/102)",
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/102">IncQL #102</a>",
     "rfc_pr_label": "IncQL #102",
     "rfc_pr_links": [
       {
@@ -5913,10 +6498,1245 @@
     ],
     "title": "Addon component registry and package contract",
     "written_against": "Incan 0.4.0 and IncQL 0.1.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "051_native_ingestion_program/",
+    "id": "051",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL already owns typed read roots, schema-aware relational plans, session binding, writes, execution observations, adapter coverage, and local evidence. Its current file-oriented read surface is not enough for authors who need to pull records from APIs, databases, object stores, event systems, and other external sources. Requiring those authors to write and deploy a separate Python extraction program would split the type system, schema contract, state model, and evidence chain at the exact boundary where IncQL should be strongest.",
+    "related": [
+      "IncQL RFC 000 (core language model and layer boundaries)",
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 009 (session format handler registry)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 050 (add-on component registry)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)",
+      "IncQL RFC 057 (local ingestion inspection and CLI lifecycle)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "004",
+      "009",
+      "011",
+      "027",
+      "048",
+      "050",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056",
+      "057"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "051_native_ingestion_program.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC establishes IncQL's native ingestion program and its ownership boundary. IncQL must let authors declare, inspect, and execute typed source-to-destination ingestion without requiring Python, Spark or another cluster runtime, an external ingestion service, or an operational pipeline framework. The program adds source and resource declarations, connector contracts, schema reconciliation, incremental state, destination commit semantics, and portable load receipts around the existing Session execution boundary. Higher operational layers may schedule, retry, deploy, backfill, and monitor the resulting ingestion plans, but they must not redefine their data semantics.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      }
+    ],
+    "title": "Native ingestion program and ownership boundary",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "052_declarative_sources_resources_connectors/",
+    "id": "052",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL's current source model is a closed file-format descriptor with CSV, Parquet, and Arrow variants. That is enough for local file reads but cannot describe an API with multiple endpoints, a reflected database with selectable tables, a paginated resource, or a source whose child resource depends on identifiers produced by a parent resource.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 009 (session format handler registry)",
+      "IncQL RFC 010 (CSV dialect and interpretation contract)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 050 (add-on component registry)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 064 (federated placement, execution targets, and explicit data exchange)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "009",
+      "010",
+      "011",
+      "028",
+      "033",
+      "048",
+      "050",
+      "051",
+      "053",
+      "054",
+      "064"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "052_declarative_sources_resources_connectors.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines IncQL's declarative source, resource, and connector-package model. A source groups related resources behind one connector and shared configuration; a resource identifies one typed, selectable record-producing unit; and a connector package implements the protocol-specific discovery and extraction contract. Source declarations contain stable intent, binding references, and policies rather than executable Python generators or resolved credentials. The model must support generic REST/OpenAPI, SQL, and filesystem connectors while remaining extensible through versioned package components and explicit capability coverage.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "extensibility",
+        "label": "Extensibility"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      }
+    ],
+    "title": "Declarative sources, resources, and connector packages",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "053_schema_reconciliation_normalization/",
+    "id": "053",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Ingestion begins at an unstable boundary. APIs add fields, databases change column types, files contain mixed representations, and nested objects do not always map naturally to one table. A system that automatically evolves destination schema from whatever it most recently observed is convenient, but it weakens IncQL's typed contract and makes schema changes difficult to review before they affect consumers.",
+    "related": [
+      "IncQL RFC 000 (core schema shapes and layer boundaries)",
+      "IncQL RFC 001 (dataset carriers and schema surfaces)",
+      "IncQL RFC 010 (CSV dialect and interpretation contract)",
+      "IncQL RFC 020 (nested data functions)",
+      "IncQL RFC 026 (semi-structured variant logical values)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "010",
+      "020",
+      "026",
+      "028",
+      "029",
+      "034",
+      "036",
+      "043",
+      "045",
+      "046",
+      "051",
+      "052",
+      "055"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "053_schema_reconciliation_normalization.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines how native IncQL ingestion observes source shape, reconciles it with declared types and imported contracts, and deterministically normalizes records into relational outputs. Schema inference is evidence about sampled or extracted data; it must not silently become type authority. The contract distinguishes declared, planned, observed, normalized, and destination schemas; defines exact, minimum-guarantee, evolve-by-decision, and discovery-only modes; and requires explicit treatment of additional fields, incompatible values, nested structures, dynamic tables, and schema migration proposals.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      }
+    ],
+    "title": "Schema observation, reconciliation, and normalization",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "054_incremental_extraction_state_checkpoints/",
+    "id": "054",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Incremental ingestion is where convenience becomes correctness-sensitive. A timestamp or integer cursor seems simple until records arrive late, multiple rows share one cursor value, a destination partially commits, two runs overlap, a backfill should not move the live cursor, or the source mutates records behind a previously observed timestamp.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "011",
+      "028",
+      "032",
+      "033",
+      "036",
+      "043",
+      "048",
+      "051",
+      "052",
+      "055",
+      "056"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "054_incremental_extraction_state_checkpoints.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines incremental extraction and durable checkpoint state for native IncQL ingestion. Incremental state must be typed, versioned, scoped to stable source and resource identities, and advanced through an explicit proposal-and-commit protocol. A resource reads one committed checkpoint, extracts a bounded increment, and proposes a successor checkpoint; the runtime commits that successor only after the corresponding destination outcome satisfies the selected commit policy. Cursor-based incremental batch extraction remains bounded work for one run and must not be conflated with unbounded DataStream[T] execution.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      }
+    ],
+    "title": "Incremental extraction, state, and checkpoints",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "055_destination_loading_commit_semantics/",
+    "id": "055",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Writing a file or inserting rows is easy; defining what happens under schema drift, retries, partial failure, and multi-table normalization is not. A destination may support one transaction across all affected tables, transactions only within one table, staged replacement, merge through temporary tables, append with no rollback, or an object-store manifest that makes a set of files visible only after publication.",
+    "related": [
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
+      "IncQL RFC 004 (execution context and Session writes)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "028",
+      "032",
+      "033",
+      "034",
+      "035",
+      "043",
+      "048",
+      "051",
+      "053",
+      "054",
+      "056"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "055_destination_loading_commit_semantics.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines destination loading for native IncQL ingestion: typed destination descriptors, append, replace, and merge dispositions, schema migration boundaries, load-job chunking, idempotency, staging, completion markers, atomicity classes, and partial-failure evidence. Destination adapters must either satisfy the requested semantics or reject the plan before mutation where possible. A successful extraction does not authorize checkpoint advancement; IncQL RFC 054 may commit a proposed checkpoint only after the destination outcome reported under this RFC satisfies the selected commit policy.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      }
+    ],
+    "title": "Destination loading, write dispositions, and commit semantics",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "056_ingestion_runs_load_receipts/",
+    "id": "056",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Data appearing in a destination is not enough to explain what happened. Operators and tools need to know which source and resource versions ran, what schema was declared and observed, which checkpoint was read and proposed, whether destination writes were atomic or partial, which rows were rejected, which quality checks ran, and whether raw payloads were retained.",
+    "related": [
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 038 (evidence exchange bridges)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)"
+    ],
+    "related_ids": [
+      "027",
+      "028",
+      "029",
+      "030",
+      "031",
+      "032",
+      "033",
+      "034",
+      "035",
+      "036",
+      "038",
+      "043",
+      "051",
+      "054",
+      "055"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "056_ingestion_runs_load_receipts.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the portable evidence model for native ingestion runs, phase attempts, load packages, load jobs, and final load receipts. A receipt must identify the immutable ingestion plan, connector and adapter versions, selected source resources, schema decisions, checkpoint lifecycle, destination effect, commit guarantee, counts, timings, diagnostics, quality and policy evidence, and payload-retention posture. Receipts must remain useful locally and across higher operational layers without embedding raw records, credentials, product-specific review state, or workflow semantics into the base IncQL contract.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      }
+    ],
+    "title": "Ingestion runs, load packages, and receipts",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "057_ingestion_inspection_cli_lifecycle/",
+    "id": "057",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Native ingestion is not credible if the only interface is \"run this program and inspect the destination.\" Source integrations fail at many earlier boundaries: credentials are missing, an API changed pagination, discovery returns unexpected resources, schema drift is incompatible, state is stale, destination merge is unsupported, or a reset would delete more data than intended.",
+    "related": [
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 011 (source discovery and parse-unit expansion)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 053 (schema observation, reconciliation, and normalization)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 056 (ingestion runs, load packages, and receipts)"
+    ],
+    "related_ids": [
+      "004",
+      "011",
+      "031",
+      "036",
+      "037",
+      "043",
+      "046",
+      "051",
+      "052",
+      "053",
+      "054",
+      "055",
+      "056"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "057_ingestion_inspection_cli_lifecycle.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the local authoring, inspection, validation, execution, and maintenance lifecycle for native IncQL ingestion. Authors and tools must be able to scaffold a source, discover resources, take a bounded redacted sample, generate and compare candidate schemas, inspect an immutable ingestion plan, validate connector and destination coverage, execute one local run, inspect receipts and state, and preview destructive reset operations through structured artifacts. Deployment, schedules, backfills across environments, and centralized monitoring remain operational-layer concerns.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      }
+    ],
+    "title": "Local ingestion inspection and CLI lifecycle",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "058_data_projects_named_relational_assets/",
+    "id": "058",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL currently gives authors typed relational carriers, Prism logical plans, Substrait interchange, Session execution, ingestion plans, and a rich evidence model. Those pieces describe one relational computation or one ingestion operation well, but they do not yet define how a repository names many reusable data outputs, declares dependencies between them, inspects them together, or selects a coherent subset to build.",
+    "related": [
+      "IncQL RFC 000 (core language model and layer boundaries)",
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 050 (addon component registry and package contract)",
+      "IncQL RFC 051 (native ingestion program and ownership boundary)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)",
+      "IncQL RFC 063 (typed relational fixtures and expected-result testing)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "004",
+      "007",
+      "027",
+      "028",
+      "030",
+      "031",
+      "046",
+      "050",
+      "051",
+      "052",
+      "059",
+      "061",
+      "062",
+      "063"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "058_data_projects_named_relational_assets.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines an IncQL data project as a statically discoverable collection of named relational assets, external relations, ingestion assets, assertions, and product-topology records connected by a typed inter-asset dependency graph. A named relational asset is a stable project resource whose implementation produces one typed IncQL relation through Prism. The project graph must be available without executing user data logic, opening external connections, resolving secrets, or evaluating template code. It is distinct from both the Prism graph inside one relational asset and any operational run graph used to schedule attempts.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Data projects, named relational assets, and the asset graph",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "059_materialization_applied_asset_lifecycle/",
+    "id": "059",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Named relational logic and physical persistence are different decisions. The same typed asset may be computed locally for exploration, exposed as a view in a warehouse, replaced as a table in a lakehouse, incrementally refreshed, or compiled into a downstream asset without an independent physical object. If persistence is encoded inside the relational body, the logical plan becomes tied to one destination and cannot be inspected or reused independently.",
+    "related": [
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 050 (addon component registry and package contract)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "004",
+      "007",
+      "028",
+      "032",
+      "033",
+      "036",
+      "040",
+      "050",
+      "055",
+      "058",
+      "060",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "059_materialization_applied_asset_lifecycle.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines how a named relational asset declares whether and how its logical result should become an independently applied physical asset. Materialization intent is typed, backend-neutral policy attached to an immutable relational asset version; it is not arbitrary SQL or a runtime hook. Session resolves that intent against one destination binding and capability snapshot, produces an inspectable materialization plan before mutation, and records the committed, partial, unknown, or abandoned outcome as an applied asset record. Logical asset identity, physical destination identity, and one materialization attempt must remain distinct.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Materialization intent and applied asset lifecycle",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "060_incremental_transformation_temporal_history/",
+    "id": "060",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Incremental transformation is attractive because rebuilding a large derived table can be unnecessarily expensive. The apparent shortcut is to filter for rows newer than a timestamp and append or merge them into the target. That becomes unsafe when rows arrive late, timestamps tie, keys are null or duplicated, upstream data is corrected, partitions are rewritten, deletes occur, a destination partially commits, or the transformation logic changes.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 054 (incremental extraction, state, and checkpoints)",
+      "IncQL RFC 055 (destination loading, write dispositions, and commit semantics)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "028",
+      "032",
+      "034",
+      "040",
+      "043",
+      "045",
+      "054",
+      "055",
+      "058",
+      "059",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "060_incremental_transformation_temporal_history.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines incremental refresh and temporal history as explicit materialization semantics for named relational assets. Every incremental asset must retain a full-result definition, declare how changed input is selected, state how incoming rows affect prior applied output, and commit successor state only after the destination outcome is known. Incremental transformation state is applied-asset state, not an ingestion checkpoint or generic workflow variable. Temporal history must declare entity keys, change detection, valid-time and observation-time behavior, current-row representation, deletion handling, late-arrival policy, and interval semantics rather than relying on destination-specific SCD macros.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Incremental transformation and temporal history semantics",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "061_asset_interfaces_contracts_access_versions/",
+    "id": "061",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "A named asset becomes an interface as soon as another transformation, application, dashboard, model-training job, or package depends on it. A field rename, type change, grain change, key change, semantic reinterpretation, or removal can break consumers even when the producing query still runs successfully.",
+    "related": [
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 046 (data contract ingress and product topology)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)",
+      "IncQL RFC 063 (typed relational fixtures and expected-result testing)"
+    ],
+    "related_ids": [
+      "028",
+      "029",
+      "030",
+      "034",
+      "035",
+      "037",
+      "040",
+      "045",
+      "046",
+      "058",
+      "059",
+      "060",
+      "062",
+      "063"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "061_asset_interfaces_contracts_access_versions.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the stable interface of a named relational asset: its typed output contract, semantic declarations, dependency access level, owning group, independently addressable versions, compatibility classification, and deprecation lifecycle. The structural contract must derive from the asset's checked output type and stable field identities rather than duplicate warehouse-specific YAML. Declared, destination-enforced, observed, verified, and proven guarantees must remain distinct. Asset access controls which project resources may take a dependency; it is not user authorization or a database grant. Breaking versions may coexist so consumers can migrate deliberately.",
+    "tags": [
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      }
+    ],
+    "title": "Asset interfaces, contracts, access, ownership, versions, and deprecation",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "062_project_build_lifecycle_selectors_state/",
+    "id": "062",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "A project graph is useful only if authors and tools can build a deliberate subset, understand what will run, distinguish unchanged resources from reusable physical results, and explain why downstream work ran or skipped. A generic run everything operation is too expensive for large projects and too weak for CI, local iteration, impact analysis, recovery, and operational delegation.",
+    "related": [
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 035 (governed attributes and policy checkpoints)",
+      "IncQL RFC 036 (governed plan bundle)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 047 (semantic evidence graph and agent query surface)",
+      "IncQL RFC 057 (local ingestion inspection and CLI lifecycle)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 059 (materialization intent and applied asset lifecycle)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 063 (typed relational fixtures and expected-result testing)"
+    ],
+    "related_ids": [
+      "004",
+      "027",
+      "028",
+      "030",
+      "031",
+      "032",
+      "034",
+      "035",
+      "036",
+      "037",
+      "040",
+      "043",
+      "047",
+      "057",
+      "058",
+      "059",
+      "060",
+      "061",
+      "063"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "062_project_build_lifecycle_selectors_state.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the reproducible build lifecycle for an IncQL data project. Project compilation produces a complete project manifest; structured selectors resolve to an immutable build set; Session validates bindings and capabilities, runs pre-materialization fixture tests, executes selected assets in dependency order, evaluates post-materialization evidence, commits applied state, and emits an append-only build receipt. Logical project state, applied asset state, and invocation results must remain separate. State comparison and deferred reuse must operate on explicit semantic and applied artifacts, with mixed-environment provenance visible. A higher operational layer may schedule or place build nodes from the immutable build set, but it must not redefine IncQL asset dependencies, materialization semantics, admissible transitions, or receipts.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Project build lifecycle, selectors, state, artifacts, and delegated execution",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-11",
+    "href": "063_typed_relational_fixtures_expected_results/",
+    "id": "063",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Data quality tests over materialized tables are necessary but late. A transformation can be logically wrong, materialize successfully, and only then reveal an error through carefully chosen production data. Authors need fast examples that prove joins, filters, null handling, aggregations, windows, nested values, and edge cases before a destination is mutated.",
+    "related": [
+      "IncQL RFC 001 (dataset carriers and boundedness)",
+      "IncQL RFC 004 (execution context and Session)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 034 (quality assertions and observations)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 042 (async verification evidence)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 044 (verifier statements and proof artifacts)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 058 (data projects, named relational assets, and the asset graph)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "007",
+      "028",
+      "030",
+      "032",
+      "034",
+      "040",
+      "042",
+      "043",
+      "044",
+      "045",
+      "058",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "063_typed_relational_fixtures_expected_results.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines pre-materialization unit testing for named relational assets using typed input fixtures, the same Prism plan as production, explicit environment and nondeterminism bindings, typed expected results or verifier statements, canonical comparison profiles, and immutable test observations. A fixture test must declare every substituted direct input and must reject unresolved live dependencies by default. Exact, unordered, ordered, subset, predicate, digest, and verifier-backed expectations must remain distinct. Fixture tests validate transformation behavior for bounded examples; they do not replace post-build data quality assertions, integration tests against live systems, destination contract coverage, or universal semantic proof.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      },
+      {
+        "key": "verification",
+        "label": "Verification"
+      }
+    ],
+    "title": "Typed relational fixtures and expected-result testing",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-14",
+    "href": "064_federated_placement_execution_targets_and_explicit_data_exchange/",
+    "id": "064",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "IncQL already separates typed relational meaning, logical planning, and execution. That separation is insufficient once a plan can read from a database, warehouse, lakehouse, cluster, or local files while more than one of those systems can perform useful computation. A connector that only retrieves rows into the default local engine wastes source-local indexes, statistics, storage layout, and compute capacity. A backend that silently copies data to make a plan work creates avoidable cost, latency, governance risk, and surprising data egress.",
+    "related": [
+      "IncQL RFC 002 (Apache Substrait integration)",
+      "IncQL RFC 004 (execution context)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 052 (declarative sources, resources, and connector packages)"
+    ],
+    "related_ids": [
+      "002",
+      "004",
+      "007",
+      "008",
+      "032",
+      "033",
+      "040",
+      "048",
+      "052"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a>",
+    "rfc_pr_label": "IncQL #98",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #98",
+        "url": "https://github.com/encero-systems/IncQL/pull/98"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/98",
+    "shipped_in": "—",
+    "source_path": "064_federated_placement_execution_targets_and_explicit_data_exchange.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines federated placement for IncQL relational plans. Prism must choose eligible execution-target fragments and explicit data exchanges from source locality, adapter capabilities, statistics, and movement policy supplied through a Session. The default policy is to preserve semantics and policy, avoid data movement, minimise transferred bytes when movement is required, and prefer computation where the relevant data already exists. Backends realise the selected fragments and report actual movement; they must not silently pull remote data into a local engine or upload local data to a remote engine as a fallback.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Federated placement, execution targets, and explicit data exchange",
+    "written_against": "Incan v0.4.0"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-26",
+    "href": "065_polyglot_sql_ast_ingress_and_egress/",
+    "id": "065",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "SQL is an important interoperability surface, but SQL text must not become IncQL's internal planning language. Sending dialect text directly to an execution engine would make that engine the accidental semantic owner. Translating text through ad-hoc strings would make schema, lineage, profile, and unsupported-feature diagnostics unreliable.",
+    "related": [
+      "IncQL RFC 000 (core language model and layer boundaries)",
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
+      "IncQL RFC 004 (execution context)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 012 (unified scalar expression surface)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
+    ],
+    "related_ids": [
+      "000",
+      "001",
+      "004",
+      "007",
+      "012",
+      "033",
+      "040",
+      "041",
+      "048",
+      "066"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/105">IncQL #105</a>",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
+    "shipped_in": "—",
+    "source_path": "065_polyglot_sql_ast_ingress_and_egress.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines an optional SQL frontend and egress boundary based on Polyglot, the open-source typed SQL AST project maintained by tobilg. Polyglot parses and generates SQL for more than 30 documented dialects; IncQL will use that breadth at the edge while Prism remains the owner of relational semantics. IncQL must advertise a dialect or SQL feature only at the most specific level for which its Polyglot AST shape, Prism mapping, semantic profile, and required ingress, egress, or execution evidence are covered.",
+    "tags": [
+      {
+        "key": "authoring",
+        "label": "Authoring"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Polyglot SQL AST ingress and dialect-aware egress",
+    "written_against": "Incan v0.5-era IncQL"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-26",
+    "href": "066_prism_relational_reasoning_and_shared_work_optimization/",
+    "id": "066",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "The same relational work can arrive from Incan carriers, query blocks, SQL, protocol clients, Delta-like sources, or future data-product interfaces. It can then be executed by an embedded engine, emitted as remote SQL, or split across sources. A fixed sequence of local rewrites cannot reliably choose among join order, predicate movement, sharing, materialization, source pushdown, placement, and exchange when these choices interact. Unbounded exploration is not an acceptable answer either: sufficiently large transformation graphs can make optimizer time and memory the dominant cost.",
+    "related": [
+      "IncQL RFC 001 (bounded and unbounded dataset carriers)",
+      "IncQL RFC 004 (execution context)",
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "IncQL RFC 047 (semantic evidence graph and agent query surface)",
+      "IncQL RFC 048 (cluster execution backend mode)",
+      "IncQL RFC 065 (Polyglot SQL AST ingress and dialect-aware egress)"
+    ],
+    "related_ids": [
+      "001",
+      "004",
+      "007",
+      "008",
+      "027",
+      "030",
+      "032",
+      "033",
+      "037",
+      "040",
+      "041",
+      "047",
+      "048",
+      "065"
+    ],
+    "rfc_pr": "<a href="https://github.com/encero-systems/IncQL/pull/105">IncQL #105</a>",
+    "rfc_pr_label": "IncQL #105",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #105",
+        "url": "https://github.com/encero-systems/IncQL/pull/105"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/105",
+    "shipped_in": "—",
+    "source_path": "066_prism_relational_reasoning_and_shared_work_optimization.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC makes Prism IncQL's standalone relational reasoning engine operating in two temporal modes: pre-execution planning and bounded adaptive re-entry. Both modes use the same authored graph, semantic rules, memo, property model, and explanation contract across local, cluster, bounded, and continuous execution. Prism must preserve immutable authored relational intent while separately maintaining a bounded memo of semantically legal alternatives, their required properties, and the evidence that makes each alternative legal. Prism must produce a valid logical result without a Session, adapter, target context, or evidence provider. When any caller supplies a provider-neutral immutable planning context, Prism may additionally select target-aware logical, placement, exchange, and sharing alternatives. A coordinator may later invoke that same Prism engine with scoped runtime observations to reconsider unfinished bounded work or future continuous work without mutating authored history, committed progress, or completed execution. Target lowerers, Session, adapters, and target optimizers remain responsible for representation-specific lowering, physical planning, runtime adaptation, state lifecycle, and execution. Graph-shaped data may enter this model only through explicit typed graph and recursion semantics; Prism's plan DAG, memo, lineage graph, and evidence graph must not be mistaken for a graph-query data model. This is a north-star optimizer contract across supported frontends, declared consumer sets, and heterogeneous targets; SQL CTEs, DataFusion plans, Spark plans, streaming operator graphs, graph-engine plans, and other target representations are not Prism's semantic core.",
+    "tags": [
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "execution",
+        "label": "Execution"
+      },
+      {
+        "key": "interoperability",
+        "label": "Interoperability"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Prism relational reasoning and shared-work optimization",
+    "written_against": "Incan v0.5-era IncQL"
   }
 ]
-</script>
-
+</template></p>
 <div class="pp-rfc-fallback" data-rfc-fallback="data-rfc-fallback">
 <table>
 <thead>
@@ -5960,7 +7780,7 @@
 </tr>
 <tr>
 <td style="text-align: right;"><a href="005_incql_pipe_forward/">005</a></td>
-<td>Blocked</td>
+<td>Planned</td>
 <td>Authoring, Planning</td>
 <td>Pipe-forward relational syntax (|&gt;)</td>
 </tr>
@@ -6223,16 +8043,117 @@
 <td>Cluster execution backend mode</td>
 </tr>
 <tr>
+<td style="text-align: right;"><a href="closed/implemented/049_declarative_quality_block_vocabulary/">049</a></td>
+<td>Implemented</td>
+<td>Authoring, Evidence, Governance</td>
+<td>Declarative quality block vocabulary</td>
+</tr>
+<tr>
 <td style="text-align: right;"><a href="050_addon_component_registry/">050</a></td>
 <td>Draft</td>
 <td>Data access, Execution, Extensibility, Interoperability</td>
 <td>Addon component registry and package contract</td>
 </tr>
+<tr>
+<td style="text-align: right;"><a href="051_native_ingestion_program/">051</a></td>
+<td>Draft</td>
+<td>Authoring, Data access, Execution, Interoperability</td>
+<td>Native ingestion program and ownership boundary</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="052_declarative_sources_resources_connectors/">052</a></td>
+<td>Draft</td>
+<td>Authoring, Data access, Extensibility, Interoperability</td>
+<td>Declarative sources, resources, and connector packages</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="053_schema_reconciliation_normalization/">053</a></td>
+<td>Draft</td>
+<td>Data access, Evidence, Governance, Types</td>
+<td>Schema observation, reconciliation, and normalization</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="054_incremental_extraction_state_checkpoints/">054</a></td>
+<td>Draft</td>
+<td>Data access, Evidence, Execution, Governance</td>
+<td>Incremental extraction, state, and checkpoints</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="055_destination_loading_commit_semantics/">055</a></td>
+<td>Draft</td>
+<td>Data access, Evidence, Execution, Interoperability</td>
+<td>Destination loading, write dispositions, and commit semantics</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="056_ingestion_runs_load_receipts/">056</a></td>
+<td>Draft</td>
+<td>Data access, Evidence, Execution, Governance</td>
+<td>Ingestion runs, load packages, and receipts</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="057_ingestion_inspection_cli_lifecycle/">057</a></td>
+<td>Draft</td>
+<td>Authoring, Data access, Evidence, Execution</td>
+<td>Local ingestion inspection and CLI lifecycle</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="058_data_projects_named_relational_assets/">058</a></td>
+<td>Draft</td>
+<td>Authoring, Evidence, Governance, Planning</td>
+<td>Data projects, named relational assets, and the asset graph</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="059_materialization_applied_asset_lifecycle/">059</a></td>
+<td>Draft</td>
+<td>Data access, Evidence, Execution, Planning</td>
+<td>Materialization intent and applied asset lifecycle</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="060_incremental_transformation_temporal_history/">060</a></td>
+<td>Draft</td>
+<td>Data access, Execution, Governance, Planning</td>
+<td>Incremental transformation and temporal history semantics</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="061_asset_interfaces_contracts_access_versions/">061</a></td>
+<td>Draft</td>
+<td>Evidence, Governance, Interoperability, Types</td>
+<td>Asset interfaces, contracts, access, ownership, versions, and deprecation</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="062_project_build_lifecycle_selectors_state/">062</a></td>
+<td>Draft</td>
+<td>Authoring, Evidence, Execution, Planning</td>
+<td>Project build lifecycle, selectors, state, artifacts, and delegated execution</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="063_typed_relational_fixtures_expected_results/">063</a></td>
+<td>Draft</td>
+<td>Authoring, Evidence, Types, Verification</td>
+<td>Typed relational fixtures and expected-result testing</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="064_federated_placement_execution_targets_and_explicit_data_exchange/">064</a></td>
+<td>Draft</td>
+<td>Data access, Execution, Interoperability, Planning</td>
+<td>Federated placement, execution targets, and explicit data exchange</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="065_polyglot_sql_ast_ingress_and_egress/">065</a></td>
+<td>Draft</td>
+<td>Authoring, Interoperability, Planning</td>
+<td>Polyglot SQL AST ingress and dialect-aware egress</td>
+</tr>
+<tr>
+<td style="text-align: right;"><a href="066_prism_relational_reasoning_and_shared_work_optimization/">066</a></td>
+<td>Draft</td>
+<td>Evidence, Execution, Interoperability, Planning</td>
+<td>Prism relational reasoning and shared-work optimization</td>
+</tr>
 </tbody>
 </table>
 </div>
 <!-- END GENERATED RFC CATALOG -->
-
 <p>IncQL RFCs cover language, planning, execution, and governance decisions owned by IncQL. They form a separate series from the <a href="https://github.com/encero-systems/incan/tree/main/workspaces/docs-site/docs/RFCs">Incan language RFCs</a>, which govern the host language itself.</p>
 <h2 id="how-the-rfc-lifecycle-works">How the RFC lifecycle works</h2>
 <p>Active RFCs remain in <code>docs/rfcs/</code> while the design is Draft, Planned, In Progress, Blocked, or Deferred. Closed records move without changing their RFC number or filename:</p>
@@ -6246,6 +8167,8 @@
 <h2 id="create-or-update-an-rfc">Create or update an RFC</h2>
 <p>Copy <a href="TEMPLATE/">TEMPLATE.md</a>, name the file <code>NNN_short_slug.md</code>, choose the next available number, and open a pull request. Follow <a href="../contributing/writing_rfcs/">Writing IncQL RFCs</a> for the metadata contract, lifecycle transitions, and review conventions.</p>
 <!-- References -->
+</main>
+</div>
 
 
 
@@ -6297,7 +8220,9 @@
     
       <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../javascripts/prismplane.js?v=20260719-book-parts-24"></script>
+        <script src="../javascripts/prismplane.js?v=20260723-architecture-nav-28"></script>
+      
+        <script src="../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>

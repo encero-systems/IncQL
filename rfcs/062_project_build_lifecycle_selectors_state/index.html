@@ -1,0 +1,4108 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed relational logic for governed data systems">
+      
+      
+      
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/062_project_build_lifecycle_selectors_state/">
+      
+      
+      
+      
+      <link rel="icon" href="../../shared/brand/incql-favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>IncQL RFC 062: Project build lifecycle, selectors, state, artifacts, and delegated execution - IncQL</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260722-nav-chevron-35">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260726-landing-polish-10">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260723-architecture-readability-4">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#incql-rfc-062-project-build-lifecycle-selectors-state-artifacts-and-delegated-execution" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+
+
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+      
+    
+  
+    
+  
+    
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+<header class="topbar crystal-strip" data-md-component="header">
+  <a class="brand" href="../.." aria-label="IncQL home">
+    <img src="../../shared/brand/incql-logo-header.png" alt="">
+    <span>
+      <strong>IncQL</strong>
+      <small>Incan Query Layer</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Documentation sections">
+    
+      <a
+        data-site-section="home"
+        data-path-prefixes=""
+        data-search-label="Search"
+        
+        href="../.."
+      >Home</a>
+    
+      <a
+        data-site-section="learn"
+        data-path-prefixes="language/"
+        data-search-label="Search learning paths"
+        
+        href="../../language/"
+      >Learn</a>
+    
+      <a
+        data-site-section="guides"
+        data-path-prefixes="language/how-to/"
+        data-search-label="Search guides"
+        
+        href="../../language/how-to/"
+      >Guides</a>
+    
+      <a
+        data-site-section="reference"
+        data-path-prefixes="language/reference/"
+        data-search-label="Search reference"
+        
+        href="../../language/reference/"
+      >Reference</a>
+    
+      <a
+        data-site-section="architecture"
+        data-path-prefixes="architecture/"
+        data-search-label="Explore layers"
+        
+        href="../../architecture/"
+      >Architecture</a>
+    
+      <a
+        data-site-section="design-records"
+        data-path-prefixes="rfcs/,design_records/,whitepapers/"
+        data-search-label="Search RFCs"
+        class="is-active" aria-current="page"
+        href="../"
+      >Design records</a>
+    
+      <a
+        data-site-section="project"
+        data-path-prefixes="project/,docs_map/,release_notes/,contributing/"
+        data-search-label="Search project docs"
+        
+        href="../../project/"
+      >Project</a>
+    
+  </nav>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="site-nav-toggle md-icon"
+      aria-label="Open navigation"
+      aria-controls="__drawer"
+      aria-expanded="false"
+      data-site-nav-toggle
+    >
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </button>
+    
+      <label class="docs-search" for="__search" aria-label="Search documentation">
+        <span data-site-search-label>Search RFCs</span>
+        <kbd>/</kbd>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
+      <img src="../../shared/icons/source-branch.svg" alt="">
+      <span>encero-systems/IncQL</span>
+    </a>
+  </div>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+      
+  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
+
+    </a>
+    IncQL
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/encero-systems/IncQL" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    encero-systems/IncQL
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Learn
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Learn
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ten-minute quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Choose by background
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Choose by background
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From SQL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From Spark and DataFrame APIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What IncQL is and is not
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/tutorials/book/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    The IncQL Book
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            The IncQL Book
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part I · Model the work
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Part I · Model the work
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. Read a typed relation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2. Build deferred work
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part II · Explain and execute it
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Part II · Explain and execute it
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3. Inspect the plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4. Collect an observed result
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5. Check adapter coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part III · Decide what happens next
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Part III · Decide what happens next
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6. Observe data quality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7. Make the write decision
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_5" id="__nav_2_4_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part IV · Query blocks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Part IV · Query blocks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8. Write your first query
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9. Summarize and order results
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset carriers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/execution_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/how-to/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Start and connect
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Start and connect
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read and write data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Transform and query
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transform and query
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset transformations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/joins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Join typed relations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Normalize semi-structured fields
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nested row values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator rows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/window_columns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Window columns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspect and trust
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspect and trust
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inspect plan lineage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution observations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quality observations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced and capability-dependent
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced and capability-dependent
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximate metrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Typed HLL sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variant payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/reference/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Language and relational authoring
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Language and relational authoring
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset carriers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset methods
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/query_blocks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Query blocks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2_4" id="__nav_4_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Builders
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Builders
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Filters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projections
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Runtime and I/O
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Runtime and I/O
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/execution_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/capabilities/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backend capability matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspection, quality, and governance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspection, quality, and governance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/inspection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inspection
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/quality/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/reference/functions/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Function catalog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Function catalog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/format/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Format
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/generators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/nested/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nested
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/variants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Interchange and adapter authoring
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            Interchange and adapter authoring
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Conformance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operator catalog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read root binding contract
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Revision and extension policy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Design records
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Design records
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design_records/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../whitepapers/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Whitepapers
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Whitepapers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../whitepapers/incql_db/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IncQL-DB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Project
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs_map/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docs map
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Release notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            Release notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release_notes/v0_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    v0.1
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_4">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributor architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing RFCs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TEMPLATE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RFC template
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prismplane docs theme
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Motivation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goals
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Goals
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guide-level explanation (how authors think about it)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference-level explanation (precise rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference-level explanation (precise rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#artifact-separation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Artifact separation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-project-compilation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Static project compilation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selector-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selector model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selection-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Selection preview
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-set-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build-set resolution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-closure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency closure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indirect-tests-and-assertions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Indirect tests and assertions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-plan-and-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build plan and phases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-node-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build-node model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ordering-and-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ordering and concurrency
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-block-and-skip-semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate, block, and skip semantics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logical-state-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logical state comparison
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applied-state-and-reuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Applied state and reuse
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deferred-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deferred bindings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-state-snapshot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project state snapshot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-resume" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local resume
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delegated-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delegated execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-receipt" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build receipt
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#artifact-encodings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Artifact encodings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cli-and-api-parity" class="md-nav__link">
+    <span class="md-ellipsis">
+      CLI and API parity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagnostics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Semantics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interaction with other IncQL surfaces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compatibility / migration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives considered
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Drawbacks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layers-affected" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layers affected
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unresolved-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unresolved questions
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="incql-rfc-062-project-build-lifecycle-selectors-state-artifacts-and-delegated-execution">IncQL RFC 062: Project build lifecycle, selectors, state, artifacts, and delegated execution</h1>
+<ul>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Created:</strong> 2026-07-11</li>
+<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
+<li><strong>Related:</strong></li>
+<li>IncQL RFC 004 (execution context and Session)</li>
+<li>IncQL RFC 027 (relational evidence program)</li>
+<li>IncQL RFC 028 (semantic identity and target model)</li>
+<li>IncQL RFC 030 (Prism lineage graph)</li>
+<li>IncQL RFC 031 (local inspection APIs and artifacts)</li>
+<li>IncQL RFC 032 (execution observations)</li>
+<li>IncQL RFC 034 (quality assertions and observations)</li>
+<li>IncQL RFC 035 (governed attributes and policy checkpoints)</li>
+<li>IncQL RFC 036 (governed plan bundle)</li>
+<li>IncQL RFC 037 (plan diff and blast-radius inputs)</li>
+<li>IncQL RFC 040 (interoperability semantic profiles)</li>
+<li>IncQL RFC 043 (canonical equality and digest profiles)</li>
+<li>IncQL RFC 047 (semantic evidence graph and agent query surface)</li>
+<li>IncQL RFC 057 (local ingestion inspection and CLI lifecycle)</li>
+<li>IncQL RFC 058 (data projects, named relational assets, and the asset graph)</li>
+<li>IncQL RFC 059 (materialization intent and applied asset lifecycle)</li>
+<li>IncQL RFC 060 (incremental transformation and temporal history semantics)</li>
+<li>IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)</li>
+<li>IncQL RFC 063 (typed relational fixtures and expected-result testing)</li>
+<li><strong>Issue:</strong> —</li>
+<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a></li>
+<li><strong>Written against:</strong> Incan v0.4.0</li>
+<li><strong>Shipped in:</strong> —</li>
+</ul>
+<h2 id="summary">Summary</h2>
+<p>This RFC defines the reproducible build lifecycle for an IncQL data project. Project compilation produces a complete project manifest; structured selectors resolve to an immutable build set; Session validates bindings and capabilities, runs pre-materialization fixture tests, executes selected assets in dependency order, evaluates post-materialization evidence, commits applied state, and emits an append-only build receipt. Logical project state, applied asset state, and invocation results must remain separate. State comparison and deferred reuse must operate on explicit semantic and applied artifacts, with mixed-environment provenance visible. A higher operational layer may schedule or place build nodes from the immutable build set, but it must not redefine IncQL asset dependencies, materialization semantics, admissible transitions, or receipts.</p>
+<h2 id="core-model">Core model</h2>
+<ol>
+<li>A <strong>project manifest</strong> is the complete immutable logical description of one resolved IncQL data project from IncQL RFC 058.</li>
+<li>A <strong>selector</strong> is a structured query over project resources, graph relationships, interface metadata, prior state, or prior results.</li>
+<li>A <strong>build set</strong> is the immutable, fully resolved resource selection plus dependency closure, exclusions, execution requirements, and selection evidence for one build intent.</li>
+<li>A <strong>build plan</strong> expands one build set into ordered IncQL lifecycle nodes without adding new semantic asset dependencies.</li>
+<li>A <strong>build run</strong> is one top-level attempt to execute one build plan under one binding, component, runner, and state snapshot.</li>
+<li>A <strong>build node attempt</strong> records one asset, fixture test, assertion, materialization, verification, or state transition attempt.</li>
+<li>A <strong>project state snapshot</strong> identifies the logical manifest, available applied assets, prior results, and environment provenance considered by selection and reuse.</li>
+<li>A <strong>deferred binding</strong> explicitly resolves an unbuilt dependency to one prior applied asset record.</li>
+<li>A <strong>build receipt</strong> records selection, execution, skips, deferred reuse, gates, effects, state transitions, and evidence references without copying or rewriting upstream receipts.</li>
+</ol>
+<h2 id="motivation">Motivation</h2>
+<p>A project graph is useful only if authors and tools can build a deliberate subset, understand what will run, distinguish unchanged resources from reusable physical results, and explain why downstream work ran or skipped. A generic <code>run everything</code> operation is too expensive for large projects and too weak for CI, local iteration, impact analysis, recovery, and operational delegation.</p>
+<p>dbt provides strong workflow prior art: graph <a href="https://docs.getdbt.com/reference/node-selection/syntax">selectors</a>, <a href="https://docs.getdbt.com/reference/node-selection/state-selection">state-based selection</a>, <code>dbt ls</code> previews, one <a href="https://docs.getdbt.com/reference/commands/build"><code>build</code> command</a> that orders models and tests, <a href="https://docs.getdbt.com/reference/artifacts/dbt-artifacts">artifacts</a> that separate manifests from run results, slim CI through state comparison, and <a href="https://docs.getdbt.com/reference/node-selection/defer">deferral</a> to previously applied relations. Those features make a project operationally usable. Their limitations are equally instructive: logical and applied state can be drawn from different environments, deferred tests can cross environments, retries rely on prior result files and idempotence assumptions, and command compilation may still execute live warehouse queries through template escape hatches.</p>
+<p>IncQL should preserve the command-and-checkpoint workflow while using stronger boundaries. Static project compilation must be effect-free. Structured selection must produce an artifact, not only a shell expression. Reuse must be based on logical, interface, binding, profile, commit, and verification evidence. A failed node must not be considered reusable merely because it emitted a success-shaped log line. A mixed-environment build must be visible before execution and subject to policy.</p>
+<p>The lifecycle must remain independently useful. Session must be able to build locally without a scheduler. At the same time, an operational layer needs a safe way to place, retry, and observe project work without reimplementing the IncQL graph or translating each asset into a second user-authored pipeline.</p>
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Define project manifest, selector, build set, build plan, run, node attempt, state snapshot, deferred binding, and build receipt artifacts.</li>
+<li>Define structured resource selection, graph traversal, set operations, exclusions, and preview.</li>
+<li>Define pure project compilation separately from explicit live binding probes and destination mutation.</li>
+<li>Define preflight, fixture-test, materialization, quality, verification, commit, and receipt phases.</li>
+<li>Define deterministic dependency, skip, block, and gate behavior.</li>
+<li>Define logical state comparison using semantic plans, interfaces, lineage, materialization, and evidence changes.</li>
+<li>Define applied-state reuse and deferral with explicit environment and binding provenance.</li>
+<li>Define safe local resume and operational delegation from immutable build sets.</li>
+<li>Preserve upstream IncQL ingestion, materialization, refresh, quality, policy, and verification receipts by reference.</li>
+<li>Provide stable machine-readable CLI and API parity for local, CI, IDE, agent, and operational consumers.</li>
+</ul>
+<h2 id="non-goals">Non-Goals</h2>
+<ul>
+<li>Defining schedules, calendars, external triggers, sensors, deployment promotion, autoscaling, or managed retention.</li>
+<li>Defining operational step retry, lease, placement, timeout, or cancellation policy.</li>
+<li>Defining asset, materialization, incremental, interface, or fixture-test semantics owned by IncQL RFCs 058 through 061 and 063.</li>
+<li>Treating source-code version control as sufficient applied-state evidence.</li>
+<li>Guaranteeing safe reuse from a successful status without commit, interface, binding, and profile evidence.</li>
+<li>Silently mixing development, production, or historical bindings.</li>
+<li>Executing arbitrary SQL or network calls during static project compilation, selection preview, or documentation generation.</li>
+<li>Defining dbt project or manifest migration.</li>
+<li>Replacing organization-wide lineage, catalog, policy, or observability systems.</li>
+</ul>
+<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
+<p>The exact executable spelling remains subject to packaging, but the command and artifact lifecycle is normative.</p>
+<p>Compile and inspect the complete project without contacting data systems:</p>
+<div class="language-text highlight"><pre><span></span><code>incql project compile --output target/incql/project.manifest.json
+incql project list --select &quot;group:commerce&quot;
+</code></pre></div>
+<p>The second command previews the resources selected from the manifest. It does not execute models or mutate destinations.</p>
+<p>Select one asset and its dependencies:</p>
+<div class="language-text highlight"><pre><span></span><code>incql build plan \
+  --select &quot;asset:commerce.customer_summary+upstream&quot; \
+  --binding local \
+  --output target/incql/customer_summary.build.json
+</code></pre></div>
+<p>The build set records the selected asset, required upstream closure, fixture tests, assertions, interface versions, materialization intents, binding requirements, and reasons each resource was included.</p>
+<p>Run locally:</p>
+<div class="language-text highlight"><pre><span></span><code>incql build run target/incql/customer_summary.build.json
+incql build inspect --latest commerce.customer_summary
+</code></pre></div>
+<p>Fixture tests run before their target is materialized. Post-build assertions run after a committed or staged output according to their declared phase. A failing required test or gate blocks affected downstream assets and records the reason.</p>
+<p>For CI, compare with a prior project and applied-state snapshot:</p>
+<div class="language-text highlight"><pre><span></span><code>incql project diff \
+  --current target/incql/project.manifest.json \
+  --state artifacts/main/
+
+incql build plan \
+  --select &quot;state:modified+downstream&quot; \
+  --state artifacts/main/ \
+  --defer-state artifacts/production/
+</code></pre></div>
+<p>Logical comparison and physical reuse are separate inputs. The resulting build set identifies which assets changed and which unselected dependencies would be reused from production. If that creates a mixed environment, the plan says so before execution.</p>
+<p>The same build set may be handed to an operational layer:</p>
+<div class="language-text highlight"><pre><span></span><code>incql build export target/incql/customer_summary.build.json \
+  --format workload-bundle
+</code></pre></div>
+<p>The operational layer may choose runners and attempts. It consumes IncQL node contracts and returns evidence; it does not rewrite the asset graph or replace the IncQL materialization and state APIs.</p>
+<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
+<h3 id="artifact-separation">Artifact separation</h3>
+<p>The lifecycle must keep these artifact families separate:</p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Authority and scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Project manifest</td>
+<td>Complete logical project declarations and graph for one resolved source and package snapshot</td>
+</tr>
+<tr>
+<td>Build set</td>
+<td>Immutable resolved selection and dependency closure for one build intent</td>
+</tr>
+<tr>
+<td>Build plan</td>
+<td>IncQL lifecycle expansion under one binding and capability snapshot</td>
+</tr>
+<tr>
+<td>Applied asset record</td>
+<td>One physical realization and commit outcome from IncQL RFC 059</td>
+</tr>
+<tr>
+<td>Project state snapshot</td>
+<td>References to prior logical, applied, and result artifacts considered by a build</td>
+</tr>
+<tr>
+<td>Build receipt</td>
+<td>One invocation's attempts, decisions, outcomes, and evidence references</td>
+</tr>
+</tbody>
+</table>
+<p>A run result must not replace the project manifest. An applied asset record must not replace the logical asset. A project state snapshot must not copy mutable physical state into logical identity.</p>
+<h3 id="static-project-compilation">Static project compilation</h3>
+<p>Project compilation must:</p>
+<ul>
+<li>discover resources according to IncQL RFC 058</li>
+<li>resolve package, asset, version, access, and generated-manifest references</li>
+<li>typecheck relational asset interfaces</li>
+<li>compile or reference Prism plans</li>
+<li>construct the asset graph</li>
+<li>attach materialization, test, assertion, contract, policy, and product-topology references</li>
+<li>emit diagnostics and unsupported evidence</li>
+<li>produce a deterministic project manifest digest</li>
+</ul>
+<p>Static compilation must not:</p>
+<ul>
+<li>resolve secret values</li>
+<li>open network, source, destination, or catalog connections</li>
+<li>execute relational queries</li>
+<li>run DDL or DML</li>
+<li>initialize external addon components</li>
+<li>call lifecycle hooks with effects</li>
+</ul>
+<p>An operation that needs live metadata must be a separate explicit validation or planning probe and must emit observation evidence.</p>
+<h3 id="selector-model">Selector model</h3>
+<p>Selectors must be representable as typed structured values. CLI syntax is a projection over that model.</p>
+<p>The initial selector methods must include:</p>
+<ul>
+<li>canonical asset or resource identity</li>
+<li>project or package namespace</li>
+<li>resource kind</li>
+<li>asset group</li>
+<li>tag or typed metadata value</li>
+<li>access level</li>
+<li>asset version</li>
+<li>materialization class</li>
+<li>source location</li>
+<li>quality, fixture-test, or contract attachment</li>
+<li>prior result status</li>
+<li>logical state-change classification</li>
+<li>applied-state availability or staleness</li>
+</ul>
+<p>Selectors must support:</p>
+<ul>
+<li>union</li>
+<li>intersection</li>
+<li>exclusion</li>
+<li>direct upstream parents</li>
+<li>transitive upstream closure</li>
+<li>direct downstream children</li>
+<li>transitive downstream closure</li>
+<li>configurable traversal depth</li>
+</ul>
+<p>Selection must operate on a specific project manifest and optional state snapshots. The manifest and state digests must appear in the selection result.</p>
+<h3 id="selection-preview">Selection preview</h3>
+<p>Selection preview must be read-only and must return a structured list containing:</p>
+<ul>
+<li>selected resource ids and versions</li>
+<li>inclusion reason</li>
+<li>graph path or selector clause responsible</li>
+<li>direct and transitive dependency status</li>
+<li>excluded resources and exclusion reason</li>
+<li>fixture tests and assertions added indirectly</li>
+<li>required but unavailable dependencies</li>
+<li>state and result evidence used</li>
+<li>diagnostics and ambiguity</li>
+</ul>
+<p>Human CLI output must be rendered from this structured result.</p>
+<h3 id="build-set-resolution">Build-set resolution</h3>
+<p>A build set must freeze:</p>
+<ul>
+<li>project manifest id and digest</li>
+<li>selector syntax and normalized structured selector</li>
+<li>explicitly selected resources</li>
+<li>dependency closure</li>
+<li>selected fixture tests and assertions</li>
+<li>exclusions and admitted missing resources</li>
+<li>asset versions and interfaces</li>
+<li>materialization intents</li>
+<li>required external relations and ingestion outputs</li>
+<li>required binding, component, runtime, destination, and state capabilities</li>
+<li>logical state and prior-result inputs</li>
+<li>deferred-binding candidates</li>
+<li>required gate and evidence policies</li>
+<li>selection diagnostics</li>
+</ul>
+<p>Changing any frozen semantic input must create a new build set and digest.</p>
+<p>A build set must not contain resolved secret values or live handles.</p>
+<h3 id="dependency-closure">Dependency closure</h3>
+<p>By default, selecting a persisted relational asset for build must include every non-reused upstream dependency required to produce it. An author may explicitly exclude an upstream dependency only when:</p>
+<ul>
+<li>a valid deferred binding resolves it to an applied asset</li>
+<li>the target plan treats it as an external relation with a valid binding</li>
+<li>the build is validation-only and execution will not require the dependency</li>
+<li>an explicit incomplete-build policy admits it</li>
+</ul>
+<p>The build set must report incomplete or unresolved closure. Execution must not discover and silently add missing dependencies.</p>
+<h3 id="indirect-tests-and-assertions">Indirect tests and assertions</h3>
+<p>Selecting an asset must include fixture tests and quality assertions according to declared attachment and selector policy.</p>
+<p>The default build policy must:</p>
+<ul>
+<li>run required IncQL RFC 063 fixture tests before materializing their target</li>
+<li>run required staged-output checks before publication when the destination supports staging</li>
+<li>run required post-commit observations after publication</li>
+<li>evaluate operational continuation only from typed evidence and declared gate policy</li>
+</ul>
+<p>A test or assertion with several parent assets must identify the dependency scope it gates. It must not block unrelated descendants merely because it has multiple independent parents.</p>
+<h3 id="build-plan-and-phases">Build plan and phases</h3>
+<p>After binding and capability validation, one build set must produce an immutable build plan. The plan must expose these logical phases when applicable:</p>
+<ol>
+<li>validate project manifest and build-set compatibility</li>
+<li>resolve binding, component, runtime, destination, and state snapshots</li>
+<li>evaluate capability and policy preflight</li>
+<li>run fixture tests and static verification</li>
+<li>execute logical assets in dependency order</li>
+<li>stage and verify materializations</li>
+<li>publish or commit applied assets</li>
+<li>run post-materialization quality and verification observations</li>
+<li>commit incremental or project state transitions</li>
+<li>emit final build receipt</li>
+</ol>
+<p>Physical execution may overlap independent nodes and fuse implementation phases, but it must preserve dependency, gate, effect, and receipt semantics.</p>
+<h3 id="build-node-model">Build-node model</h3>
+<p>A build plan may contain node kinds for:</p>
+<ul>
+<li>fixture test</li>
+<li>ingestion asset invocation or admitted prior receipt</li>
+<li>relational asset execution</li>
+<li>materialization planning</li>
+<li>materialization attempt</li>
+<li>quality assertion</li>
+<li>verification</li>
+<li>policy checkpoint</li>
+<li>deferred applied-asset binding</li>
+<li>refresh-state commit</li>
+<li>receipt finalization</li>
+</ul>
+<p>Build nodes are execution expansion of project resources. They must reference the originating project resource or evidence target and must not create new project asset dependencies.</p>
+<h3 id="ordering-and-concurrency">Ordering and concurrency</h3>
+<p>A build node may run only after all required predecessor nodes reach an admissible outcome.</p>
+<p>Independent nodes may execute concurrently when:</p>
+<ul>
+<li>their bindings and destination effects do not conflict</li>
+<li>their state transitions have independent scopes or safe concurrency controls</li>
+<li>their declared resource requirements permit concurrency</li>
+<li>deterministic evidence association is preserved</li>
+</ul>
+<p>Concurrency changes timing and placement, not graph meaning.</p>
+<h3 id="gate-block-and-skip-semantics">Gate, block, and skip semantics</h3>
+<p>Node outcome must distinguish at least:</p>
+<ul>
+<li><code>succeeded</code></li>
+<li><code>failed</code></li>
+<li><code>warning</code></li>
+<li><code>blocked_by_dependency</code></li>
+<li><code>blocked_by_gate</code></li>
+<li><code>skipped_not_selected</code></li>
+<li><code>skipped_deferred</code></li>
+<li><code>reused_applied_asset</code></li>
+<li><code>cancelled</code></li>
+<li><code>effect_unknown</code></li>
+<li><code>unsupported</code></li>
+</ul>
+<p>A downstream node must be blocked when a required predecessor fails, has an unknown required effect, or produces evidence rejected by a required gate.</p>
+<p>A warning may permit continuation only when the gate policy explicitly admits it.</p>
+<p>Skip and reuse statuses must identify the exact dependency, gate, selector, or applied asset responsible. They must not be generic success.</p>
+<h3 id="logical-state-comparison">Logical state comparison</h3>
+<p>Logical state comparison must use project manifests and IncQL RFC 037 semantic diff evidence. It must compare at least:</p>
+<ul>
+<li>resource addition, removal, and identity</li>
+<li>asset implementation and Prism plan</li>
+<li>output interface and field identity</li>
+<li>lineage and source dependencies</li>
+<li>materialization intent</li>
+<li>incremental or history policy</li>
+<li>fixture tests and quality assertions</li>
+<li>access, version, and deprecation</li>
+<li>semantic profile and adapter requirements</li>
+<li>package and component requirements</li>
+</ul>
+<p>State selectors must preserve per-dimension change classification. A source-text change with no semantic change may be reported separately from a semantic plan change.</p>
+<p><code>state:modified</code> must never mean only <code>file bytes changed</code> in the canonical model.</p>
+<h3 id="applied-state-and-reuse">Applied state and reuse</h3>
+<p>An applied asset may be reused only when the build policy establishes compatibility across:</p>
+<ul>
+<li>logical asset id and resolved version</li>
+<li>project and Prism plan digests</li>
+<li>asset interface and schema</li>
+<li>materialization intent and physical class</li>
+<li>binding and destination scope</li>
+<li>semantic and equality profiles</li>
+<li>upstream input applied records and ingestion receipts</li>
+<li>component versions and capability coverage</li>
+<li>commit, visibility, quality, policy, and verification evidence</li>
+<li>staleness or freshness requirements</li>
+</ul>
+<p>If one requirement is unknown, reuse must be unknown or rejected according to policy. Prior success status alone is insufficient.</p>
+<p>Reuse must produce a build-node record that references the applied asset and explains the decision.</p>
+<h3 id="deferred-bindings">Deferred bindings</h3>
+<p>A deferred binding resolves one selected or unselected logical dependency to one prior committed applied asset record.</p>
+<p>The binding must record:</p>
+<ul>
+<li>logical dependency and version</li>
+<li>applied asset record and physical object reference</li>
+<li>source environment or binding profile</li>
+<li>current build environment</li>
+<li>compatibility and freshness evidence</li>
+<li>interface and semantic-profile comparison</li>
+<li>reason for deferral</li>
+<li>mixed-environment classification</li>
+<li>gate or waiver evidence</li>
+</ul>
+<p>Deferral must not apply to an inline asset with no independently applied record.</p>
+<p>The build set must expose whether all inputs come from one environment, several known environments, or unknown provenance. Tests spanning assets from different environments must be marked as mixed-context before execution.</p>
+<p>An implementation must not silently prefer an existing local physical object over the explicitly selected deferred state or vice versa. Precedence must be declared and recorded.</p>
+<h3 id="project-state-snapshot">Project state snapshot</h3>
+<p>A project state snapshot must reference, rather than copy, the canonical artifacts used for:</p>
+<ul>
+<li>logical comparison</li>
+<li>prior result selection</li>
+<li>applied-asset availability</li>
+<li>deferred bindings</li>
+<li>incremental refresh state</li>
+<li>ingestion checkpoint and receipt context</li>
+</ul>
+<p>Logical comparison state and deferred applied state may come from different snapshots. When they do, the build set must identify both and explain their roles.</p>
+<h3 id="local-resume">Local resume</h3>
+<p>Local resume must create a new build-run identity while referencing the interrupted run and its node attempts.</p>
+<p>A node may be reused during resume only when its prior outcome is committed, visible, compatible with the current build plan, and safe under its idempotency and side-effect contract.</p>
+<p>A failed, partial, cancelled, or unknown-effect attempt must remain in evidence. Resume must not rewrite it as though it never happened.</p>
+<p>If no durable node outcome exists, resume must restart the required work or fail with a reconciliation requirement.</p>
+<h3 id="delegated-execution">Delegated execution</h3>
+<p>IncQL must support exporting one build plan or build-set workload bundle for a higher operational layer.</p>
+<p>The export must include:</p>
+<ul>
+<li>immutable build and project identities</li>
+<li>node ids, kinds, dependencies, and admissible predecessor outcomes</li>
+<li>typed inputs, outputs, bindings, and capability requirements</li>
+<li>effect, idempotency, timeout-admissibility, and cancellation boundaries where known</li>
+<li>required IncQL runtime and component versions</li>
+<li>evidence and receipt schemas</li>
+<li>state-transition APIs and authority</li>
+<li>redaction requirements</li>
+</ul>
+<p>The operational layer may choose placement, runners, concurrency within declared constraints, attempt timing, operational retry policy, and monitoring projection.</p>
+<p>The operational layer must not:</p>
+<ul>
+<li>add or remove semantic asset dependencies</li>
+<li>change selected asset versions</li>
+<li>reinterpret materialization, refresh, schema, quality, or checkpoint semantics</li>
+<li>mark an IncQL state transition committed without calling the authoritative IncQL operation</li>
+<li>copy and rewrite upstream receipts as its own evidence</li>
+<li>treat operational success as proof of an IncQL data guarantee</li>
+</ul>
+<p>IncQL must be able to validate returned node evidence and assemble the same build receipt shape used by local execution.</p>
+<h3 id="build-receipt">Build receipt</h3>
+<p>A build receipt must contain or reference:</p>
+<ul>
+<li>build run, build plan, build set, project manifest, and state snapshot identities</li>
+<li>normalized selector and selection reasons</li>
+<li>binding, component, runner, destination, and semantic-profile snapshots</li>
+<li>node attempts and outcomes</li>
+<li>fixture-test, quality, policy, contract, and verification evidence</li>
+<li>ingestion, materialization, applied-asset, refresh, and checkpoint receipts</li>
+<li>deferred and reused applied assets</li>
+<li>skip, block, warning, waiver, cancellation, and unknown-effect reasons</li>
+<li>state proposals and committed transitions</li>
+<li>timing, counts, diagnostics, and trace references</li>
+<li>payload and secret-redaction posture</li>
+<li>supersession and resume relationships</li>
+</ul>
+<p>The build receipt must be append-only and schema-versioned. It must preserve external or child receipt authority through content-digested references rather than lossy copies.</p>
+<h3 id="artifact-encodings">Artifact encodings</h3>
+<p>The normative contract is the typed artifact schema and canonical digest profile, not one physical encoding.</p>
+<p>Implementations must support at least one portable structured encoding. They should provide columnar projections for large graph, node, timing, and observation collections. A columnar projection must reference the canonical artifact identity and must not become an alternate source of semantic truth.</p>
+<p>Human logs, documentation pages, dashboards, and CLI tables must be projections from structured artifacts.</p>
+<h3 id="cli-and-api-parity">CLI and API parity</h3>
+<p>Every normative project and build CLI operation must have an equivalent typed API over the same artifacts.</p>
+<p>The tool surface must provide operations equivalent to:</p>
+<ul>
+<li>project compile</li>
+<li>project list or selector preview</li>
+<li>project inspect</li>
+<li>project diff</li>
+<li>build plan</li>
+<li>build validate</li>
+<li>build run</li>
+<li>build resume</li>
+<li>build inspect</li>
+<li>build export</li>
+</ul>
+<p>Static, read-only live-probe, and mutating operations must be visibly distinct.</p>
+<h3 id="diagnostics">Diagnostics</h3>
+<p>Build diagnostics must distinguish at least:</p>
+<ul>
+<li>invalid or stale project manifest</li>
+<li>invalid selector or empty selection</li>
+<li>incomplete dependency closure</li>
+<li>inaccessible or incompatible asset version</li>
+<li>missing required fixture test or assertion</li>
+<li>unavailable binding or component</li>
+<li>uncovered or unknown required capability</li>
+<li>incompatible prior applied asset</li>
+<li>mixed-environment deferral</li>
+<li>dependency or gate block</li>
+<li>partial or unknown effect</li>
+<li>stale state revision</li>
+<li>unsafe resume</li>
+<li>invalid delegated evidence</li>
+<li>receipt schema or digest mismatch</li>
+</ul>
+<p>Diagnostics must preserve relevant project, build, asset, node, state, applied, component, and environment identities without exposing secret values.</p>
+<h2 id="design-details">Design details</h2>
+<h3 id="syntax">Syntax</h3>
+<p>This RFC defines typed selector and lifecycle semantics. The exact CLI shorthand may evolve before Planned status.</p>
+<p>Selectors must have a structured representation even when users write concise strings. An implementation must not make shell parsing the only normative selector model.</p>
+<h3 id="semantics">Semantics</h3>
+<p>Project compilation describes all resources. Selection chooses one immutable build set. Binding and planning resolve one execution environment. Execution produces attempts and effects. Receipts describe what happened. These phases must not be collapsed into one mutable status document.</p>
+<p>A local build and a delegated build must preserve the same IncQL semantic transitions and evidence shapes. Operational control may differ without changing data meaning.</p>
+<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
+<p>IncQL RFC 031 provides the local structured-inspection principle.</p>
+<p>IncQL RFC 036 provides governed bundle and unsupported-evidence conventions.</p>
+<p>IncQL RFC 037 supplies semantic plan and interface diff inputs.</p>
+<p>IncQL RFC 047 supplies graph queries over declared and observed build evidence.</p>
+<p>IncQL RFC 057 supplies analogous command/API parity, explicit live probes, and destructive-operation discipline for ingestion.</p>
+<p>IncQL RFC 058 supplies the complete project resource and asset graph.</p>
+<p>IncQL RFC 059 and RFC 060 supply materialization, applied asset, refresh, and state transitions.</p>
+<p>IncQL RFC 061 supplies interface, access, version, compatibility, and deprecation evidence.</p>
+<p>IncQL RFC 063 supplies fixture-test planning and observations.</p>
+<h3 id="compatibility-migration">Compatibility / migration</h3>
+<p>Existing standalone Session execution remains valid. A one-asset local build may be represented as a build set containing one selected asset and its required dependencies.</p>
+<p>Existing CI scripts may adopt project manifest, selector preview, build set, and build receipt artifacts incrementally. Human log scraping should be deprecated once equivalent structured records are available.</p>
+<p>Existing external orchestrators may initially execute a whole IncQL build as one operational step. Per-node delegated execution should be adopted only after the workload bundle and evidence-return contract are stable.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li><strong>Use one mutable manifest for logical state, applied state, and results.</strong> Rejected because those facts have different lifecycles and authorities.</li>
+<li><strong>Make selectors CLI-only strings.</strong> Rejected because APIs, agents, CI, and operational layers need deterministic structured selection.</li>
+<li><strong>Select changed files rather than changed semantics.</strong> Rejected because formatting can change without impact and plan or interface meaning can change through dependencies.</li>
+<li><strong>Reuse any prior successful node.</strong> Rejected because success does not establish binding, interface, input, profile, commit, or freshness compatibility.</li>
+<li><strong>Silently defer to production.</strong> Rejected because mixed-environment data and cross-environment tests can produce misleading results.</li>
+<li><strong>Let an external orchestrator reconstruct the graph.</strong> Rejected because dependency, gate, effect, and state semantics would drift from local IncQL.</li>
+<li><strong>Require an operational layer for every build.</strong> Rejected because standalone IncQL must remain usable locally.</li>
+<li><strong>Store only logs.</strong> Rejected because logs are unstable human projections and cannot safely drive state, resume, or delegation.</li>
+</ul>
+<h2 id="drawbacks">Drawbacks</h2>
+<ul>
+<li>Build manifests, sets, plans, node attempts, applied records, and receipts create a substantial artifact model.</li>
+<li>Strict reuse checks may rebuild more work than systems that assume idempotence and compatibility.</li>
+<li>Semantic state comparison can be expensive for large plans and dependency graphs.</li>
+<li>Mixed-environment safety makes some convenient CI patterns require explicit policy.</li>
+<li>Delegated execution requires a carefully versioned workload and evidence protocol.</li>
+<li>Columnar and structured artifact projections add serialization and migration obligations.</li>
+</ul>
+<h2 id="implementation-architecture">Implementation architecture</h2>
+<p>This section is non-normative. A local build controller can compile a project manifest, resolve a typed selector into a build set, bind it through Session, expand it into a phase-aware DAG, and execute ready nodes through a bounded scheduler. The same build plan can be exported as a workload bundle whose nodes call authoritative IncQL APIs. Artifact storage should separate canonical envelopes from query-friendly graph and observation projections.</p>
+<h2 id="layers-affected">Layers affected</h2>
+<ul>
+<li><strong>IncQL specification</strong> must define selectors, build artifacts, phase ordering, state separation, reuse, deferral, resume, delegation, and receipt semantics.</li>
+<li><strong>IncQL library package</strong> must expose project compilation, selection, planning, local build control, inspection, state, resume, and workload export APIs.</li>
+<li><strong>Incan compiler and package tooling</strong> must provide deterministic project compilation and declaration metadata; new selector or build grammar is not required by this RFC.</li>
+<li><strong>Execution / interchange</strong> must preserve node contracts, applied state, receipts, and authoritative state transitions across local, cluster, and delegated runners.</li>
+<li><strong>Documentation and tooling</strong> must expose pure compilation, live validation, mutation, selection reasons, mixed provenance, skips, blocks, and effects clearly.</li>
+</ul>
+<h2 id="unresolved-questions">Unresolved questions</h2>
+<ul>
+<li>What concise CLI selector syntax should project onto the structured selector model?</li>
+<li>Which indirect fixture-test and quality-assertion selection policy should be the default?</li>
+<li>What minimum assurance is required before an applied asset is reusable in local development versus CI?</li>
+<li>Should mixed-environment deferral default to warning, failure, or policy-required explicit admission?</li>
+<li>What is the minimum per-node workload contract needed for the first delegated operational integration?</li>
+<li>Which artifact families require canonical JSON-compatible envelopes, and which should have first-class Arrow or Parquet projections?</li>
+<li>Should a project build commit applied state asset-by-asset or support an optional multi-asset publication group?</li>
+</ul>
+<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+<!-- References -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../../javascripts/prismplane.js?v=20260723-architecture-nav-28"></script>
+      
+        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+      
+    
+  </body>
+</html>

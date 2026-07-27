@@ -1,0 +1,3955 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed relational logic for governed data systems">
+      
+      
+      
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/063_typed_relational_fixtures_expected_results/">
+      
+      
+      
+      
+      <link rel="icon" href="../../shared/brand/incql-favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>IncQL RFC 063: Typed relational fixtures and expected-result testing - IncQL</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260722-nav-chevron-35">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260726-landing-polish-10">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260723-architecture-readability-4">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+    
+      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#incql-rfc-063-typed-relational-fixtures-and-expected-result-testing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+
+
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+      
+      
+    
+  
+    
+  
+    
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+<header class="topbar crystal-strip" data-md-component="header">
+  <a class="brand" href="../.." aria-label="IncQL home">
+    <img src="../../shared/brand/incql-logo-header.png" alt="">
+    <span>
+      <strong>IncQL</strong>
+      <small>Incan Query Layer</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Documentation sections">
+    
+      <a
+        data-site-section="home"
+        data-path-prefixes=""
+        data-search-label="Search"
+        
+        href="../.."
+      >Home</a>
+    
+      <a
+        data-site-section="learn"
+        data-path-prefixes="language/"
+        data-search-label="Search learning paths"
+        
+        href="../../language/"
+      >Learn</a>
+    
+      <a
+        data-site-section="guides"
+        data-path-prefixes="language/how-to/"
+        data-search-label="Search guides"
+        
+        href="../../language/how-to/"
+      >Guides</a>
+    
+      <a
+        data-site-section="reference"
+        data-path-prefixes="language/reference/"
+        data-search-label="Search reference"
+        
+        href="../../language/reference/"
+      >Reference</a>
+    
+      <a
+        data-site-section="architecture"
+        data-path-prefixes="architecture/"
+        data-search-label="Explore layers"
+        
+        href="../../architecture/"
+      >Architecture</a>
+    
+      <a
+        data-site-section="design-records"
+        data-path-prefixes="rfcs/,design_records/,whitepapers/"
+        data-search-label="Search RFCs"
+        class="is-active" aria-current="page"
+        href="../"
+      >Design records</a>
+    
+      <a
+        data-site-section="project"
+        data-path-prefixes="project/,docs_map/,release_notes/,contributing/"
+        data-search-label="Search project docs"
+        
+        href="../../project/"
+      >Project</a>
+    
+  </nav>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="site-nav-toggle md-icon"
+      aria-label="Open navigation"
+      aria-controls="__drawer"
+      aria-expanded="false"
+      data-site-nav-toggle
+    >
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </button>
+    
+      <label class="docs-search" for="__search" aria-label="Search documentation">
+        <span data-site-search-label>Search RFCs</span>
+        <kbd>/</kbd>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
+      <img src="../../shared/icons/source-branch.svg" alt="">
+      <span>encero-systems/IncQL</span>
+    </a>
+  </div>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+      
+  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
+
+    </a>
+    IncQL
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/encero-systems/IncQL" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    encero-systems/IncQL
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Learn
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Learn
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ten-minute quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Choose by background
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Choose by background
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From SQL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From Spark and DataFrame APIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What IncQL is and is not
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/tutorials/book/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    The IncQL Book
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            The IncQL Book
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part I · Model the work
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Part I · Model the work
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. Read a typed relation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2. Build deferred work
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part II · Explain and execute it
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Part II · Explain and execute it
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3. Inspect the plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4. Collect an observed result
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5. Check adapter coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part III · Decide what happens next
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Part III · Decide what happens next
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6. Observe data quality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7. Make the write decision
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_5" id="__nav_2_4_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part IV · Query blocks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Part IV · Query blocks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8. Write your first query
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9. Summarize and order results
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset carriers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/explanation/execution_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/how-to/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Start and connect
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Start and connect
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read and write data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Transform and query
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transform and query
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset transformations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/joins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Join typed relations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Normalize semi-structured fields
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nested row values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator rows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/window_columns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Window columns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspect and trust
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspect and trust
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inspect plan lineage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution observations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quality observations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced and capability-dependent
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced and capability-dependent
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximate metrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Typed HLL sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variant payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/reference/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Language and relational authoring
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Language and relational authoring
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset carriers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset methods
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/query_blocks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Query blocks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2_4" id="__nav_4_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Builders
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Builders
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Filters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projections
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Runtime and I/O
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Runtime and I/O
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/execution_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/capabilities/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backend capability matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspection, quality, and governance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspection, quality, and governance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/inspection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inspection
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/quality/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../language/reference/functions/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Function catalog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Function catalog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/format/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Format
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/generators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/nested/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nested
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/variants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/functions/windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Interchange and adapter authoring
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            Interchange and adapter authoring
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Conformance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operator catalog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read root binding contract
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Revision and extension policy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Design records
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Design records
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design_records/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../whitepapers/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Whitepapers
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Whitepapers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../whitepapers/incql_db/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IncQL-DB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Project
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../docs_map/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docs map
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Release notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            Release notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../release_notes/v0_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    v0.1
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_4">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributor architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing RFCs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TEMPLATE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RFC template
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prismplane docs theme
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Motivation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goals
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Goals
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guide-level explanation (how authors think about it)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference-level explanation (precise rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference-level explanation (precise rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test scope
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixture-identity-and-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixture identity and schema
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixture-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixture sources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixture-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixture bindings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-plan-fidelity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Production-plan fidelity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-and-nondeterminism-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment and nondeterminism bindings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expectation-kinds" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expectation kinds
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comparison profiles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#difference-evidence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Difference evidence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test planning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution profiles
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test observations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#versioned-assets-and-shared-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioned assets and shared tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fixture-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fixture governance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Diagnostics
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Semantics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interaction with other IncQL surfaces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compatibility / migration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives considered
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Drawbacks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layers-affected" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layers affected
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unresolved-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unresolved questions
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="incql-rfc-063-typed-relational-fixtures-and-expected-result-testing">IncQL RFC 063: Typed relational fixtures and expected-result testing</h1>
+<ul>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Created:</strong> 2026-07-11</li>
+<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
+<li><strong>Related:</strong></li>
+<li>IncQL RFC 001 (dataset carriers and boundedness)</li>
+<li>IncQL RFC 004 (execution context and Session)</li>
+<li>IncQL RFC 007 (Prism logical planning and optimization engine)</li>
+<li>IncQL RFC 028 (semantic identity and target model)</li>
+<li>IncQL RFC 030 (Prism lineage graph)</li>
+<li>IncQL RFC 032 (execution observations)</li>
+<li>IncQL RFC 034 (quality assertions and observations)</li>
+<li>IncQL RFC 040 (interoperability semantic profiles)</li>
+<li>IncQL RFC 042 (async verification evidence)</li>
+<li>IncQL RFC 043 (canonical equality and digest profiles)</li>
+<li>IncQL RFC 044 (verifier statements and proof artifacts)</li>
+<li>IncQL RFC 045 (constraint evidence and verification-aware planning)</li>
+<li>IncQL RFC 058 (data projects, named relational assets, and the asset graph)</li>
+<li>IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)</li>
+<li>IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)</li>
+<li><strong>Issue:</strong> —</li>
+<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/98">IncQL #98</a></li>
+<li><strong>Written against:</strong> Incan v0.4.0</li>
+<li><strong>Shipped in:</strong> —</li>
+</ul>
+<h2 id="summary">Summary</h2>
+<p>This RFC defines pre-materialization unit testing for named relational assets using typed input fixtures, the same Prism plan as production, explicit environment and nondeterminism bindings, typed expected results or verifier statements, canonical comparison profiles, and immutable test observations. A fixture test must declare every substituted direct input and must reject unresolved live dependencies by default. Exact, unordered, ordered, subset, predicate, digest, and verifier-backed expectations must remain distinct. Fixture tests validate transformation behavior for bounded examples; they do not replace post-build data quality assertions, integration tests against live systems, destination contract coverage, or universal semantic proof.</p>
+<h2 id="core-model">Core model</h2>
+<ol>
+<li>A <strong>relational fixture</strong> is a bounded typed dataset with stable schema, provenance, content identity, redaction policy, and optional human-readable source form.</li>
+<li>A <strong>fixture binding</strong> substitutes one external relation or upstream relational asset reference with one compatible fixture for a test run.</li>
+<li>A <strong>fixture test</strong> targets one resolved relational asset version and defines its fixture bindings, environment bindings, expectation, comparison profile, and required execution profile.</li>
+<li>An <strong>expected result</strong> is a typed bounded relation or structured assertion describing acceptable output.</li>
+<li>A <strong>comparison profile</strong> defines row ordering, field selection, null, NaN, decimal, timestamp, collation, nested-value, and tolerance semantics.</li>
+<li>A <strong>test plan</strong> combines the production Prism plan with fixture substitutions and verification work without creating an alternate transformation implementation.</li>
+<li>A <strong>test observation</strong> records the target, plan, fixtures, profiles, runtime coverage, outcome, differences, diagnostics, and redaction posture.</li>
+</ol>
+<h2 id="motivation">Motivation</h2>
+<p>Data quality tests over materialized tables are necessary but late. A transformation can be logically wrong, materialize successfully, and only then reveal an error through carefully chosen production data. Authors need fast examples that prove joins, filters, null handling, aggregations, windows, nested values, and edge cases before a destination is mutated.</p>
+<p>dbt <a href="https://docs.getdbt.com/docs/build/unit-tests">unit tests</a> provide valuable workflow prior art: static inputs replace model references, an expected output is evaluated before materialization, and a failed unit test can block the target build. Their limitations follow from SQL and warehouse coupling: tests support only selected model forms, fixtures carry adapter caveats, and comparison behavior depends on generated SQL and destination semantics.</p>
+<p>IncQL already has typed model values, Prism plans, a local DataFusion reference backend, canonical equality profiles, semantic profiles, verification evidence, and a Session boundary. A native fixture test can therefore use checked row models and execute the same relational semantics without requiring Python, Spark, a warehouse, or a second test implementation.</p>
+<p>The boundary with quality must remain explicit. A fixture test asks whether one transformation produces the expected result for controlled bounded inputs. An IncQL RFC 034 assertion asks whether an actual dataset satisfies a quality rule. Passing one does not imply passing the other.</p>
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Define typed bounded fixtures for relational asset inputs and expected outputs.</li>
+<li>Require fixture bindings to typecheck against the input interface they replace.</li>
+<li>Execute the same Prism plan used by the production asset.</li>
+<li>Define exact, unordered, ordered, subset, predicate, digest, and verifier-backed expectations.</li>
+<li>Use explicit canonical equality and semantic profiles.</li>
+<li>Bind or reject clocks, randomness, environment values, volatile metadata, and other nondeterministic inputs.</li>
+<li>Emit immutable structured test observations and bounded difference evidence.</li>
+<li>Run locally before materialization and integrate with IncQL RFC 062 build gates.</li>
+<li>Support shared tests across compatible asset versions while resolving each version independently.</li>
+<li>Preserve adapter-specific and portable test coverage separately.</li>
+</ul>
+<h2 id="non-goals">Non-Goals</h2>
+<ul>
+<li>Replacing IncQL RFC 034 data quality assertions over actual datasets.</li>
+<li>Proving correctness for all possible inputs from finite fixtures alone.</li>
+<li>Defining a general-purpose Incan test framework.</li>
+<li>Requiring a live destination or warehouse for portable fixture tests.</li>
+<li>Mocking arbitrary external side effects or operational workflows.</li>
+<li>Defining connector contract tests, destination conformance tests, or performance benchmarks.</li>
+<li>Treating snapshot-file approval as equivalent to semantic review.</li>
+<li>Allowing untyped JSON blobs to bypass model and schema checking.</li>
+<li>Persisting sensitive fixture or difference payloads without explicit retention policy.</li>
+</ul>
+<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
+<p>An author can define a small typed input and expected output:</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">Session</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span><span class="o">.</span><span class="n">testing</span> <span class="kn">import</span><span class="w"> </span><span class="nn">fixture_test</span><span class="o">,</span><span class="w"> </span><span class="nn">unordered_rows</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models</span><span class="w"> </span><span class="kn">import</span> <span class="nc">CustomerSummary</span><span class="p">,</span> <span class="nc">Order</span>
+
+<span class="n">orders_fixture</span> <span class="o">=</span> <span class="kt">Session</span><span class="o">.</span><span class="n">from_values</span><span class="p">([</span>
+    <span class="nc">Order</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">customer_id</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;paid&quot;</span><span class="p">),</span>
+    <span class="nc">Order</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">customer_id</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;paid&quot;</span><span class="p">),</span>
+    <span class="nc">Order</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">customer_id</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;cancelled&quot;</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="n">expected</span> <span class="o">=</span> <span class="kt">Session</span><span class="o">.</span><span class="n">from_values</span><span class="p">([</span>
+    <span class="nc">CustomerSummary</span><span class="p">(</span>
+        <span class="n">customer_id</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">order_count</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">lifetime_value</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">])</span>
+
+<span class="n">customer_summary_test</span> <span class="o">=</span> <span class="n">fixture_test</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;customer_summary_excludes_cancelled_orders&quot;</span><span class="p">,</span>
+    <span class="n">target</span><span class="o">=</span><span class="n">project</span><span class="o">.</span><span class="n">asset_ref</span><span class="p">(</span><span class="s2">&quot;commerce.customer_summary&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">orders</span><span class="p">:</span> <span class="n">orders_fixture</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">expected</span><span class="o">=</span><span class="n">expected</span><span class="p">,</span>
+    <span class="n">comparison</span><span class="o">=</span><span class="n">unordered_rows</span><span class="p">(),</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>The test compiles the production <code>commerce.customer_summary</code> Prism plan and substitutes the <code>orders</code> read root with the fixture. No warehouse table is created.</p>
+<p>Ordering is explicit. If the asset promises ordered output, the test may use <code>ordered_rows()</code>. If order is not part of the interface, <code>unordered_rows()</code> compares row multiplicities without treating backend output order as meaning.</p>
+<p>A test may use structured assertions instead of enumerating every output row:</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="n">customer_totals_test</span> <span class="o">=</span> <span class="n">fixture_test</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;customer_totals_preserve_grain&quot;</span><span class="p">,</span>
+    <span class="n">target</span><span class="o">=</span><span class="n">customer_summary</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="n">orders</span><span class="p">:</span> <span class="n">orders_fixture</span><span class="p">},</span>
+    <span class="n">expect</span><span class="o">=</span><span class="n">all_of</span><span class="p">([</span>
+        <span class="n">row_count</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+        <span class="n">unique</span><span class="p">([</span><span class="s2">&quot;customer_id&quot;</span><span class="p">]),</span>
+        <span class="n">field_value</span><span class="p">(</span><span class="s2">&quot;lifetime_value&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="p">]),</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Those expectations remain test-local verifier statements. They do not become global quality claims unless separately declared under IncQL RFC 034.</p>
+<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
+<h3 id="test-scope">Test scope</h3>
+<p>A fixture test must target:</p>
+<ul>
+<li>one canonical relational asset id</li>
+<li>one resolved asset version</li>
+<li>one project manifest or compatible asset bundle</li>
+<li>one authored Prism plan identity</li>
+</ul>
+<p>A test must not target an ambiguous current or latest alias in its resolved artifact. Authoring may use such an alias only when project compilation records the selected version.</p>
+<p>Tests may target logical-only, inline, view, table, incremental, history, or managed assets because the test evaluates relational meaning before physical materialization. Materialization-specific conformance remains outside this RFC.</p>
+<h3 id="fixture-identity-and-schema">Fixture identity and schema</h3>
+<p>A relational fixture must contain or reference:</p>
+<ul>
+<li>fixture id and schema version</li>
+<li>row model and logical schema</li>
+<li>boundedness</li>
+<li>canonical content digest or explicit unknown digest status</li>
+<li>source form and provenance</li>
+<li>row count when known</li>
+<li>semantic and equality profile</li>
+<li>redaction and retention policy</li>
+<li>diagnostics and truncation status</li>
+</ul>
+<p>A fixture must be bounded. Unbounded streams require a separately defined bounded event-window or stream-test contract.</p>
+<p>The fixture schema must typecheck against the input interface it replaces. Field aliases or compatibility coercions may be applied only through explicit profile-backed conversion evidence.</p>
+<p>An empty fixture is valid when its row model supplies a complete schema.</p>
+<h3 id="fixture-sources">Fixture sources</h3>
+<p>Portable fixture sources may include:</p>
+<ul>
+<li>checked inline Incan model values</li>
+<li>a schema-bearing virtual table</li>
+<li>Arrow or Parquet data with a declared model mapping and digest</li>
+<li>another immutable fixture artifact</li>
+<li>a generated fixture with generator identity, input digest, and deterministic seed</li>
+</ul>
+<p>CSV, JSON, or other weakly typed source forms may be used only after explicit parsing and schema admission. The parsed typed fixture, not the source text alone, is the test input.</p>
+<p>A live table or API response is not a unit fixture by default. A test that explicitly observes live data must be classified as an integration or observation test and must not claim portable fixture-test semantics.</p>
+<h3 id="fixture-bindings">Fixture bindings</h3>
+<p>Every direct external relation or upstream asset dependency reached by the target Prism plan must be:</p>
+<ul>
+<li>replaced by a compatible fixture binding</li>
+<li>replaced by a declared test double contract</li>
+<li>explicitly admitted as a live dependency under a non-unit test profile</li>
+</ul>
+<p>The default fixture-test profile must reject unbound live dependencies.</p>
+<p>A fixture binding must identify the original read-root or asset-reference target and the replacement fixture. Substitution must occur at the logical binding boundary, not by rewriting generated SQL strings.</p>
+<p>Fixture substitution must preserve:</p>
+<ul>
+<li>expected row type and field identities</li>
+<li>boundedness requirements</li>
+<li>semantic profile requirements</li>
+<li>lineage from fixture fields into the test plan</li>
+<li>diagnostic references to the original dependency</li>
+</ul>
+<p>A fixture must not gain access to private asset implementation details that the target asset itself could not reference.</p>
+<h3 id="production-plan-fidelity">Production-plan fidelity</h3>
+<p>The test plan must use the same authored Prism plan as the selected relational asset version.</p>
+<p>The implementation may apply test-specific physical planning and safe logical optimization, but it must preserve authored plan identity and record any rewritten plan digest.</p>
+<p>The test must not call a separate author-maintained <code>test implementation</code> of the transformation.</p>
+<p>If the production asset performs an inadmissible external effect inside its relational body, project compilation or fixture planning must reject it. Fixture testing must not silently skip arbitrary effects.</p>
+<h3 id="environment-and-nondeterminism-bindings">Environment and nondeterminism bindings</h3>
+<p>A test plan must identify and bind or reject nondeterministic inputs, including as applicable:</p>
+<ul>
+<li>current time and timezone</li>
+<li>random values and seeds</li>
+<li>environment variables</li>
+<li>current user or session identity</li>
+<li>locale and collation</li>
+<li>backend-specific metadata</li>
+<li>volatile functions</li>
+<li>unordered input assumptions</li>
+</ul>
+<p>The default portable profile must reject unbound nondeterminism that can affect the expected result.</p>
+<p>Generated fixtures and randomized property-style tests must record the seed and generator version. A failing generated case must be reproducible from recorded evidence when possible.</p>
+<h3 id="expectation-kinds">Expectation kinds</h3>
+<p>The portable expectation kinds are:</p>
+<table>
+<thead>
+<tr>
+<th>Expectation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exact_relation</code></td>
+<td>Actual output must equal the expected typed relation under the selected comparison profile.</td>
+</tr>
+<tr>
+<td><code>unordered_multiset</code></td>
+<td>Row order is ignored, but duplicate multiplicity is preserved.</td>
+</tr>
+<tr>
+<td><code>ordered_sequence</code></td>
+<td>Row order is semantically compared under the declared ordering and value profile.</td>
+</tr>
+<tr>
+<td><code>field_subset</code></td>
+<td>Only declared output fields participate; ignored fields and justification are recorded.</td>
+</tr>
+<tr>
+<td><code>predicate_set</code></td>
+<td>Structured row, aggregate, schema, or relation predicates must all produce admitted observations.</td>
+</tr>
+<tr>
+<td><code>digest_match</code></td>
+<td>Actual and expected canonical digests must match under one explicit digest profile.</td>
+</tr>
+<tr>
+<td><code>verifier_statement</code></td>
+<td>A verifier statement or proof backend evaluates the expected claim and returns typed evidence.</td>
+</tr>
+</tbody>
+</table>
+<p>An expectation must not infer order significance from incidental backend output.</p>
+<p>An expected relation must have a schema compatible with the target output interface or with an explicit field-subset projection.</p>
+<p>Predicate-set expectations must use typed IncQL RFC 034 assertions or IncQL RFC 044 verifier statements where applicable. A textual assertion description is not executable semantics.</p>
+<h3 id="comparison-profiles">Comparison profiles</h3>
+<p>Every relation comparison must name or embed an IncQL RFC 043 canonical equality profile.</p>
+<p>The profile must define as applicable:</p>
+<ul>
+<li>row ordering significance</li>
+<li>duplicate multiplicity</li>
+<li>field selection and ordering</li>
+<li>null equality</li>
+<li>NaN and infinity behavior</li>
+<li>decimal scale, precision, and rounding</li>
+<li>floating tolerance</li>
+<li>timestamp precision and timezone normalization</li>
+<li>string collation and case behavior</li>
+<li>nested list, map, struct, and variant comparison</li>
+<li>canonical serialization and digest algorithm</li>
+</ul>
+<p>Default comparison must be strict logical equality with unordered row multiset semantics unless the asset interface declares order as part of its output contract.</p>
+<p>Approximate numeric comparison must be opt-in and must record absolute, relative, or domain-specific tolerance.</p>
+<h3 id="difference-evidence">Difference evidence</h3>
+<p>A failed relation comparison should produce bounded structured difference evidence containing:</p>
+<ul>
+<li>missing expected rows</li>
+<li>unexpected actual rows</li>
+<li>multiplicity differences</li>
+<li>field-level value differences</li>
+<li>ordering differences</li>
+<li>schema differences</li>
+<li>profile and canonicalization diagnostics</li>
+</ul>
+<p>Difference payloads must be bounded by row, byte, and field limits. Truncation must be explicit.</p>
+<p>Sensitive values must follow fixture and project redaction policy. A failure report must not reveal protected values merely because the test failed.</p>
+<p>Digest-only or redacted comparisons may report a mismatch without row payloads.</p>
+<h3 id="test-planning">Test planning</h3>
+<p>Fixture-test planning must validate:</p>
+<ul>
+<li>target project, asset, and version identity</li>
+<li>target implementation and interface compatibility</li>
+<li>complete fixture or admitted live binding coverage</li>
+<li>fixture schemas and field identities</li>
+<li>nondeterminism bindings</li>
+<li>runtime and function capability coverage</li>
+<li>comparison and semantic profiles</li>
+<li>expectation schema and verifier availability</li>
+<li>redaction, retention, and difference limits</li>
+</ul>
+<p>Unknown required coverage must not be reported as a valid portable test plan.</p>
+<p>Planning must not mutate a destination or resolve unrelated production credentials.</p>
+<h3 id="execution-profiles">Execution profiles</h3>
+<p>A portable fixture test should execute on the local reference backend when the Prism plan and functions have covered semantics there.</p>
+<p>Tests may request another compute runtime or semantic profile to verify backend-specific behavior. The observation must distinguish:</p>
+<ul>
+<li>portable logical test outcome</li>
+<li>adapter-specific conformance outcome</li>
+<li>unsupported or partially covered execution</li>
+</ul>
+<p>Success on one adapter must not imply success under every semantic profile.</p>
+<p>The test runtime must not materialize the target's configured production destination. Temporary or in-memory physical work must be isolated under the test plan and recorded when relevant.</p>
+<h3 id="test-observations">Test observations</h3>
+<p>Every fixture-test attempt must emit a typed observation containing or referencing:</p>
+<ul>
+<li>test id, name, and schema version</li>
+<li>project manifest and target asset version</li>
+<li>authored and executed Prism plan digests</li>
+<li>fixture ids, schemas, content digests, and bindings</li>
+<li>environment and nondeterminism bindings</li>
+<li>expectation and comparison profile</li>
+<li>runtime, adapter, component, and semantic profile</li>
+<li>capability coverage</li>
+<li>status and timing</li>
+<li>expected and actual row counts when available</li>
+<li>bounded difference evidence</li>
+<li>verifier, proof, quality, or constraint evidence</li>
+<li>redaction and retention posture</li>
+<li>diagnostics, trace references, and supersession</li>
+</ul>
+<p>Status must distinguish at least:</p>
+<ul>
+<li><code>passed</code></li>
+<li><code>failed</code></li>
+<li><code>error</code></li>
+<li><code>unsupported</code></li>
+<li><code>incomplete</code></li>
+<li><code>unknown</code></li>
+<li><code>skipped</code></li>
+</ul>
+<p>A runtime error must not be reported as a failed semantic expectation. Unsupported coverage must not be reported as a passing skipped test.</p>
+<p>Observations must be append-only. Updating fixtures or expectations creates a new test-plan and observation identity.</p>
+<h3 id="build-integration">Build integration</h3>
+<p>IncQL RFC 062 must run required fixture tests before materializing their target asset.</p>
+<p>A failed, errored, unsupported, incomplete, or unknown required fixture test must block the target unless an explicit gate or waiver admits that outcome.</p>
+<p>A passing test admits only the selected build transition under the declared policy. It does not certify all data, all backends, or all future versions.</p>
+<p>Indirect test selection must record why the test was included and which target or downstream nodes it gates.</p>
+<h3 id="versioned-assets-and-shared-tests">Versioned assets and shared tests</h3>
+<p>A fixture test may target one explicit asset version or a structured version selector.</p>
+<p>When one declaration selects several versions, project compilation must instantiate and typecheck an independent test plan for each version. A shared name must not hide version-specific fixture or expectation incompatibility.</p>
+<p>A new asset version must not inherit prior test success. It may reuse the test declaration and fixtures, but it must produce new observations against its own plan and interface.</p>
+<h3 id="fixture-governance">Fixture governance</h3>
+<p>Fixtures may contain synthetic, sampled, anonymized, or production-derived values. Their provenance and retention policy must identify which.</p>
+<p>Production-derived fixtures must record redaction or transformation evidence and must not be persisted in source control or ordinary artifacts unless policy permits it.</p>
+<p>Fixture generation by an agent or model creates a proposal. Runtime typechecking and test execution remain authoritative for whether the fixture is usable; generated examples do not become approved expected semantics solely because they compile.</p>
+<h3 id="diagnostics">Diagnostics</h3>
+<p>Fixture-test diagnostics must distinguish at least:</p>
+<ul>
+<li>unresolved or incompatible target version</li>
+<li>missing direct fixture binding</li>
+<li>fixture schema mismatch</li>
+<li>inaccessible dependency</li>
+<li>unbound nondeterminism</li>
+<li>unsupported function or runtime capability</li>
+<li>expected-output schema mismatch</li>
+<li>invalid comparison profile</li>
+<li>bounded difference truncation</li>
+<li>redaction or retention violation</li>
+<li>verifier unavailable</li>
+<li>runtime execution error</li>
+<li>expectation mismatch</li>
+</ul>
+<p>Diagnostics must preserve target, fixture, plan, profile, runtime, and observation identities.</p>
+<h2 id="design-details">Design details</h2>
+<h3 id="syntax">Syntax</h3>
+<p>This RFC introduces no grammar. Fixture, binding, expectation, comparison, and test declarations should first be typed Incan library values.</p>
+<p><code>Session.from_values</code> is the intended ergonomic path for checked inline fixtures once its canonical Incan-to-Arrow row encoding is available. Other fixture sources must lower to the same typed logical binding contract.</p>
+<h3 id="semantics">Semantics</h3>
+<p>A fixture test is a bounded experiment over one production relational plan. Its evidence is scoped to the fixtures, bindings, runtime, profiles, and test version that produced it.</p>
+<p>Fixture expected results are authored claims. Passing execution verifies those claims for the selected examples; it does not make them universal data contracts.</p>
+<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
+<p>IncQL RFC 004 supplies the local Session binding and execution boundary.</p>
+<p>IncQL RFC 030 must preserve fixture-origin lineage through substituted read roots.</p>
+<p>IncQL RFC 034 remains the data quality assertion model. This RFC may execute assertion-shaped expectations but must preserve their test-local scope.</p>
+<p>IncQL RFC 040 and RFC 043 supply semantic and equality profiles.</p>
+<p>IncQL RFC 044 and RFC 045 supply verifier statements, proof artifacts, and constraint evidence for richer expectations.</p>
+<p>IncQL RFC 058 supplies target asset and dependency identities.</p>
+<p>IncQL RFC 061 supplies the versioned output contract used to typecheck fixtures and expectations.</p>
+<p>IncQL RFC 062 selects, orders, gates, and records fixture tests within project builds.</p>
+<h3 id="compatibility-migration">Compatibility / migration</h3>
+<p>Existing Incan tests that construct a <code>DataSet[T]</code> and compare collected values remain valid. They may migrate to fixture-test artifacts when they need project selection, asset-version targeting, build gating, or portable evidence.</p>
+<p>Existing data-quality assertions should remain under IncQL RFC 034. They must not be relabeled as unit tests merely because they use small data.</p>
+<p>Existing golden files may become expected-relation fixtures after schema admission, canonical profile declaration, content digesting, and review provenance are explicit.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<ul>
+<li><strong>Run only post-materialization data tests.</strong> Rejected because logic errors should be caught before destination mutation and controlled edge cases need small fixtures.</li>
+<li><strong>Maintain a separate test implementation of each transformation.</strong> Rejected because production and test logic would drift.</li>
+<li><strong>Compare generated SQL strings.</strong> Rejected because SQL is backend-specific physical output and does not establish relational result semantics.</li>
+<li><strong>Use untyped JSON fixtures.</strong> Rejected because fixtures must respect the same model and schema contracts as production inputs.</li>
+<li><strong>Treat row order as always significant.</strong> Rejected because many relational results have no semantic order.</li>
+<li><strong>Treat row order as never significant.</strong> Rejected because ordered assets and windowed outputs may declare order guarantees.</li>
+<li><strong>Permit live dependencies by default.</strong> Rejected because unit tests would become environment-dependent and potentially mutating.</li>
+<li><strong>Store unlimited failing rows.</strong> Rejected because differences can be large or sensitive.</li>
+<li><strong>Treat test success as certification.</strong> Rejected because finite fixtures provide scoped evidence, not universal proof.</li>
+</ul>
+<h2 id="drawbacks">Drawbacks</h2>
+<ul>
+<li>Typed fixtures can be verbose for wide or deeply nested models.</li>
+<li>Canonical comparison profiles add concepts that simple equality assertions avoid.</li>
+<li>Large expected relations may create expensive artifacts and reviews.</li>
+<li>Strict live-dependency rejection requires explicit fixtures for every direct input.</li>
+<li>Backend-specific behavior may require a test matrix beyond the local reference runtime.</li>
+<li>Difference redaction can make some failures harder to diagnose.</li>
+</ul>
+<h2 id="implementation-architecture">Implementation architecture</h2>
+<p>This section is non-normative. Fixture planning can clone the target's authored Prism plan, replace logical read bindings with schema-bearing virtual tables, bind deterministic environment providers, execute through Session, and lower actual and expected outputs into canonical comparison or verifier plans. Difference evidence should be produced through bounded relational operations rather than unconstrained in-memory formatting.</p>
+<h2 id="layers-affected">Layers affected</h2>
+<ul>
+<li><strong>IncQL specification</strong> must define fixture, binding, expectation, comparison, test-plan, observation, and build-gate semantics.</li>
+<li><strong>IncQL library package</strong> must expose typed fixture construction, asset test declarations, comparison profiles, execution, differences, and inspection.</li>
+<li><strong>Incan compiler and package tooling</strong> must support canonical model-value reflection and row encoding needed for inline fixtures; new test grammar is not required by this RFC.</li>
+<li><strong>Execution / interchange</strong> must preserve fixture bindings, semantic profiles, plan identity, adapter coverage, and bounded difference evidence.</li>
+<li><strong>Documentation and tooling</strong> must distinguish fixture tests, data quality assertions, integration tests, adapter conformance, and proofs.</li>
+</ul>
+<h2 id="unresolved-questions">Unresolved questions</h2>
+<ul>
+<li>Which expectation kinds are required for the first implementation beyond exact unordered relation comparison?</li>
+<li>Should inline fixture declarations support a dedicated concise syntax after the typed library path is proven?</li>
+<li>What canonical field identity and row encoding must <code>Session.from_values</code> expose for nested and variant values?</li>
+<li>How should snapshot or golden expected results be reviewed and updated without turning approval into an untracked file replacement?</li>
+<li>Which nondeterministic functions require built-in test binding providers?</li>
+<li>What bounded difference defaults balance diagnosis, performance, and data protection?</li>
+<li>Should property-based fixture generators be part of this RFC's first release or a later testing extension?</li>
+</ul>
+<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+<!-- References -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../../javascripts/prismplane.js?v=20260723-architecture-nav-28"></script>
+      
+        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+      
+    
+  </body>
+</html>
