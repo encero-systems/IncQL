@@ -1,7 +1,6 @@
 """Chapter 9: group and summarize typed data with IncQL query clauses."""
 
 import pub::incql
-
 from domain import Order, StatusSummary
 from pub::incql import LazyFrame, Session, SessionError, count, desc, report_session_error, sum
 

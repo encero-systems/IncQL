@@ -1,7 +1,6 @@
 """Chapter 8: filter and shape typed data with IncQL query clauses."""
 
 import pub::incql
-
 from domain import Order, PaidOrderReview
 from pub::incql import LazyFrame, Session, SessionError, desc, report_session_error
 
