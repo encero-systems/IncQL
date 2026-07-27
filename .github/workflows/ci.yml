@@ -19,8 +19,9 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
-  INCAN_REF: release/v0.3
-  EXPECTED_INCAN_VERSION: 0.3.0
+  # Current Incan 0.5 development baseline (main at 2026-07-27).
+  INCAN_REF: fe8c9d77caf7000ba8968cd0b07febab71dc6283
+  EXPECTED_INCAN_VERSION: 0.5.0-dev.32
   RUST_BACKTRACE: 1
   INCAN_NO_BANNER: 1
   INCAN_GENERATED_CARGO_TARGET_DIR: ${{ github.workspace }}/.incan-generated-cargo-target
