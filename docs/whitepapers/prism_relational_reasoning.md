@@ -6,17 +6,17 @@
 
 **Audience:** IncQL and Incan contributors, database-systems researchers, data-platform architects, and prospective execution-engine collaborators.
 
-**Scope:** This document is non-normative. It frames a research direction for Prism and defines evidence required before any product or performance claim. RFC 066 records the normative north-star boundary; focused follow-on RFCs must specify stable public APIs, individual rewrite families, statistics transport, materialization lifecycle, and adaptive execution contracts.
+**Scope:** This document is non-normative. It frames a research direction for Prism and defines evidence required before any product or performance claim. RFC 066 records the normative north-star boundary; focused follow-on RFCs must specify stable public APIs, individual rewrite families, planning-context transport, materialization lifecycle, and adaptive execution contracts.
 
 ## Thesis
 
-Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: a system that remains tractable over large transformation graphs, recognizes equivalent and shared relational work, preserves the reasons a rewrite is legal, and selects logical, sharing, placement, and exchange requirements before external target lowerers and execution engines choose their representations and physical plans.
+Prism should evolve from an immutable logical-plan store into IncQL's relational reasoning engine: one system operating in pre-execution and bounded adaptive re-entry modes, remaining tractable over large transformation graphs, recognizing equivalent and shared relational work, preserving the reasons a rewrite is legal, and selecting logical, sharing, placement, and exchange requirements before external target lowerers and execution engines choose their representations and physical plans. Both temporal modes use the same authored graph, semantic rules, memo, property model, and explanation contract.
 
 The goal is not to make SQL CTEs work, nor to replace Catalyst, DataFusion, PostgreSQL, Spark, or another target optimizer or execution engine. The goal is to give IncQL an optimizer-owned semantic graph that can improve plans arriving from Incan APIs, SQL, protocol frontends, Delta-like sources, and future data-product interfaces before target-specific optimization begins.
 
 This matters because data transformations are increasingly authored as long chains of models, views, CTEs, and reusable staging steps. Those structures are useful to authors but are not necessarily the best execution structure. A capable Prism can treat them as relational intent, discover reusable work across declared consumers and planning horizons, and select whether work should be inlined, shared, materialized, pushed down, repartitioned, or placed elsewhere. Target lowerers and engines then realize and refine that selection.
 
-## The product opportunity
+## Why this research matters
 
 dbt's `ephemeral` materialization demonstrates the pressure clearly: an ephemeral model is emitted as a CTE rather than persisted as a database object. That is convenient authoring structure, but it limits the target optimizer to the relational structure and context visible in the submitted statement. [dbt CTE guidance][dbt-cte] [dbt-ephemeral]
 
@@ -27,10 +27,10 @@ IncQL can offer a different contract:
 - optimizer decisions remain inspectable rather than being hidden in generated SQL;
 - Prism can reason across declared outputs and heterogeneous candidate targets before committing to one engine's plan;
 - target lowerers receive selected logical, placement, exchange, and sharing requirements;
-- runtime observations can return as scoped evidence for bounded replanning and later executions; and
+- runtime observations can return as scoped evidence for bounded replanning and, when retained by an external provider, later executions; and
 - SQL egress is one target representation, not the semantic source of truth.
 
-The commercial hypothesis is not merely that IncQL makes generated SQL faster. It is that IncQL can optimize relational intent before it collapses into one target's SQL or physical plan, across authoring frontends, transformation roots, executions, and heterogeneous targets, while retaining the evidence that makes equivalence, sharing, and placement decisions legal and explainable. No target-local optimizer can act on IncQL context that it never receives. Whether this wider decision surface produces cheaper or more reliable execution remains a measured hypothesis, not a performance claim.
+The systems hypothesis is not merely that IncQL makes generated SQL faster. It is that IncQL can optimize relational intent before it collapses into one target's SQL or physical plan, across authoring frontends, transformation roots, executions, and heterogeneous targets, while retaining the evidence that makes equivalence, sharing, and placement decisions legal and explainable. No target-local optimizer can act on IncQL context that it never receives. Whether this wider decision surface produces cheaper or more reliable execution remains a measured hypothesis, not a performance claim.
 
 ## A north-star architecture
 
@@ -43,7 +43,7 @@ Incan · query blocks · SQL AST · protocols
 immutable relational intent · schema · lineage · policy
                  │
                  ▼
-        Optimization memo ◄──────── Optional planning context
+        Optimization memo ◄──────── Provider-neutral planning context
 equivalence · alternatives          capabilities · estimates · observations
 properties · legality                         ▲
                  │                            │
@@ -64,7 +64,7 @@ DataFusion · PostgreSQL · Spark · others      │
         at a bounded adaptive checkpoint
 ```
 
-The authored graph and optimization memo must be distinct. The authored graph records what the author or frontend meant, including source provenance. The memo records semantically equivalent alternatives. An optimizer may choose a different alternative, but it must preserve a lineage and evidence path explaining why the alternative is valid and why it was selected. Prism must also produce a valid target-independent logical result when the optional planning-evidence input is absent.
+The authored graph and optimization memo must be distinct. The authored graph records what the author or frontend meant, including source provenance. The memo records semantically equivalent alternatives. An optimizer may choose a different alternative, but it must preserve a lineage and evidence path explaining why the alternative is valid and why it was selected. Prism must also produce a valid target-independent logical result when the optional planning-evidence input is absent. Any caller may construct that immutable input through the same open contract; Prism does not require or recognize a privileged evidence provider.
 
 Target realization and execution remain outside Prism. A target engine may refine or replace physical choices, and a coordinator may later invoke Prism again with an immutable observation snapshot at an explicit adaptive checkpoint. Replanning derives a new selection for unfinished work; it does not mutate authored history or completed execution.
 
@@ -101,6 +101,12 @@ Microsoft's production research is especially relevant to the scale and lifecycl
 
 Oasis explores the optimizer-as-a-service boundary, separating reusable optimization capability from an individual engine deployment. QO-Advisor demonstrates that production steering also needs validation, regression control, and a safe path for declining a proposed change. Research on joint query and resource optimization further shows that a query plan cannot be ranked independently of the resources available to execute it. These are direct precedents for Prism's standalone boundary, multi-objective planning context, and evidence-governed rollout. [Oasis][oasis] [QO-Advisor][qo-advisor] [query and resource optimization][query-resource]
 
+### Open evidence ingress without a required experience service
+
+Prism's consideration of prior evidence should remain part of the open reasoning engine. A provider-neutral immutable planning context can carry target capabilities, policy facts, estimates, observations, and candidate placements with explicit authority, provenance, scope, freshness, confidence, and invalidation. `Session`, an adapter, an offline tool, a test harness, or a client-built history service should be able to supply the same contract.
+
+Prism should receive an evidence snapshot rather than retrieve or persist history itself. Historical estimates and observations may rank or prune semantically legal alternatives, but they cannot establish rewrite legality or become authored truth. Current capability, authorization, and policy facts may constrain target realizability only when their authority and applicability are explicit. This separation leaves room for independently built longitudinal evidence systems without making Prism a thin client for any particular service. This paper does not define product packaging for such systems.
+
 ### DataFusion as an experimental target
 
 DataFusion is valuable because it offers structured logical and physical planning, extensible optimizer rules, common-subexpression elimination, and `EXPLAIN ANALYZE` metrics. It should be used to test Prism's reasoning and external target-realization boundary, without becoming the semantic owner of IncQL plans. [DataFusion optimizer][datafusion-optimizer] [DataFusion logical plans][datafusion-logical-plans] [DataFusion EXPLAIN][datafusion-explain]
@@ -132,6 +138,14 @@ Planning evidence has at least three distinct classes:
 An observation is not timeless truth. It is evidence about a particular plan identity, data snapshot, parameter shape, semantic profile, target configuration, and execution attempt. Reuse requires provenance, scope, freshness, confidence, and invalidation rules.
 
 Target engines remain free to adapt their physical execution internally. In addition, a coordinator may establish an explicit adaptive checkpoint and invoke Prism again with an immutable observation snapshot. Prism may reconsider only unfinished logical, placement, exchange, sharing, or materialization choices. Completed work, authored intent, transaction and snapshot guarantees, and policy constraints remain fixed. Replanning must have a bounded cost and a legal fallback; an optimizer that spends more than the opportunity it can recover has failed.
+
+### Optimization evidence is not operational interpretation
+
+Prism can establish that actual cardinality diverged from an estimate, a join began spilling, an exchange became expensive, or a previously successful plan regressed. Those facts do not establish why the change happened or what an organization should do about it. Seasonality, a deployment, data-quality drift, infrastructure contention, a target-engine change, or an expected business event may produce similar optimizer evidence.
+
+Operational-cause interpretation, alerting, incident classification, and automated response therefore belong outside Prism. A related system may combine Prism evidence with deployment events, policy, system dependencies, and other operational signals, but it must expose uncertainty and must not infer business meaning from cardinality alone.
+
+The same separation applies to development-to-production impact analysis. IncQL RFC 037 defines local semantic plan diffs and blast-radius inputs. An external system may combine those artifacts with deployed workload identities, dependency indexes, and correctly scoped historical observations to estimate the probable production effect of in-flight development work. That counterfactual forecast must report assumptions, confidence, evidence coverage, and unknowns and should be backtested after promotion. Prism supplies reasoning and evidence; it does not own organization-wide blast radius or operational response.
 
 ### Equality saturation is a research branch, not the foundation
 
@@ -206,9 +220,17 @@ For every selected plan, IncQL should eventually explain:
 
 This is essential for governed data work and is a differentiator from opaque generated SQL.
 
+### 8. How should independent evidence providers integrate?
+
+Research must establish a stable planning-context contract that gives locally built, client-built, and future managed providers equal access to Prism's evidence consideration without coupling the optimizer to storage or network access. It must test provenance, authority, scope, invalidation, reproducibility, contradictory evidence, missing evidence, and the explanation of how each supplied fact affected ranking or pruning.
+
+### 9. How can plan evidence support change-impact analysis without moving operations into Prism?
+
+Research should connect semantic plan diffs to stable deployed workload identities and relevant historical execution evidence. The goal is to test whether a proposed development plan's probable effects can be forecast with calibrated uncertainty and later backtested, not to make Prism infer operational causes, discover every downstream consumer, or automate a response.
+
 ## Evidence program
 
-The research program should combine semantic, optimizer-complexity, target-comparison, and adaptive-execution evidence.
+The research program should combine semantic, optimizer-complexity, target-comparison, evidence-provider, adaptive-execution, and change-impact evidence.
 
 ### dbt-like transformation graphs
 
@@ -237,6 +259,10 @@ Build graph families whose depth, breadth, expression size, join count, repeated
 ### Adaptive-execution studies
 
 Create controlled estimation errors, skew, changing selectivity, and partition distributions. Record the pre-execution estimate, runtime observation, target-local adaptation, any coordinator-requested Prism replan, and the resulting unfinished plan. Compare one-shot planning, target-local adaptation alone, Prism replanning without target observations, and Prism replanning with scoped observations. The study must include cases where replanning is correctly declined because its cost, freshness, snapshot, or policy preconditions are not met.
+
+### Development-to-production impact studies
+
+For controlled workload changes, compare the semantic before-and-after plan diff, affected deployed workload identities, relevant historical executions, and predicted target effects before promotion. Record confidence, evidence coverage, alternative explanations, and unknown dependencies. After promotion, compare the forecast with observed latency, rows, bytes, scans, shuffles, spill, memory, and target-plan changes. The study must include correctly uncertain or declined forecasts when identity, history, or operational context is insufficient.
 
 ### Cross-target plan comparison
 
@@ -335,9 +361,11 @@ The experiments support four bounded conclusions: Polyglot is capable of carryin
 3. **Relational completeness.** Strengthen Prism's relation identity, aliases, subqueries, joins, aggregates, windows, scoped bindings, and schema/property derivation.
 4. **Tractable memo exploration.** Add a separate memo over the authored graph with an audited rule set, explicit property requirements, search budgets, pruning, graceful fallback, and measured planning cost.
 5. **Reuse and placement selection.** Evaluate inline, target-local sharing, generated SQL CTEs, transient or durable materialization, placement, and exchange without assigning representation-specific lowering to Prism.
-6. **Runtime evidence loop.** Transport scoped target observations into immutable planning contexts, distinguish target-local adaptation from coordinator-owned replanning, and preserve completed work and authored history.
-7. **Catalyst and target baselines.** Stress native Spark Catalyst/AQE, DataFusion, and PostgreSQL alongside Prism, including cases where target-local optimization is already sufficient.
-8. **Focused RFCs.** Promote stable rule families, observation transport, adaptive checkpoints, materialization lifecycle, and target-realization contracts only after the research harness establishes them.
+6. **Provider-neutral evidence ingress.** Validate one immutable planning-context contract across session, adapter, offline, test, and independently built evidence providers without giving Prism storage or retrieval responsibilities.
+7. **Runtime evidence loop.** Transport scoped target observations into immutable planning contexts, distinguish target-local adaptation from coordinator-owned replanning, and preserve completed work and authored history.
+8. **Change-impact evidence.** Connect semantic plan diffs, deployed workload identity, and historical observations in controlled development-to-production forecasting and backtesting studies while keeping operational interpretation outside Prism.
+9. **Catalyst and target baselines.** Stress native Spark Catalyst/AQE, DataFusion, and PostgreSQL alongside Prism, including cases where target-local optimization is already sufficient.
+10. **Focused RFCs.** Promote stable rule families, planning-context transport, adaptive checkpoints, materialization lifecycle, and target-realization contracts only after the research harness establishes them.
 
 ## Non-goals
 
@@ -348,7 +376,9 @@ This whitepaper does not propose:
 - treating every CTE as materialized or every shared graph as beneficial to factor;
 - introducing a general optimizer framework before relational semantics and evidence are ready;
 - making a public compatibility claim from parser, AST, or plan-shape evidence alone; or
-- collapsing policy, source locality, and target execution details into an untyped cost number.
+- collapsing policy, source locality, and target execution details into an untyped cost number;
+- defining a required longitudinal evidence service or product package; or
+- making Prism infer operational causes, own organization-wide blast radius, issue alerts, or automate incident response.
 
 ## What success would look like
 
@@ -357,12 +387,14 @@ The research succeeds when IncQL can show, with reproducible evidence, that it:
 - understands a complex multi-root transformation graph independently of its source syntax;
 - remains within declared planning-time and memory budgets as graph complexity grows;
 - preserves semantic and policy constraints while exploring alternatives;
+- accepts equivalent immutable planning evidence from independent providers and explains how it influenced selection;
 - explains why a logical, sharing, placement, or exchange plan was selected and how the target realized it;
 - improves or safely retains unfinished work when scoped runtime evidence becomes available;
+- emits plan-diff and execution evidence suitable for calibrated external change-impact studies without claiming operational cause;
 - produces equivalent results across declared execution targets; and
 - demonstrates workload-level or target-specific improvements over intact native baselines without overstating them.
 
-RFC 066 records the north-star contract for authored intent, memo exploration, bounded search, shared-work and placement selection, evidence progression, and coordinator-owned adaptive replanning. Focused follow-on RFCs can stabilize individual rule families, statistics and observation transport, materialization lifecycle, adaptive checkpoints, target-plan contracts, and SQL ingress/egress profiles as the evidence program resolves them.
+RFC 066 records the north-star contract for authored intent, memo exploration, bounded search, shared-work and placement selection, provider-neutral evidence ingress, evidence progression, and coordinator-owned adaptive replanning. Focused follow-on RFCs can stabilize individual rule families, planning-context transport, materialization lifecycle, adaptive checkpoints, target-plan contracts, and SQL ingress/egress profiles as the evidence program resolves them.
 
 ## Acknowledgements
 
