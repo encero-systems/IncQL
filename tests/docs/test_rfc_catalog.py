@@ -487,9 +487,9 @@ class RfcCatalogTests(unittest.TestCase):
             tags=repository_root / "docs" / "rfcs" / "catalog.json",
         )
 
-        self.assertEqual(len(records), 67)
+        self.assertEqual(len(records), 68)
         self.assertEqual(records[0].id, "000")
-        self.assertEqual(records[-1].id, "066")
+        self.assertEqual(records[-1].id, "067")
         self.assertIn("049", {record.id for record in records})
         self.assertTrue(all(1 <= len(record.tags) <= 4 for record in records))
         readme = (repository_root / "docs" / "rfcs" / "README.md").read_text(

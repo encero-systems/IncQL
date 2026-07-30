@@ -6,5 +6,5 @@ Whitepapers are intentionally broader than RFCs. They frame a problem, name a no
 
 ## Papers
 
-- [IncQL-DB: local ACID analytical memory for IncQL applications](incql_db.md)
+- [IncQL-DB: embedded AI-first database for typed semantic memory](incql_db.md) — the product and architecture north star for local governed memory and Incan/Oven dogfooding.
 - [Prism: relational reasoning and shared-work optimization](prism_relational_reasoning.md)

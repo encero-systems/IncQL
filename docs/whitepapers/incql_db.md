@@ -1,25 +1,41 @@
-# IncQL-DB: local ACID analytical memory for IncQL applications
+# IncQL-DB: embedded AI-first database for typed semantic memory
 
-**Status:** Exploratory whitepaper
+**Status:** Positioning and architecture whitepaper
 
-**Date:** 2026-05-06
+**Originally written:** 2026-05-06
 
-**Audience:** IncQL and Incan contributors, application authors evaluating local analytical state, and implementers of future IncQL execution backends.
+**Updated:** 2026-07-30
 
-**Scope:** This document is non-normative. It defines a product and architecture north star for IncQL-DB. Normative behavior should later be split into focused IncQL RFCs for backend selection, storage layout, transaction semantics, vector search, and CLI contracts.
+**Audience:** IncQL, Incan, and Encero AI Workbench contributors; application authors; and implementers of future IncQL execution backends.
+
+**Scope:** This document is non-normative. It defines the IncQL-DB product position and architecture north star. Normative behavior should later be split into focused IncQL RFCs for logical records, backend selection, storage layout, transaction semantics, vector search, retrieval evidence, and CLI contracts. It names intended product direction; it does not claim that the described database already exists.
 
 ## Thesis
 
-IncQL-DB is an embedded, directory-backed, ACID, columnar store for typed IncQL data logic.
+IncQL-DB is an embedded, directory-backed, ACID database for typed semantic memory in Incan-authored systems. It is AI-first because its logical center is not tables, document blobs, or vector indexes in isolation. Its core is identity-bearing records, relationships, revisions, evidence, retrieval traces, physical payloads, and bounded materialization over all of them.
 
-It is designed for app-local memory, retrieval-augmented generation stores, edge analytics, durable local caches, and small analytical datasets that should live inside an application without a database server, SQL dependency, or heavyweight runtime stack.
+The north star is:
 
-The product shape is closer to SQLite-style local ownership plus DuckDB-style analytical execution plus Delta-inspired transaction logs than to a general DuckDB clone.
+```text
+validated Incan models
+  -> explicit structural identities
+  -> IncQL-DB logical store
+  -> bounded typed access and IncQL materialization
+  -> product-specific authority or execution layer
+```
+
+The first product is Encero AI Workbench. It needs a durable local substrate for research intake, review state, source snapshots, package drafts, approved memory atoms, Content DNA, retrieval evidence, receipts, and deployment-ready materializations. The Workbench remains the authoring and operational control surface; IncQL-DB preserves the typed memory and evidence that surface must inspect and govern.
+
+The first internal dogfood is Incan itself, especially Oven. IncQL-DB should persist compiler-backed CodeGraph facts alongside source, diagnostics, RFC, test, build, and lifecycle evidence, then make Loaf, package, artifact, deployment-plan, and build-receipt metadata inspectable through the same typed store. Oven remains the resolver, build planner, executor, and artifact authority. IncQL-DB supplies durable storage, identity-preserving joins, bounded inspection, and replayable evidence around that work.
+
+It is designed for app-local memory, retrieval-augmented generation, local agent memory, edge analytics, durable caches, and small typed datasets that should live inside an application without a database server, SQL dependency, or heavyweight runtime stack. Columnar vectors, transactional logs, snapshots, and local indexes are enabling architecture, not the product definition.
+
+The product shape is closer to local ownership, analytical execution, and Delta-inspired transaction logs than to a general DuckDB clone. IncQL-DB is neither a general SQL database nor a vector store with governance bolted on later.
 
 IncQL-DB should be opened directly by an application:
 
 ```incan
-db = IncQLDB.open("./agent_memory.incqldb")
+let db = IncQLDB.open("./agent_memory.incqldb")
 ```
 
 and inspected with the IncQL CLI:
@@ -41,6 +57,30 @@ IncQL already owns the typed relational authoring layer:
 IncQL-DB should therefore be an IncQL execution and storage backend, not a separate query language. Authors should use IncQL's DSL and carrier APIs. IncQL-DB should consume the resulting logical plans and provide a local physical data plane.
 
 No SQL support is required for the core product.
+
+## AI-first product center
+
+AI-first does not mean that IncQL-DB owns model inference, prompts, autonomous agent behavior, or product authority. It means the database natively represents the memory and evidence an AI system needs to act responsibly:
+
+- validated typed records and explicit structural identities;
+- semantic handles and typed relationships;
+- graph traversal and tabular materialization over the same facts;
+- vector payloads, index versions, and hybrid retrieval;
+- candidate, eligibility, rejection, selection, and replay evidence;
+- source provenance, revisions, snapshots, retention, tombstones, and access policy;
+- receipts and inspection artifacts for authority-bearing operations.
+
+The ownership boundary is deliberate:
+
+- Incan defines models and produces compiler-backed facts.
+- IncQL defines query and materialization semantics.
+- IncQL-DB persists typed memory and its physical representations.
+- HyperQuant nominates retrieval candidates and records its evidence-provider work.
+- Hees.ai owns admission and runtime authority.
+- Encero AI Workbench owns the first product experience: research, review, package authoring, operations, and deployment.
+- Oven owns build resolution, baking, Loaf selection, and build execution; it uses IncQL-DB for durable CodeGraph and artifact inspection state.
+
+This boundary prevents a familiar failure mode: treating the database as either a passive vector cache or the system that decides what an AI may say or do.
 
 ## Product goals
 
@@ -93,7 +133,7 @@ The north star is full ACID semantics for local embedded use:
 
 The initial concurrency model should remain deliberately small: single writer, multiple snapshot readers.
 
-### Analytical and retrieval-native
+### AI memory, analytical, and retrieval-native
 
 IncQL-DB should be optimized for local analytical scans and retrieval workflows:
 
@@ -102,15 +142,16 @@ IncQL-DB should be optimized for local analytical scans and retrieval workflows:
 - Append-heavy tables.
 - Hybrid retrieval over structured metadata and embedding vectors.
 - Local vector indexes as first-class persisted artifacts.
+- Replayable evidence for selected and rejected retrieval candidates.
+- Graph and tabular views over the same identity-bearing records.
 
 The target use cases include:
 
-- In-app RAG memory.
-- Local agent memory.
-- Edge-local event stores.
-- Offline analytical caches.
-- Typed feature stores for small applications.
-- Durable local datasets shipped with an app.
+- Encero AI Workbench research, review, package, and governed-memory state.
+- Incan Oven CodeGraph, Loaf, artifact, and build-receipt inspection.
+- In-app RAG memory and local agent memory.
+- Edge-local event stores and offline analytical caches.
+- Typed feature stores and durable local datasets shipped with an app.
 
 ## Non-goals
 
@@ -125,6 +166,8 @@ IncQL-DB should not initially attempt to be:
 - a DataFusion replacement for every workload,
 - a general-purpose OLTP database,
 - or a wrapper around external engines.
+
+It should also not become an LLM runtime, a prompt store, a generic agent framework, or the authority that admits evidence into a governed workflow. Those responsibilities remain with the relevant product and framework layers.
 
 Those systems are useful references, not compatibility targets.
 
@@ -597,38 +640,67 @@ The useful comparison is therefore:
 | SurrealDB | multi-model document/KV database with SurrealQL        |
 | DuckDB    | embedded analytical SQL engine                         |
 | Delta     | immutable columnar files plus transaction log          |
-| IncQL-DB   | embedded typed analytical memory store for IncQL plans  |
+| IncQL-DB  | embedded AI-first database for typed semantic memory   |
+
+## First product and internal dogfood
+
+### Encero AI Workbench
+
+Encero AI Workbench is the first product that should prove IncQL-DB. It needs one local, typed store that can follow a piece of knowledge from research intake through extraction, review, package authoring, approval, retrieval, runtime selection, and an inspectable receipt. The first Workbench path should make it possible to answer, without reconstructing state from JSON files or logs:
+
+- what source produced this candidate;
+- which reviewer or policy decision admitted it;
+- which package and Content DNA revision contain it;
+- which retrieval candidates were considered, rejected, and selected;
+- which exact evidence supported a resulting governed experience.
+
+### Incan Oven
+
+Oven is the first internal dogfood corpus. Its use of IncQL-DB should join compiler-backed CodeGraph facts with source, RFC, diagnostic, test, package, build, and lifecycle metadata. It should also expose a typed inspection path from a Loaf to its target compatibility, resolved inputs, artifact identities, receipts, deployment plan, provenance, and revocation or replacement state. The store is not a replacement for Oven's build graph; it is the persistent, queryable memory and evidence surface around that graph.
+
+These two consumers deliberately stress different aspects of the same substrate. Workbench proves governed semantic memory. Oven proves structural engineering memory and artifact inspection. A design that requires separate incompatible stores for either has missed the product center.
 
 ## Implementation path
 
-The whitepaper north star should be split into RFCs before implementation.
+The whitepaper north star should be split into RFCs before implementation. The sequence below is a dependency order, not a claim that IncQL-DB should be built only as a generic engine before Workbench or Oven can use it. Each RFC must retain the typed identity, provenance, evidence, and bounded-inspection contracts needed by those first consumers.
 
 Recommended RFC sequence:
 
-1. **IncQL-DB backend RFC**
+1. **IncQL RFC 067: Typed semantic memory store**
+   Define record families, structural identities, revisions, relationships, semantic handles, evidence/receipt records, snapshots, and the separation between logical records and physical payloads.
+
+2. **IncQL-DB backend RFC**
    Define `BackendKind.IncQLDBEngine`, session selection, plan execution boundary, error classes, and compatibility with existing DataFusion-backed sessions.
 
-2. **Directory and transaction-log RFC**
+3. **Directory and transaction-log RFC**
    Define `.incqldb/` layout, commit file format, checkpointing, locking, recovery, and snapshot semantics.
 
-3. **Column segment RFC**
+4. **Column segment RFC**
    Define `iqseg` physical layout, primitive types, nullability, statistics, compression hooks, and checksums.
 
-4. **Vectorized execution RFC**
+5. **Vectorized execution RFC**
    Define physical operators, `DataChunk`, `ColumnVector`, and the first supported plan subset.
 
-5. **Vector column and ANN RFC**
+6. **Vector column and ANN RFC**
    Define vector physical type, distance functions, index files, transactionally visible indexes, and query lowering.
 
-6. **HyperQuant evidence-provider ledger RFC**
+7. **HyperQuant evidence-provider ledger RFC**
    Define evidence-provider runs, candidate evidence, rejected evidence, provider fingerprints, index provenance, federated evidence-run grouping, and replay/debug contracts.
 
-7. **CLI RFC**
+8. **CLI RFC**
    Define `incql db` commands and diagnostics.
 
-## First useful vertical slice
+## First proof slice
 
-The first implementation should prove the whole architecture with a narrow plan subset:
+The first proof slice should keep the physical implementation narrow while proving the actual product. It must support one Encero AI Workbench record path and one Incan Oven inspection path:
+
+- install and revise one governed Workbench package with typed memory atoms, provenance, and a receipt;
+- persist one HyperQuant evidence-provider run with eligible and rejected candidate rows;
+- persist one Incan CodeGraph snapshot and link a declaration to its RFC, diagnostic, and test evidence;
+- persist one Loaf or deployment-plan record with target, artifact, and build-receipt metadata;
+- inspect the linked records through bounded IncQL queries and `incql db`.
+
+The supporting engine scope is intentionally small:
 
 - open/create `.incqldb/`,
 - create one table from an Incan model-derived schema,
@@ -637,7 +709,6 @@ The first implementation should prove the whole architecture with a narrow plan 
 - scan committed segments,
 - filter/project/limit,
 - collect into `DataFrame[T]`,
-- persist one evidence-provider run with eligible and rejected candidate rows,
 - inspect and verify with `incql db`.
 
 Vector search can follow immediately after this slice, starting with brute-force search over fixed-dimension vectors before adding ANN index files.
