@@ -14,7 +14,7 @@
   - IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)
   - IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)
 - **Issue:** —
-- **RFC PR:** —
+- **RFC PR:** [IncQL #108](https://github.com/encero-systems/IncQL/pull/108)
 - **Written against:** IncQL 0.1.0 / Incan v0.5-era IncQL
 - **Shipped in:** —
 
