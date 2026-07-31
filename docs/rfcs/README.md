@@ -6,7 +6,7 @@
 </div>
 <nav class="rail-nav">
 <a href="../design_records/"><span>Overview</span><small>Start here</small></a>
-<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>67 durable records</small></a>
+<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>68 durable records</small></a>
 <a href="#how-the-rfc-lifecycle-works"><span>Lifecycle guide</span><small>From draft to shipped</small></a>
 </nav>
 <div class="rail-section">
@@ -15,7 +15,7 @@
 </div>
 <div class="rail-note">
 <span class="health-light"></span>
-<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 67 records</small></div>
+<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 68 records</small></div>
 </div>
 </aside>
 
@@ -4534,6 +4534,65 @@
     ],
     "title": "Prism relational reasoning and shared-work optimization",
     "written_against": "Incan v0.5-era IncQL"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-07-30",
+    "href": "067_typed_semantic_memory_store/",
+    "id": "067",
+    "issue": "—",
+    "issue_label": null,
+    "issue_links": [],
+    "issue_url": null,
+    "lifecycle": "active",
+    "motivation": "Local AI systems and developer tools accumulate information that needs more than a document store or vector index. A source may be ingested, reviewed, rejected, superseded, approved for one package revision, selected by a retriever, evaluated by a designated process, and later retained only as a redacted provenance reference. A compiler-derived fact may be connected to a source declaration, diagnostic, test, build artifact, compatibility result, and replacement artifact. These are all typed records with identity, relationships, revisions, and lifecycle.",
+    "related": [
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 029 (typed metadata attachments)",
+      "IncQL RFC 030 (Prism lineage graph)",
+      "IncQL RFC 036 (plan bundle)",
+      "IncQL RFC 043 (canonical equality and digest profiles)",
+      "IncQL RFC 047 (semantic evidence graph and agent query surface)",
+      "IncQL RFC 060 (incremental transformation and temporal history semantics)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, ownership, versions, and deprecation)",
+      "IncQL RFC 062 (project build lifecycle, selectors, state, artifacts, and delegated execution)"
+    ],
+    "related_ids": [
+      "028",
+      "029",
+      "030",
+      "036",
+      "043",
+      "047",
+      "060",
+      "061",
+      "062"
+    ],
+    "rfc_pr": "—",
+    "rfc_pr_label": null,
+    "rfc_pr_links": [],
+    "rfc_pr_url": null,
+    "shipped_in": "—",
+    "source_path": "067_typed_semantic_memory_store.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines the logical record contract for IncQL-DB: a local typed semantic memory store for durable facts, revisions, relationships, source and artifact references, retrieval traces, decisions, receipts, and bounded snapshots. The store preserves the identity and evidence needed to explain a result, but it does not invent domain decisions, policy outcomes, model output, or physical storage behavior. Record families remain rooted in validated Incan models; IncQL remains the query and materialization layer.",
+    "tags": [
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      }
+    ],
+    "title": "Typed semantic memory store",
+    "written_against": "IncQL 0.1.0 / Incan v0.5-era IncQL"
   }
 ]
 </template>
@@ -4609,6 +4668,7 @@
 | [064](064_federated_placement_execution_targets_and_explicit_data_exchange.md) | Draft | Data access, Execution, Interoperability, Planning | Federated placement, execution targets, and explicit data exchange |
 | [065](065_polyglot_sql_ast_ingress_and_egress.md) | Draft | Authoring, Interoperability, Planning | Polyglot SQL AST ingress and dialect-aware egress |
 | [066](066_prism_relational_reasoning_and_shared_work_optimization.md) | Draft | Evidence, Execution, Interoperability, Planning | Prism relational reasoning and shared-work optimization |
+| [067](067_typed_semantic_memory_store.md) | Draft | Evidence, Governance, Types | Typed semantic memory store |
 
 </div>
 <!-- END GENERATED RFC CATALOG -->
