@@ -15,7 +15,7 @@
   - IncQL RFC 047 (semantic evidence graph and agent query surface)
   - IncQL RFC 066 (Prism relational reasoning and shared-work optimization)
 - **Issue:** —
-- **RFC PR:** —
+- **RFC PR:** [IncQL #109](https://github.com/encero-systems/IncQL/pull/109)
 - **Written against:** Incan v0.5-era IncQL
 - **Shipped in:** —
 
