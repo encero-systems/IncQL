@@ -4634,10 +4634,15 @@
       "047",
       "066"
     ],
-    "rfc_pr": "—",
-    "rfc_pr_label": null,
-    "rfc_pr_links": [],
-    "rfc_pr_url": null,
+    "rfc_pr": "[IncQL #109](https://github.com/encero-systems/IncQL/pull/109)",
+    "rfc_pr_label": "IncQL #109",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #109",
+        "url": "https://github.com/encero-systems/IncQL/pull/109"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/109",
     "shipped_in": "—",
     "source_path": "068_evidence_backed_plan_diagnostics_and_review_gates.md",
     "status": "Draft",
