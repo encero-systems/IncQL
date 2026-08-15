@@ -1,0 +1,109 @@
+"""Session tests for explicit portable plan validation."""
+
+from backends import csv_source
+from dataset import LazyFrame, lazy_frame_named_table
+from functions import always_true
+from rust::substrait::proto import PlanRel, RelRoot
+from rust::substrait::proto::plan_rel import RelType as PlanRelType
+from session import Session, SessionErrorKind
+from std.testing import assert_is_err, assert_is_ok
+from substrait import empty_plan, plan_source_named_table_names, read_named_table_rel, reference_rel
+
+
+@derive(Clone)
+pub model Order:
+    """Minimal row model used by plan-validation tests."""
+
+    pub id: int
+
+
+def test_session_plan_validation__accepts_registered_plan_without_changing_backend() -> None:
+    """validate_plan should validate bindings without introducing another execution backend."""
+    # -- Arrange --
+    mut session = Session.default()
+
+    # -- Act & Assert --
+    assert_is_ok(
+        session.register("orders", csv_source("tests/fixtures/orders.csv")),
+        "fixture registration should succeed",
+    )
+    lazy: LazyFrame[Order] = assert_is_ok(session.table("orders"), "registered table lookup should succeed")
+
+    assert_is_ok(session.validate_plan(lazy), "a bound named-table plan should validate")
+    assert session.backend_name() == "datafusion", "plan validation must not select a synthetic backend"
+
+
+def test_session_plan_validation__accepts_read_csv_plan() -> None:
+    """validate_plan should accept a source registered through the ordinary Session read path."""
+    # -- Arrange --
+    mut session = Session.default()
+    lazy: LazyFrame[Order] = assert_is_ok(
+        session.read_csv("orders", "tests/fixtures/orders.csv"),
+        "read_csv should bind the fixture source",
+    )
+
+    # -- Act & Assert --
+    assert_is_ok(session.validate_plan(lazy), "read_csv plans should validate without execution")
+
+
+def test_session_plan_validation__rejects_unbound_named_table() -> None:
+    """validate_plan should reject a direct named-table read without a Session registration."""
+    # -- Arrange --
+    session = Session.default()
+    lazy: LazyFrame[Order] = lazy_frame_named_table("missing_orders")
+
+    # -- Act --
+    err = assert_is_err(session.validate_plan(lazy), "an unbound named-table plan should fail validation")
+
+    # -- Assert --
+    assert err.kind == SessionErrorKind.UnknownTable, err.error_message()
+    assert err.message.contains("missing_orders"), err.error_message()
+
+
+def test_session_plan_validation__rejects_nested_unbound_named_table() -> None:
+    """validate_plan should inspect named-table reads below relational operators."""
+    # -- Arrange --
+    session = Session.default()
+    lazy: LazyFrame[Order] = lazy_frame_named_table("missing_orders").filter(always_true())
+
+    # -- Act --
+    err = assert_is_err(session.validate_plan(lazy), "a nested unbound named-table read should fail validation")
+
+    # -- Assert --
+    assert err.kind == SessionErrorKind.UnknownTable, err.error_message()
+    assert err.message.contains("missing_orders"), err.error_message()
+
+
+def test_session_plan_validation__validates_every_join_input_binding() -> None:
+    """validate_plan should reject an unbound join input even when another input is registered."""
+    # -- Arrange --
+    mut session = Session.default()
+    assert_is_ok(
+        session.register("orders", csv_source("tests/fixtures/orders.csv")),
+        "fixture registration should succeed",
+    )
+    orders: LazyFrame[Order] = assert_is_ok(session.table("orders"), "registered table lookup should succeed")
+    missing: LazyFrame[Order] = lazy_frame_named_table("missing_orders")
+    joined = orders.join(missing, always_true())
+
+    # -- Act --
+    err = assert_is_err(session.validate_plan(joined), "an unbound join input should fail validation")
+
+    # -- Assert --
+    assert err.kind == SessionErrorKind.UnknownTable, err.error_message()
+    assert err.message.contains("missing_orders"), err.error_message()
+
+
+def test_plan_source_named_table_names__includes_referenced_plan_relations() -> None:
+    """Plan-level binding inspection should include named reads stored behind a ReferenceRel."""
+    # -- Arrange --
+    mut plan = empty_plan()
+    plan.relations = [PlanRel(rel_type=Some(PlanRelType.Root(RelRoot(input=Some(reference_rel(1)), names=[])))), PlanRel(
+        rel_type=Some(PlanRelType.Rel(read_named_table_rel("referenced_orders"))),
+    )]
+
+    # -- Act --
+    names = plan_source_named_table_names(plan)
+
+    # -- Assert --
+    assert names == ["referenced_orders"], "plan-level binding inspection should include referenced PlanRel roots"

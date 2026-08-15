@@ -33,6 +33,10 @@ model Order:
 
 
 def main() -> Result[None, SessionError]:
+    mut validation = Session.default()
+    validation_plan = validation.read_csv[Order]("validation_orders", "tests/fixtures/orders.csv")?
+    validation.validate_plan(validation_plan)?
+
     mut session = Session.default()
     orders = session.read_csv[Order]("orders", "tests/fixtures/orders.csv")?
     transformed = orders.filter(always_true()).limit(1)
