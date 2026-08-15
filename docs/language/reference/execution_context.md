@@ -34,14 +34,16 @@ All read APIs return `LazyFrame[T]`. They create deferred logical work; they do 
 
 ## Execution and materialization surface
 
-| API                     | Returns                              | Role                                                                                       |
-| ----------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `session.execute(data)` | `Result[LazyFrame[T], SessionError]` | Execute the backend path as a validation/checkpoint boundary without materializing locally |
-| `session.collect(data)` | `Result[DataFrame[T], SessionError]` | Execute and materialize a local `DataFrame[T]`                                             |
-| `lazy.collect()`        | `Result[DataFrame[T], SessionError]` | Convenience form that resolves through the active session at call time                     |
+| API                           | Returns                              | Role                                                                                       |
+| ----------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `session.validate_plan(data)` | `Result[None, SessionError]`         | Lower the plan and validate every Session-owned logical binding without adapter dispatch   |
+| `session.execute(data)`       | `Result[LazyFrame[T], SessionError]` | Execute the backend path as a validation/checkpoint boundary without materializing locally |
+| `session.collect(data)`       | `Result[DataFrame[T], SessionError]` | Execute and materialize a local `DataFrame[T]`                                             |
+| `lazy.collect()`              | `Result[DataFrame[T], SessionError]` | Convenience form that resolves through the active session at call time                     |
 
-`execute(...)` and `collect(...)` are intentionally different:
+`validate_plan(...)`, `execute(...)`, and `collect(...)` are intentionally different:
 
+- `validate_plan(...)` proves that the authored carrier lowers and that every named-table read has a matching Session registration. It does not dispatch to an adapter or claim that work ran.
 - `execute(...)` proves the plan can bind, lower, and run.
 - `collect(...)` performs that same work and materializes a local `DataFrame[T]`.
 
@@ -73,7 +75,7 @@ Observed execution methods preserve the ordinary session contracts while also re
 | `context_targets`               | `list[SemanticTarget]`        | Session or binding context targets attached to the attempt        |
 | `operation`                     | `ExecutionOperationKind`      | Operation family: `execute`, `collect`, or `write`                |
 | `status`                        | `ExecutionObservationStatus`  | Terminal status                                                   |
-| `backend_name`                  | `str`                         | Selected backend name, currently `datafusion` by default          |
+| `backend_name`                  | `str`                         | Selected backend name, currently `datafusion`                     |
 | `adapter_version`               | `Option[str]`                 | Adapter version when reported by the backend                      |
 | `requested_semantic_profile_id` | `Option[str]`                 | Requested semantic profile identity when one is bound             |
 | `observed_semantic_profile_id`  | `Option[str]`                 | Observed semantic profile identity when the adapter reports one   |
@@ -212,7 +214,7 @@ If no active session exists when a convenience API needs one, the operation fail
 
 ## Backend note
 
-DataFusion is the implemented execution backend. `Session` stores a backend kind plus encoded options, lowers work to Substrait, and dispatches through an internal backend adapter boundary. DataFusion is the first adapter behind that boundary; it is not the shape of the `Session` state.
+DataFusion is the implemented execution backend. `Session` stores a backend kind plus encoded options, lowers work to Substrait, and dispatches through an internal backend adapter boundary. DataFusion is the first adapter behind that boundary; it is not the shape of the `Session` state. `Session.validate_plan(...)` remains outside adapter dispatch because successful local validation is not evidence that an execution backend accepted or ran the plan.
 
 ## Related docs
 

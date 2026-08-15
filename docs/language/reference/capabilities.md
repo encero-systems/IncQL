@@ -1,6 +1,6 @@
 # Backend capability matrix
 
-This page summarizes current IncQL v0.1 package behavior and the first DataFusion adapter. It is a decision aid, not a promise that every combination of operation, input type, and backend version has been certified.
+This page summarizes current IncQL v0.1 package behavior and the DataFusion execution adapter. It is a decision aid, not a promise that every combination of operation, input type, and backend version has been certified.
 
 Use three status meanings:
 
@@ -15,6 +15,7 @@ Use three status meanings:
 | `LazyFrame[T]` planning | Executable | Prism-backed plans lower to Substrait and can be executed or collected | intended model annotations do not yet prove complete physical source compatibility |
 | `DataFrame[T]` materialization | Executable | returned by `Session.collect(...)` with resolved columns, row count, and preview text | preview text is diagnostic, not a stable serialization format |
 | `DataStream[T]` carrier | Plan/type boundary only | no streaming execution path | streaming-specific execution semantics remain future work |
+| `Session.validate_plan(...)` | Plan/evidence only | lowers a `LazyFrame[T]` and validates every named-table binding without adapter dispatch | it does not execute rows or prove backend capability |
 | `Session.execute(...)` | Executable | validates, lowers, binds, and runs while returning a deferred carrier | it is a checkpoint, not local row materialization |
 | `Session.collect(...)` | Executable | materializes a local `DataFrame[T]` | memory, scale, and physical behavior remain backend-owned |
 
