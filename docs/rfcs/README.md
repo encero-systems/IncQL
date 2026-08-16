@@ -6,7 +6,7 @@
 </div>
 <nav class="rail-nav">
 <a href="../design_records/"><span>Overview</span><small>Start here</small></a>
-<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>68 durable records</small></a>
+<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>69 durable records</small></a>
 <a href="#how-the-rfc-lifecycle-works"><span>Lifecycle guide</span><small>From draft to shipped</small></a>
 </nav>
 <div class="rail-section">
@@ -15,7 +15,7 @@
 </div>
 <div class="rail-note">
 <span class="health-light"></span>
-<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 68 records</small></div>
+<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 69 records</small></div>
 </div>
 </aside>
 
@@ -4568,10 +4568,15 @@
       "061",
       "062"
     ],
-    "rfc_pr": "—",
-    "rfc_pr_label": null,
-    "rfc_pr_links": [],
-    "rfc_pr_url": null,
+    "rfc_pr": "[IncQL #108](https://github.com/encero-systems/IncQL/pull/108)",
+    "rfc_pr_label": "IncQL #108",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #108",
+        "url": "https://github.com/encero-systems/IncQL/pull/108"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/108",
     "shipped_in": "—",
     "source_path": "067_typed_semantic_memory_store.md",
     "status": "Draft",
@@ -4593,6 +4598,81 @@
     ],
     "title": "Typed semantic memory store",
     "written_against": "IncQL 0.1.0 / Incan v0.5-era IncQL"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-08-10",
+    "href": "068_evidence_backed_plan_diagnostics_and_review_gates/",
+    "id": "068",
+    "issue": "[IncQL #110](https://github.com/encero-systems/IncQL/issues/110)",
+    "issue_label": "IncQL #110",
+    "issue_links": [
+      {
+        "label": "IncQL #110",
+        "url": "https://github.com/encero-systems/IncQL/issues/110"
+      }
+    ],
+    "issue_url": "https://github.com/encero-systems/IncQL/issues/110",
+    "lifecycle": "active",
+    "motivation": "Prism needs to explain why a legal plan was selected, and IncQL needs to expose execution observations, adapter coverage, plan diffs, and verification evidence. Those capabilities are necessary but not sufficient for a human or CI review decision. A reviewer needs a concise answer to different questions: what condition was detected, why it matters, which evidence supports it, whether the impact is measured or only possible, and whether a deliberate exception is still valid.",
+    "related": [
+      "IncQL RFC 007 (Prism logical planning and optimization engine)",
+      "IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)",
+      "IncQL RFC 027 (relational evidence program)",
+      "IncQL RFC 032 (execution observations)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 037 (plan diff and blast-radius inputs)",
+      "IncQL RFC 038 (evidence exchange bridges)",
+      "IncQL RFC 040 (interoperability semantic profiles)",
+      "IncQL RFC 042 (async verification evidence)",
+      "IncQL RFC 045 (constraint evidence and verification-aware planning)",
+      "IncQL RFC 047 (semantic evidence graph and agent query surface)",
+      "IncQL RFC 066 (Prism relational reasoning and shared-work optimization)"
+    ],
+    "related_ids": [
+      "007",
+      "008",
+      "027",
+      "032",
+      "033",
+      "037",
+      "038",
+      "040",
+      "042",
+      "045",
+      "047",
+      "066"
+    ],
+    "rfc_pr": "[IncQL #109](https://github.com/encero-systems/IncQL/pull/109)",
+    "rfc_pr_label": "IncQL #109",
+    "rfc_pr_links": [
+      {
+        "label": "IncQL #109",
+        "url": "https://github.com/encero-systems/IncQL/pull/109"
+      }
+    ],
+    "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/109",
+    "shipped_in": "—",
+    "source_path": "068_evidence_backed_plan_diagnostics_and_review_gates.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines a deterministic rule-evaluation, diagnostic, and review-gate layer over IncQL plans and their evidence. It evaluates a bounded versioned rule set completely, turns evidence-backed conditions into reviewable findings with stable identities and source and plan anchors, preserves assurance from the evidence records that own it, and applies scoped review waivers without mutating those records. It does not make diagnostics part of relational semantics, and it does not let a warning become a performance fact unless the supplied evidence supports that claim.",
+    "tags": [
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "governance",
+        "label": "Governance"
+      },
+      {
+        "key": "planning",
+        "label": "Planning"
+      }
+    ],
+    "title": "Evidence-backed plan diagnostics and review gates",
+    "written_against": "IncQL 0.1.0 / Incan 0.5.0-dev.46"
   }
 ]
 </template>
@@ -4669,6 +4749,7 @@
 | [065](065_polyglot_sql_ast_ingress_and_egress.md) | Draft | Authoring, Interoperability, Planning | Polyglot SQL AST ingress and dialect-aware egress |
 | [066](066_prism_relational_reasoning_and_shared_work_optimization.md) | Draft | Evidence, Execution, Interoperability, Planning | Prism relational reasoning and shared-work optimization |
 | [067](067_typed_semantic_memory_store.md) | Draft | Evidence, Governance, Types | Typed semantic memory store |
+| [068](068_evidence_backed_plan_diagnostics_and_review_gates.md) | Draft | Evidence, Governance, Planning | Evidence-backed plan diagnostics and review gates |
 
 </div>
 <!-- END GENERATED RFC CATALOG -->
