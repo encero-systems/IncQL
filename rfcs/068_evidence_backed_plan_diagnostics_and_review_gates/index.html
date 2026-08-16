@@ -10,28 +10,24 @@
       
       
       
-        <link rel="canonical" href="https://encero-systems.github.io/IncQL/whitepapers/">
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/068_evidence_backed_plan_diagnostics_and_review_gates/">
       
       
-        <link rel="prev" href="../design_records/">
       
       
-        <link rel="next" href="incql_db/">
-      
-      
-      <link rel="icon" href="../shared/brand/incql-favicon.png">
+      <link rel="icon" href="../../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>Overview - IncQL</title>
+        <title>IncQL RFC 068: Evidence-backed plan diagnostics and review gates - IncQL</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,21 +40,21 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/prismplane.css?v=20260722-nav-chevron-35">
+      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260722-nav-chevron-35">
     
-      <link rel="stylesheet" href="../stylesheets/crystalline.css?v=20260726-landing-polish-10">
+      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260726-landing-polish-10">
     
-      <link rel="stylesheet" href="../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
     
-      <link rel="stylesheet" href="../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
     
-      <link rel="stylesheet" href="../stylesheets/crystal-integration.css?v=20260723-architecture-readability-4">
+      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260723-architecture-readability-4">
     
-      <link rel="stylesheet" href="../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
     
-      <link rel="stylesheet" href="../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -84,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#incql-whitepapers" class="md-skip">
+        <a href="#incql-rfc-068-evidence-backed-plan-diagnostics-and-review-gates" class="md-skip">
           Skip to content
         </a>
       
@@ -119,12 +115,12 @@
 
   
     
-  
+      
+      
     
   
     
-      
-      
+  
     
   
 
@@ -139,8 +135,8 @@
   
 
 <header class="topbar crystal-strip" data-md-component="header">
-  <a class="brand" href=".." aria-label="IncQL home">
-    <img src="../shared/brand/incql-logo-header.png" alt="">
+  <a class="brand" href="../.." aria-label="IncQL home">
+    <img src="../../shared/brand/incql-logo-header.png" alt="">
     <span>
       <strong>IncQL</strong>
       <small>Incan Query Layer</small>
@@ -154,7 +150,7 @@
         data-path-prefixes=""
         data-search-label="Search"
         
-        href=".."
+        href="../.."
       >Home</a>
     
       <a
@@ -162,7 +158,7 @@
         data-path-prefixes="language/"
         data-search-label="Search learning paths"
         
-        href="../language/"
+        href="../../language/"
       >Learn</a>
     
       <a
@@ -170,7 +166,7 @@
         data-path-prefixes="language/how-to/"
         data-search-label="Search guides"
         
-        href="../language/how-to/"
+        href="../../language/how-to/"
       >Guides</a>
     
       <a
@@ -178,7 +174,7 @@
         data-path-prefixes="language/reference/"
         data-search-label="Search reference"
         
-        href="../language/reference/"
+        href="../../language/reference/"
       >Reference</a>
     
       <a
@@ -186,7 +182,7 @@
         data-path-prefixes="architecture/"
         data-search-label="Explore layers"
         
-        href="../architecture/"
+        href="../../architecture/"
       >Architecture</a>
     
       <a
@@ -194,7 +190,7 @@
         data-path-prefixes="rfcs/,design_records/,whitepapers/"
         data-search-label="Search RFCs"
         class="is-active" aria-current="page"
-        href="../rfcs/"
+        href="../"
       >Design records</a>
     
       <a
@@ -202,7 +198,7 @@
         data-path-prefixes="project/,docs_map/,release_notes/,contributing/"
         data-search-label="Search project docs"
         
-        href="../project/"
+        href="../../project/"
       >Project</a>
     
   </nav>
@@ -258,7 +254,7 @@
 </div>
     
     <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
-      <img src="../shared/icons/source-branch.svg" alt="">
+      <img src="../../shared/icons/source-branch.svg" alt="">
       <span>encero-systems/IncQL</span>
     </a>
   </div>
@@ -285,9 +281,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../shared/brand/incql-logo-header.png" alt="logo">
+  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -314,7 +310,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -365,7 +361,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../language/" class="md-nav__link ">
+            <a href="../../language/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -398,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/quickstart/" class="md-nav__link">
+      <a href="../../language/quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -467,7 +463,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/explanation/from_sql/" class="md-nav__link">
+      <a href="../../language/explanation/from_sql/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -488,7 +484,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/explanation/from_spark/" class="md-nav__link">
+      <a href="../../language/explanation/from_spark/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -509,7 +505,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/explanation/what_incql_is/" class="md-nav__link">
+      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -569,7 +565,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../language/tutorials/book/" class="md-nav__link ">
+            <a href="../../language/tutorials/book/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -648,7 +644,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -669,7 +665,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -746,7 +742,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -767,7 +763,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -788,7 +784,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -863,7 +859,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -884,7 +880,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/07_governed_write/" class="md-nav__link">
+      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -959,7 +955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -980,7 +976,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1063,7 +1059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/explanation/dataset_carriers/" class="md-nav__link">
+      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1084,7 +1080,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/explanation/execution_context/" class="md-nav__link">
+      <a href="../../language/explanation/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1151,7 +1147,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../language/how-to/" class="md-nav__link ">
+            <a href="../../language/how-to/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1230,7 +1226,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/read_write_data/" class="md-nav__link">
+      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1251,7 +1247,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/troubleshooting/" class="md-nav__link">
+      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1334,7 +1330,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/dataset_transformations/" class="md-nav__link">
+      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1355,7 +1351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/joins/" class="md-nav__link">
+      <a href="../../language/how-to/joins/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1376,7 +1372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1397,7 +1393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/nested_row_values/" class="md-nav__link">
+      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1418,7 +1414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/generator_rows/" class="md-nav__link">
+      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1439,7 +1435,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/window_columns/" class="md-nav__link">
+      <a href="../../language/how-to/window_columns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1518,7 +1514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1539,7 +1535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/execution_observations/" class="md-nav__link">
+      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1560,7 +1556,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/quality_observations/" class="md-nav__link">
+      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1581,7 +1577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/governed_evidence/" class="md-nav__link">
+      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1658,7 +1654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/approximate_metrics/" class="md-nav__link">
+      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1679,7 +1675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/typed_hll_sketches/" class="md-nav__link">
+      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1700,7 +1696,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1769,7 +1765,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../language/reference/" class="md-nav__link ">
+            <a href="../../language/reference/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1852,7 +1848,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/dataset_carriers/" class="md-nav__link">
+      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1873,7 +1869,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/dataset_methods/" class="md-nav__link">
+      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1894,7 +1890,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/query_blocks/" class="md-nav__link">
+      <a href="../../language/reference/query_blocks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1963,7 +1959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/builders/filters/" class="md-nav__link">
+      <a href="../../language/reference/builders/filters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1984,7 +1980,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/builders/projections/" class="md-nav__link">
+      <a href="../../language/reference/builders/projections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2005,7 +2001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/builders/aggregates/" class="md-nav__link">
+      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2088,7 +2084,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/execution_context/" class="md-nav__link">
+      <a href="../../language/reference/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2109,7 +2105,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/capabilities/" class="md-nav__link">
+      <a href="../../language/reference/capabilities/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2186,7 +2182,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/inspection/" class="md-nav__link">
+      <a href="../../language/reference/inspection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2207,7 +2203,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/quality/" class="md-nav__link">
+      <a href="../../language/reference/quality/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2228,7 +2224,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/governance/" class="md-nav__link">
+      <a href="../../language/reference/governance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2294,7 +2290,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../language/reference/functions/" class="md-nav__link ">
+            <a href="../../language/reference/functions/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2327,7 +2323,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/approximate/" class="md-nav__link">
+      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2348,7 +2344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/format/" class="md-nav__link">
+      <a href="../../language/reference/functions/format/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2369,7 +2365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/generators/" class="md-nav__link">
+      <a href="../../language/reference/functions/generators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2390,7 +2386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/nested/" class="md-nav__link">
+      <a href="../../language/reference/functions/nested/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2411,7 +2407,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/sketches/" class="md-nav__link">
+      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2432,7 +2428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/variants/" class="md-nav__link">
+      <a href="../../language/reference/functions/variants/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2453,7 +2449,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/functions/windows/" class="md-nav__link">
+      <a href="../../language/reference/functions/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2532,7 +2528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/substrait/conformance/" class="md-nav__link">
+      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2553,7 +2549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/substrait/operator_catalog/" class="md-nav__link">
+      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2574,7 +2570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2595,7 +2591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2631,7 +2627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture/" class="md-nav__link">
+      <a href="../../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2648,8 +2644,6 @@
       
   
   
-    
-  
   
   
     
@@ -2666,24 +2660,21 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../rfcs/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2694,13 +2685,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Design records
@@ -2716,7 +2707,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../design_records/" class="md-nav__link">
+      <a href="../../design_records/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2734,8 +2725,6 @@
                 
   
   
-    
-  
   
   
     
@@ -2752,22 +2741,19 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
+            <a href="../../whitepapers/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2778,13 +2764,13 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_6_3" id="__nav_6_3_label" tabindex="">
+              <label class="md-nav__link " for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_3">
             <span class="md-nav__icon md-icon"></span>
             Whitepapers
@@ -2800,7 +2786,7 @@
   
   
     <li class="md-nav__item">
-      <a href="incql_db/" class="md-nav__link">
+      <a href="../../whitepapers/incql_db/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2886,7 +2872,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../project/" class="md-nav__link">
+      <a href="../../project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2907,7 +2893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../docs_map/" class="md-nav__link">
+      <a href="../../docs_map/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2972,7 +2958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../release_notes/v0_1/" class="md-nav__link">
+      <a href="../../release_notes/v0_1/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3051,7 +3037,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/architecture/" class="md-nav__link">
+      <a href="../../contributing/architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3072,7 +3058,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/writing_rfcs/" class="md-nav__link">
+      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3093,7 +3079,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../rfcs/TEMPLATE/" class="md-nav__link">
+      <a href="../TEMPLATE/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3114,7 +3100,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/prismplane_docs_theme/" class="md-nav__link">
+      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3170,9 +3156,252 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#papers" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
-      Papers
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core model
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Motivation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Goals
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Goals
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guide-level explanation (how authors think about it)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference-level explanation (precise rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference-level explanation (precise rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-evaluations-and-diagnostic-records" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule evaluations and diagnostic records
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-and-authority" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence and authority
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-rule-family" class="md-nav__link">
+    <span class="md-ellipsis">
+      Required rule family
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#review-profiles-and-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Review profiles and gates
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#waivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waivers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Suggestions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design details
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semantics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Semantics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interaction with other IncQL surfaces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compatibility / migration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives-considered" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives considered
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternatives considered">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#put-review-rules-directly-in-prism" class="md-nav__link">
+    <span class="md-ellipsis">
+      Put review rules directly in Prism
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emit-unstructured-warnings-from-each-adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emit unstructured warnings from each adapter
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treat-all-missing-evidence-as-a-warning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Treat all missing evidence as a warning
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adopt-a-generic-code-quality-rule-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adopt a generic code-quality rule format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drawbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Drawbacks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layers-affected" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layers affected
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unresolved-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unresolved questions
     </span>
   </a>
   
@@ -3196,14 +3425,163 @@
   
 
 
-<h1 id="incql-whitepapers">IncQL whitepapers</h1>
-<p>This directory holds non-normative design papers for larger IncQL product and architecture directions.</p>
-<p>Whitepapers are intentionally broader than RFCs. They frame a problem, name a north star, and identify design pressure before a specific normative proposal is ready. When a whitepaper direction becomes implementation work, split the actionable contracts into focused RFCs under <code>docs/rfcs/</code>.</p>
-<h2 id="papers">Papers</h2>
+<h1 id="incql-rfc-068-evidence-backed-plan-diagnostics-and-review-gates">IncQL RFC 068: Evidence-backed plan diagnostics and review gates</h1>
 <ul>
-<li><a href="incql_db/">IncQL-DB: embedded AI-first database for typed semantic memory</a> — the product and architecture north star for local governed memory and Incan/Oven dogfooding.</li>
-<li><a href="prism_relational_reasoning/">Prism: relational reasoning and shared-work optimization</a></li>
+<li><strong>Status:</strong> Draft</li>
+<li><strong>Created:</strong> 2026-08-10</li>
+<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
+<li><strong>Related:</strong></li>
+<li>IncQL RFC 007 (Prism logical planning and optimization engine)</li>
+<li>IncQL RFC 008 (optimizer boundary, statistics, cost-based optimization, and adaptive execution)</li>
+<li>IncQL RFC 027 (relational evidence program)</li>
+<li>IncQL RFC 032 (execution observations)</li>
+<li>IncQL RFC 033 (adapter requirements and coverage)</li>
+<li>IncQL RFC 037 (plan diff and blast-radius inputs)</li>
+<li>IncQL RFC 038 (evidence exchange bridges)</li>
+<li>IncQL RFC 040 (interoperability semantic profiles)</li>
+<li>IncQL RFC 042 (async verification evidence)</li>
+<li>IncQL RFC 045 (constraint evidence and verification-aware planning)</li>
+<li>IncQL RFC 047 (semantic evidence graph and agent query surface)</li>
+<li>IncQL RFC 066 (Prism relational reasoning and shared-work optimization)</li>
+<li><strong>Issue:</strong> <a href="https://github.com/encero-systems/IncQL/issues/110">IncQL #110</a></li>
+<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/109">IncQL #109</a></li>
+<li><strong>Written against:</strong> IncQL 0.1.0 / Incan 0.5.0-dev.46</li>
+<li><strong>Shipped in:</strong> —</li>
 </ul>
+<h2 id="summary">Summary</h2>
+<p>This RFC defines a deterministic rule-evaluation, diagnostic, and review-gate layer over IncQL plans and their evidence. It evaluates a bounded versioned rule set completely, turns evidence-backed conditions into reviewable findings with stable identities and source and plan anchors, preserves assurance from the evidence records that own it, and applies scoped review waivers without mutating those records. It does not make diagnostics part of relational semantics, and it does not let a warning become a performance fact unless the supplied evidence supports that claim.</p>
+<h2 id="core-model">Core model</h2>
+<ol>
+<li>A versioned rule catalog defines each reviewable condition, its application scope, required evidence, and possible outcomes.</li>
+<li>A versioned review profile selects compatible rule versions, severity and gate policy, evidence requirements, freshness limits, and accepted review-waiver authorities.</li>
+<li>A review evaluation artifact records one explicit outcome for every required rule-and-scope evaluation over one immutable plan, canonical evidence snapshot, and explicit evaluation context.</li>
+<li>A diagnostic explains each finding, unknown result, or unsupported evaluation without replacing the owner-issued evidence that supports it.</li>
+<li>A gate derives one deterministic decision from a complete evaluation artifact, its selected profile, and a canonical snapshot of applicable review waivers. Missing evaluations cannot produce a passing gate.</li>
+<li>A review waiver is a separate scoped decision that may alter the gate result but cannot alter plan semantics, source evidence, verification assurance, or optimizer authority.</li>
+</ol>
+<h2 id="motivation">Motivation</h2>
+<p>Prism needs to explain why a legal plan was selected, and IncQL needs to expose execution observations, adapter coverage, plan diffs, and verification evidence. Those capabilities are necessary but not sufficient for a human or CI review decision. A reviewer needs a concise answer to different questions: what condition was detected, why it matters, which evidence supports it, whether the impact is measured or only possible, and whether a deliberate exception is still valid.</p>
+<p>Without a dedicated contract, every UI, agent, and CI integration will invent its own severity, remediation text, and waiver behavior. That would blur warnings with optimizer legality, cause cross-target comparisons to overclaim, and make a stale suppression look like a current decision. IncQL needs one public review projection that remains subordinate to the plan, evidence, and execution owners.</p>
+<h2 id="goals">Goals</h2>
+<ul>
+<li>Define a stable, machine-readable diagnostic record for plan-review findings.</li>
+<li>Require every evaluation and finding to retain its evidence, authority, scope, freshness, and owner-issued assurance context.</li>
+<li>Distinguish an unsupported analysis, an unknown result, a potential impact, and a measured impact.</li>
+<li>Define deterministic review profiles and narrowly scoped, auditable waivers.</li>
+<li>Enable CI, editor, and agent consumers to make the same review decision from the same snapshot.</li>
+<li>Keep planner legality, target realization, and observed runtime behavior under their existing owners.</li>
+</ul>
+<h2 id="non-goals">Non-Goals</h2>
+<ul>
+<li>Defining a general-purpose linter, policy engine, dashboard, or hosted review service.</li>
+<li>Replacing Prism's optimization, search, explain, or target-selection contracts.</li>
+<li>Making a static pattern a universal performance claim.</li>
+<li>Automatically rewriting an author's plan or applying a suggested repair.</li>
+<li>Establishing that an external SQL, dbt, catalog, or telemetry artifact is IncQL semantic truth.</li>
+<li>Defining organization-wide approval workflow or identity management.</li>
+</ul>
+<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
+<p>An author continues to write ordinary IncQL. A review profile asks the tooling to inspect a particular immutable plan and evidence snapshot:</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="n">review</span> <span class="o">=</span> <span class="n">review_plan</span><span class="p">(</span>
+    <span class="n">plan</span><span class="p">,</span>
+    <span class="n">profile</span><span class="o">=</span><span class="s2">&quot;local-strict&quot;</span><span class="p">,</span>
+    <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="n">adapter_profile</span><span class="p">,</span> <span class="n">plan_explain</span><span class="p">,</span> <span class="n">observations</span><span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>The names are illustrative. The result is not a second optimizer. It is a complete evaluation artifact plus findings such as "a required projection is not realizable by this target" or "the selected plan repeats an expensive subplan, but no materialization evidence was supplied." Each enabled rule reports whether its condition is clear, detected, unknown, or unsupported. A finding separately says whether its impact is absent, potential, measured, or unknown, and links the owner-issued planning, coverage, profile, verification, or observation evidence that supports that claim.</p>
+<p>A team may waive a finding only through a separately reviewable decision that names the rule key and evaluation identity, the affected plan or artifact identity, the evidence scope, and an expiry or invalidation rule. Removing a line of text from a configuration file must not silently turn a blocking finding into a passing review.</p>
+<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
+<h3 id="rule-evaluations-and-diagnostic-records">Rule evaluations and diagnostic records</h3>
+<p>A review evaluation artifact is a derived, immutable record. It must identify the plan, planning context, review profile, canonical evidence snapshot, rule-catalog version, evaluator version, explicit evaluation context, freshness policy, and canonically ordered rule-evaluation records. The evaluation context must include the decision instant used for freshness checks rather than consulting an implicit clock. The artifact must also state whether the required evaluation set is complete.</p>
+<p>Each enabled rule must publish a deterministic application-scope algorithm. Every rule-and-scope pair required by that algorithm must produce exactly one evaluation outcome:</p>
+<ul>
+<li><code>clear</code>: all prerequisite evidence is present and acceptable, the rule was evaluated, and its condition was not detected;</li>
+<li><code>finding</code>: all prerequisite evidence required to detect the condition is present and the condition was detected;</li>
+<li><code>unknown</code>: the rule is representable, but required evidence is missing, stale, conflicting, incomparable, or insufficient; or</li>
+<li><code>unsupported</code>: the evaluator cannot represent or execute the rule for that scope or evidence shape.</li>
+</ul>
+<p><code>clear</code> is not the absence of a diagnostic. A gate may use <code>clear</code> only from an explicit evaluation record. Missing rule evaluations, missing scope evaluations, duplicate evaluation identities, and conflicting evidence identities make the evaluation artifact incomplete and prevent a passing gate.</p>
+<p>A rule-evaluation record must contain:</p>
+<ul>
+<li>a deterministic evaluation identity plus a stable rule key and rule version;</li>
+<li>the evaluation outcome and the exact application scope;</li>
+<li>a severity selected by the review profile;</li>
+<li>a category and human-readable explanation when the outcome is not <code>clear</code>;</li>
+<li>source anchors and plan-node or artifact references when available;</li>
+<li>the plan, planning-context, profile, and canonical evidence-snapshot identities against which it was derived;</li>
+<li>the condition observed, the missing or unacceptable prerequisite when the result is <code>unknown</code>, and any unsupported-analysis reason;</li>
+<li>source evidence references with their owner-issued basis, authority, assurance, scope, coverage, and diagnostics preserved;</li>
+<li>an impact classification of <code>none</code>, <code>potential</code>, <code>measured</code>, or <code>unknown</code>;</li>
+<li>a repair class of <code>informational</code>, <code>manual-review</code>, or <code>safe-suggestion</code>; and</li>
+<li>freshness and invalidation information for every non-static input.</li>
+</ul>
+<p>The record must not define a second assurance scale or upgrade source evidence. Any assurance summary is a projection over linked owner-issued records and must retain their scope and coverage. The record must not claim a cost, cardinality, safety property, target behavior, or semantic equivalence not present in its evidence. A <code>measured</code> impact must link to the observation identity, workload scope, and execution environment. A <code>potential</code> impact must state the prerequisite evidence that would make it measurable. <code>unknown</code> and <code>unsupported</code> are valid terminal results and must not be rewritten as <code>clear</code> or a passing result.</p>
+<p>Rule keys and versions are stable public identifiers. A change that materially changes a rule's condition, application scope, evidence requirements, or implication must use a new rule version or key. Evaluation identities are derived from the rule key and version, application scope, plan identity, review-profile identity, canonical evidence-snapshot identity, evaluator version, and evaluation-context identity; they must not be used as compatibility aliases for the rule itself.</p>
+<h3 id="evidence-and-authority">Evidence and authority</h3>
+<p>Diagnostics may consume authored plan facts, Prism explain artifacts, adapter capability and coverage records, declared semantic profiles, plan diffs, constraint and verification evidence, imported bridge evidence, and execution observations. Each input retains the authority and assurance assigned by the RFC that owns it.</p>
+<p>The diagnostic layer must not create relational lineage, make a target capability claim, or upgrade an imported or attested artifact to verified evidence. It may report a mismatch, missing mapping, stale observation, or unsupported rule. A rule that depends on target behavior must identify the target profile and capability or coverage evidence it used.</p>
+<h3 id="required-rule-family">Required rule family</h3>
+<p>This RFC requires a bounded rule family whose evidence and consequences are precisely defined. Required rule categories are:</p>
+<ul>
+<li>a selected plan requires a capability absent from the declared target profile;</li>
+<li>a target-specific pushdown opportunity is rejected because required coverage or semantic-profile evidence is absent;</li>
+<li>a repeated logical subplan is detected, but sharing or materialization is not recommended unless the required legality and lifecycle evidence exists;</li>
+<li>a plan diff changes an evidence-backed source, schema, lineage, or target-coverage assumption that a review profile marks as material; and</li>
+<li>an observed regression is reported only when semantically comparable runs, workload identity, environment scope, and measurement provenance are present.</li>
+</ul>
+<p>The exact rule keys, prerequisites, and consequence vocabulary must be published with the profile. Generic textual rules such as "avoid SELECT star" are outside this rule family unless an IncQL surface and evidence contract make them meaningful.</p>
+<h3 id="review-profiles-and-gates">Review profiles and gates</h3>
+<p>A review profile is a versioned, immutable declaration of:</p>
+<ul>
+<li>enabled rule keys and compatible rule versions;</li>
+<li>severity thresholds and whether a threshold is advisory or blocking;</li>
+<li>permitted evidence classes, freshness limits, and target scope;</li>
+<li>whether <code>unknown</code> or <code>unsupported</code> is permitted, reported, or blocking for each rule; and</li>
+<li>which waiver authorities and scopes it accepts.</li>
+</ul>
+<p>A gate evaluates one complete review evaluation artifact against its profile and a canonical snapshot of applicable review waivers. It must return <code>pass</code>, <code>advisory</code>, <code>blocked</code>, or <code>inconclusive</code>. <code>inconclusive</code> is required when the evaluation set is incomplete or the profile demands evidence that is absent, stale, unsupported, conflicting, or not comparable; it must not be emitted as <code>pass</code>.</p>
+<p>The gate must be deterministic for identical plan identity, profile identity, canonical evidence-snapshot identity, evaluator version, evaluation-context identity, and canonical review-waiver-snapshot identity. Evidence and waiver input order must not change either snapshot identity or the gate result; the evaluator must canonicalize and reject duplicate or conflicting identities according to the published rule and waiver contracts. A profile may be selected by CI, an editor, or an agent, but those callers must not change the result by injecting opaque private state.</p>
+<h3 id="waivers">Waivers</h3>
+<p>A review waiver is a separate decision record, never a mutation of the evaluation, diagnostic, or source evidence. It must identify the rule key and version, evaluation identity, affected plan, artifact, source, or target scope, review-profile identity, rationale, responsible approving authority when required by the profile, and expiry or deterministic invalidation condition.</p>
+<p>A review waiver must not apply when the referenced rule version, plan identity, target profile, semantic profile, application scope, or evidence precondition has materially changed. The gate must expose both the original evaluation and the applied waiver. A review waiver changes only the review decision permitted by its profile; it cannot turn <code>unsupported</code> or <code>unknown</code> into <code>clear</code>, <code>proved</code>, <code>measured</code>, or verified evidence, and it is not a verification waiver under RFC 042.</p>
+<h3 id="suggestions">Suggestions</h3>
+<p>A diagnostic may provide a safe suggestion only when it is a non-semantic presentation or inspection action. A suggestion that changes authored plan structure, execution placement, materialization, a target binding, or policy must be <code>manual-review</code> and must name the evidence needed to validate it. Applying a suggestion is outside this RFC and must create a new plan or artifact identity for review.</p>
+<h2 id="design-details">Design details</h2>
+<h3 id="syntax">Syntax</h3>
+<p>This RFC introduces no required IncQL authoring syntax. The first public surface is an inspection and CI-oriented review artifact. A future source-level annotation must be specified separately and must not be required to use review profiles.</p>
+<h3 id="semantics">Semantics</h3>
+<p>Review evaluations and diagnostics are projections over immutable plan and evidence snapshots. They do not participate in typechecking, plan equivalence, optimizer legality, or execution. Prism may expose facts that make an evaluation possible, but the review evaluator must neither add alternatives to the memo nor override the selected plan.</p>
+<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
+<p>RFCs 007, 008, and 066 own semantic planning, target-aware selection, and adaptive re-entry. RFC 032 owns observations; RFC 033 owns adapter coverage; RFC 037 owns plan-diff inputs; RFC 040 owns semantic profiles; RFC 045 owns constraint and verification-aware planning; and RFC 047 owns the semantic evidence graph. This RFC consumes their records through stable references and does not merge their authority or semantics.</p>
+<p>Imported artifacts under RFC 038 may seed a review only as imported evidence. In particular, a transformation manifest or run result cannot establish a Prism plan fact merely because names appear to match.</p>
+<h3 id="compatibility-migration">Compatibility / migration</h3>
+<p>Existing plans and evidence remain valid. Review evaluation is additive and must be off unless a caller selects a review profile. Profiles, rule versions, evaluator versions, evidence snapshots, and review waivers are versioned so a repository can adopt tighter gates intentionally. A profile change must produce a new profile identity.</p>
+<h2 id="alternatives-considered">Alternatives considered</h2>
+<h3 id="put-review-rules-directly-in-prism">Put review rules directly in Prism</h3>
+<p>Rejected. Prism owns legal alternative construction and selection. Review severity, waiver scope, and CI behavior are a different concern and would make planning less portable.</p>
+<h3 id="emit-unstructured-warnings-from-each-adapter">Emit unstructured warnings from each adapter</h3>
+<p>Rejected. Adapter-local messages lose cross-target consistency, evidence identity, waiver semantics, and a stable interface for agents and CI.</p>
+<h3 id="treat-all-missing-evidence-as-a-warning">Treat all missing evidence as a warning</h3>
+<p>Rejected. Some profiles must fail closed. <code>inconclusive</code> preserves the distinction between a clean result and an unevaluated one.</p>
+<h3 id="adopt-a-generic-code-quality-rule-format">Adopt a generic code-quality rule format</h3>
+<p>Rejected. IncQL needs plan, semantic-profile, target, and observation references rather than a text-file-oriented lint model.</p>
+<h2 id="drawbacks">Drawbacks</h2>
+<p>The result model adds concepts—assurance, impact, freshness, profile, and waiver—that teams must learn. The initial rule family will deliberately be small, and noisy diagnostics will still require curation. Deterministic gates also require teams to maintain comparable workload and target evidence when they want to block on measured performance.</p>
+<h2 id="layers-affected">Layers affected</h2>
+<ul>
+<li><strong>IncQL specification</strong> — derived diagnostic, review-profile, gate, and waiver semantics must remain distinct from planning and execution semantics.</li>
+<li><strong>IncQL library package</strong> — inspection APIs must expose stable diagnostic records, profile evaluation, and evidence references without requiring a hosted service.</li>
+<li><strong>Execution / interchange</strong> — adapters and observation providers must expose only the capability, coverage, and measurement facts they own; callers must supply comparable evidence explicitly.</li>
+<li><strong>Documentation</strong> — rule catalogs and profiles must state prerequisites, assurance, impact meanings, and waiver behavior without overstating performance claims.</li>
+</ul>
+<h2 id="unresolved-questions">Unresolved questions</h2>
+<ul>
+<li>Which initial diagnostic keys have enough specified evidence and test corpus to become blocking in a reference profile?</li>
+<li>What canonical identity and lifecycle should review profiles and waiver records use across packages and CI systems?</li>
+<li>Which evidence freshness defaults are conservative enough for local, cluster, and continuous execution without making every review inconclusive?</li>
+<li>Should a future source annotation allow an author to request a review profile, or should profile selection remain entirely with callers and project policy?</li>
+</ul>
+<!-- Rename this section to "Design Decisions" once all questions have been resolved. An RFC cannot move from Draft to Planned until no unresolved questions remain. -->
 
 
 
@@ -3250,14 +3628,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../javascripts/prismplane.js?v=20260723-architecture-nav-28"></script>
+        <script src="../../javascripts/prismplane.js?v=20260723-architecture-nav-28"></script>
       
-        <script src="../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>
