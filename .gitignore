@@ -46,6 +46,10 @@ pnpm-debug.log*
 # Local AI agent instructions
 .github/copilot-instructions.md
 
+# Claude Code project hooks/policy (.claude/settings.json) are committed and
+# shared; personal per-machine overrides are not.
+.claude/settings.local.json
+
 # Local agent reviews, screenshots, and scratch plans
 .agents/state/
 .agents/plans/
