@@ -39,7 +39,6 @@ IncQL evidence should be useful outside IncQL, and external project artifacts sh
 - Allow external artifacts to seed metadata, lineage hints, quality observations, verification observations, proof artifact references, constraint evidence, contract evidence, product topology, run observations, graph projections, and target mappings without becoming authoritative IncQL semantics.
 - Prefer public standards and open ecosystem specifications for external projections when they fit the evidence being exchanged.
 - Support transformation-framework artifacts such as manifests, catalogs, run results, source definitions, model metadata, tests, tags, and documentation scaffolds, including dbt-shaped artifacts where a bridge supports that profile.
-- Define a versioned dbt artifact bridge profile with explicit target bindings, mapping loss, and confidence rules.
 - Keep provider configuration and hosted ingestion outside IncQL core.
 - Support local exchange without requiring a specific external service.
 
@@ -90,18 +89,6 @@ Sensitive attachments must follow visibility rules. Exchange bridges must not le
 
 Provider configuration, authentication, network transport, sampling, hosted ingestion, and storage are outside this RFC.
 
-### dbt artifact bridge profile
-
-The `dbt-artifacts` bridge profile is a versioned inbound profile for a coherent snapshot of dbt-produced artifacts. Its minimum required input is a manifest artifact. A catalog artifact and run-results artifact are optional, separate inputs; their absence must be represented as absent evidence rather than inferred from the manifest. The profile must preserve the source-declared artifact schema identifier and dbt release information when present, the byte identity or digest of every imported artifact, the project or revision identity when present, the production time when present, and the bridge-profile version.
-
-For every imported resource, the bridge must preserve its external unique identity, kind, package or namespace, name, source location when present, and declared dependency references. It may preserve materialization, configuration, tags, descriptions, tests, exposures, and documentation metadata as imported metadata. Compiled SQL, database locations, and other sensitive fields are optional attachments: the bridge must preserve their availability and redaction state, but it must not require them or expose them to an inspection consumer without the applicable visibility permission.
-
-The bridge must create an explicit target-binding record before associating an external resource with an IncQL relation, model, plan node, source anchor, or other semantic target. A binding names both identities, the binding basis, the bridge profile, and its confidence. Matching display names, paths, or SQL text alone must not create a binding. Unbound and ambiguous resources are valid outcomes and must be diagnosed. A declared dbt dependency is imported dependency evidence; it must not become Prism value, control, grouping, join, sort, or other lineage without separate IncQL analysis and validation.
-
-Catalog and run-result entries are observations or attestations. A successful dbt result may support an imported run observation, but it must not become an IncQL quality pass, verification result, plan-success assertion, or performance claim without an IncQL evidence contract that validates the corresponding scope. Failed, skipped, and unavailable results must preserve their source outcome and uncertainty.
-
-The profile must publish a compatibility matrix for supported artifact-schema families and mapping coverage. An unsupported schema, missing required source field, redacted required field, unmapped resource, ambiguous target binding, or lossy mapping must produce a structured bridge diagnostic. A bridge implementation may offer suggested IncQL declarations or review links, but suggestions remain non-authoritative projections and must name the imported artifact and binding evidence they used.
-
 ## Design details
 
 ### Syntax
@@ -132,7 +119,7 @@ Standards mappings must be versioned bridge profiles. If a target standard canno
 
 Exchange bridges depend on inspection artifacts, execution observations, quality observations, adapter coverage, interoperability profiles, and governed plan bundles. They should map from or into those records rather than from backend-specific plans.
 
-Transformation-framework bridges are a first-class example. A bridge may ingest manifest, catalog, run-result, source, model, test, tag, exposure, metadata, and documentation artifacts from systems such as dbt, Airflow, MWAA, Dagster, or Prefect when the bridge profile supports them. The dbt artifact bridge profile above is the required first transformation-framework profile. It may export suggested source definitions, model metadata, quality tests, documentation scaffolds, exposures, tags, or run validation summaries. The bridge must keep imported project semantics distinct from Prism-authored semantics and must identify any profile assumptions used to compare source and target environments.
+Transformation-framework bridges are a first-class example. A bridge may ingest manifest, catalog, run-result, source, model, test, tag, exposure, metadata, and documentation artifacts from systems such as dbt, Airflow, MWAA, Dagster, or Prefect when the bridge profile supports them. It may export suggested source definitions, model metadata, quality tests, documentation scaffolds, exposures, tags, or run validation summaries. The bridge must keep imported project semantics distinct from Prism-authored semantics and must identify any profile assumptions used to compare source and target environments.
 
 Data-contract, data-product, and graph bridge profiles are specialized by IncQL RFC 046 and IncQL RFC 047. Contract and product artifacts may seed normalized evidence, product topology, and graph nodes or edges, but they remain imported evidence. Runtime lineage events may seed observed graph relationships, but they remain observed or attested evidence unless separate verification evidence supports a stronger assurance label.
 
@@ -164,7 +151,6 @@ Exchange bridges must version their mappings. Adding a new internal evidence fie
 ## Unresolved questions
 
 - Which exchange bridge profiles are required by this RFC?
-- Which dbt artifact-schema families, target-binding bases, and redaction defaults are sufficient for the first interoperable dbt profile?
 - Which public standards bridge profiles are required before this RFC can advance beyond Draft?
 - Should exchange bridges live in the core package or optional integration packages?
 - What sidecar format should preserve IncQL-specific evidence when an external target is lossy?

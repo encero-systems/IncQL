@@ -10,18 +10,31 @@
   - IncQL RFC 032 (execution observations)
   - IncQL RFC 033 (adapter requirements and coverage)
   - IncQL RFC 037 (plan diff and blast-radius inputs)
+  - IncQL RFC 038 (evidence exchange bridges)
   - IncQL RFC 040 (interoperability semantic profiles)
+  - IncQL RFC 042 (async verification evidence)
   - IncQL RFC 045 (constraint evidence and verification-aware planning)
   - IncQL RFC 047 (semantic evidence graph and agent query surface)
   - IncQL RFC 066 (Prism relational reasoning and shared-work optimization)
-- **Issue:** —
+  - Incan RFC 106 (shared codegraph projection consumed by this RFC's source anchors): [incan#777](https://github.com/encero-systems/incan/issues/777)
+  - Incan RFC 120 (canonical source symbol identity; owner of source-location identity): [incan#1042](https://github.com/encero-systems/incan/issues/1042)
+- **Issue:** [IncQL #110](https://github.com/encero-systems/IncQL/issues/110)
 - **RFC PR:** [IncQL #109](https://github.com/encero-systems/IncQL/pull/109)
-- **Written against:** Incan v0.5-era IncQL
+- **Written against:** IncQL 0.1.0 / Incan 0.5.0-dev.46
 - **Shipped in:** —
 
 ## Summary
 
-This RFC defines a deterministic diagnostic and review-gate layer over IncQL plans and their evidence. It turns a bounded set of known, evidence-backed conditions into reviewable findings with stable identities, explicit assurance, source and plan anchors, and scoped waivers. It does not make diagnostics part of relational semantics, and it does not let a warning become a performance fact unless the supplied evidence supports that claim.
+This RFC defines a deterministic rule-evaluation, diagnostic, and review-gate layer over IncQL plans and their evidence. It evaluates a bounded versioned rule set completely, turns evidence-backed conditions into reviewable findings with stable identities and source and plan anchors, preserves assurance from the evidence records that own it, and applies scoped review waivers without mutating those records. It does not make diagnostics part of relational semantics, and it does not let a warning become a performance fact unless the supplied evidence supports that claim.
+
+## Core model
+
+1. A versioned rule catalog defines each reviewable condition, its application scope, required evidence, and possible outcomes.
+2. A versioned review profile selects compatible rule versions, severity and gate policy, evidence requirements, freshness limits, and accepted review-waiver authorities.
+3. A review evaluation artifact records one explicit outcome for every required rule-and-scope evaluation over one immutable plan, canonical evidence snapshot, and explicit evaluation context.
+4. A diagnostic explains each finding, unknown result, or unsupported evaluation without replacing the owner-issued evidence that supports it.
+5. A gate derives one deterministic decision from a complete evaluation artifact, its selected profile, and a canonical snapshot of applicable review waivers. Missing evaluations cannot produce a passing gate.
+6. A review waiver is a separate scoped decision that may alter the gate result but cannot alter plan semantics, source evidence, verification assurance, or optimizer authority.
 
 ## Motivation
 
@@ -32,7 +45,7 @@ Without a dedicated contract, every UI, agent, and CI integration will invent it
 ## Goals
 
 - Define a stable, machine-readable diagnostic record for plan-review findings.
-- Require every finding to retain its evidence, authority, scope, freshness, and assurance.
+- Require every evaluation and finding to retain its evidence, authority, scope, freshness, and owner-issued assurance context.
 - Distinguish an unsupported analysis, an unknown result, a potential impact, and a measured impact.
 - Define deterministic review profiles and narrowly scoped, auditable waivers.
 - Enable CI, editor, and agent consumers to make the same review decision from the same snapshot.
@@ -59,30 +72,42 @@ review = review_plan(
 )
 ```
 
-The names are illustrative. The result is not a second optimizer. It is a collection of findings such as "a required projection is not realizable by this target" or "the selected plan repeats an expensive subplan, but no materialization evidence was supplied." Each result says whether that is a proven planning fact, a target-coverage fact, a potential concern, or a measured observation.
+The names are illustrative. The result is not a second optimizer. It is a complete evaluation artifact plus findings such as "a required projection is not realizable by this target" or "the selected plan repeats an expensive subplan, but no materialization evidence was supplied." Each enabled rule reports whether its condition is clear, detected, unknown, or unsupported. A finding separately says whether its impact is absent, potential, measured, or unknown, and links the owner-issued planning, coverage, profile, verification, or observation evidence that supports that claim.
 
-A team may waive a finding only through a separately reviewable decision that names the diagnostic key, the affected plan or artifact identity, the evidence scope, and an expiry or invalidation rule. Removing a line of text from a configuration file must not silently turn a blocking finding into a passing review.
+A team may waive a finding only through a separately reviewable decision that names the rule key and evaluation identity, the affected plan or artifact identity, the evidence scope, and an expiry or invalidation rule. Removing a line of text from a configuration file must not silently turn a blocking finding into a passing review.
 
 ## Reference-level explanation (precise rules)
 
-### Diagnostic records
+### Rule evaluations and diagnostic records
 
-A plan diagnostic is a derived, immutable record. It must contain:
+A review evaluation artifact is a derived, immutable record. It must identify the plan, planning context, review profile, canonical evidence snapshot, rule-catalog version, evaluator version, explicit evaluation context, freshness policy, and canonically ordered rule-evaluation records. The evaluation context must include the decision instant used for freshness checks rather than consulting an implicit clock. The artifact must also state whether the required evaluation set is complete.
 
-- a stable diagnostic key and versioned rule identifier;
+Each enabled rule must publish a deterministic application-scope algorithm. Every rule-and-scope pair required by that algorithm must produce exactly one evaluation outcome:
+
+- `clear`: all prerequisite evidence is present and acceptable, the rule was evaluated, and its condition was not detected;
+- `finding`: all prerequisite evidence required to detect the condition is present and the condition was detected;
+- `unknown`: the rule is representable, but required evidence is missing, stale, conflicting, incomparable, or insufficient; or
+- `unsupported`: the evaluator cannot represent or execute the rule for that scope or evidence shape.
+
+`clear` is not the absence of a diagnostic. A gate may use `clear` only from an explicit evaluation record. Missing rule evaluations, missing scope evaluations, duplicate evaluation identities, and conflicting evidence identities make the evaluation artifact incomplete and prevent a passing gate.
+
+A rule-evaluation record must contain:
+
+- a deterministic evaluation identity plus a stable rule key and rule version;
+- the evaluation outcome and the exact application scope;
 - a severity selected by the review profile;
-- a category and human-readable explanation;
+- a category and human-readable explanation when the outcome is not `clear`;
 - source anchors and plan-node or artifact references when available;
-- the plan, planning-context, and evidence identities against which it was derived;
-- the condition observed, the required missing fact when the result is `unknown`, and any unsupported-analysis reason;
-- an assurance classification of `derived`, `attested`, `measured`, `unknown`, or `unsupported`;
+- the plan, planning-context, profile, and canonical evidence-snapshot identities against which it was derived;
+- the condition observed, the missing or unacceptable prerequisite when the result is `unknown`, and any unsupported-analysis reason;
+- source evidence references with their owner-issued basis, authority, assurance, scope, coverage, and diagnostics preserved;
 - an impact classification of `none`, `potential`, `measured`, or `unknown`;
 - a repair class of `informational`, `manual-review`, or `safe-suggestion`; and
 - freshness and invalidation information for every non-static input.
 
-The record must not claim a cost, cardinality, safety property, target behavior, or semantic equivalence not present in its evidence. A `measured` impact must link to the observation identity, workload scope, and execution environment. A `potential` impact must state the prerequisite evidence that would make it measurable. `unknown` and `unsupported` are valid terminal results and must not be rewritten as a passing result.
+The record must not define a second assurance scale or upgrade source evidence. Any assurance summary is a projection over linked owner-issued records and must retain their scope and coverage. The record must not claim a cost, cardinality, safety property, target behavior, or semantic equivalence not present in its evidence. A `measured` impact must link to the observation identity, workload scope, and execution environment. A `potential` impact must state the prerequisite evidence that would make it measurable. `unknown` and `unsupported` are valid terminal results and must not be rewritten as `clear` or a passing result.
 
-Diagnostic keys are stable public identifiers. A change that materially changes a rule's condition, its evidence requirements, or its implication must use a new rule version or key rather than silently repurposing a suppression.
+Rule keys and versions are stable public identifiers. A change that materially changes a rule's condition, application scope, evidence requirements, or implication must use a new rule version or key. Evaluation identities are derived from the rule key and version, application scope, plan identity, review-profile identity, canonical evidence-snapshot identity, evaluator version, and evaluation-context identity; they must not be used as compatibility aliases for the rule itself.
 
 ### Evidence and authority
 
@@ -90,9 +115,11 @@ Diagnostics may consume authored plan facts, Prism explain artifacts, adapter ca
 
 The diagnostic layer must not create relational lineage, make a target capability claim, or upgrade an imported or attested artifact to verified evidence. It may report a mismatch, missing mapping, stale observation, or unsupported rule. A rule that depends on target behavior must identify the target profile and capability or coverage evidence it used.
 
-### Initial rule family
+Source anchors are compiler-owned evidence. A rule-evaluation record must derive every source anchor from the canonical source symbol identity defined by Incan RFC 120, projected through the shared codegraph of Incan RFC 106, and must preserve the staleness signalled by that projection rather than assuming an anchor remains valid. IncQL must not define an independent identity scheme for source locations. An anchor that cannot be resolved against current compiler facts makes its evaluation `unknown`; it must not be reported as a finding located at a guessed position.
 
-The first implementation must support only rules whose evidence and consequence are precisely defined. Candidate initial rules are:
+### Required rule family
+
+This RFC requires a bounded rule family whose evidence and consequences are precisely defined. Required rule categories are:
 
 - a selected plan requires a capability absent from the declared target profile;
 - a target-specific pushdown opportunity is rejected because required coverage or semantic-profile evidence is absent;
@@ -100,27 +127,27 @@ The first implementation must support only rules whose evidence and consequence 
 - a plan diff changes an evidence-backed source, schema, lineage, or target-coverage assumption that a review profile marks as material; and
 - an observed regression is reported only when semantically comparable runs, workload identity, environment scope, and measurement provenance are present.
 
-The exact rule keys, prerequisites, and consequence vocabulary must be published with the profile. Generic textual rules such as "avoid SELECT star" are outside the first family unless an IncQL surface and evidence contract make them meaningful.
+The exact rule keys, prerequisites, and consequence vocabulary must be published with the profile. Generic textual rules such as "avoid SELECT star" are outside this rule family unless an IncQL surface and evidence contract make them meaningful.
 
 ### Review profiles and gates
 
 A review profile is a versioned, immutable declaration of:
 
-- enabled diagnostic keys and compatible rule versions;
+- enabled rule keys and compatible rule versions;
 - severity thresholds and whether a threshold is advisory or blocking;
 - permitted evidence classes, freshness limits, and target scope;
 - whether `unknown` or `unsupported` is permitted, reported, or blocking for each rule; and
 - which waiver authorities and scopes it accepts.
 
-A gate evaluates one plan or artifact snapshot against one profile. It must return `pass`, `advisory`, `blocked`, or `inconclusive`. `inconclusive` is required when the profile demands evidence that is absent, stale, unsupported, or not comparable; it must not be emitted as `pass`.
+A gate evaluates one complete review evaluation artifact against its profile and a canonical snapshot of applicable review waivers. It must return `pass`, `advisory`, `blocked`, or `inconclusive`. `inconclusive` is required when the evaluation set is incomplete or the profile demands evidence that is absent, stale, unsupported, conflicting, or not comparable; it must not be emitted as `pass`.
 
-The gate must be deterministic for identical plan identity, profile identity, ordered evidence identities, and evaluator version. A profile may be selected by CI, an editor, or an agent, but those callers must not change the result by injecting opaque private state.
+The gate must be deterministic for identical plan identity, profile identity, canonical evidence-snapshot identity, evaluator version, evaluation-context identity, and canonical review-waiver-snapshot identity. Evidence and waiver input order must not change either snapshot identity or the gate result; the evaluator must canonicalize and reject duplicate or conflicting identities according to the published rule and waiver contracts. A profile may be selected by CI, an editor, or an agent, but those callers must not change the result by injecting opaque private state.
 
 ### Waivers
 
-A waiver is a separate decision record, never a mutation of the diagnostic. It must identify the diagnostic key and version, the affected plan, artifact, source, or target scope, the review-profile identity, a rationale, the responsible approving authority when required by the profile, and an expiry or deterministic invalidation condition.
+A review waiver is a separate decision record, never a mutation of the evaluation, diagnostic, or source evidence. It must identify the rule key and version, evaluation identity, affected plan, artifact, source, or target scope, review-profile identity, rationale, responsible approving authority when required by the profile, and expiry or deterministic invalidation condition.
 
-A waiver must not apply when the referenced rule version, plan identity, target profile, semantic profile, or evidence precondition has materially changed. The gate must expose both the original diagnostic and the applied waiver. No waiver can turn `unsupported` or `unknown` into `proved`, `measured`, or verified evidence.
+A review waiver must not apply when the referenced rule version, plan identity, target profile, semantic profile, application scope, or evidence precondition has materially changed. The gate must expose both the original evaluation and the applied waiver. A review waiver changes only the review decision permitted by its profile; it cannot turn `unsupported` or `unknown` into `clear`, `proved`, `measured`, or verified evidence, and it is not a verification waiver under RFC 042.
 
 ### Suggestions
 
@@ -134,7 +161,7 @@ This RFC introduces no required IncQL authoring syntax. The first public surface
 
 ### Semantics
 
-Diagnostics are projections over immutable plan and evidence snapshots. They do not participate in typechecking, plan equivalence, optimizer legality, or execution. Prism may expose facts that make a diagnostic possible, but the diagnostic engine must neither add alternatives to the memo nor override the selected plan.
+Review evaluations and diagnostics are projections over immutable plan and evidence snapshots. They do not participate in typechecking, plan equivalence, optimizer legality, or execution. Prism may expose facts that make an evaluation possible, but the review evaluator must neither add alternatives to the memo nor override the selected plan.
 
 ### Interaction with other IncQL surfaces
 
@@ -144,7 +171,7 @@ Imported artifacts under RFC 038 may seed a review only as imported evidence. In
 
 ### Compatibility / migration
 
-Existing plans and evidence remain valid. Diagnostics are additive and must be off unless a caller selects a review profile. Profiles, rule versions, and waivers are versioned so a repository can adopt tighter gates intentionally. A profile change must produce a new profile identity.
+Existing plans and evidence remain valid. Review evaluation is additive and must be off unless a caller selects a review profile. Profiles, rule versions, evaluator versions, evidence snapshots, and review waivers are versioned so a repository can adopt tighter gates intentionally. A profile change must produce a new profile identity.
 
 ## Alternatives considered
 
@@ -181,3 +208,5 @@ The result model adds concepts—assurance, impact, freshness, profile, and waiv
 - What canonical identity and lifecycle should review profiles and waiver records use across packages and CI systems?
 - Which evidence freshness defaults are conservative enough for local, cluster, and continuous execution without making every review inconclusive?
 - Should a future source annotation allow an author to request a review profile, or should profile selection remain entirely with callers and project policy?
+
+<!-- Rename this section to "Design Decisions" once all questions have been resolved. An RFC cannot move from Draft to Planned until no unresolved questions remain. -->
