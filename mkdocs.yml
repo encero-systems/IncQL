@@ -154,6 +154,7 @@ nav:
       - Whitepapers:
           - Overview: whitepapers/README.md
           - IncQL-DB: whitepapers/incql_db.md
+  - Roadmap: roadmap.md
   - Project:
       - Overview: project.md
       - Docs map: docs_map.md
