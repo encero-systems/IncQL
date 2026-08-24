@@ -375,8 +375,14 @@ This section tracks the implementation path for this RFC. It is intentionally op
 - [ ] Public dataset join typing is aligned with the intended DX for heterogeneous joins, including a real output-schema contract rather than a temporary `Self`-only surface.
 - [ ] `Session.from_values(...)` is implemented as part of the core `Session` API surface described in this RFC.
 - [x] Generic `Session.write(data, target)` API is implemented for the current typed sink descriptors (beyond file-specific sink methods).
-- [ ] Multi-backend implementation beyond DataFusion is shipped through the backend abstraction.
+- [ ] ~~Multi-backend implementation beyond DataFusion is shipped through the backend abstraction.~~ Moved out of this RFC's exit criteria; see the note below.
 
 ### Exit criteria for RFC status change
 
-RFC 004 can move from `In Progress` to `Implemented` when all checklist items above are complete and the IncQL CI gate is green on the target release branch.
+RFC 004 can move from `In Progress` to `Implemented` when all remaining checklist items above are complete and the IncQL CI gate is green on the target release branch.
+
+**A second execution backend is no longer an exit criterion.** The portable backend abstraction is the requirement this RFC owns, and it is satisfied: Session dispatch routes through an adapter boundary over Substrait plans rather than wiring DataFusion into Session state. Shipping a second adapter proves the boundary but does not change the contract, and a second engine that reads the same local sources would give a user nothing they could observe.
+
+What users actually lack is not another engine but real sources — object storage, partitioned datasets, and lakehouse table formats. That work is tracked under IncQL #112 and IncQL RFC 069, and it exercises the same adapter boundary more meaningfully than a duplicate runtime would.
+
+A second backend remains desirable and stays tracked under IncQL #22. It is deliberately not a gate on this RFC.
