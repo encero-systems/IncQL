@@ -401,6 +401,9 @@ def main() -> None:
 EOF
 
 (cd "$PROJECT_DIR" && "$INCAN_BIN" lock >/dev/null)
+# Since Incan 0.5, a consumer must import the provider's already-baked closure
+# through its own Oven bake before it can check or run against `pub::incql`.
+(cd "$PROJECT_DIR" && "$INCAN_BIN" oven bake --project . >/dev/null)
 (cd "$PROJECT_DIR" && "$INCAN_BIN" --check src/main.incn >/dev/null)
 (cd "$PROJECT_DIR" && "$INCAN_BIN" --check src/query_blocks_smoke.incn >/dev/null)
 (cd "$PROJECT_DIR" && "$INCAN_BIN" run src/query_blocks_smoke.incn)
