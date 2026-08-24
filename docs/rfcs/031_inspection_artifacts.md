@@ -11,6 +11,8 @@
   - IncQL RFC 030 (Prism lineage graph)
   - IncQL RFC 040 (interoperability semantic profiles)
   - IncQL RFC 041 (Prism plan ingress and external client frontends)
+  - Incan RFC 106 (shared codegraph projection consumed by this RFC's source references): [incan#777](https://github.com/encero-systems/incan/issues/777)
+  - Incan RFC 120 (canonical source symbol identity; owner of source-location identity): [incan#1042](https://github.com/encero-systems/incan/issues/1042)
 - **Issue:** [IncQL #65](https://github.com/encero-systems/IncQL/issues/65)
 - **RFC PR:** [IncQL #60](https://github.com/encero-systems/IncQL/pull/60)
 - **Written against:** Incan v0.3-era IncQL
@@ -79,6 +81,12 @@ Artifacts must include schema version, IncQL version, relevant rule versions, ta
 
 Human-readable reports may exist, but they must be generated from structured inspection records or artifacts.
 
+### Source identity ownership
+
+Where an inspection record or artifact references a source location, that reference must derive from the compiler's canonical source symbol identity as defined by Incan RFC 120, projected through the shared codegraph of Incan RFC 106. IncQL must not define an independent identity scheme for source locations, and must not re-derive source identity from generated Rust or from a rendered projection.
+
+IncQL owns relational semantic targets, plan structure, and lineage. The compiler owns source symbols, ranges, and their provenance and staleness. An inspection record joins the two by carrying both identities; it must not restate one in terms of the other.
+
 Sensitive attachments must be redacted or omitted according to the visibility rules from IncQL RFC 029.
 
 ## Design details
@@ -125,3 +133,30 @@ Existing code remains valid. New tooling should prefer structured inspection ove
 - How stable must artifact ordering be for snapshot tests and CI diffs?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land typed inspection records over Prism-backed plans.
+2. Land deterministic serialized artifacts for every required family.
+3. Land a human-readable report generated strictly as a projection of those artifacts.
+
+### Checklist
+
+- [x] `inspect_plan(...)` and `inspect_lineage(...)` return typed records rather than formatted strings.
+- [x] Artifact-family summaries carry schema version, IncQL version, status, and record counts.
+- [x] An empty lineage graph is distinguishable from lineage that was not computed or is not supported.
+- [x] Families exist for plan graph, lineage graph, schema flow, and metadata attachments.
+- [ ] Deterministic serialized artifacts are written, not only summarized. The current `InspectionArtifact` record describes a family; it does not serialize one.
+- [ ] A semantic profiles family exists (depends on IncQL RFC 040).
+- [ ] An ingress mappings family exists (depends on IncQL RFC 041).
+- [ ] A client session context family exists (depends on IncQL RFC 041).
+- [ ] A human-readable report is generated from structured records or artifacts, satisfying this RFC's own goal that human reports remain projections.
+- [ ] Source references derive from the compiler's canonical source symbol identity rather than an IncQL-defined scheme.
+
+### Exit criteria for RFC status change
+
+RFC 031 can move from `In Progress` to `Implemented` when every checklist item above is complete and the IncQL CI gate is green on the target release branch. Serialization is required rather than optional: this RFC exists to make evidence consumable by CI, editors, and agents, and a summary record does not make an artifact consumable. The three families that depend on IncQL RFCs 040 and 041 make this RFC's completion contingent on those RFCs landing.

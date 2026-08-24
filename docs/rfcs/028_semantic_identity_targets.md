@@ -137,3 +137,27 @@ Existing plans without semantic targets remain valid for execution. Tools that r
 - How should target identity behave when an optimizer rewrite duplicates one authored expression into multiple rewritten positions?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land the target-kind vocabulary required by the child evidence RFCs.
+2. Distinguish authored Prism targets from rewritten Prism targets and from execution observations.
+3. Classify each target kind by identity scope and state the determinism guarantee that scope implies.
+
+### Checklist
+
+- [x] Target kinds exist for plans, authored and rewritten Prism nodes, relation outputs, fields, scalar expressions, aggregate measures, window expressions, generator outputs, and read roots.
+- [x] Target kinds exist for ingress requests, ingress nodes, ingress expressions, analyzer bindings, and client sessions.
+- [x] Target kinds exist for governed attributes, quality assertions, quality observations, policy checkpoints, and policy decisions.
+- [x] Target kinds exist for adapter requirements, coverage records, and execution attempts.
+- [x] Authored Prism targets are distinguishable from rewritten Prism targets.
+- [ ] Every target kind is classified as plan-local, artifact-stable, or execution-local, and that classification is expressed in the type model rather than only in prose.
+- [ ] The determinism guarantee for identities within one plan, ingress, or profile snapshot is stated normatively and covered by tests.
+
+### Exit criteria for RFC status change
+
+RFC 028 can move from `In Progress` to `Implemented` when every checklist item above is complete and the IncQL CI gate is green on the target release branch. Identity-scope classification is required: a target vocabulary without it cannot tell a consumer which identities are safe to persist across snapshots, which is the guarantee the child RFCs depend on.

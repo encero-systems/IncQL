@@ -508,3 +508,38 @@ DataFusion must be migrated first as a built-in file connector and local compute
 - How should native addon artifacts be distributed when a package cannot be built from Rust dependencies alone on a target platform?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land component identity, versions, and the pure descriptor model, with no executable hooks attached.
+2. Land the registry lifecycle: registration, collision, compatibility assessment, freezing, and lookup.
+3. Land executable component contracts and Session ownership of a frozen registry with an explicit default runtime.
+4. Re-express the built-in DataFusion components through the same contracts, replacing closed backend and source identities.
+5. Connect component declarations to the coverage, profile, observation, and ingress evidence surfaces.
+
+### Checklist
+
+- [ ] Stable namespaced component identifiers and versions replace closed backend and source enums.
+- [ ] Pure component descriptors are inspectable without loading executable hooks or live runtime state.
+- [ ] Data connector, compute runtime, plan ingress, and evidence provider component kinds are independently registrable.
+- [ ] Registration, collision, compatibility, freezing, and lookup rules are deterministic and tested.
+- [ ] Open source, sink, runtime-mode, and capability keys are extensible without a core change.
+- [ ] Source and sink bindings are selectable independently of compute-runtime selection.
+- [ ] A Session owns one frozen registry snapshot and one explicit default runtime selection.
+- [ ] Connector and runtime compatibility is assessed and reported without implying universal interoperability.
+- [ ] Built-in DataFusion components are registered through the same contracts as external components, with no privileged path.
+- [ ] Component identity and declarations feed IncQL RFC 033 coverage, RFC 040 profiles, RFC 032 observations, and RFC 041 ingress coverage.
+- [ ] An external component outside the IncQL package is registered and used end to end, proving the contract is not core-only.
+
+### Exit criteria for RFC status change
+
+RFC 050 can move from `Draft` to `Planned` when the unresolved questions above are resolved. It can move to `Implemented` when every checklist item is complete and the IncQL CI gate is green on the target release branch.
+
+Two items are load-bearing rather than incidental. The built-in DataFusion components must go through the same contracts as external ones, because a privileged internal path would leave the external contract untested by the code that exercises it most. And at least one genuinely external component must be registered and used end to end, because a registry that has only ever hosted its own package has not demonstrated the property this RFC exists to provide.
+
+IncQL RFC 069 depends on this contract for table-format source components. This RFC therefore gates the lakehouse source work rather than running alongside it.
+

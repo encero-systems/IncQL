@@ -192,3 +192,31 @@ This program should be additive. Existing plans may lack evidence artifacts unti
 - Should the umbrella completion set include future syntax RFCs if evidence-driven authoring syntax is later proposed?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land the shared evidence spine (semantic targets, attachments, lineage, inspection) that every child RFC depends on.
+2. Land the observation and governance children that consume that spine.
+3. Land the exchange, profile, ingress, and verification children.
+4. Close each child as `Implemented`, `Rejected`, or explicitly `Superseded`.
+
+### Checklist
+
+- [x] IncQL RFC 032 (execution observations) is closed.
+- [x] IncQL RFC 033 (adapter requirements and coverage) is closed.
+- [x] IncQL RFC 034 (quality assertions and observations) is closed.
+- [x] IncQL RFC 035 (governed attributes and policy checkpoints) is closed.
+- [ ] IncQL RFC 028 (semantic identity and target model) is closed.
+- [ ] IncQL RFC 029 (typed metadata attachments) is closed.
+- [ ] IncQL RFC 030 (Prism lineage graph) is closed.
+- [ ] IncQL RFC 031 (local inspection APIs and artifacts) is closed.
+- [ ] IncQL RFCs 036, 037, 038, 039, 040, 041, 042 are each closed.
+- [ ] IncQL RFCs 043, 044, 045, 046, 047 are each closed.
+
+### Exit criteria for RFC status change
+
+RFC 027 is an umbrella tracker and defines no independent surface. It can move from `In Progress` to `Implemented` only when every child RFC listed above is `Implemented`, `Rejected`, or explicitly superseded by a named successor RFC. It must not be closed on the strength of the evidence spine alone, and it must never be treated as a release gate in its own right.
