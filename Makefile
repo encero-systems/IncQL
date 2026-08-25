@@ -181,15 +181,15 @@ fmt-check: ## Check formatting without writing (`incan fmt --check` per director
 # =============================================================================
 
 .PHONY: check
-check: fmt-check test-style vocab-companion-test registry-metadata bake build test ## Format check, style gate, metadata check, build, and test
+check: fmt-check test-style vocab-companion-test bake registry-metadata build test ## Format check, style gate, bake, metadata check, build, and test
 	@echo "\033[32m✓ check passed\033[0m"
 
 .PHONY: pre-commit
-pre-commit: fmt-check test-style vocab-companion-test registry-metadata bake build test ## Fast gate before commit (same as `check`)
+pre-commit: fmt-check test-style vocab-companion-test bake registry-metadata build test ## Fast gate before commit (same as `check`)
 	@echo "\033[32m✓ pre-commit gate passed\033[0m"
 
 .PHONY: ci
-ci: fmt-check test-style vocab-companion-test registry-metadata bake build test smoke-consumer ## Same steps as GitHub Actions `incql` job
+ci: fmt-check test-style vocab-companion-test bake registry-metadata build test smoke-consumer ## Same steps as GitHub Actions `incql` job
 	@echo "\033[32m✓ ci gate passed\033[0m"
 
 .PHONY: verify
