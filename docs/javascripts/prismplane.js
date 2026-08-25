@@ -1492,9 +1492,37 @@
       });
 
       svg.innerHTML = markup.join("");
+
+      /* Each path needs its own length before CSS can draw it in, and
+       * getTotalLength only works once the node is in the document. */
+      svg.querySelectorAll(".incql-map-link--base").forEach((path) => {
+        path.style.setProperty("--len", path.getTotalLength().toFixed(1));
+      });
     };
 
     draw();
+
+    /* Draw the connectors the first time the map is scrolled into view, so the
+     * convergence happens rather than merely being depicted. Redraws after
+     * that (resize, font swap) keep the drawn state and do not replay. */
+    if (typeof IntersectionObserver !== "function") {
+      /* No observer: show the finished lines rather than nothing. */
+      svg.classList.add("has-drawn");
+    } else if (!body.dataset.drawObserved) {
+      body.dataset.drawObserved = "true";
+      const reveal = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              svg.classList.add("has-drawn");
+              reveal.disconnect();
+            }
+          });
+        },
+        { threshold: 0.25 }
+      );
+      reveal.observe(body);
+    }
 
     if (!body.dataset.linksObserved) {
       body.dataset.linksObserved = "true";

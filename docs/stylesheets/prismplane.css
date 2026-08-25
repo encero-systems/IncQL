@@ -7720,6 +7720,26 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
   animation: incql-map-flow 3.1s linear infinite;
 }
 
+/* Undrawn by default; the observer adds `has-drawn` on first view. A path
+ * inserted after that renders at its final state rather than replaying, which
+ * is what keeps resizes from re-animating. */
+.incql-map-links .incql-map-link--base {
+  stroke-dasharray: var(--len, 0);
+  stroke-dashoffset: var(--len, 0);
+}
+
+.incql-map-links.has-drawn .incql-map-link--base {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.15s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* The pulse only makes sense once there is a line for it to travel. */
+.incql-map-links .incql-map-link--pulse { opacity: 0; }
+.incql-map-links.has-drawn .incql-map-link--pulse {
+  opacity: 1;
+  transition: opacity 0.5s ease-out 0.85s;
+}
+
 .incql-map-link--in { stroke: url(#incql-map-in); }
 .incql-map-link--out { stroke: url(#incql-map-out); }
 .incql-map-link--out.incql-map-link--pulse { animation-duration: 3.6s; }
@@ -7731,7 +7751,14 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
 
 @media (prefers-reduced-motion: reduce) {
   .incql-map-link--pulse { display: none; }
-  .incql-map-link--base { stroke-opacity: 0.55; stroke-width: 1.3; }
+  .incql-map-links .incql-map-link--base,
+  .incql-map-links.has-drawn .incql-map-link--base {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    stroke-opacity: 0.55;
+    stroke-width: 1.3;
+    transition: none;
+  }
 }
 
 /* Once the measured lines exist, the blurred stand-in is redundant. */
