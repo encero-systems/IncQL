@@ -60,7 +60,7 @@ extra_css:
   - stylesheets/crystalline.css?v=20260726-landing-polish-10
   - stylesheets/crystal-prototype.css?v=20260723-guides-nav-2
   - stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1
-  - stylesheets/crystal-integration.css?v=20260723-architecture-readability-4
+  - stylesheets/crystal-integration.css?v=20260825-roadmap-cta-gh-1
   - stylesheets/crystal-learn.css?v=20260722-learn-crystal-9
   - stylesheets/crystal-book.css?v=20260723-book-concepts-7
 
@@ -154,6 +154,7 @@ nav:
       - Whitepapers:
           - Overview: whitepapers/README.md
           - IncQL-DB: whitepapers/incql_db.md
+  - Roadmap: roadmap.md
   - Project:
       - Overview: project.md
       - Docs map: docs_map.md

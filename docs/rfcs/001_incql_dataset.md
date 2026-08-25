@@ -260,3 +260,31 @@ Future RFCs **may** add methods on `BoundedDataSet[T]` or `UnboundedDataSet[T]`,
 - **`collect` / `display`:** Not part of the `DataSet[T]` trait surface. Helpers such as `collect(data)` or `display(data)` belong to the execution context and concrete implementation model defined in IncQL RFC 004, not in this RFC.
 
 - **Intermediate traits:** `BoundedDataSet[T]` and `UnboundedDataSet[T]` do not add required core relational methods in v0.1. Future RFCs may add additional methods only where the semantics are inherently boundedness-specific and remain backend-neutral.
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land the carrier hierarchy and the concrete `DataFrame[T]`, `LazyFrame[T]`, and `DataStream[T]` types.
+2. Land the relational operation API and the execution backend boundary.
+3. Move bounded-only operations onto `BoundedDataSet[T]` so static capability gating becomes real rather than documentary.
+4. Prove rejection with compile-fail coverage rather than by asserting trait shape.
+
+### Checklist
+
+- [x] `DataSet[T]`, `BoundedDataSet[T]`, and `UnboundedDataSet[T]` exist as a trait hierarchy.
+- [x] `DataFrame[T]`, `LazyFrame[T]`, and `DataStream[T]` exist as concrete carriers.
+- [x] The relational operation API is expressed on the carrier surface with row types preserved or updated.
+- [x] The execution backend boundary keeps engine internals out of the author contract.
+- [x] Compiler-side enforcement for static capability gating is available upstream.
+- [ ] Bounded-only operations are declared on `BoundedDataSet[T]`, leaving root `DataSet[T]` with only backend-neutral row-local operations.
+- [ ] `DataStream[T]` rejects bounded-only operations at compile time.
+- [ ] Compile-fail coverage demonstrates rejection, rather than tests asserting only that the trait hierarchy has the intended shape.
+
+### Exit criteria for RFC status change
+
+RFC 001 can move from `In Progress` to `Implemented` when every checklist item above is complete and the IncQL CI gate is green on the target release branch.
+
+Static capability gating is the load-bearing item. This RFC's central normative rule is that operations invalid on an unbounded carrier must produce compile-time errors rather than runtime failures. Today the root `DataSet[T]` trait declares every operation and `BoundedDataSet[T]` declares none, so `DataStream[T]` inherits joins, grouping, aggregation, ordering, limits, and windows. The compiler support this depended on landed upstream; the remaining work is adoption in this package. Until it lands, the RFC's guarantee is documentary, and closing the RFC on the strength of the trait hierarchy alone would publish a compile-time promise the package does not keep.
+

@@ -320,8 +320,7 @@
     "related_ids": [
       "000",
       "001",
-      "003",
-      "040"
+      "003"
     ],
     "rfc_pr": "-",
     "rfc_pr_label": null,
@@ -665,12 +664,7 @@
       "001",
       "003",
       "004",
-      "007",
-      "025",
-      "028",
-      "029",
-      "040",
-      "045"
+      "007"
     ],
     "rfc_pr": "—",
     "rfc_pr_label": null,
@@ -816,8 +810,7 @@
       "003",
       "007",
       "012",
-      "013",
-      "048"
+      "013"
     ],
     "rfc_pr": "[IncQL #42](https://github.com/encero-systems/IncQL/pull/42)",
     "rfc_pr_label": "IncQL #42",
@@ -1887,7 +1880,9 @@
       "IncQL RFC 029 (typed metadata attachments)",
       "IncQL RFC 030 (Prism lineage graph)",
       "IncQL RFC 040 (interoperability semantic profiles)",
-      "IncQL RFC 041 (Prism plan ingress and external client frontends)"
+      "IncQL RFC 041 (Prism plan ingress and external client frontends)",
+      "Incan RFC 106 (shared codegraph projection consumed by this RFC's source references): incan#777",
+      "Incan RFC 120 (canonical source symbol identity; owner of source-location identity): incan#1042"
     ],
     "related_ids": [
       "007",
@@ -4673,6 +4668,78 @@
     ],
     "title": "Evidence-backed plan diagnostics and review gates",
     "written_against": "IncQL 0.1.0 / Incan 0.5.0-dev.46"
+  },
+  {
+    "authors": "Danny Meijer (@dannymeijer)",
+    "created": "2026-08-24",
+    "href": "069_lakehouse_table_format_sources/",
+    "id": "069",
+    "issue": "[IncQL #115](https://github.com/encero-systems/IncQL/issues/115)",
+    "issue_label": "IncQL #115",
+    "issue_links": [
+      {
+        "label": "IncQL #115",
+        "url": "https://github.com/encero-systems/IncQL/issues/115"
+      }
+    ],
+    "issue_url": "https://github.com/encero-systems/IncQL/issues/115",
+    "lifecycle": "active",
+    "motivation": "IncQL currently reads a local file. That is enough to demonstrate typed relational authoring and nothing else: a local CSV is a file that every existing tool already reads with less ceremony. A typed data logic plane earns its place only when it operates on the data an organization actually governs, and for a growing share of that data the unit of governance is a lakehouse table rather than a file or a warehouse relation.",
+    "related": [
+      "IncQL RFC 002 (Apache Substrait integration)",
+      "IncQL RFC 004 (execution context and DataFusion)",
+      "IncQL RFC 028 (semantic identity and target model)",
+      "IncQL RFC 031 (local inspection APIs and artifacts)",
+      "IncQL RFC 033 (adapter requirements and coverage)",
+      "IncQL RFC 050 (addon component registry and package contract)",
+      "IncQL RFC 052 (declarative sources, resources, and connectors)",
+      "IncQL RFC 053 (schema reconciliation and normalization)",
+      "IncQL RFC 055 (destination loading and commit semantics)",
+      "IncQL RFC 059 (materialization and applied asset lifecycle)",
+      "IncQL RFC 061 (asset interfaces, contracts, access, and versions)"
+    ],
+    "related_ids": [
+      "002",
+      "004",
+      "028",
+      "031",
+      "033",
+      "050",
+      "052",
+      "053",
+      "055",
+      "059",
+      "061"
+    ],
+    "rfc_pr": "—",
+    "rfc_pr_label": null,
+    "rfc_pr_links": [],
+    "rfc_pr_url": null,
+    "shipped_in": "—",
+    "source_path": "069_lakehouse_table_format_sources.md",
+    "status": "Draft",
+    "status_key": "draft",
+    "summary": "This RFC defines how IncQL reads and writes lakehouse table formats — Apache Iceberg and Delta Lake — as typed relational sources. A table-format source is provided by an addon component rather than by IncQL core. Its authoritative table schema is reconciled against the declared Incan model before planning completes, and that reconciliation produces a typed, inspectable outcome rather than a runtime surprise. Every read carries a version selector, reads at exactly one immutable version, and records which version it read as part of the read root's semantic identity and its evidence. Credentials, endpoints, and provider configuration are resolved by the component's binding and never enter a plan.",
+    "tags": [
+      {
+        "key": "data-access",
+        "label": "Data access"
+      },
+      {
+        "key": "evidence",
+        "label": "Evidence"
+      },
+      {
+        "key": "extensibility",
+        "label": "Extensibility"
+      },
+      {
+        "key": "types",
+        "label": "Types"
+      }
+    ],
+    "title": "Lakehouse table-format sources",
+    "written_against": "IncQL 0.1.0 / Incan 0.5.0"
   }
 ]
 </template>
@@ -4750,6 +4817,7 @@
 | [066](066_prism_relational_reasoning_and_shared_work_optimization.md) | Draft | Evidence, Execution, Interoperability, Planning | Prism relational reasoning and shared-work optimization |
 | [067](067_typed_semantic_memory_store.md) | Draft | Evidence, Governance, Types | Typed semantic memory store |
 | [068](068_evidence_backed_plan_diagnostics_and_review_gates.md) | Draft | Evidence, Governance, Planning | Evidence-backed plan diagnostics and review gates |
+| [069](069_lakehouse_table_format_sources.md) | Draft | Data access, Evidence, Extensibility, Types | Lakehouse table-format sources |
 
 </div>
 <!-- END GENERATED RFC CATALOG -->

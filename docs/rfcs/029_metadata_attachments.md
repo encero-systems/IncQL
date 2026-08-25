@@ -116,3 +116,26 @@ Existing APIs may continue returning simple inspection data. New evidence APIs s
 - What is the first serialized payload schema format for attachments?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land one common attachment shape usable by every child evidence RFC.
+2. Land lifecycle, source, visibility, and evidence-reference metadata on that shape.
+3. Specify namespace and key rules so independently authored payload schemas cannot collide.
+
+### Checklist
+
+- [x] One attachment shape carries target, namespace, key, and typed payload.
+- [x] Lifecycle and source metadata are present.
+- [x] Visibility supports sensitive and redacted attachments without forcing them into portable plans.
+- [x] Evidence references are preserved on the attachment.
+- [ ] Namespace ownership and key uniqueness rules are specified normatively, including the behavior when two attachments claim the same namespace and key on one target.
+- [ ] At least one child RFC payload schema is expressed through this contract, demonstrating specialization without a second attachment model.
+
+### Exit criteria for RFC status change
+
+RFC 029 can move from `In Progress` to `Implemented` when every checklist item above is complete and the IncQL CI gate is green on the target release branch. The namespace and collision rules are required: the contract's purpose is to let child RFCs define payloads independently, which is unsafe while collision behavior is undefined.

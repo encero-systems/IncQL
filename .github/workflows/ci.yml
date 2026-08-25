@@ -1,8 +1,21 @@
 # IncQL CI — Incan library package
 #
-# Checks out the pinned Incan compiler source, installs it through Incan's
-# downstream install action, then runs the IncQL package checks against that
-# local binary.
+# Installs the pinned Incan **release** toolchain and runs the IncQL package
+# checks against it.
+#
+# Why the release archive rather than a source build: since Incan 0.5, a project
+# that declares a `[vocab]` companion (IncQL does — see `incan.toml`) needs a
+# compiler-owned vocabulary helper drawn from a release-cohort Oven Loaf. Those
+# Loafs are sealed into the release archive by Incan's packaging and are *not*
+# produced by `cargo build` on a source checkout, so a from-source compiler
+# cannot build this package at all.
+#
+# Why an Incan checkout is still needed: the release archive deliberately drops
+# the stdlib component sources (`crates/incan_stdlib/stdlib`). `incan tools
+# metadata api`, used by the registry-metadata gate, prepares SDK components
+# from that tree. So CI takes the binary and its Loafs from the release, and the
+# stdlib sources from a checkout at the matching tag, wired up via INCAN_STDLIB.
+# Nothing is compiled from the checkout.
 
 name: CI
 
@@ -19,11 +32,15 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
-  # Current Incan 0.5 development baseline (main at 2026-07-27).
-  # Keep INCAN_REF in every compiler-dependent cache key: multiple commits can
-  # report the same development version.
-  INCAN_REF: fe8c9d77caf7000ba8968cd0b07febab71dc6283
-  EXPECTED_INCAN_VERSION: 0.5.0-dev.32
+  # Pinned Incan release. INCAN_TAG selects both the toolchain archive and the
+  # stdlib-source checkout; the two must always name the same release.
+  INCAN_TAG: v0.5.0
+  EXPECTED_INCAN_VERSION: 0.5.0
+  # The release Loafs are sealed against an exact `rustc --version` identity and
+  # are verified against it, so this must name a concrete version. A floating
+  # `stable` channel drifts out from under the release the moment upstream
+  # publishes a new compiler.
+  RUST_VERSION: 1.98.0
   RUST_BACKTRACE: 1
   INCAN_NO_BANNER: 1
   INCAN_GENERATED_CARGO_TARGET_DIR: ${{ github.workspace }}/.incan-generated-cargo-target
@@ -36,32 +53,80 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            target: aarch64-apple-darwin
 
     steps:
       - name: Check out IncQL
         uses: actions/checkout@v4
 
-      - name: Check out Incan
+      # Checked out for its stdlib component sources only — never built here.
+      - name: Check out Incan stdlib sources
         uses: actions/checkout@v4
         with:
           repository: encero-systems/incan
-          ref: ${{ env.INCAN_REF }}
+          ref: ${{ env.INCAN_TAG }}
           path: incan
 
-      - name: Install Incan compiler
-        uses: ./incan/.github/actions/install-incan
+      - name: Install Rust ${{ env.RUST_VERSION }}
+        uses: dtolnay/rust-toolchain@master
         with:
-          profile: debug
-          cache-shared-key: incql-incan-${{ runner.os }}-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}
+          toolchain: ${{ env.RUST_VERSION }}
+
+      - name: Cache Incan release toolchain
+        id: toolchain-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/incan-toolchain
+          key: incql-incan-release-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_TAG }}
+
+      - name: Install Incan release toolchain
+        if: steps.toolchain-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          archive="incan-${INCAN_TAG}-${{ matrix.target }}.tar.gz"
+          workdir="$(mktemp -d)"
+          gh release download "$INCAN_TAG" \
+            --repo encero-systems/incan \
+            --pattern "$archive" \
+            --pattern "$archive.sha256" \
+            --dir "$workdir"
+          # The published .sha256 holds a bare digest, so compare it directly
+          # rather than feeding it to `shasum -c`, which wants "digest  name".
+          expected="$(tr -d '[:space:]' < "$workdir/$archive.sha256")"
+          actual="$(shasum -a 256 "$workdir/$archive" | awk '{ print $1 }')"
+          if [ "$expected" != "$actual" ]; then
+            echo "::error::Incan archive checksum mismatch (expected $expected, got $actual)"
+            exit 1
+          fi
+          mkdir -p "${{ runner.temp }}/incan-toolchain"
+          tar -xzf "$workdir/$archive" -C "${{ runner.temp }}/incan-toolchain"
+          rm -rf "$workdir"
+
+      - name: Expose Incan on PATH
+        run: |
+          set -euo pipefail
+          echo "${{ runner.temp }}/incan-toolchain/bin" >> "$GITHUB_PATH"
+          # The release archive ships no stdlib component sources; point the
+          # toolchain at the matching checkout so SDK component preparation
+          # (used by `incan tools metadata api`) can resolve them.
+          stdlib="${{ github.workspace }}/incan/crates/incan_stdlib/stdlib"
+          test -d "$stdlib" || { echo "::error::stdlib sources missing at $stdlib"; exit 1; }
+          echo "INCAN_STDLIB=$stdlib" >> "$GITHUB_ENV"
+          echo "INCAN_STDLIB_DIR=$stdlib" >> "$GITHUB_ENV"
 
       - name: Cache generated IncQL Cargo artifacts
         uses: actions/cache@v4
         with:
           path: .incan-generated-cargo-target
-          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
           restore-keys: |
-            incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
+            incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-
 
       - name: Cache generated IncQL Rust metadata
         uses: actions/cache@v4
@@ -72,16 +137,17 @@ jobs:
             target/incan_lock/rust_inspect/**/src/main.rs
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
-          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
           restore-keys: |
-            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
-            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
+            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
+            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
 
       - name: Show toolchain
         run: |
           incan --version
           test "$(incan --version)" = "incan ${EXPECTED_INCAN_VERSION}"
           rustc --version
+          test "$(rustc --version | awk '{ print $2 }')" = "${RUST_VERSION}"
 
       - name: Format check (package .incn)
         run: make fmt-check
@@ -92,9 +158,16 @@ jobs:
       - name: Function registry metadata check
         run: make registry-metadata
 
+      - name: Bake Oven project authority
+        run: make bake
+
       - name: Build library
         run: make build
 
+      # Known red: blocked upstream on encero-systems/incan#1189 — `incan test`
+      # cannot reconcile project inspection sources for a package whose Rust
+      # dependency closure requires unified Cargo resolution, which IncQL's
+      # datafusion/substrait closure does. Remove this comment when that lands.
       - name: Run tests
         run: make test
 

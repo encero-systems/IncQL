@@ -47,7 +47,17 @@ _MARKDOWN_LINK_RE = re.compile(r"!?\[([^]]*)\]\([^)]+\)")
 _MARKDOWN_REFERENCE_LINK_RE = re.compile(r"\[([^]]+)\]\[[^]]*\]")
 _METADATA_LINK_RE = re.compile(r"\[([^]]+)\]\((https?://[^\s)]+)\)")
 _BARE_URL_RE = re.compile(r"https?://\S+")
-_RELATED_RFC_RE = re.compile(r"(?:IncQL\s+)?RFC\s+(\d{3})", flags=re.IGNORECASE)
+# Only IncQL's own RFCs become `related_ids`. A cross-project reference such as
+# `Incan RFC 040` names a different corpus and must not resolve to the IncQL RFC
+# that happens to share its number. Each occurrence is judged on its own leading
+# label, so one Related block may cite both projects' RFC 040 without collision.
+_RELATED_RFC_RE = re.compile(
+    r"(?:(?P<label>[A-Za-z][A-Za-z0-9.+-]*)\s+)?RFC\s+(?P<id>\d{3})",
+    flags=re.IGNORECASE,
+)
+# Sibling projects whose RFC numbering is distinct from IncQL's. An unrecognized
+# leading word is treated as prose, preserving the bare `RFC NNN` behavior.
+_FOREIGN_PROJECT_LABELS = frozenset({"incan", "pallay"})
 _TAG_KEY_RE = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 
 
@@ -245,7 +255,19 @@ def _parse_related(raw: str) -> tuple[str, ...]:
 
 
 def _related_ids(raw: str) -> tuple[str, ...]:
-    return tuple(dict.fromkeys(_RELATED_RFC_RE.findall(raw)))
+    """Collect IncQL RFC ids from a Related block, ignoring cross-project references.
+
+    `Incan RFC 040` and `IncQL RFC 040` are different documents that happen to
+    share a number. Only the latter contributes a related id; the former is
+    recorded as prose in `related` and left out of the graph.
+    """
+    own_ids: list[str] = []
+    for match in _RELATED_RFC_RE.finditer(raw):
+        label = match.group("label")
+        if label and label.lower() in _FOREIGN_PROJECT_LABELS:
+            continue
+        own_ids.append(match.group("id"))
+    return tuple(dict.fromkeys(own_ids))
 
 
 def _parse_metadata_links(raw: str, field: str, source: Path) -> tuple[CatalogLink, ...]:

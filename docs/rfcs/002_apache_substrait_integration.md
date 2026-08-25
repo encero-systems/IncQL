@@ -215,30 +215,30 @@ Non-normative: toolchains **should** maintain golden Substrait plans or equivale
 
 ### Spec / design
 
-- [ ] Substrait revision pinning policy documented in release artifacts and compiler docs.
-- [ ] Normative operator catalog published (including gap annotations).
-- [ ] Extension URI registration conventions documented.
+- [x] Substrait revision pinning policy documented in release artifacts and compiler docs.
+- [x] Normative operator catalog published (including gap annotations).
+- [x] Extension URI registration conventions documented.
 
 ### IR / lowering — core relations
 
-- [ ] `ReadRel` emission: named table, virtual rows, extension sources.
-- [ ] `FilterRel` emission.
-- [ ] `ProjectRel` boundary scaffold emission.
-- [ ] `JoinRel` emission (semi, anti, single, mark variants).
-- [ ] `CrossRel` emission.
-- [ ] `AggregateRel` boundary scaffold emission.
-- [ ] `SortRel` emission.
-- [ ] `FetchRel` emission (limit / offset).
-- [ ] `SetRel` emission (union / intersect / except).
-- [ ] `ReferenceRel` ordinal emission at the Substrait boundary.
+- [x] `ReadRel` emission: named table, virtual rows, extension sources.
+- [x] `FilterRel` emission.
+- [x] `ProjectRel` boundary scaffold emission.
+- [x] `JoinRel` emission (semi, anti, single, mark variants).
+- [x] `CrossRel` emission.
+- [x] `AggregateRel` boundary scaffold emission.
+- [x] `SortRel` emission.
+- [x] `FetchRel` emission (limit / offset).
+- [x] `SetRel` emission (union / intersect / except).
+- [x] `ReferenceRel` ordinal emission at the Substrait boundary.
 - [ ] Lowering is identical across `query {}`, method chains, and desugared pipe-forward for the same checked tree once RFC 003 and Prism-backed lowering land.
-- [ ] Field references align with RFC 001 `model`-backed schemas and `NamedStruct` indices.
+- [x] Field references align with RFC 001 `model`-backed schemas and `NamedStruct` indices.
 
 ### Extensions and read binding
 
-- [ ] Extension URI registration for non-core functions wired in toolchain catalog.
-- [ ] Logical `ReadRel` carries no normative secret material (binding left to execution context).
-- [ ] Documented extension encoding for unnest / explode gap.
+- [x] Extension URI registration for non-core functions wired in toolchain catalog.
+- [x] Logical `ReadRel` carries no normative secret material (binding left to execution context).
+- [x] Documented extension encoding for unnest / explode gap.
 
 ### Optional mutation profile
 
@@ -255,8 +255,8 @@ Non-normative: toolchains **should** maintain golden Substrait plans or equivale
 
 ### Docs
 
-- [ ] Operator catalog page updated in docs-site.
-- [ ] Release notes entry added.
+- [x] Operator catalog page updated in docs-site.
+- [x] Release notes entry added.
 
 ## Design Decisions
 
@@ -271,3 +271,14 @@ Non-normative: toolchains **should** maintain golden Substrait plans or equivale
 [ref-revision-policy]: ../language/reference/substrait/revision_and_extension_policy.md
 [ref-read-root]: ../language/reference/substrait/read_root_binding_contract.md
 [ref-conformance-corpus]: ../language/reference/substrait/conformance.md
+
+### Exit criteria for RFC status change
+
+RFC 002 can move from `In Progress` to `Implemented` when the required checklist items above are complete and the IncQL CI gate is green on the target release branch.
+
+Three items are explicitly **not** required. `WriteRel`, `DdlRel`, and `UpdateRel` are optional profiles; IncQL may ship this RFC as `Implemented` without them, and doing so must be recorded rather than left implicit.
+
+One item is **scoped by dependency**. Lowering equivalence across authoring surfaces can only be asserted for surfaces that exist. It must hold for `query {}` blocks and method chains before this RFC closes; the pipe-forward clause becomes assertable only when IncQL RFC 005 lands and must not block this RFC until then.
+
+The remaining items are required. Golden plan fixtures and the round-trip test are what make the interchange contract falsifiable rather than aspirational, and the secret-material test is what turns "logical reads carry no credentials" from a design intention into a checked property. A Substrait boundary with no golden fixtures cannot detect the revision drift this RFC exists to manage.
+

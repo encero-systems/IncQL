@@ -48,6 +48,15 @@ help: ## Show Make targets
 
 INCQL_TEST_DIR := tests
 
+# Since Incan 0.5, a project that declares `[rust-dependencies]` must hold a
+# source-current Oven project inspection authority before `incan build --lib`
+# will run. `bake` establishes that authority; it is a no-op replay once the
+# sealed Loafs for this source and lock state are already in the Oven store.
+.PHONY: bake
+bake: ## Establish the Oven project inspection authority (`incan oven bake`)
+	@echo "\033[1mBaking IncQL Oven project authority...\033[0m"
+	@$(INCAN) oven bake --project .
+
 .PHONY: build
 build: ## Build the library (`incan build --lib`)
 	@echo "\033[1mBuilding IncQL library...\033[0m"
@@ -172,15 +181,15 @@ fmt-check: ## Check formatting without writing (`incan fmt --check` per director
 # =============================================================================
 
 .PHONY: check
-check: fmt-check test-style vocab-companion-test registry-metadata build test ## Format check, style gate, metadata check, build, and test
+check: fmt-check test-style vocab-companion-test registry-metadata bake build test ## Format check, style gate, metadata check, build, and test
 	@echo "\033[32m✓ check passed\033[0m"
 
 .PHONY: pre-commit
-pre-commit: fmt-check test-style vocab-companion-test registry-metadata build test ## Fast gate before commit (same as `check`)
+pre-commit: fmt-check test-style vocab-companion-test registry-metadata bake build test ## Fast gate before commit (same as `check`)
 	@echo "\033[32m✓ pre-commit gate passed\033[0m"
 
 .PHONY: ci
-ci: fmt-check test-style vocab-companion-test registry-metadata build test smoke-consumer ## Same steps as GitHub Actions `incql` job
+ci: fmt-check test-style vocab-companion-test registry-metadata bake build test smoke-consumer ## Same steps as GitHub Actions `incql` job
 	@echo "\033[32m✓ ci gate passed\033[0m"
 
 .PHONY: verify

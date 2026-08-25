@@ -137,3 +137,26 @@ Plans without lineage remain executable. Inspection APIs must distinguish unsupp
 - How should lineage represent set operations once IncQL adds them?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+
+## Implementation plan and checklist (non-normative)
+
+This section tracks the implementation path for this RFC. It is intentionally operational and does not change the normative semantics above.
+
+### Plan
+
+1. Land native lineage edges over semantic targets rather than over backend plan strings.
+2. Cover the relational operations the current authoring surface can express.
+3. Preserve authored-origin relationships through rewrites, and ingress-origin relationships once ingress exists.
+
+### Checklist
+
+- [x] Relationship kinds cover value, control, grouping, join, sort, window, policy, and quality dependencies.
+- [x] Confidence is represented as exact, conservative, or unknown.
+- [x] Edges are derived over authored and rewritten Prism views with origin mappings preserved.
+- [x] Reads, projections, filters, joins, aggregates, windows, generators, ordering, and limits contribute edges.
+- [ ] Nested-data access and semi-structured or format-parsing helpers from the function catalog program contribute edges, or are explicitly recorded as unsupported lineage rather than silently omitted.
+- [ ] Ingress-origin relationships are preserved through rewrites once IncQL RFC 041 lands.
+
+### Exit criteria for RFC status change
+
+RFC 030 can move from `In Progress` to `Implemented` when every checklist item above is complete and the IncQL CI gate is green on the target release branch. Function-catalog coverage is required: a lineage graph that silently omits edges for helpers the authoring surface offers is not conservative, it is wrong, and downstream selection and blast-radius consumers cannot detect the omission.
