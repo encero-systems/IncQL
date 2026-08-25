@@ -418,7 +418,27 @@ body:has(.incql-launch) .incql-hero h1 {
   -webkit-backdrop-filter: blur(16px) saturate(108%);
 }
 
-.incql-convergence-section {
+/* Nested crystal surfaces ------------------------------------------------
+ * A `backdrop-filter` inside another one samples its parent's already blurred,
+ * already flattened surface. The visible difference is nil; the cost is a
+ * compositing layer plus a full blur pass per element, every frame anything
+ * above it animates. Only the outermost surface of each band samples the real
+ * page behind it, so only it needs the filter.
+ *
+ * Deliberately not listing `.incql-trust` here: that section has no filter of
+ * its own, so its two cards are outermost and must keep theirs. */
+.incql-convergence-section *,
+.incql-process *,
+.incql-prism-visible *,
+.incql-surfaces *,
+.incql-final-cta * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Pinned flush only when it is the band directly under the hero. It no longer
+ * always is, and the rule silently won on `!important` wherever it applied. */
+.incql-hero + .incql-convergence-section {
   margin-top: 0 !important;
 }
 

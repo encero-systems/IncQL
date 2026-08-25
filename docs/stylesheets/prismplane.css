@@ -1614,7 +1614,7 @@ body:has(.incql-launch) .md-typeset li {
 .incql-hero {
   position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   min-height: clamp(23rem, 40svh, 26rem);
   padding: clamp(0.8rem, 1.4vw, 1.3rem) 0 clamp(0.6rem, 1vw, 0.8rem);
 }
@@ -1741,6 +1741,7 @@ body:has(.incql-launch) .md-typeset li {
   filter: saturate(1.04) contrast(1.02);
 }
 
+.incql-launch > .incql-showcase,
 .incql-launch > .incql-convergence-section,
 .incql-launch > .incql-process,
 .incql-launch > .incql-prism-visible,
@@ -1750,9 +1751,7 @@ body:has(.incql-launch) .md-typeset li {
   margin-top: clamp(1.6rem, 3vw, 2.7rem);
 }
 
-.incql-launch > .incql-convergence-section {
-  margin-top: 0;
-}
+
 
 .incql-convergence-section,
 .incql-process,
@@ -1811,8 +1810,8 @@ body:has(.incql-launch) .md-typeset li {
 
 .incql-friction-list article {
   display: grid;
-  grid-template-columns: 3.1rem minmax(0, 1fr);
-  gap: 0.9rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.25rem;
   align-items: start;
   padding: clamp(0.7rem, 1vw, 0.9rem) 0;
   border-bottom: 1px solid var(--incql-page-line);
@@ -1931,7 +1930,7 @@ body:has(.incql-launch) .md-typeset li {
 .incql-map-body {
   position: relative;
   display: block;
-  min-height: clamp(21rem, 26vw, 28rem);
+  min-height: clamp(22rem, 28vw, 30rem);
   margin-top: clamp(0.95rem, 1.6vw, 1.45rem);
   border-radius: clamp(1rem, 1.55vw, 1.4rem);
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0.2) 100%);
@@ -1978,15 +1977,17 @@ body:has(.incql-launch) .md-typeset li {
 }
 
 .incql-map-sources {
-  top: 19%;
+  top: 50%;
   left: 6.2%;
   width: 24%;
+  transform: translateY(-50%);
 }
 
 .incql-map-targets {
-  top: 19%;
+  top: 50%;
   right: 3.4%;
   width: 23.4%;
+  transform: translateY(-50%);
 }
 
 .incql-map-sources article,
@@ -2791,14 +2792,27 @@ body:has(.incql-launch) .md-typeset li {
     rgba(255, 255, 255, 0.86) !important;
 }
 
-.incql-trust__number {
+/* Was a large 01 / 02 watermark, which promised an order these two parallel
+ * claims do not have. A glyph naming the card's subject holds the same corner
+ * weight and says something true. */
+.incql-trust__mark {
   position: absolute;
-  top: 1.3rem;
+  top: 1.35rem;
   right: 1.45rem;
-  color: rgba(71, 109, 255, 0.18);
-  font-size: clamp(2.4rem, 4vw, 4.2rem);
-  font-weight: 860;
-  line-height: 1;
+  display: grid;
+  place-items: center;
+  width: clamp(2.4rem, 3.4vw, 3.4rem);
+  height: clamp(2.4rem, 3.4vw, 3.4rem);
+  border: 1px solid rgba(71, 109, 255, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.incql-trust__mark img {
+  width: 55%;
+  height: auto;
+  margin: 0;
+  opacity: 0.55;
 }
 
 .incql-trust article .incql-section-kicker {
@@ -2907,7 +2921,7 @@ body:has(.incql-launch) .md-typeset li {
 
   .incql-hero {
     min-height: clamp(26rem, 46vw, 29rem);
-    align-items: flex-start;
+    align-items: center;
     padding-top: 1.8rem;
   }
 
@@ -3063,6 +3077,7 @@ body:has(.incql-launch) .md-typeset li {
     position: relative;
     inset: auto;
     width: auto;
+    transform: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -3095,6 +3110,7 @@ body:has(.incql-launch) .md-typeset li {
     gap: 0.8rem;
     min-height: calc(100svh - 3rem);
     padding: 1.1rem 0 0.75rem;
+    align-items: flex-start;
   }
 
   .incql-hero::before {
@@ -7454,5 +7470,532 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
 
   body:has(.incql-architecture) .md-typeset .incql-architecture-next a {
     text-align: center;
+  }
+}
+
+/* ---- Landing: worked-example showcase -----------------------------------
+ * Sits directly under the hero, where the four adjective cards used to be.
+ * A language surface earns its claims by showing syntax, so the code leads and
+ * each note beside it says what that code buys the reader — with a link to the
+ * reference page that owns the contract. */
+
+.incql-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1.32fr) minmax(15rem, 0.68fr);
+  gap: clamp(1.2rem, 2.4vw, 2.4rem);
+  align-items: start;
+  padding: clamp(1.4rem, 2.6vw, 2.4rem);
+  border: 1px solid var(--incql-page-line);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(92, 148, 255, 0.12), transparent 26rem),
+    radial-gradient(circle at 92% 82%, rgba(190, 98, 255, 0.09), transparent 24rem),
+    linear-gradient(112deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.84));
+  box-shadow: 0 26px 64px rgba(55, 74, 123, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.md-typeset .incql-showcase__label {
+  margin: 0 0 0.6rem;
+  color: var(--incql-page-muted);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* The snippet is the anchor of the band, so it keeps its own surface rather
+ * than inheriting the page's default code styling. */
+.md-typeset .incql-showcase__code .highlight {
+  margin: 0;
+  border: 1px solid var(--incql-page-line);
+  border-radius: 14px;
+  box-shadow: 0 18px 42px rgba(55, 74, 123, 0.1);
+}
+
+.md-typeset .incql-showcase__code pre {
+  margin: 0;
+}
+
+.md-typeset .incql-showcase__code pre > code {
+  overflow: visible;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  font-size: 0.715rem;
+  line-height: 1.65;
+}
+
+.incql-showcase__notes {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.md-typeset .incql-showcase__hint {
+  margin: 0.15rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--incql-page-line);
+  color: var(--incql-page-muted);
+  font-size: 0.78rem;
+}
+
+.md-typeset .incql-showcase__notes > .incql-section-kicker {
+  margin: 0;
+}
+
+.incql-showcase__notes article {
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--incql-page-line-strong);
+}
+
+.md-typeset .incql-showcase__notes h3 {
+  margin: 0 0 0.3rem;
+  color: var(--incql-page-ink);
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.md-typeset .incql-showcase__notes p {
+  margin: 0 0 0.4rem;
+  color: var(--incql-page-copy);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.md-typeset .incql-showcase__notes a {
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 59.9375em) {
+  .incql-showcase {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.3rem;
+  }
+  .md-typeset .incql-showcase__code pre > code { overflow-x: auto; }
+}
+
+/* ---- 404 ----------------------------------------------------------------
+ * The default template renders a bare status heading. A reader who lands here
+ * has a navigation problem, so give them routes out rather than a diagnosis. */
+
+.incql-notfound { max-width: 46rem; }
+
+.md-typeset .incql-notfound h1 {
+  margin: 0 0 0.6rem;
+  color: var(--incql-page-ink);
+}
+
+.md-typeset .incql-notfound__lead {
+  margin: 0 0 1.6rem;
+  color: var(--incql-page-copy);
+  font-size: 0.95rem;
+}
+
+/* The joke only works if it looks like a real query block, so it borrows the
+ * snippet treatment rather than the default code styling. */
+.incql-notfound__joke {
+  margin: 0 0 1.6rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--incql-page-line);
+  border-left: 3px solid var(--incql-page-blue);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.md-typeset .incql-notfound__joke pre {
+  margin: 0 0 0.75rem;
+  padding: 0;
+  background: none;
+  overflow-x: auto;
+}
+
+.md-typeset .incql-notfound__joke code {
+  padding: 0;
+  background: none;
+  color: var(--incql-page-copy);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.md-typeset .incql-notfound__joke .k { color: #7a4ddb; font-weight: 700; }
+.md-typeset .incql-notfound__joke .s { color: #1d7a5f; }
+
+.md-typeset .incql-notfound__joke p {
+  margin: 0;
+  color: var(--incql-page-muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.md-typeset .incql-notfound__joke b { color: var(--incql-page-ink); }
+
+.incql-notfound__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.md-typeset .incql-notfound__grid a {
+  display: block;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--incql-page-line);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.6);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 130ms ease, box-shadow 130ms ease, transform 130ms ease;
+}
+
+.md-typeset .incql-notfound__grid a:hover,
+.md-typeset .incql-notfound__grid a:focus-visible {
+  border-color: var(--incql-page-line-strong);
+  box-shadow: 0 16px 38px rgba(55, 74, 123, 0.12);
+  transform: translateY(-1px);
+}
+
+.md-typeset .incql-notfound__grid strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--incql-page-ink);
+  font-size: 0.92rem;
+}
+
+.md-typeset .incql-notfound__grid span {
+  color: var(--incql-page-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.md-typeset .incql-notfound__search {
+  margin: 0;
+  color: var(--incql-page-muted);
+  font-size: 0.85rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .incql-notfound__grid a { transition: none; }
+  .md-typeset .incql-notfound__grid a:hover { transform: none; }
+}
+
+/* The lead note tells the reader the markers are clickable, so the glyph it
+ * names should look like the marker it refers to. */
+.md-typeset .incql-annot-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 50%;
+  background: var(--incql-page-blue);
+  color: #fff;
+  font-size: 0.78em;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: -0.12em;
+}
+
+/* ---- Convergence map: measured connectors -------------------------------
+ * Drawn by prismplane.js from the live card positions. Sits under the cards
+ * and the mark, above the map's ambient wash. The pre-rendered raster stays as
+ * the no-JS fallback and is only hidden once these have been drawn. */
+
+.incql-map-links {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.incql-map-link {
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* The continuous relationship. */
+.incql-map-link--base {
+  stroke-width: 1.1;
+  stroke-opacity: 0.34;
+}
+
+/* The travelling pulse on top: a long dash with a long gap reads as movement
+ * rather than as a dotted line. */
+.incql-map-link--pulse {
+  stroke-width: 1.7;
+  stroke-dasharray: 9 42;
+  animation: incql-map-flow 3.1s linear infinite;
+}
+
+/* Undrawn by default; the observer adds `has-drawn` on first view. A path
+ * inserted after that renders at its final state rather than replaying, which
+ * is what keeps resizes from re-animating. */
+.incql-map-links .incql-map-link--base {
+  stroke-dasharray: var(--len, 0);
+  stroke-dashoffset: var(--len, 0);
+}
+
+.incql-map-links.has-drawn .incql-map-link--base {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.15s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* The pulse only makes sense once there is a line for it to travel. */
+.incql-map-links .incql-map-link--pulse { opacity: 0; }
+.incql-map-links.has-drawn .incql-map-link--pulse {
+  opacity: 1;
+  transition: opacity 0.5s ease-out 0.85s;
+}
+
+.incql-map-link--in { stroke: url(#incql-map-in); }
+.incql-map-link--out { stroke: url(#incql-map-out); }
+.incql-map-link--out.incql-map-link--pulse { animation-duration: 3.6s; }
+
+@keyframes incql-map-flow {
+  from { stroke-dashoffset: 51; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .incql-map-link--pulse { display: none; }
+  .incql-map-links .incql-map-link--base,
+  .incql-map-links.has-drawn .incql-map-link--base {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    stroke-opacity: 0.55;
+    stroke-width: 1.3;
+    transition: none;
+  }
+}
+
+/* Once the measured lines exist, the blurred stand-in is redundant. */
+.incql-map-body.has-links::before {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .incql-map-link {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-opacity: 0.75;
+  }
+}
+
+/* ---- Convergence map: the mark breathes ---------------------------------
+ * Two halos rather than one, cross-fading half a cycle apart, so the glow
+ * alternates between the brand's cyan and magenta. A registered custom
+ * property could animate a single gradient's colour, but two stacked layers
+ * need no `@property` support and let the crossover blend the two hues.
+ *
+ * The full colour cycle is 6.2s, which is two 3.1s breaths — one per colour —
+ * keeping each breath in step with the inbound connector pulse. */
+
+.incql-map-core::before,
+.incql-map-core::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -52%;
+  border-radius: 50%;
+  animation: incql-core-halo 6.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.incql-map-core::before {
+  background: radial-gradient(
+    circle,
+    rgba(10, 174, 232, 0.34) 0%,
+    rgba(10, 174, 232, 0.15) 44%,
+    transparent 70%
+  );
+}
+
+/* Half a cycle behind, so it peaks as the cyan fades. */
+.incql-map-core::after {
+  background: radial-gradient(
+    circle,
+    rgba(191, 96, 255, 0.32) 0%,
+    rgba(191, 96, 255, 0.14) 44%,
+    transparent 70%
+  );
+  animation-delay: -3.1s;
+}
+
+.incql-map-core img {
+  animation: incql-core-glow 6.2s ease-in-out infinite;
+}
+
+/* Neither layer reaches zero, so the crossover reads as a blend of the two
+ * rather than as the glow blinking out twice a cycle. */
+@keyframes incql-core-halo {
+  0%, 100% { opacity: 0.12; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+
+/* The mark's existing drop-shadow is carried through every keyframe, so only
+ * the glow moves and the logo keeps sitting on the same ground. */
+@keyframes incql-core-glow {
+  0%, 100% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 5px rgba(10, 174, 232, 0.3));
+  }
+  25% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 14px rgba(10, 174, 232, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 5px rgba(191, 96, 255, 0.3));
+  }
+  75% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 14px rgba(191, 96, 255, 0.6));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .incql-map-core::before,
+  .incql-map-core::after {
+    animation: none;
+    transform: scale(1);
+  }
+  .incql-map-core::before { opacity: 0.6; }
+  .incql-map-core::after { opacity: 0.4; }
+  .incql-map-core img { animation: none; }
+}
+
+/* ---- "Same plan" confirmation -------------------------------------------
+ * Fired by prismplane.js when the reader switches authoring surface. The
+ * point being made is that this panel did NOT change, so the cue has to
+ * announce a non-event: a chip that says so, and a brief edge highlight to
+ * pull the eye across from the panel that did change. */
+
+.incql-same-plan {
+  position: relative;
+}
+
+.incql-same-plan::after {
+  content: "unchanged";
+  position: absolute;
+  z-index: 4;
+  top: 0.85rem;
+  right: 0.9rem;
+  padding: 0.16rem 0.48rem;
+  border: 1px solid rgba(20, 180, 143, 0.4);
+  border-radius: 999px;
+  background: rgba(233, 252, 246, 0.94);
+  color: #0f8a6d;
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.incql-same-plan.is-unchanged::after {
+  animation: incql-unchanged-chip 2.1s ease-out 1;
+}
+
+.incql-same-plan.is-unchanged {
+  animation: incql-unchanged-edge 2.1s ease-out 1;
+}
+
+@keyframes incql-unchanged-chip {
+  0% { opacity: 0; transform: translateY(-3px); }
+  14% { opacity: 1; transform: translateY(0); }
+  72% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-3px); }
+}
+
+@keyframes incql-unchanged-edge {
+  0% { box-shadow: 0 0 0 0 rgba(20, 180, 143, 0); }
+  16% { box-shadow: 0 0 0 2px rgba(20, 180, 143, 0.34); }
+  100% { box-shadow: 0 0 0 0 rgba(20, 180, 143, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the message, drop the movement: hold the chip briefly instead. */
+  .incql-same-plan.is-unchanged::after { animation: incql-unchanged-hold 2.1s steps(1, end) 1; }
+  .incql-same-plan.is-unchanged { animation: none; }
+  @keyframes incql-unchanged-hold {
+    0%, 92% { opacity: 1; transform: none; }
+    100% { opacity: 0; transform: none; }
+  }
+}
+
+/* ---- Process rail connector ---------------------------------------------
+ * Threads the five stages so the sequence reads visually, not only from the
+ * numbering. Sits behind the cards, which are z-index 2 on the rail. */
+
+.incql-rail-link {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.incql-rail-chevron {
+  fill: none;
+  stroke: rgba(71, 109, 255, 0.5);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- Section bridges ----------------------------------------------------
+ * The bands below the convergence map are a descent: the plan, then its
+ * stages, then its contents, then the guarantee. Each band was self-contained,
+ * which is how a slide deck works — a presenter narrates the joins aloud. On a
+ * page nobody does, so the joins have to be written.
+ *
+ * These sit between the bands rather than inside them, so they read as
+ * narration rather than as another section's opening line. The chevron points
+ * down because the movement being described is downward: into detail. */
+
+.incql-launch > .incql-bridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: min(100% - 2rem, 34rem);
+  margin: clamp(1.5rem, 2.8vw, 2.5rem) auto clamp(1.2rem, 2.2vw, 2rem);
+  color: var(--incql-page-copy);
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.incql-bridge__arrow {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid rgba(71, 109, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--incql-page-blue);
+}
+
+.incql-bridge__arrow svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+@media screen and (max-width: 44em) {
+  .incql-launch > .incql-bridge {
+    width: min(100% - 1.25rem, 34rem);
+    font-size: 0.92rem;
   }
 }

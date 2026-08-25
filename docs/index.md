@@ -9,15 +9,9 @@
 
 <div class="incql-actions">
 <a class="incql-button incql-button--primary" href="language/">Start learning IncQL</a>
-<a class="incql-button" href="language/how-to/inspect_plan_lineage/">See Prism in action</a>
+<a class="incql-button" href="language/how-to/inspect_plan_lineage/">See a plan before it runs</a>
 </div>
 
-<div class="incql-proof-row" aria-label="IncQL proof points">
-<span><strong>Typed & safe</strong> Catch issues early with static typing</span>
-<span><strong>Inspectable</strong> See the plan before execution</span>
-<span><strong>Portable</strong> Compile to Substrait</span>
-<span><strong>Governed</strong> Observe and verify behavior</span>
-</div>
 </div>
 
 <div class="incql-hero__visual" aria-label="Prism refracts data logic into inspectable typed plan layers.">
@@ -25,6 +19,80 @@
 <source srcset="shared/prismplane/prismplane-hero-light.webp" type="image/webp">
 <img src="shared/prismplane/prismplane-hero-light.png" width="1672" height="941" decoding="async" fetchpriority="high" alt="A glass prism refracting data logic into layered plan stages.">
 </picture>
+</div>
+</section>
+
+<section class="incql-showcase" markdown="1">
+<div class="incql-showcase__code" markdown="1">
+<p class="incql-showcase__label">Reading paid orders from a CSV</p>
+
+```incan
+import pub::incql  # (1)!
+from pub::incql import LazyFrame, Session, SessionError, desc
+
+model Order:  # (2)!
+    order_id: int
+    customer_id: str
+    status: str
+    amount: float
+
+model PaidOrder:  # (3)!
+    order_id: int
+    amount: float
+
+def paid_orders(
+    mut session: Session,  # (4)!
+) -> Result[LazyFrame[PaidOrder], SessionError]:  # (5)!
+    orders: LazyFrame[Order] = session.read_csv("orders", "orders.csv")?  # (6)!
+    paid: LazyFrame[PaidOrder] = query {  # (7)!
+        FROM orders
+        WHERE .status == "paid"
+        SELECT
+            .order_id as order_id,
+            .amount as amount,
+        ORDER BY desc(.amount)
+    }
+    return Ok(paid)
+```
+
+1.  **Two imports, doing different jobs.** `import pub::incql` activates IncQL's vocabulary — it is what lets `query { }` parse as syntax at all. The `from ... import` line brings in the names this program uses. A program with a query block needs both.
+2.  **`model` is an ordinary Incan record type** — not an IncQL construct. It declares a row's fields and their types in source, so the schema is something written down rather than something the file reveals at runtime.
+3.  **The output shape gets a name too.** Projecting to `PaidOrder` is what keeps the result typed. Without it you would be back to "some rows with some columns".
+4.  **`mut` means this call changes the Session.** Incan is explicit about mutation, and registering a source mutates the registry — so you can see, at the call site, that something was written to.
+5.  **`Result` and `?` are Incan's failure path.** There are no exceptions: a read that can fail returns `Result`, and `?` hands the failure to the caller. Nothing fails invisibly.
+6.  **`LazyFrame[Order]` is a carrier that knows its row type — and has not run.** `LazyFrame` is the deferred one; `DataFrame[T]` is its eager sibling and `DataStream[T]` the unbounded one. The `[Order]` is what later clauses are checked against. Nothing in the arguments implies the row type, so it has to be given: either by this annotation, or explicitly as `session.read_csv[Order](...)`.
+7.  **The query block is typed against that carrier.** `.status` resolves against `Order`'s fields, so this is checked relational logic, not a string handed to an engine.
+
+</div>
+
+<div class="incql-showcase__notes" markdown="1">
+<p class="incql-section-kicker">What this buys you</p>
+
+<article markdown="1">
+### Mistakes surface before anything runs
+
+Three lines would do this elsewhere. Those three cannot tell you `amount` is still a `float`.
+
+[Dataset carriers](language/reference/dataset_carriers.md)
+</article>
+
+<article markdown="1">
+### Switch surface without a rewrite
+
+The equivalent `LazyFrame` method chain resolves the same names and produces the same plan.
+
+[Query blocks](language/reference/query_blocks.md)
+</article>
+
+<article markdown="1">
+### You decide when data moves
+
+Nothing runs until `collect(...)`. Until then the plan is inspectable and lowers to Substrait.
+
+[Execution context](language/reference/execution_context.md)
+</article>
+
+<p class="incql-showcase__hint">Click any <span class="incql-annot-hint">+</span> to see what a line does.</p>
 </div>
 </section>
 
@@ -36,35 +104,23 @@ Teams lose time to expression, semantics drift, and opaque pipelines that lock t
 
 <div class="incql-friction-list">
 <article>
-<span>01</span>
-<div>
 <h3>Too many ways to express logic</h3>
 <p>SQL, DataFrames, pipelines, and notebooks each carry their own shape.</p>
-</div>
 </article>
 
 <article>
-<span>02</span>
-<div>
 <h3>Different semantics and behaviors</h3>
 <p>Small rewrites can change meaning before anyone sees the plan.</p>
-</div>
 </article>
 
 <article>
-<span>03</span>
-<div>
 <h3>Hard to inspect and debug</h3>
 <p>You see results, but not the logic, lineage, or rechecking behavior.</p>
-</div>
 </article>
 
 <article>
-<span>04</span>
-<div>
 <h3>Tied to specific engines</h3>
 <p>Porting usually means rewriting logic and revalidating behavior.</p>
-</div>
 </article>
 </div>
 </div>
@@ -120,6 +176,8 @@ Teams lose time to expression, semantics drift, and opaque pipelines that lock t
 </div>
 </div>
 </section>
+
+<p class="incql-bridge"><span class="incql-bridge__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>That one plan is the whole trick. Everything below is a closer look at it.</p>
 
 <section class="incql-process" markdown="1">
 <div class="incql-section-heading incql-process-heading" markdown="1">
@@ -210,6 +268,8 @@ model Order:
 </div>
 </section>
 
+<p class="incql-bridge"><span class="incql-bridge__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Stage three is the only one you can open and read. Here is what is inside.</p>
+
 <section class="incql-prism-visible" markdown="1">
 <div class="incql-section-heading" markdown="1">
 <p class="incql-section-kicker">Inspect before execution</p>
@@ -274,6 +334,8 @@ Source(orders)
 </div>
 </div>
 </section>
+
+<p class="incql-bridge"><span class="incql-bridge__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>If the plan is what matters, the way you write it should not. It does not.</p>
 
 <section class="incql-surfaces" markdown="1">
 <div class="incql-surfaces__copy" markdown="1">
@@ -341,7 +403,7 @@ preview = (
 
 <section class="incql-trust" markdown="1">
 <article class="incql-trust__card incql-trust__card--confidence" markdown="1">
-<div class="incql-trust__number" aria-hidden="true">01</div>
+<div class="incql-trust__mark" aria-hidden="true"><img src="shared/icons/shield-check-outline.svg" alt=""></div>
 <p class="incql-section-kicker">Confidence by construction</p>
 
 ## Built for trust
@@ -353,7 +415,7 @@ preview = (
 </article>
 
 <article class="incql-trust__card incql-trust__card--developer" markdown="1">
-<div class="incql-trust__number" aria-hidden="true">02</div>
+<div class="incql-trust__mark" aria-hidden="true"><img src="shared/icons/code-braces-box.svg" alt=""></div>
 <p class="incql-section-kicker">A surface developers can own</p>
 
 ## Engineered for developers

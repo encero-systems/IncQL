@@ -56,8 +56,8 @@ markdown_extensions:
 
 extra_css:
   # Ordered ownership contract: see docs/contributing/prismplane_docs_theme.md.
-  - stylesheets/prismplane.css?v=20260722-nav-chevron-35
-  - stylesheets/crystalline.css?v=20260726-landing-polish-10
+  - stylesheets/prismplane.css?v=20260825-bridges-1
+  - stylesheets/crystalline.css?v=20260825-flatten-nested-1
   - stylesheets/crystal-prototype.css?v=20260723-guides-nav-2
   - stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1
   - stylesheets/crystal-integration.css?v=20260825-roadmap-cta-gh-1
@@ -65,7 +65,7 @@ extra_css:
   - stylesheets/crystal-book.css?v=20260723-book-concepts-7
 
 extra_javascript:
-  - javascripts/prismplane.js?v=20260723-architecture-nav-28
+  - javascripts/prismplane.js?v=20260825-rail-chevron-1
   - javascripts/crystalline.js?v=20260720-crystal-port-4
 
 nav:
