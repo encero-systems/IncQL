@@ -56,7 +56,7 @@ markdown_extensions:
 
 extra_css:
   # Ordered ownership contract: see docs/contributing/prismplane_docs_theme.md.
-  - stylesheets/prismplane.css?v=20260825-map-links-2
+  - stylesheets/prismplane.css?v=20260825-core-breathe-1
   - stylesheets/crystalline.css?v=20260825-band-rhythm-1
   - stylesheets/crystal-prototype.css?v=20260723-guides-nav-2
   - stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1

@@ -7743,3 +7743,56 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
     stroke-opacity: 0.75;
   }
 }
+
+/* ---- Convergence map: the mark breathes ---------------------------------
+ * Timed to the inbound connector pulse (3.1s), so the glow reads as a
+ * consequence of what arrives rather than as decoration running on its own
+ * clock. Kept low-amplitude on purpose — it should be noticed second, after
+ * the diagram itself. */
+
+.incql-map-core::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -52%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(124, 108, 255, 0.32) 0%,
+    rgba(190, 98, 255, 0.15) 44%,
+    transparent 70%
+  );
+  animation: incql-core-halo 3.1s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.incql-map-core img {
+  animation: incql-core-glow 3.1s ease-in-out infinite;
+}
+
+@keyframes incql-core-halo {
+  0%, 100% { opacity: 0.5; transform: scale(0.93); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* The base drop-shadow is the one already on the mark; only its glow moves,
+ * so the logo keeps sitting on the same ground throughout. */
+@keyframes incql-core-glow {
+  0%, 100% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 5px rgba(124, 108, 255, 0.28));
+  }
+  50% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 14px rgba(168, 110, 255, 0.55));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .incql-map-core::before {
+    animation: none;
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  .incql-map-core img { animation: none; }
+}
