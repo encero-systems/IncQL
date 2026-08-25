@@ -68,6 +68,21 @@ Planned
 </div>
 
 </div>
+
+??? note "Why this matters"
+
+    Every data team has shipped a rename that passed review, ran green, and quietly
+    poisoned a dashboard for a week. The mistake was cheap; the distance between
+    making it and hearing about it was expensive.
+
+    That distance is the whole cost. A typo caught while you still hold the context
+    that created it costs seconds. The same typo caught by a stakeholder costs a
+    morning of archaeology, a correction, and some of the trust that made anyone
+    look at the number in the first place.
+
+    The promise is not that you stop making mistakes. It is that the feedback
+    arrives while you are still the person best placed to fix them.
+
 </div>
 
 <div class="moment crystal-surface" data-status="available" markdown>
@@ -94,6 +109,22 @@ Out of scope
 </div>
 
 </div>
+
+??? note "Why this matters"
+
+    When your logic lives inside strings, your tools go blind. Your editor cannot
+    follow a reference it cannot parse. Rename a column and grep becomes your
+    refactoring tool. Every guarantee the language gives you stops at the quote
+    mark.
+
+    Staying in the language means those guarantees keep applying to the part of
+    your work that handles the most valuable thing you own. Your schema is a type,
+    so it can be shared, imported, and reasoned about. Your query is source, so it
+    is navigable, diffable, and reviewable like everything else.
+
+    The alternative is not worse syntax. It is a smaller set of things your tools
+    can help you with.
+
 </div>
 
 <div class="moment crystal-surface" data-status="available" markdown>
@@ -123,6 +154,21 @@ Planned
 </div>
 
 </div>
+
+??? note "Why this matters"
+
+    In most data tooling, types survive right up until the data arrives, and then
+    evaporate. You carefully describe a schema, run the query, and get back
+    something the compiler knows nothing about. Every line after that is guessing.
+
+    Keeping the row type through execution means the code downstream of a query is
+    as checked as the code upstream of it. The result is not a bag of columns you
+    hope has the right shape — it is a value whose shape the compiler already
+    agreed to.
+
+    That matters most where data work usually gets fragile: the transformation
+    after the transformation, written weeks later by someone else.
+
 </div>
 
 <div class="moment crystal-surface" data-status="partial" markdown>
@@ -151,6 +197,20 @@ Planned
 </div>
 
 </div>
+
+??? note "Why this matters"
+
+    Reviewing data logic today usually means reading the code and hoping you
+    correctly imagined what it would do — then finding out afterwards by reading
+    logs. The feedback arrives after the compute is spent and the table is written.
+
+    Being able to inspect the plan before execution moves review from post-mortem
+    to pre-flight. You can see which sources it touches, how the schema flows, and
+    where each output field actually came from, without running anything.
+
+    This is also what makes the other moments compound: lineage that exists before
+    execution is what lets a build system know precisely what your change affects.
+
 </div>
 
 <div class="moment crystal-surface" data-status="available" markdown>
@@ -179,6 +239,21 @@ Planned
 </div>
 
 </div>
+
+??? note "Why this matters"
+
+    A tool that quietly approximates is more dangerous than one that refuses.
+    Silent degradation is how a number ends up subtly wrong in a way nobody
+    notices for two quarters — an unsupported operation gets emulated, a guarantee
+    is assumed rather than checked, and the result looks exactly like a correct one.
+
+    Saying "I cannot do this here" is a feature. So is distinguishing *this is
+    unsupported* from *this was not checked* from *this passed*, because a reviewer
+    needs to tell those apart and a log line cannot.
+
+    The goal is that nothing IncQL reports is more confident than the evidence
+    behind it.
+
 </div>
 
 <div class="moment crystal-surface" data-status="planned" markdown>
@@ -209,6 +284,22 @@ Planned
 
 Table formats change the schema story in IncQL's favour. A CSV has no schema, so one must be inferred. An Iceberg or Delta table carries an authoritative schema and tracks its evolution — so a declared `model` can be reconciled against the table's real, current shape before any data is read, and a renamed column can be reported as a rename rather than as a disappearance.
 
+
+??? note "Why this matters"
+
+    Local files are where tools go to look good. Reading a CSV from disk proves
+    nothing a dozen libraries have not already proven with less ceremony, and every
+    demo works.
+
+    The data an organization actually governs lives somewhere else: object storage,
+    lakehouse tables with schemas that evolve, sources someone else owns and
+    changes without telling you. That last part is the point — when the schema is
+    authoritative and versioned, a typed layer can compare your declared contract
+    against reality *before* reading anything, and tell you precisely how they
+    have drifted apart.
+
+    Until that works, IncQL is a good demonstration rather than a tool.
+
 </div>
 
 <div class="moment crystal-surface" data-status="planned" markdown>
@@ -238,6 +329,23 @@ Planned
 </div>
 
 Because lineage is typed and tracks fields rather than only relations, selection can be **column-level**: rebuild what actually depends on a given column, rather than everything downstream of the relation that happens to contain it.
+
+
+??? note "Why this matters"
+
+    Ask a data engineer what actually slows them down and they rarely say the SQL.
+    They say the shared development database where someone else's rebuild
+    overwrites the table you were mid-test on, and the twenty-minute full refresh
+    you run because nobody can tell you what your change affects.
+
+    Having your own target removes the first. Being able to rebuild precisely what
+    you touched removes the second. Neither has anything to do with the query
+    language, and together they are what a team feels every single day.
+
+    Because lineage here is typed and tracks fields rather than only relations,
+    that selection can be column-level: rebuild what depends on *this column*, not
+    everything downstream of the table that happens to contain it. That is a
+    distinction a string-addressed dependency graph cannot make.
 
 </div>
 
