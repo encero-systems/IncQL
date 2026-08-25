@@ -1614,7 +1614,7 @@ body:has(.incql-launch) .md-typeset li {
 .incql-hero {
   position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   min-height: clamp(23rem, 40svh, 26rem);
   padding: clamp(0.8rem, 1.4vw, 1.3rem) 0 clamp(0.6rem, 1vw, 0.8rem);
 }
@@ -2906,7 +2906,7 @@ body:has(.incql-launch) .md-typeset li {
 
   .incql-hero {
     min-height: clamp(26rem, 46vw, 29rem);
-    align-items: flex-start;
+    align-items: center;
     padding-top: 1.8rem;
   }
 
@@ -3094,6 +3094,7 @@ body:has(.incql-launch) .md-typeset li {
     gap: 0.8rem;
     min-height: calc(100svh - 3rem);
     padding: 1.1rem 0 0.75rem;
+    align-items: flex-start;
   }
 
   .incql-hero::before {
