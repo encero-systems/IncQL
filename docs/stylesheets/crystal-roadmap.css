@@ -123,28 +123,40 @@
 
 .roadmap-moments .moment {
   position: relative;
-  overflow: hidden;
-  padding: 1.2rem 1.4rem 1rem;
-  border: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
-  border-radius: 10px;
-  background:
-    linear-gradient(117deg, rgba(255, 255, 255, 0.82) 0 26%, rgba(238, 247, 255, 0.38) 26.35% 63%, rgba(255, 255, 255, 0.68) 63.35%),
-    var(--crystal-surface, rgba(248, 252, 255, 0.62));
-  backdrop-filter: blur(8px) saturate(110%) brightness(1.03);
-  -webkit-backdrop-filter: blur(8px) saturate(110%) brightness(1.03);
-  box-shadow: var(--crystal-shadow, 0 22px 58px rgba(32, 65, 145, 0.1));
+  padding: 1.25rem 1.4rem 1.05rem 4.6rem;
+  border-radius: 14px;
 }
 
-/* Status rail on the leading edge, fading as it descends so the card reads as
- * lit by its own state rather than merely outlined. */
-.roadmap-moments .moment::before {
-  content: "";
+/* Status becomes the crystal's own leading edge light rather than a bar laid
+ * on top of it: the left inset that normally reads cyan carries the signal. */
+.roadmap-moments .moment {
+  box-shadow:
+    var(--shadow, 0 14px 34px rgba(19, 49, 113, 0.11)),
+    inset 0 1px #fff,
+    inset 3px 0 var(--road-signal),
+    inset -1px 0 rgba(133, 90, 255, 0.25),
+    inset 0 -1px rgba(74, 120, 234, 0.22);
+}
+
+/* Numeral tile, after the Learn route-card icon tile. */
+.roadmap-moments .moment__num {
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--road-signal) 0%, var(--road-signal) 42%, transparent 100%);
+  left: 1.35rem;
+  top: 1.2rem;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: 11px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.76), rgba(200, 236, 255, 0.38), rgba(225, 207, 255, 0.34));
+  box-shadow: 0 6px 16px rgba(31, 73, 156, 0.1), inset 0 1px #fff;
+  color: var(--road-signal);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
 
 .roadmap-moments .moment[data-status="available"] { --road-signal: var(--road-available); --road-glow: rgba(20, 180, 143, 0.55); }

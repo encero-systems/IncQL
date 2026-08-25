@@ -31,20 +31,22 @@ The v0.1 target is described below as **seven moments** rather than as a feature
 ## The seven moments
 
 <div class="roadmap-glance">
-  <a href="#1-it-caught-it" data-status="partial"><span>1</span>It caught it</a>
-  <a href="#2-i-never-left-the-language" data-status="available"><span>2</span>I never left the language</a>
-  <a href="#3-it-ran-and-the-result-is-still-typed" data-status="available"><span>3</span>It ran, and the result is still typed</a>
-  <a href="#4-i-saw-what-it-would-do-before-it-did-it" data-status="partial"><span>4</span>I saw what it would do before it did it</a>
-  <a href="#5-it-told-me-the-truth-about-its-limits" data-status="available"><span>5</span>It told me the truth about its limits</a>
-  <a href="#6-it-works-on-my-actual-data" data-status="planned"><span>6</span>It works on my actual data</a>
-  <a href="#7-i-can-work-without-stepping-on-anyone" data-status="planned"><span>7</span>I can work without stepping on anyone</a>
+  <a href="#it-caught-it" data-status="partial"><span>1</span>It caught it</a>
+  <a href="#i-never-left-the-language" data-status="available"><span>2</span>I never left the language</a>
+  <a href="#it-ran-and-the-result-is-still-typed" data-status="available"><span>3</span>It ran, and the result is still typed</a>
+  <a href="#i-saw-what-it-would-do-before-it-did-it" data-status="partial"><span>4</span>I saw what it would do before it did it</a>
+  <a href="#it-told-me-the-truth-about-its-limits" data-status="available"><span>5</span>It told me the truth about its limits</a>
+  <a href="#it-works-on-my-actual-data" data-status="planned"><span>6</span>It works on my actual data</a>
+  <a href="#i-can-work-without-stepping-on-anyone" data-status="planned"><span>7</span>I can work without stepping on anyone</a>
 </div>
 
 <div class="roadmap-moments" markdown>
 
-<div class="moment" data-status="partial" markdown>
+<div class="moment crystal-surface" data-status="partial" markdown>
 
-### 1. "It caught it." {: data-status="partial" }
+<span class="moment__num" aria-hidden="true">1</span>
+
+### "It caught it." {: data-status="partial" }
 
 You reference a column that does not exist, compare mismatched types, or aggregate the wrong thing — and you find out before anything runs.
 
@@ -68,9 +70,11 @@ Planned
 </div>
 </div>
 
-<div class="moment" data-status="available" markdown>
+<div class="moment crystal-surface" data-status="available" markdown>
 
-### 2. "I never left the language." {: data-status="available" }
+<span class="moment__num" aria-hidden="true">2</span>
+
+### "I never left the language." {: data-status="available" }
 
 No SQL strings. No stringly-typed row access. Your schema is a `model`, and your query is source your editor and compiler both understand.
 
@@ -92,9 +96,11 @@ Out of scope
 </div>
 </div>
 
-<div class="moment" data-status="available" markdown>
+<div class="moment crystal-surface" data-status="available" markdown>
 
-### 3. "It ran, and the result is still typed." {: data-status="available" }
+<span class="moment__num" aria-hidden="true">3</span>
+
+### "It ran, and the result is still typed." {: data-status="available" }
 
 Read a source, transform it, get rows back that still carry their row type.
 
@@ -119,9 +125,11 @@ Planned
 </div>
 </div>
 
-<div class="moment" data-status="partial" markdown>
+<div class="moment crystal-surface" data-status="partial" markdown>
 
-### 4. "I saw what it would do before it did it." {: data-status="partial" }
+<span class="moment__num" aria-hidden="true">4</span>
+
+### "I saw what it would do before it did it." {: data-status="partial" }
 
 You can inspect a plan — its structure, its schema flow, and where each field came from — without executing it.
 
@@ -145,9 +153,11 @@ Planned
 </div>
 </div>
 
-<div class="moment" data-status="available" markdown>
+<div class="moment crystal-surface" data-status="available" markdown>
 
-### 5. "It told me the truth about its limits." {: data-status="available" }
+<span class="moment__num" aria-hidden="true">5</span>
+
+### "It told me the truth about its limits." {: data-status="available" }
 
 IncQL says "I cannot do this here" instead of degrading quietly.
 
@@ -171,9 +181,11 @@ Planned
 </div>
 </div>
 
-<div class="moment" data-status="planned" markdown>
+<div class="moment crystal-surface" data-status="planned" markdown>
 
-### 6. "It works on my actual data." {: data-status="planned" }
+<span class="moment__num" aria-hidden="true">6</span>
+
+### "It works on my actual data." {: data-status="planned" }
 
 A typed data logic plane is only interesting when it operates on data you actually govern. Today IncQL reads local CSV and Parquet files.
 
@@ -199,9 +211,11 @@ Table formats change the schema story in IncQL's favour. A CSV has no schema, so
 
 </div>
 
-<div class="moment" data-status="planned" markdown>
+<div class="moment crystal-surface" data-status="planned" markdown>
 
-### 7. "I can work without stepping on anyone." {: data-status="planned" }
+<span class="moment__num" aria-hidden="true">7</span>
+
+### "I can work without stepping on anyone." {: data-status="planned" }
 
 Your own materialization target, and a way to rebuild only the part you changed.
 
