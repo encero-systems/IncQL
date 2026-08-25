@@ -7748,54 +7748,84 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
 }
 
 /* ---- Convergence map: the mark breathes ---------------------------------
- * Timed to the inbound connector pulse (3.1s), so the glow reads as a
- * consequence of what arrives rather than as decoration running on its own
- * clock. Kept low-amplitude on purpose — it should be noticed second, after
- * the diagram itself. */
+ * Two halos rather than one, cross-fading half a cycle apart, so the glow
+ * alternates between the brand's cyan and magenta. A registered custom
+ * property could animate a single gradient's colour, but two stacked layers
+ * need no `@property` support and let the crossover blend the two hues.
+ *
+ * The full colour cycle is 6.2s, which is two 3.1s breaths — one per colour —
+ * keeping each breath in step with the inbound connector pulse. */
 
-.incql-map-core::before {
+.incql-map-core::before,
+.incql-map-core::after {
   content: "";
   position: absolute;
   z-index: -1;
   inset: -52%;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(124, 108, 255, 0.32) 0%,
-    rgba(190, 98, 255, 0.15) 44%,
-    transparent 70%
-  );
-  animation: incql-core-halo 3.1s ease-in-out infinite;
+  animation: incql-core-halo 6.2s ease-in-out infinite;
   pointer-events: none;
 }
 
+.incql-map-core::before {
+  background: radial-gradient(
+    circle,
+    rgba(10, 174, 232, 0.34) 0%,
+    rgba(10, 174, 232, 0.15) 44%,
+    transparent 70%
+  );
+}
+
+/* Half a cycle behind, so it peaks as the cyan fades. */
+.incql-map-core::after {
+  background: radial-gradient(
+    circle,
+    rgba(191, 96, 255, 0.32) 0%,
+    rgba(191, 96, 255, 0.14) 44%,
+    transparent 70%
+  );
+  animation-delay: -3.1s;
+}
+
 .incql-map-core img {
-  animation: incql-core-glow 3.1s ease-in-out infinite;
+  animation: incql-core-glow 6.2s ease-in-out infinite;
 }
 
+/* Neither layer reaches zero, so the crossover reads as a blend of the two
+ * rather than as the glow blinking out twice a cycle. */
 @keyframes incql-core-halo {
-  0%, 100% { opacity: 0.5; transform: scale(0.93); }
-  50% { opacity: 1; transform: scale(1.05); }
+  0%, 100% { opacity: 0.12; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.06); }
 }
 
-/* The base drop-shadow is the one already on the mark; only its glow moves,
- * so the logo keeps sitting on the same ground throughout. */
+/* The mark's existing drop-shadow is carried through every keyframe, so only
+ * the glow moves and the logo keeps sitting on the same ground. */
 @keyframes incql-core-glow {
   0%, 100% {
     filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
-            drop-shadow(0 0 5px rgba(124, 108, 255, 0.28));
+            drop-shadow(0 0 5px rgba(10, 174, 232, 0.3));
+  }
+  25% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 14px rgba(10, 174, 232, 0.6));
   }
   50% {
     filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
-            drop-shadow(0 0 14px rgba(168, 110, 255, 0.55));
+            drop-shadow(0 0 5px rgba(191, 96, 255, 0.3));
+  }
+  75% {
+    filter: drop-shadow(0 12px 30px rgba(80, 108, 255, 0.3))
+            drop-shadow(0 0 14px rgba(191, 96, 255, 0.6));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .incql-map-core::before {
+  .incql-map-core::before,
+  .incql-map-core::after {
     animation: none;
-    opacity: 0.75;
     transform: scale(1);
   }
+  .incql-map-core::before { opacity: 0.6; }
+  .incql-map-core::after { opacity: 0.4; }
   .incql-map-core img { animation: none; }
 }
