@@ -203,7 +203,21 @@
         return;
       }
 
-      const activateTab = (nextTab, moveFocus = false) => {
+      /* Switching authoring surface is the page's central claim, and the proof
+       * is that the plan beside it does *not* change. That is a non-event, so
+       * nothing draws the eye to it. Flag the panel briefly on a user-driven
+       * switch so the reader notices what stayed put. */
+      const samePlan = group.closest(".incql-surfaces")?.querySelector(".incql-same-plan") ?? null;
+      const signalUnchanged = () => {
+        if (!samePlan) {
+          return;
+        }
+        samePlan.classList.remove("is-unchanged");
+        void samePlan.offsetWidth; // restart the animation on a repeat switch
+        samePlan.classList.add("is-unchanged");
+      };
+
+      const activateTab = (nextTab, moveFocus = false, userInitiated = false) => {
         tabs.forEach((tab) => {
           const isActive = tab === nextTab;
           tab.setAttribute("aria-selected", String(isActive));
@@ -236,10 +250,14 @@
         if (moveFocus) {
           nextTab.focus();
         }
+
+        if (userInitiated) {
+          signalUnchanged();
+        }
       };
 
       tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => activateTab(tab));
+        tab.addEventListener("click", () => activateTab(tab, false, true));
         tab.addEventListener("keydown", (event) => {
           let nextIndex = null;
 
@@ -255,7 +273,7 @@
 
           if (nextIndex !== null) {
             event.preventDefault();
-            activateTab(tabs[nextIndex], true);
+            activateTab(tabs[nextIndex], true, true);
           }
         });
       });

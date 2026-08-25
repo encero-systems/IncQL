@@ -7829,3 +7829,64 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
   .incql-map-core::after { opacity: 0.4; }
   .incql-map-core img { animation: none; }
 }
+
+/* ---- "Same plan" confirmation -------------------------------------------
+ * Fired by prismplane.js when the reader switches authoring surface. The
+ * point being made is that this panel did NOT change, so the cue has to
+ * announce a non-event: a chip that says so, and a brief edge highlight to
+ * pull the eye across from the panel that did change. */
+
+.incql-same-plan {
+  position: relative;
+}
+
+.incql-same-plan::after {
+  content: "unchanged";
+  position: absolute;
+  z-index: 4;
+  top: 0.85rem;
+  right: 0.9rem;
+  padding: 0.16rem 0.48rem;
+  border: 1px solid rgba(20, 180, 143, 0.4);
+  border-radius: 999px;
+  background: rgba(233, 252, 246, 0.94);
+  color: #0f8a6d;
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.incql-same-plan.is-unchanged::after {
+  animation: incql-unchanged-chip 2.1s ease-out 1;
+}
+
+.incql-same-plan.is-unchanged {
+  animation: incql-unchanged-edge 2.1s ease-out 1;
+}
+
+@keyframes incql-unchanged-chip {
+  0% { opacity: 0; transform: translateY(-3px); }
+  14% { opacity: 1; transform: translateY(0); }
+  72% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-3px); }
+}
+
+@keyframes incql-unchanged-edge {
+  0% { box-shadow: 0 0 0 0 rgba(20, 180, 143, 0); }
+  16% { box-shadow: 0 0 0 2px rgba(20, 180, 143, 0.34); }
+  100% { box-shadow: 0 0 0 0 rgba(20, 180, 143, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the message, drop the movement: hold the chip briefly instead. */
+  .incql-same-plan.is-unchanged::after { animation: incql-unchanged-hold 2.1s steps(1, end) 1; }
+  .incql-same-plan.is-unchanged { animation: none; }
+  @keyframes incql-unchanged-hold {
+    0%, 92% { opacity: 1; transform: none; }
+    100% { opacity: 0; transform: none; }
+  }
+}
