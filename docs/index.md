@@ -397,7 +397,7 @@ preview = (
 
 <section class="incql-trust" markdown="1">
 <article class="incql-trust__card incql-trust__card--confidence" markdown="1">
-<div class="incql-trust__number" aria-hidden="true">01</div>
+<div class="incql-trust__mark" aria-hidden="true"><img src="shared/icons/shield-check-outline.svg" alt=""></div>
 <p class="incql-section-kicker">Confidence by construction</p>
 
 ## Built for trust
@@ -409,7 +409,7 @@ preview = (
 </article>
 
 <article class="incql-trust__card incql-trust__card--developer" markdown="1">
-<div class="incql-trust__number" aria-hidden="true">02</div>
+<div class="incql-trust__mark" aria-hidden="true"><img src="shared/icons/code-braces-box.svg" alt=""></div>
 <p class="incql-section-kicker">A surface developers can own</p>
 
 ## Engineered for developers

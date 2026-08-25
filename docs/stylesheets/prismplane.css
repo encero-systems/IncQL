@@ -2792,14 +2792,27 @@ body:has(.incql-launch) .md-typeset li {
     rgba(255, 255, 255, 0.86) !important;
 }
 
-.incql-trust__number {
+/* Was a large 01 / 02 watermark, which promised an order these two parallel
+ * claims do not have. A glyph naming the card's subject holds the same corner
+ * weight and says something true. */
+.incql-trust__mark {
   position: absolute;
-  top: 1.3rem;
+  top: 1.35rem;
   right: 1.45rem;
-  color: rgba(71, 109, 255, 0.18);
-  font-size: clamp(2.4rem, 4vw, 4.2rem);
-  font-weight: 860;
-  line-height: 1;
+  display: grid;
+  place-items: center;
+  width: clamp(2.4rem, 3.4vw, 3.4rem);
+  height: clamp(2.4rem, 3.4vw, 3.4rem);
+  border: 1px solid rgba(71, 109, 255, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.incql-trust__mark img {
+  width: 55%;
+  height: auto;
+  margin: 0;
+  opacity: 0.55;
 }
 
 .incql-trust article .incql-section-kicker {
