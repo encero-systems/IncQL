@@ -1040,28 +1040,115 @@ body:has(.incql-architecture)::after {
 [data-md-color-scheme="slate"] .roadmap-moments .moment > p,
 [data-md-color-scheme="slate"] .roadmap-test li { color: #b6c2d2; }
 
-/* Capability tables sit inside a collapsible, so they must not inherit the
- * full-width table treatment used by ordinary reading pages. */
 
-.roadmap-moments .moment details table {
+/* ---- Capability rows ----------------------------------------------------
+ * One disclosure per capability rather than one for the whole set: the list
+ * stays scannable and depth is paid for per item. State is a word, not only a
+ * colour, so the row still reads without hue.
+ *
+ * This structure is meant to outlive the roadmap. When every capability reads
+ * `available`, the same markup is a feature inventory with its own
+ * explanations and links already attached.
+ */
+
+.roadmap-moments .moment-caps {
+  margin: 1rem 0 0.25rem;
+  border-top: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
+}
+
+.roadmap-moments details.cap,
+.md-typeset .roadmap-moments details.cap {
   margin: 0;
-  font-size: 0.84rem;
+  padding: 0;
+  border: none;
+  border-bottom: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  font-size: inherit;
 }
 
-.roadmap-moments .moment details th {
-  color: var(--crystal-muted, #536d9c);
+.roadmap-moments details.cap:last-child,
+.md-typeset .roadmap-moments details.cap:last-child { border-bottom: none; }
+
+.md-typeset .roadmap-moments details.cap > summary {
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-weight: inherit;
+}
+
+.md-typeset .roadmap-moments details.cap > summary::after { display: none; }
+
+.roadmap-moments details.cap > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.62rem 0.35rem 0.62rem 1.15rem;
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  color: var(--crystal-copy, #294b7e);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  transition: color 120ms ease;
+}
+
+.roadmap-moments details.cap > summary::-webkit-details-marker { display: none; }
+
+/* Disclosure caret, rotating on open. */
+.roadmap-moments details.cap > summary::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 0.95rem;
+  width: 0.34rem;
+  height: 0.34rem;
+  border-right: 1.5px solid var(--cap-signal);
+  border-bottom: 1.5px solid var(--cap-signal);
+  transform: rotate(-45deg);
+  transition: transform 140ms ease;
+}
+
+.roadmap-moments details.cap[open] > summary::before { transform: rotate(45deg); }
+
+.roadmap-moments details.cap > summary:hover { color: var(--crystal-ink, #08245f); }
+
+.roadmap-moments .cap-what { flex: 1 1 auto; }
+
+.roadmap-moments .cap-state {
+  flex: 0 0 auto;
+  color: var(--cap-signal);
   font-family: var(--md-code-font-family, monospace);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.roadmap-moments .moment details td:nth-child(2) {
-  white-space: nowrap;
+.roadmap-moments details.cap[data-state="available"]    { --cap-signal: #14b48f; }
+.roadmap-moments details.cap[data-state="planned"]      { --cap-signal: #6f86bd; }
+.roadmap-moments details.cap[data-state="out of scope"] { --cap-signal: #97a3b8; }
+
+.roadmap-moments details.cap > p {
+  margin: 0 0 0.55rem;
+  padding-left: 1.15rem;
+  color: var(--crystal-muted, #536d9c);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+.roadmap-moments details.cap > p:first-of-type { margin-top: 0.1rem; }
+
+.roadmap-moments details.cap > p:last-child a {
   font-family: var(--md-code-font-family, monospace);
   font-size: 0.72rem;
   font-weight: 600;
 }
 
-.roadmap-moments .moment details tr:has(td:nth-child(2)) td:nth-child(2) { color: var(--crystal-muted, #536d9c); }
+.roadmap-moments details.cap > p:last-child a::after { content: " \2192"; }
+
+[data-md-color-scheme="slate"] .roadmap-moments details.cap > summary { color: #b6c2d2; }
+[data-md-color-scheme="slate"] .roadmap-moments details.cap > p { color: #94a1b2; }

@@ -64,15 +64,49 @@ You reference a column that does not exist, compare mismatched types, or aggrega
     The promise is not that you stop making mistakes. It is that the feedback
     arrives while you are still the person best placed to fix them.
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | `query { }` blocks typechecked against the current query schema | Available | [Query blocks](language/reference/query_blocks.md) |
-    | Row shapes are ordinary `model` types, so a projection that changes shape changes type | Available | [Dataset carriers](language/reference/dataset_carriers.md) |
-    | Typed helpers validate their scalar inputs at the call site | Available | [Dataset methods](language/reference/dataset_methods.md) |
-    | Field references resolved against the declared model at compile time | Planned | [#116](https://github.com/encero-systems/IncQL/issues/116) |
-    | Unbounded carriers reject operations that need finite input | Planned | [#114](https://github.com/encero-systems/IncQL/issues/114) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">`query { }` blocks typechecked against the current query schema</span><span class="cap-state">available</span></summary>
+
+Clause-oriented syntax that is checked, not templated. Names resolve against the query schema at the point you write them.
+
+[Query blocks](language/reference/query_blocks.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Row shapes are ordinary `model` types</span><span class="cap-state">available</span></summary>
+
+A projection that changes shape changes type: `LazyFrame[Order]` becomes `LazyFrame[PaidOrder]` because the SELECT says so, and the compiler agrees.
+
+[Dataset carriers](language/reference/dataset_carriers.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Typed helpers validate their scalar inputs</span><span class="cap-state">available</span></summary>
+
+Helpers accept primitives where that is the natural shape — `add(col("amount"), 1)` — while still rejecting inputs whose types cannot combine.
+
+[Dataset methods](language/reference/dataset_methods.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Field references resolved against the declared model</span><span class="cap-state">planned</span></summary>
+
+Today `.amount` lowers to `col("amount")`, a string, so a typo surfaces at plan lowering rather than at compile time. Making the shorthand resolve against the model closes the gap, with `col("…")` left as the explicit escape for reaching past a partial model.
+
+[#116](https://github.com/encero-systems/IncQL/issues/116)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Unbounded carriers reject bounded-only operations</span><span class="cap-state">planned</span></summary>
+
+The root `DataSet[T]` trait currently declares every operation, so `DataStream[T]` inherits joins, grouping and ordering. Compiler support for the gating landed upstream in April; adoption here has not.
+
+[#114](https://github.com/encero-systems/IncQL/issues/114)
+</details>
+
+</div>
 
 </div>
 
@@ -99,14 +133,41 @@ No SQL strings. No stringly-typed row access. Your schema is a `model`, and your
     The alternative is not worse syntax. It is a smaller set of things your tools
     can help you with.
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | SQL-familiar `query { }` blocks | Available | [Query blocks](language/reference/query_blocks.md) |
-    | `DataSet[T]` method chains resolving identically | Available | [Dataset methods](language/reference/dataset_methods.md) |
-    | Schemas as ordinary Incan `model` types | Available | [Dataset carriers](language/explanation/dataset_carriers.md) |
-    | Optional pipe-forward (`\|>`) | Out of scope | [RFC 005](rfcs/005_incql_pipe_forward.md) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">SQL-familiar `query { }` blocks</span><span class="cap-state">available</span></summary>
+
+Both the brace spelling and the expression-position `query:` form, covering SELECT aliases, grouped aggregates, DISTINCT, joins, generators and named windows.
+
+[Query blocks](language/reference/query_blocks.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">`DataSet[T]` method chains resolving identically</span><span class="cap-state">available</span></summary>
+
+The same naming and schema rules apply whichever surface you author in, so the two are equivalent where it counts rather than merely similar.
+
+[Dataset methods](language/reference/dataset_methods.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Schemas as ordinary Incan `model` types</span><span class="cap-state">available</span></summary>
+
+No schema DSL and no separate registry. A row shape is a type you can share, import, and reason about like any other.
+
+[Dataset carriers](language/explanation/dataset_carriers.md)
+</details>
+
+<details class="cap" data-state="out of scope" markdown>
+<summary markdown><span class="cap-what">Optional pipe-forward (`\|>`)</span><span class="cap-state">out of scope</span></summary>
+
+Specified and dependent on Incan's scoped DSL glyph mechanism, which shipped. Deliberately excluded from v0.1 rather than unfinished.
+
+[RFC 005](rfcs/005_incql_pipe_forward.md)
+</details>
+
+</div>
 
 </div>
 
@@ -132,16 +193,57 @@ Read a source, transform it, get rows back that still carry their row type.
     That matters most where data work usually gets fragile: the transformation
     after the transformation, written weeks later by someone else.
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | Typed read, execute, collect and write | Available | [Read and write data](language/how-to/read_write_data.md) |
-    | Typed sink descriptors and structured materialization | Available | [Execution context](language/reference/execution_context.md) |
-    | DataFusion behind a Substrait backend boundary | Available | [Execution context](language/explanation/execution_context.md) |
-    | Relations constructed from in-memory values | Planned | [#20](https://github.com/encero-systems/IncQL/issues/20) |
-    | An explicit catalog model for logical-name schema binding | Planned | [RFC 004](rfcs/004_incql_execution_context.md) |
-    | An output-schema contract for heterogeneous joins | Planned | [Joins](language/how-to/joins.md) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Typed read, execute, collect and write</span><span class="cap-state">available</span></summary>
+
+`read_csv`, `read_parquet`, `execute`, `collect`, `write` and the file-specific sink helpers, each carrying the row type through.
+
+[Read and write data](language/how-to/read_write_data.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Typed sink descriptors and structured materialization</span><span class="cap-state">available</span></summary>
+
+`collect(...)` returns a `DataFrame[T]` with resolved columns and row counts, not rendered text that happens to look tabular.
+
+[Execution context](language/reference/execution_context.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">DataFusion behind a Substrait backend boundary</span><span class="cap-state">available</span></summary>
+
+Session dispatch routes through an adapter boundary over Substrait plans, so the reference engine is not wired into Session state.
+
+[Execution context](language/explanation/execution_context.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Relations constructed from in-memory values</span><span class="cap-state">planned</span></summary>
+
+`Session.from_values(...)` needs a canonical Incan-to-Arrow row encoding before it can join the core Session surface.
+
+[#20](https://github.com/encero-systems/IncQL/issues/20)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">An explicit catalog model for schema binding</span><span class="cap-state">planned</span></summary>
+
+Logical-name binding is an implicit global registry today. It needs a catalog or snapshot model with real overwrite diagnostics.
+
+[RFC 004](rfcs/004_incql_execution_context.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">An output-schema contract for heterogeneous joins</span><span class="cap-state">planned</span></summary>
+
+Joins are `Self`-only, so two different row types cannot yet produce a third with a checked shape.
+
+[Joins](language/how-to/joins.md)
+</details>
+
+</div>
 
 </div>
 
@@ -166,15 +268,49 @@ You can inspect a plan — its structure, its schema flow, and where each field 
     This is also what makes the other moments compound: lineage that exists before
     execution is what lets a build system know precisely what your change affects.
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | Typed plan inspection without executing | Available | [Inspect plan and lineage](language/how-to/inspect_plan_lineage.md) |
-    | Lineage across value, control, grouping, join, sort, window, policy and quality edges | Available | [Inspection](language/reference/inspection.md) |
-    | Uncomputed evidence marked rather than omitted | Available | [Inspection](language/reference/inspection.md) |
-    | Serialized artifacts and a rendered report | Planned | [#117](https://github.com/encero-systems/IncQL/issues/117) |
-    | Prism backing beyond `LazyFrame[T]` | Planned | [#16](https://github.com/encero-systems/IncQL/issues/16) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Typed plan inspection without executing</span><span class="cap-state">available</span></summary>
+
+`inspect_plan(...)` and `inspect_lineage(...)` read Prism state locally. No execution, no backend binding, no physical plan.
+
+[Inspect plan and lineage](language/how-to/inspect_plan_lineage.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Lineage across eight relationship kinds</span><span class="cap-state">available</span></summary>
+
+Value, control, grouping, join, sort, window, policy and quality dependencies, each carrying exact, conservative or unknown confidence.
+
+[Inspection](language/reference/inspection.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Uncomputed evidence marked, not omitted</span><span class="cap-state">available</span></summary>
+
+An empty lineage graph is distinguishable from one that was never computed or is unsupported — which is what makes the absence trustworthy.
+
+[Inspection](language/reference/inspection.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Serialized artifacts and a rendered report</span><span class="cap-state">planned</span></summary>
+
+Inspection returns typed records but writes no artifacts, and nothing renders them for a person. A local spike proved the shape; productionising it is the work.
+
+[#117](https://github.com/encero-systems/IncQL/issues/117)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Prism backing beyond `LazyFrame[T]`</span><span class="cap-state">planned</span></summary>
+
+`DataFrame[T]` and `DataStream[T]` are not Prism-backed, so inspection does not reach them.
+
+[#16](https://github.com/encero-systems/IncQL/issues/16)
+</details>
+
+</div>
 
 </div>
 
@@ -200,15 +336,49 @@ IncQL says "I cannot do this here" instead of degrading quietly.
     The goal is that nothing IncQL reports is more confident than the evidence
     behind it.
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | Adapter coverage: covered, partially covered, uncovered, unknown | Available | [Capabilities](language/reference/capabilities.md) |
-    | Observed execution, collection and write attempts | Available | [Execution observations](language/how-to/execution_observations.md) |
-    | Quality observations that never act as invisible filters | Available | [Quality](language/reference/quality.md) |
-    | Governed attributes and policy checkpoints | Available | [Governance](language/reference/governance.md) |
-    | A rendered form for coverage and unsupported evidence | Planned | [#117](https://github.com/encero-systems/IncQL/issues/117) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Adapter coverage with four honest states</span><span class="cap-state">available</span></summary>
+
+Covered, partially covered, uncovered, or unknown — against the selected adapter, for requirements inferred from plan evidence or supplied by a caller.
+
+[Capabilities](language/reference/capabilities.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Observed execution, collection and write attempts</span><span class="cap-state">available</span></summary>
+
+The observed variants return a structured record for both success and failure, so an attempt can be audited rather than reconstructed from logs.
+
+[Execution observations](language/how-to/execution_observations.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Quality observations that never filter silently</span><span class="cap-state">available</span></summary>
+
+A failed check is reported, never applied. Row counts, null rates, uniqueness and cross-relation equality produce evidence, not hidden WHERE clauses.
+
+[Quality](language/reference/quality.md)
+</details>
+
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Governed attributes and policy checkpoints</span><span class="cap-state">available</span></summary>
+
+Provenance, confidence, authority, lifetime and visibility attach to semantic targets without turning IncQL into a policy engine.
+
+[Governance](language/reference/governance.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">A rendered form for coverage evidence</span><span class="cap-state">planned</span></summary>
+
+Coverage and unsupported evidence share the same gap as plan inspection: available to code, not yet to a person.
+
+[#117](https://github.com/encero-systems/IncQL/issues/117)
+</details>
+
+</div>
 
 </div>
 
@@ -235,15 +405,49 @@ A typed data logic plane is only interesting when it operates on data you actual
 
     Until that works, IncQL is a good demonstration rather than a tool.
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | Local CSV and Parquet sources with typed row shapes | Available | [Read and write data](language/how-to/read_write_data.md) |
-    | Object-store locations and partitioned datasets | Planned | [#112](https://github.com/encero-systems/IncQL/issues/112) |
-    | Schema inference that does not read the file into memory | Planned | [#112](https://github.com/encero-systems/IncQL/issues/112) |
-    | Iceberg and Delta tables as typed, reconciled sources | Planned | [RFC 069](rfcs/069_lakehouse_table_format_sources.md) |
-    | Addon component registry so a lakehouse stack is opt-in | Planned | [#113](https://github.com/encero-systems/IncQL/issues/113) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">Local CSV and Parquet with typed row shapes</span><span class="cap-state">available</span></summary>
+
+Enough to demonstrate the authoring model end to end, and not much more.
+
+[Read and write data](language/how-to/read_write_data.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Object-store locations and partitioned datasets</span><span class="cap-state">planned</span></summary>
+
+`read_csv` already takes a URI, but validation only checks non-emptiness and no object store is registered, so a remote path fails as a missing local file.
+
+[#112](https://github.com/encero-systems/IncQL/issues/112)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Schema inference that does not read the whole file</span><span class="cap-state">planned</span></summary>
+
+CSV inference currently reads the entire file into a string to find a header, which is local-only and does not scale.
+
+[#112](https://github.com/encero-systems/IncQL/issues/112)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Iceberg and Delta as typed, reconciled sources</span><span class="cap-state">planned</span></summary>
+
+The table's schema is authoritative, so a declared model can be reconciled against it before any data is read — and a renamed column reported as a rename rather than a disappearance.
+
+[RFC 069](rfcs/069_lakehouse_table_format_sources.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Addon registry so a lakehouse stack is opt-in</span><span class="cap-state">planned</span></summary>
+
+Table formats arrive as addon packages rather than core dependencies, so nobody compiles an engine they never call.
+
+[#113](https://github.com/encero-systems/IncQL/issues/113)
+</details>
+
+</div>
 
 </div>
 
@@ -273,14 +477,41 @@ Your own materialization target, and a way to rebuild only the part you changed.
 
 </div>
 
-??? abstract "Capabilities and status"
+<div class="moment-caps" markdown>
 
-    | Capability | State | Where |
-    | --- | --- | --- |
-    | The typed lineage graph the loop depends on | Available | [Inspection](language/reference/inspection.md) |
-    | Projects as named relational assets with a typed dependency graph | Planned | [RFC 058](rfcs/058_data_projects_named_relational_assets.md) |
-    | Materialization intent against one destination binding | Planned | [RFC 059](rfcs/059_materialization_applied_asset_lifecycle.md) |
-    | Selector-driven builds with an append-only receipt | Planned | [RFC 062](rfcs/062_project_build_lifecycle_selectors_state.md) |
+<details class="cap" data-state="available" markdown>
+<summary markdown><span class="cap-what">The typed lineage graph the loop depends on</span><span class="cap-state">available</span></summary>
+
+Already built, and the reason selection can be column-level rather than relation-level.
+
+[Inspection](language/reference/inspection.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Projects as named relational assets</span><span class="cap-state">planned</span></summary>
+
+A statically discoverable asset graph available without executing user logic, opening connections, or resolving secrets.
+
+[RFC 058](rfcs/058_data_projects_named_relational_assets.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Materialization intent against one destination</span><span class="cap-state">planned</span></summary>
+
+Typed, backend-neutral policy resolved against a destination binding — which is what gives each developer their own target.
+
+[RFC 059](rfcs/059_materialization_applied_asset_lifecycle.md)
+</details>
+
+<details class="cap" data-state="planned" markdown>
+<summary markdown><span class="cap-what">Selector-driven builds with an append-only receipt</span><span class="cap-state">planned</span></summary>
+
+Structured selectors resolve to an immutable build set, execute in dependency order, and record what actually happened.
+
+[RFC 062](rfcs/062_project_build_lifecycle_selectors_state.md)
+</details>
+
+</div>
 
 </div>
 
