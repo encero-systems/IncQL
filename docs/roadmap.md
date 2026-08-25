@@ -475,8 +475,6 @@ Your own materialization target, and a way to rebuild only the part you changed.
     everything downstream of the table that happens to contain it. That is a
     distinction a string-addressed dependency graph cannot make.
 
-</div>
-
 <div class="moment-caps" markdown>
 
 <details class="cap" data-state="available" markdown>
