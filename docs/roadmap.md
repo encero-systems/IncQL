@@ -559,34 +559,83 @@ Three of the seven hold outright, one holds partially, and three do not hold at 
 
 ## Status by area
 
-- **Authoring and language:** see [RFC 000][rfc000] and [RFC 003][rfc003]. Query blocks and carrier method chains share one resolution model.
-- **Dataset carriers:** see [RFC 001][rfc001]. The bounded/unbounded split exists; static capability gating is the remaining work.
-- **Function catalogue:** complete. Core operators, aggregates and modifiers, common scalars, window helpers, generators, nested-data helpers, format and approximate functions, typed sketches, and variant values all ship through one registry-backed helper model.
-- **Planning and interchange:** see [RFC 002][rfc002] and [RFC 007][rfc007]. Substrait is the normative interchange; Prism backs `LazyFrame[T]`.
-- **Execution:** see [RFC 004][rfc004]. DataFusion is the reference adapter behind a portable backend boundary.
-- **Evidence and inspection:** see [RFC 027][rfc027] and its child RFCs. Semantic targets, attachments, lineage, execution observations, adapter coverage, quality observations and governed attributes ship; serialized artifacts and a rendered report do not yet.
-- **Data access:** the immediate release surface. Object storage, partitioned datasets, and lakehouse table formats.
+<div class="roadmap-areas" markdown>
+
+<div class="roadmap-area" data-state="available" markdown>
+**Function catalogue**
+
+Complete. Core operators, aggregates and modifiers, common scalars, window helpers, generators, nested-data helpers, format and approximate functions, typed sketches and variant values all ship through one registry-backed helper model.
+</div>
+
+<div class="roadmap-area" data-state="available" markdown>
+**Authoring and language**
+
+`query { }` blocks and carrier method chains share one resolution model. See [RFC 000][rfc000] and [RFC 003][rfc003].
+</div>
+
+<div class="roadmap-area" data-state="partial" markdown>
+**Dataset carriers**
+
+The bounded/unbounded split exists; static capability gating is the remaining work. See [RFC 001][rfc001].
+</div>
+
+<div class="roadmap-area" data-state="partial" markdown>
+**Planning and interchange**
+
+Substrait is the normative interchange. Prism backs `LazyFrame[T]` only. See [RFC 002][rfc002] and [RFC 007][rfc007].
+</div>
+
+<div class="roadmap-area" data-state="partial" markdown>
+**Evidence and inspection**
+
+Targets, attachments, lineage, observations, coverage, quality and governed attributes ship. Serialized artifacts and a rendered report do not. See [RFC 027][rfc027].
+</div>
+
+<div class="roadmap-area" data-state="available" markdown>
+**Execution**
+
+DataFusion is the reference adapter behind a portable backend boundary. See [RFC 004][rfc004].
+</div>
+
+<div class="roadmap-area" data-state="planned" markdown>
+**Data access**
+
+The immediate release surface: object storage, partitioned datasets, and lakehouse table formats. See [RFC 069][rfc069].
+</div>
+
+</div>
 
 ## Deliberately out of scope
 
-These are boundaries rather than backlog. IncQL owns data logic; each of these belongs to a layer below or beside it.
+These are boundaries, not backlog. Each belongs to a layer below or beside IncQL.
 
-- **Pipeline and workflow orchestration.** Scheduling, retries, and DAG execution stay downstream.
-- **A semantic catalog.** Logical registration and backend-resolved reads are in scope; a portable catalog API across vendors is not.
-- **Credential and secret management.** Provider configuration is resolved at the binding and never enters a plan, artifact, or inspection record.
-- **A second execution engine.** The portable backend boundary is the requirement, and it is satisfied; additional adapters are tracked separately and do not gate v0.1.
+<div class="roadmap-bounds" markdown>
 
-## Guides
+- **Pipeline and workflow orchestration** — scheduling, retries and DAG execution stay downstream.
+- **A semantic catalog** — logical registration and backend-resolved reads are in scope; a portable catalog API across vendors is not.
+- **Credential and secret management** — provider configuration resolves at the binding and never enters a plan, artifact, or evidence record.
+- **A second execution engine** — the portable backend boundary is the requirement, and it is satisfied. Additional adapters are tracked separately and do not gate v0.1.
 
-- [Ten-minute quickstart][quickstart]
-- [From SQL][from-sql] and [From Spark and DataFrame APIs][from-spark]
-- [What IncQL is and is not][what-incql-is]
+</div>
 
-## Interested in contributing?
+<section class="incql-final-cta roadmap-cta" markdown="1">
 
-Work toward v0.1 is tracked in the [v0.1 milestone][milestone]. Normative design lives in the [RFCs][rfcs], and shipped user-visible changes are summarized in the [release notes][release-notes].
+<div class="incql-final-cta__copy" markdown="1">
+<p class="incql-section-kicker">Seven moments, three of them still ahead</p>
 
-See the [Project][project] pages for repository layout, documentation conventions, and the contributor workflow.
+## Want to shape what lands next?
+
+The gaps on this page are specific, scoped, and written down. Several are unclaimed — and the ones that decide whether IncQL feels like a tool are not the hardest ones.
+
+</div>
+
+<div class="incql-actions" markdown="1">
+<a class="incql-button incql-button--primary" href="https://github.com/encero-systems/IncQL/milestone/1">See the v0.1 milestone</a>
+<a class="incql-button" href="rfcs/README.md">Read the RFCs</a>
+<a class="incql-button" href="project.md">Contributor guide</a>
+</div>
+
+</section>
 
 <!-- References -->
 
