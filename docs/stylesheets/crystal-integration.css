@@ -892,47 +892,6 @@ body:has(.incql-architecture)::after {
   font-size: 0.92rem;
 }
 
-/* Two lanes: usable now, and still ahead. */
-.roadmap-moments .moment-split {
-  display: grid;
-  gap: 0 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
-}
-
-.roadmap-moments .moment-split > div > p:first-child {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin: 0 0 0.4rem;
-  color: var(--crystal-muted, #536d9c);
-  font-family: var(--md-code-font-family, monospace);
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.roadmap-moments .moment-split > div > p:first-child::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--crystal-cyan, #22c8ee);
-}
-
-.roadmap-moments .moment-split > div:first-child > p:first-child::before {
-  background: var(--road-available);
-}
-
-.roadmap-moments .moment-split ul {
-  margin: 0 0 0.7rem;
-  color: var(--crystal-copy, #294b7e);
-  font-size: 0.86rem;
-}
-
-.roadmap-moments .moment-split li { margin-bottom: 0.28rem; }
 
 /* ---- Acceptance test ----------------------------------------------------
  * Each clause states its own verdict. Status is encoded three ways so it does
@@ -1079,5 +1038,30 @@ body:has(.incql-architecture)::after {
 
 [data-md-color-scheme="slate"] .roadmap-glance a,
 [data-md-color-scheme="slate"] .roadmap-moments .moment > p,
-[data-md-color-scheme="slate"] .roadmap-moments .moment-split ul,
 [data-md-color-scheme="slate"] .roadmap-test li { color: #b6c2d2; }
+
+/* Capability tables sit inside a collapsible, so they must not inherit the
+ * full-width table treatment used by ordinary reading pages. */
+
+.roadmap-moments .moment details table {
+  margin: 0;
+  font-size: 0.84rem;
+}
+
+.roadmap-moments .moment details th {
+  color: var(--crystal-muted, #536d9c);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.roadmap-moments .moment details td:nth-child(2) {
+  white-space: nowrap;
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.roadmap-moments .moment details tr:has(td:nth-child(2)) td:nth-child(2) { color: var(--crystal-muted, #536d9c); }

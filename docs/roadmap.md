@@ -50,25 +50,6 @@ The v0.1 target is described below as **seven moments** rather than as a feature
 
 You reference a column that does not exist, compare mismatched types, or aggregate the wrong thing — and you find out before anything runs.
 
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- `query { }` blocks typechecked against the current query schema
-- Row shapes are ordinary `model` types, so `LazyFrame[Order]` becoming `LazyFrame[PaidOrder]` is checked, not asserted
-- Typed helpers validate scalar inputs at the call site
-</div>
-
-<div markdown>
-Planned
-
-- Column names are still strings internally, so a typo is caught at plan lowering rather than at compile time ([#116][i116])
-- Unbounded carriers do not yet reject operations that need finite input ([#114][i114])
-</div>
-
-</div>
-
 ??? note "Why this matters"
 
     Every data team has shipped a rename that passed review, ran green, and quietly
@@ -83,6 +64,16 @@ Planned
     The promise is not that you stop making mistakes. It is that the feedback
     arrives while you are still the person best placed to fix them.
 
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | `query { }` blocks typechecked against the current query schema | Available | [Query blocks](language/reference/query_blocks.md) |
+    | Row shapes are ordinary `model` types, so a projection that changes shape changes type | Available | [Dataset carriers](language/reference/dataset_carriers.md) |
+    | Typed helpers validate their scalar inputs at the call site | Available | [Dataset methods](language/reference/dataset_methods.md) |
+    | Field references resolved against the declared model at compile time | Planned | [#116](https://github.com/encero-systems/IncQL/issues/116) |
+    | Unbounded carriers reject operations that need finite input | Planned | [#114](https://github.com/encero-systems/IncQL/issues/114) |
+
 </div>
 
 <div class="moment crystal-surface" data-status="available" markdown>
@@ -92,23 +83,6 @@ Planned
 ### "I never left the language." {: data-status="available" }
 
 No SQL strings. No stringly-typed row access. Your schema is a `model`, and your query is source your editor and compiler both understand.
-
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- SQL-familiar `query { }` blocks and `DataSet[T]` method chains resolve identically
-- The [ten-minute quickstart][quickstart] carries the whole shape in about fifty lines
-</div>
-
-<div markdown>
-Out of scope
-
-- Optional pipe-forward (`|>`) is specified in [RFC 005][rfc005] and deliberately excluded from v0.1
-</div>
-
-</div>
 
 ??? note "Why this matters"
 
@@ -125,6 +99,15 @@ Out of scope
     The alternative is not worse syntax. It is a smaller set of things your tools
     can help you with.
 
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | SQL-familiar `query { }` blocks | Available | [Query blocks](language/reference/query_blocks.md) |
+    | `DataSet[T]` method chains resolving identically | Available | [Dataset methods](language/reference/dataset_methods.md) |
+    | Schemas as ordinary Incan `model` types | Available | [Dataset carriers](language/explanation/dataset_carriers.md) |
+    | Optional pipe-forward (`\|>`) | Out of scope | [RFC 005](rfcs/005_incql_pipe_forward.md) |
+
 </div>
 
 <div class="moment crystal-surface" data-status="available" markdown>
@@ -134,26 +117,6 @@ Out of scope
 ### "It ran, and the result is still typed." {: data-status="available" }
 
 Read a source, transform it, get rows back that still carry their row type.
-
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- Typed read, execute, collect, and write, with typed sink descriptors
-- Structured materialization rather than rendered text as the contract
-- DataFusion as reference adapter behind a Substrait backend boundary
-</div>
-
-<div markdown>
-Planned
-
-- Constructing a relation directly from in-memory values ([#20][i20])
-- An explicit catalog model for logical-name schema binding
-- A real output-schema contract for joins between different row types
-</div>
-
-</div>
 
 ??? note "Why this matters"
 
@@ -169,6 +132,17 @@ Planned
     That matters most where data work usually gets fragile: the transformation
     after the transformation, written weeks later by someone else.
 
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | Typed read, execute, collect and write | Available | [Read and write data](language/how-to/read_write_data.md) |
+    | Typed sink descriptors and structured materialization | Available | [Execution context](language/reference/execution_context.md) |
+    | DataFusion behind a Substrait backend boundary | Available | [Execution context](language/explanation/execution_context.md) |
+    | Relations constructed from in-memory values | Planned | [#20](https://github.com/encero-systems/IncQL/issues/20) |
+    | An explicit catalog model for logical-name schema binding | Planned | [RFC 004](rfcs/004_incql_execution_context.md) |
+    | An output-schema contract for heterogeneous joins | Planned | [Joins](language/how-to/joins.md) |
+
 </div>
 
 <div class="moment crystal-surface" data-status="partial" markdown>
@@ -178,25 +152,6 @@ Planned
 ### "I saw what it would do before it did it." {: data-status="partial" }
 
 You can inspect a plan — its structure, its schema flow, and where each field came from — without executing it.
-
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- Typed inspection records over Prism-backed plans
-- Lineage across value, control, grouping, join, sort, window, policy and quality dependencies, each with exact, conservative, or unknown confidence
-- Evidence that could not be computed is marked, not silently omitted
-</div>
-
-<div markdown>
-Planned
-
-- Records are not yet written as versioned artifacts, and there is no rendered report ([#117][i117])
-- Prism currently backs `LazyFrame[T]` only ([#16][i16])
-</div>
-
-</div>
 
 ??? note "Why this matters"
 
@@ -211,6 +166,16 @@ Planned
     This is also what makes the other moments compound: lineage that exists before
     execution is what lets a build system know precisely what your change affects.
 
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | Typed plan inspection without executing | Available | [Inspect plan and lineage](language/how-to/inspect_plan_lineage.md) |
+    | Lineage across value, control, grouping, join, sort, window, policy and quality edges | Available | [Inspection](language/reference/inspection.md) |
+    | Uncomputed evidence marked rather than omitted | Available | [Inspection](language/reference/inspection.md) |
+    | Serialized artifacts and a rendered report | Planned | [#117](https://github.com/encero-systems/IncQL/issues/117) |
+    | Prism backing beyond `LazyFrame[T]` | Planned | [#16](https://github.com/encero-systems/IncQL/issues/16) |
+
 </div>
 
 <div class="moment crystal-surface" data-status="available" markdown>
@@ -220,25 +185,6 @@ Planned
 ### "It told me the truth about its limits." {: data-status="available" }
 
 IncQL says "I cannot do this here" instead of degrading quietly.
-
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- Adapter coverage reports covered, partially covered, uncovered, or unknown
-- Execution, collection and writes have observed variants capturing evidence for success and failure
-- Quality assertions produce observations without acting as invisible filters
-- A backend with no implementation reports a planning diagnostic rather than approximating
-</div>
-
-<div markdown>
-Planned
-
-- Coverage and unsupported evidence share the rendered-report gap from moment 4
-</div>
-
-</div>
 
 ??? note "Why this matters"
 
@@ -254,6 +200,16 @@ Planned
     The goal is that nothing IncQL reports is more confident than the evidence
     behind it.
 
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | Adapter coverage: covered, partially covered, uncovered, unknown | Available | [Capabilities](language/reference/capabilities.md) |
+    | Observed execution, collection and write attempts | Available | [Execution observations](language/how-to/execution_observations.md) |
+    | Quality observations that never act as invisible filters | Available | [Quality](language/reference/quality.md) |
+    | Governed attributes and policy checkpoints | Available | [Governance](language/reference/governance.md) |
+    | A rendered form for coverage and unsupported evidence | Planned | [#117](https://github.com/encero-systems/IncQL/issues/117) |
+
 </div>
 
 <div class="moment crystal-surface" data-status="planned" markdown>
@@ -263,27 +219,6 @@ Planned
 ### "It works on my actual data." {: data-status="planned" }
 
 A typed data logic plane is only interesting when it operates on data you actually govern. Today IncQL reads local CSV and Parquet files.
-
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- Local CSV and Parquet sources with typed row shapes
-</div>
-
-<div markdown>
-Planned
-
-- Object-store locations and partitioned datasets, with inference that does not read a file into memory ([#112][i112])
-- Iceberg and Delta tables as typed sources ([RFC 069][rfc069], [#115][i115])
-- Delivered as addon packages through a component registry ([#113][i113]), so a lakehouse stack is never compiled unasked
-</div>
-
-</div>
-
-Table formats change the schema story in IncQL's favour. A CSV has no schema, so one must be inferred. An Iceberg or Delta table carries an authoritative schema and tracks its evolution — so a declared `model` can be reconciled against the table's real, current shape before any data is read, and a renamed column can be reported as a rename rather than as a disappearance.
-
 
 ??? note "Why this matters"
 
@@ -300,6 +235,16 @@ Table formats change the schema story in IncQL's favour. A CSV has no schema, so
 
     Until that works, IncQL is a good demonstration rather than a tool.
 
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | Local CSV and Parquet sources with typed row shapes | Available | [Read and write data](language/how-to/read_write_data.md) |
+    | Object-store locations and partitioned datasets | Planned | [#112](https://github.com/encero-systems/IncQL/issues/112) |
+    | Schema inference that does not read the file into memory | Planned | [#112](https://github.com/encero-systems/IncQL/issues/112) |
+    | Iceberg and Delta tables as typed, reconciled sources | Planned | [RFC 069](rfcs/069_lakehouse_table_format_sources.md) |
+    | Addon component registry so a lakehouse stack is opt-in | Planned | [#113](https://github.com/encero-systems/IncQL/issues/113) |
+
 </div>
 
 <div class="moment crystal-surface" data-status="planned" markdown>
@@ -309,27 +254,6 @@ Table formats change the schema story in IncQL's favour. A CSV has no schema, so
 ### "I can work without stepping on anyone." {: data-status="planned" }
 
 Your own materialization target, and a way to rebuild only the part you changed.
-
-<div class="moment-split" markdown>
-
-<div markdown>
-Available
-
-- The typed lineage graph this depends on already exists
-</div>
-
-<div markdown>
-Planned
-
-- Data projects as [named relational assets][rfc058] with a typed dependency graph available without executing your code
-- [Materialization intent][rfc059] resolved against one destination binding
-- A [build lifecycle][rfc062] where structured selectors resolve to an immutable build set and emit a receipt
-</div>
-
-</div>
-
-Because lineage is typed and tracks fields rather than only relations, selection can be **column-level**: rebuild what actually depends on a given column, rather than everything downstream of the relation that happens to contain it.
-
 
 ??? note "Why this matters"
 
@@ -348,6 +272,15 @@ Because lineage is typed and tracks fields rather than only relations, selection
     distinction a string-addressed dependency graph cannot make.
 
 </div>
+
+??? abstract "Capabilities and status"
+
+    | Capability | State | Where |
+    | --- | --- | --- |
+    | The typed lineage graph the loop depends on | Available | [Inspection](language/reference/inspection.md) |
+    | Projects as named relational assets with a typed dependency graph | Planned | [RFC 058](rfcs/058_data_projects_named_relational_assets.md) |
+    | Materialization intent against one destination binding | Planned | [RFC 059](rfcs/059_materialization_applied_asset_lifecycle.md) |
+    | Selector-driven builds with an append-only receipt | Planned | [RFC 062](rfcs/062_project_build_lifecycle_selectors_state.md) |
 
 </div>
 
