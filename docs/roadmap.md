@@ -30,7 +30,7 @@ The v0.1 target is described below as **seven moments** rather than as a feature
 
 ## The seven moments
 
-<div class="roadmap-glance">
+<div class="roadmap-glance crystal-surface">
   <a href="#it-caught-it" data-status="partial"><span>1</span>It caught it</a>
   <a href="#i-never-left-the-language" data-status="available"><span>2</span>I never left the language</a>
   <a href="#it-ran-and-the-result-is-still-typed" data-status="available"><span>3</span>It ran, and the result is still typed</a>
@@ -247,7 +247,7 @@ Because lineage is typed and tracks fields rather than only relations, selection
 
 v0.1 is done when a stranger can do all of this in one sitting, without reading a single RFC.
 
-<ol class="roadmap-test">
+<ol class="roadmap-test crystal-surface">
   <li data-result="yes">
     <span class="clause">Point IncQL at a real CSV and define a model for its rows</span>
     <span class="verdict"><b aria-hidden="true">✓</b>works</span>
