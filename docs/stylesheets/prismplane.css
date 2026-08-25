@@ -7495,7 +7495,6 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
   margin: 0;
   border: 1px solid var(--incql-page-line);
   border-radius: 14px;
-  overflow: hidden;
   box-shadow: 0 18px 42px rgba(55, 74, 123, 0.1);
 }
 
@@ -7504,8 +7503,9 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
 }
 
 .md-typeset .incql-showcase__code pre > code {
-  overflow-x: auto;
+  overflow: visible;
   padding: 1rem 1.1rem;
+  border-radius: 14px;
   font-size: 0.715rem;
   line-height: 1.65;
 }
@@ -7552,6 +7552,7 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
     grid-template-columns: minmax(0, 1fr);
     gap: 1.3rem;
   }
+  .md-typeset .incql-showcase__code pre > code { overflow-x: auto; }
 }
 
 /* ---- 404 ----------------------------------------------------------------
@@ -7618,4 +7619,21 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
 @media (prefers-reduced-motion: reduce) {
   .md-typeset .incql-notfound__grid a { transition: none; }
   .md-typeset .incql-notfound__grid a:hover { transform: none; }
+}
+
+/* The lead note tells the reader the markers are clickable, so the glyph it
+ * names should look like the marker it refers to. */
+.md-typeset .incql-annot-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 50%;
+  background: var(--incql-page-blue);
+  color: #fff;
+  font-size: 0.78em;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: -0.12em;
 }

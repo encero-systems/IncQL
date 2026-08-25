@@ -27,21 +27,21 @@
 <p class="incql-showcase__label">Reading paid orders from a CSV</p>
 
 ```incan
-model Order:
+model Order:  # (1)!
     order_id: int
     customer_id: str
     status: str
     amount: float
 
-model PaidOrder:
+model PaidOrder:  # (2)!
     order_id: int
     amount: float
 
 def paid_orders(
-    mut session: Session,
-) -> Result[LazyFrame[PaidOrder], SessionError]:
-    orders: LazyFrame[Order] = session.read_csv("orders", "orders.csv")?
-    paid: LazyFrame[PaidOrder] = query {
+    mut session: Session,  # (3)!
+) -> Result[LazyFrame[PaidOrder], SessionError]:  # (4)!
+    orders: LazyFrame[Order] = session.read_csv("orders", "orders.csv")?  # (5)!
+    paid: LazyFrame[PaidOrder] = query {  # (6)!
         FROM orders
         WHERE .status == "paid"
         SELECT
@@ -52,17 +52,24 @@ def paid_orders(
     return Ok(paid)
 ```
 
+1.  **`model` is an ordinary Incan record type** — not an IncQL construct. It declares a row's fields and their types in source, so the schema is something written down rather than something the file reveals at runtime.
+2.  **The output shape gets a name too.** Projecting to `PaidOrder` is what keeps the result typed. Without it you would be back to "some rows with some columns".
+3.  **`mut` means this call changes the Session.** Incan is explicit about mutation, and registering a source mutates the registry — so you can see, at the call site, that something was written to.
+4.  **`Result` and `?` are Incan's failure path.** There are no exceptions: a read that can fail returns `Result`, and `?` hands the failure to the caller. Nothing fails invisibly.
+5.  **`LazyFrame[Order]` is a carrier that knows its row type — and has not run.** `LazyFrame` is the deferred one; `DataFrame[T]` is its eager sibling and `DataStream[T]` the unbounded one. The `[Order]` is what later clauses are checked against.
+6.  **The query block is typed against that carrier.** `.status` resolves against `Order`'s fields, so this is checked relational logic, not a string handed to an engine.
+
 </div>
 
 <div class="incql-showcase__notes" markdown="1">
-<p class="incql-section-kicker">What that buys you</p>
+<p class="incql-section-kicker">Reading the example</p>
 
-<article markdown="1">
-### The row shape is a type
+<article class="incql-showcase__note--lead" markdown="1">
+### Yes, this is long for a CSV
 
-`Order` is an ordinary Incan `model`. The query block is typed against it, so the schema is something the compiler knows rather than something the data reveals at runtime.
+Three lines would do it in most tools. What those three lines cannot do is tell you, before anything runs, that `amount` is still a `float` and `status` still exists. Every line here that looks like ceremony is a check moved earlier: the models are the schema, the annotations are what the query block is checked against, and `?` is the failure path made visible.
 
-[Dataset carriers](language/reference/dataset_carriers.md)
+Click any <span class="incql-annot-hint">+</span> above to see what a line is doing.
 </article>
 
 <article markdown="1">
