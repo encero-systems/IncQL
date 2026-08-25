@@ -22,11 +22,14 @@ The v0.1 target is described below as **seven moments** rather than as a feature
 
 <p class="roadmap-thesis" markdown>Strip away the RFC numbering and IncQL makes one promise: your data mistakes become compile errors instead of 3am pager duty. Everything else serves that — and the loop you live in every day decides whether anyone stays long enough to find out.</p>
 
-| Status | Meaning |
-| ------ | ------- |
-| **Available** | Works today in the published package. |
-| **Partial** | Usable, but does not yet cover everything the moment implies. |
-| **Planned** | Designed and specified in an RFC; not yet implemented. |
+<div class="roadmap-legend crystal-surface">
+  <p class="roadmap-legend__label">How to read this page</p>
+  <ol>
+    <li data-state="available"><span>Available</span><strong>Works today in the published package</strong></li>
+    <li data-state="partial"><span>Partial</span><strong>Usable, but does not yet cover everything the moment implies</strong></li>
+    <li data-state="planned"><span>Planned</span><strong>Designed and specified in an RFC; not yet implemented</strong></li>
+  </ol>
+</div>
 
 ## The seven moments
 
@@ -512,6 +515,8 @@ Structured selectors resolve to an immutable build set, execute in dependency or
 </div>
 
 </div>
+</div>
+
 
 ## The acceptance test
 
@@ -554,8 +559,6 @@ v0.1 is done when a stranger can do all of this in one sitting, without reading 
     <span class="why">Specified across RFCs 058, 059 and 062 — projects as typed assets, materialization intent, and selector-driven builds — but not yet implemented.</span>
   </li>
 </ol>
-
-Three of the seven hold outright, one holds partially, and three do not hold at all. That gap is the distance between a package that works and a tool someone adopts — and it maps exactly onto the moments still marked partial or planned above.
 
 ## Status by area
 
@@ -629,10 +632,10 @@ The gaps on this page are specific, scoped, and written down. Several are unclai
 
 </div>
 
-<div class="incql-actions" markdown="1">
+<div class="incql-actions" markdown="span">
 <a class="incql-button incql-button--primary" href="https://github.com/encero-systems/IncQL/milestone/1">See the v0.1 milestone</a>
-<a class="incql-button" href="rfcs/README.md">Read the RFCs</a>
-<a class="incql-button" href="project.md">Contributor guide</a>
+<a class="incql-button" href="../rfcs/">Read the RFCs</a>
+<a class="incql-button" href="../project/">Contributor guide</a>
 </div>
 
 </section>

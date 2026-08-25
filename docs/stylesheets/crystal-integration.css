@@ -759,7 +759,9 @@ body:has(.incql-architecture)::after {
 .roadmap-glance {
   display: grid;
   gap: 0.1rem 1.4rem;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  grid-auto-flow: column;
+  grid-template-rows: repeat(4, auto);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 1.35rem 0 2rem;
   padding: 1rem 1.15rem;
   border-radius: 10px;
@@ -1018,7 +1020,12 @@ body:has(.incql-architecture)::after {
 @media screen and (max-width: 44.9375em) {
   .roadmap-moments .moment { padding: 1rem 1.05rem 0.85rem; }
   .roadmap-moments .moment > h3::after { display: block; margin: 0.35rem 0 0; width: max-content; }
-  .roadmap-glance { padding: 0.85rem 0.9rem; }
+  .roadmap-glance {
+    padding: 0.85rem 0.9rem;
+    grid-auto-flow: row;
+    grid-template-rows: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ---- Dark scheme --------------------------------------------------------
@@ -1247,4 +1254,118 @@ body:has(.incql-architecture)::after {
 
 @media screen and (max-width: 59.9375em) {
   .roadmap-cta { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---- Roadmap: status legend ---------------------------------------------
+ * Modelled on the Learn hero's receipt panel: a labelled key on a crystal
+ * surface rather than a bare Markdown table. Laid out three-up so it reads as
+ * one glanceable strip and aligns with the cards below it. Each row carries
+ * the same state signal used throughout the page — dot colour is backed by the
+ * word itself, so the key never depends on hue alone. */
+
+.roadmap-legend {
+  --facet-angle: 111deg;
+  --seam-angle: 129deg;
+  margin: 1.35rem 0 2rem;
+  padding: 1.1rem 1.4rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.96);
+  border-radius: 15px;
+  background:
+    linear-gradient(116deg, rgba(255, 255, 255, 0.82), rgba(239, 247, 255, 0.66) 54%, rgba(245, 239, 255, 0.69)),
+    rgba(241, 247, 255, 0.78);
+  box-shadow:
+    0 16px 36px rgba(24, 56, 126, 0.15),
+    inset 0 1px #fff,
+    inset 1px 0 rgba(70, 209, 255, 0.5),
+    inset -1px 0 rgba(124, 80, 255, 0.22);
+  backdrop-filter: blur(15px) saturate(111%);
+  -webkit-backdrop-filter: blur(15px) saturate(111%);
+}
+
+.md-typeset .roadmap-legend__label {
+  margin: 0 0 0.9rem;
+  color: var(--crystal-muted, #536d9c);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.md-typeset .roadmap-legend ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem 1.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-typeset .roadmap-legend li {
+  margin: 0;
+  padding: 0 0 0 0.85rem;
+  border-left: 2px solid var(--legend-signal);
+}
+
+.md-typeset .roadmap-legend li span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+  color: var(--legend-signal);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.md-typeset .roadmap-legend li span::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: var(--legend-signal);
+  box-shadow: 0 0 8px var(--legend-glow);
+}
+
+.md-typeset .roadmap-legend li strong {
+  display: block;
+  color: var(--crystal-copy, #294b7e);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.roadmap-legend li[data-state="available"] { --legend-signal: #14b48f; --legend-glow: rgba(20, 180, 143, 0.6); }
+.roadmap-legend li[data-state="partial"]   { --legend-signal: #e8961a; --legend-glow: rgba(232, 150, 26, 0.55); }
+.roadmap-legend li[data-state="planned"]   { --legend-signal: #6f86bd; --legend-glow: rgba(111, 134, 189, 0.4); }
+
+/* ---- Roadmap: CTA actions -----------------------------------------------
+ * The shared actions row packs tightly for a hero. Three peer buttons in a
+ * body section need more air between them, and room above. */
+
+/* Three peer actions do not fit one row inside the CTA's right-hand column,
+ * and wrapping them left an orphan on the first line. Stack them instead, so
+ * they read as a deliberate list with real space between each. */
+
+.roadmap-cta .incql-actions {
+  flex: 0 0 auto;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin-top: 0;
+}
+
+.md-typeset .roadmap-cta .incql-actions .incql-button {
+  margin: 0;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 59.9375em) {
+  .roadmap-cta .incql-actions { align-self: stretch; }
 }
