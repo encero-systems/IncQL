@@ -1,183 +1,252 @@
 /* Crystal roadmap
  *
- * Owns the roadmap page's moment cards only. Everything here is scoped beneath
- * `.roadmap-moments` so it refines shared primitives without introducing a
- * global override, per the ordered cascade in
+ * Owns the roadmap page's moment cards, glance strip, and acceptance test.
+ * Everything is scoped beneath a roadmap root so it refines shared primitives
+ * without a global override, per the ordered cascade in
  * docs/contributing/prismplane_docs_theme.md.
  *
- * Status is carried by an edge rail and a small signal label rather than by a
- * decorative badge: color belongs in rails and signal accents, and the page
- * must stay analytical rather than ceremonial. The markup degrades to ordinary
- * headings, paragraphs, and lists when this file is absent.
+ * Built on the shared optical tokens from crystalline.css and the surface
+ * treatment established by crystal-architecture.css: layered facet gradients
+ * over a translucent ground, with backdrop saturation. Status is a saturated
+ * signal light after the pattern of `.health-light`, not a flat swatch —
+ * colour belongs in rails and signal accents, and a reader should be able to
+ * tell settled from planned across the page without reading a word.
+ *
+ * The markup degrades to ordinary headings, paragraphs, and lists when this
+ * file is absent.
  */
+
+.roadmap-moments,
+.roadmap-glance,
+.roadmap-test {
+  --road-available: #14b48f;
+  --road-partial: #e8961a;
+  --road-planned: #6f86bd;
+  --road-blocked: #d24d6a;
+}
+
+/* ---- Thesis ------------------------------------------------------------- */
+
+.roadmap-thesis {
+  position: relative;
+  margin: 1.35rem 0 0;
+  padding: 0.55rem 0 0.55rem 1.35rem;
+  color: var(--crystal-ink, #08245f);
+  font-size: 1.12rem;
+  line-height: 1.52;
+  max-width: 46rem;
+}
+
+.roadmap-thesis::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--crystal-blue, #315df0), var(--crystal-cyan, #22c8ee));
+}
+
+/* ---- At a glance --------------------------------------------------------
+ * All seven states legible in one pass, before any prose. */
+
+.roadmap-glance {
+  display: grid;
+  gap: 0.1rem 1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  margin: 1.35rem 0 2rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
+  border-radius: 10px;
+  background:
+    linear-gradient(117deg, rgba(255, 255, 255, 0.8) 0 26%, rgba(238, 247, 255, 0.4) 26.35% 63%, rgba(255, 255, 255, 0.66) 63.35%),
+    var(--crystal-surface, rgba(248, 252, 255, 0.62));
+  backdrop-filter: blur(8px) saturate(112%) brightness(1.03);
+  -webkit-backdrop-filter: blur(8px) saturate(112%) brightness(1.03);
+  box-shadow: var(--crystal-shadow, 0 22px 58px rgba(32, 65, 145, 0.1));
+}
+
+.roadmap-glance a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.34rem 0.4rem;
+  border-radius: 6px;
+  border-bottom: none;
+  color: var(--crystal-copy, #294b7e);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.roadmap-glance a:hover,
+.roadmap-glance a:focus-visible {
+  background: rgba(49, 93, 240, 0.07);
+  color: var(--crystal-ink, #08245f);
+}
+
+.roadmap-glance a > span {
+  flex: 0 0 auto;
+  min-width: 1.1rem;
+  color: var(--crystal-muted, #536d9c);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Signal light: saturated core, white ring, glow sized to confidence. */
+.roadmap-glance a::after {
+  content: "";
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: var(--road-signal);
+  box-shadow: 0 0 10px var(--road-glow);
+}
+
+.roadmap-glance a[data-status="available"] { --road-signal: var(--road-available); --road-glow: rgba(20, 180, 143, 0.68); }
+.roadmap-glance a[data-status="partial"]   { --road-signal: var(--road-partial);   --road-glow: rgba(232, 150, 26, 0.62); }
+.roadmap-glance a[data-status="planned"]   { --road-signal: var(--road-planned);   --road-glow: rgba(111, 134, 189, 0.42); }
+
+/* ---- Moment cards ------------------------------------------------------- */
 
 .roadmap-moments {
   display: flex;
   flex-direction: column;
   gap: 1.15rem;
-  margin: 1.5rem 0 2rem;
+  margin: 1.5rem 0 2.25rem;
 }
 
 .roadmap-moments .moment {
   position: relative;
-  border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.12));
-  border-left: 3px solid var(--roadmap-rail, var(--md-default-fg-color--lighter));
-  border-radius: 4px;
-  padding: 1.05rem 1.25rem 0.85rem;
-  background: var(--md-default-bg-color);
+  overflow: hidden;
+  padding: 1.2rem 1.4rem 1rem;
+  border: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
+  border-radius: 10px;
+  background:
+    linear-gradient(117deg, rgba(255, 255, 255, 0.82) 0 26%, rgba(238, 247, 255, 0.38) 26.35% 63%, rgba(255, 255, 255, 0.68) 63.35%),
+    var(--crystal-surface, rgba(248, 252, 255, 0.62));
+  backdrop-filter: blur(8px) saturate(110%) brightness(1.03);
+  -webkit-backdrop-filter: blur(8px) saturate(110%) brightness(1.03);
+  box-shadow: var(--crystal-shadow, 0 22px 58px rgba(32, 65, 145, 0.1));
 }
 
-/* Signal accents. Available reads settled, planned reads deliberately quiet. */
-.roadmap-moments .moment[data-status="available"] { --roadmap-rail: #2f7a5a; --roadmap-ink: #2f7a5a; }
-.roadmap-moments .moment[data-status="partial"]   { --roadmap-rail: #8f6412; --roadmap-ink: #8f6412; }
-.roadmap-moments .moment[data-status="planned"]   { --roadmap-rail: #4a5568; --roadmap-ink: #5b6675; }
+/* Status rail on the leading edge, fading as it descends so the card reads as
+ * lit by its own state rather than merely outlined. */
+.roadmap-moments .moment::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--road-signal) 0%, var(--road-signal) 42%, transparent 100%);
+}
 
-[data-md-color-scheme="slate"] .roadmap-moments .moment[data-status="available"] { --roadmap-rail: #63ba8e; --roadmap-ink: #63ba8e; }
-[data-md-color-scheme="slate"] .roadmap-moments .moment[data-status="partial"]   { --roadmap-rail: #d3a44f; --roadmap-ink: #d3a44f; }
-[data-md-color-scheme="slate"] .roadmap-moments .moment[data-status="planned"]   { --roadmap-rail: #8792a2; --roadmap-ink: #94a1b2; }
+.roadmap-moments .moment[data-status="available"] { --road-signal: var(--road-available); --road-glow: rgba(20, 180, 143, 0.55); }
+.roadmap-moments .moment[data-status="partial"]   { --road-signal: var(--road-partial);   --road-glow: rgba(232, 150, 26, 0.5); }
+.roadmap-moments .moment[data-status="planned"]   { --road-signal: var(--road-planned);   --road-glow: rgba(111, 134, 189, 0.36); }
 
 .roadmap-moments .moment > h3 {
-  margin: 0 0 0.15rem;
-  font-size: 1.05rem;
-  line-height: 1.3;
+  margin: 0 0 0.2rem;
+  color: var(--crystal-ink, #08245f);
+  font-size: 1.08rem;
+  line-height: 1.32;
 }
 
-/* The status word is generated from the data attribute so the Markdown source
- * carries the state once, on the element that is actually styled by it. */
 .roadmap-moments .moment > h3::after {
   content: attr(data-status);
   display: inline-block;
-  margin-left: 0.6rem;
-  white-space: nowrap;
-  padding: 0.08rem 0.42rem;
-  border: 1px solid var(--roadmap-rail);
-  border-radius: 3px;
-  color: var(--roadmap-ink);
+  margin-left: 0.65rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: var(--road-signal);
+  box-shadow: 0 0 12px var(--road-glow);
+  color: #fff;
   font-family: var(--md-code-font-family, monospace);
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-
-.roadmap-moments .moment > p {
-  margin: 0.35rem 0 0.7rem;
-  font-size: 0.9rem;
-}
-
-/* Two lanes: what a reader can use now, and what is still ahead. Collapses to
- * one column on narrow viewports rather than scrolling sideways. */
-.roadmap-moments .moment-split {
-  display: grid;
-  gap: 0 1.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  border-top: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.1));
-  padding-top: 0.75rem;
-}
-
-.roadmap-moments .moment-split > div > p:first-child {
-  margin: 0 0 0.3rem;
-  color: var(--md-default-fg-color--light);
-  font-family: var(--md-code-font-family, monospace);
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.roadmap-moments .moment > p {
+  margin: 0.4rem 0 0.85rem;
+  color: var(--crystal-copy, #294b7e);
+  font-size: 0.92rem;
+}
+
+/* Two lanes: usable now, and still ahead. */
+.roadmap-moments .moment-split {
+  display: grid;
+  gap: 0 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
+}
+
+.roadmap-moments .moment-split > div > p:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.4rem;
+  color: var(--crystal-muted, #536d9c);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.roadmap-moments .moment-split > div > p:first-child::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--crystal-cyan, #22c8ee);
+}
+
+.roadmap-moments .moment-split > div:first-child > p:first-child::before {
+  background: var(--road-available);
 }
 
 .roadmap-moments .moment-split ul {
-  margin: 0 0 0.6rem;
-  font-size: 0.85rem;
-}
-
-.roadmap-moments .moment-split li { margin-bottom: 0.2rem; }
-
-@media screen and (max-width: 44.9375em) {
-  .roadmap-moments .moment { padding: 0.9rem 1rem 0.7rem; }
-  .roadmap-moments .moment > h3::after { display: block; margin: 0.3rem 0 0; width: max-content; }
-}
-
-/* ---- Thesis -------------------------------------------------------------
- * One claim, set apart. Weight comes from scale and a rail, not ornament. */
-
-.roadmap-thesis {
-  margin: 1.1rem 0 0;
-  padding: 0.15rem 0 0.15rem 1.1rem;
-  border-left: 3px solid var(--md-primary-fg-color, #5b6675);
-  font-size: 1.06rem;
-  line-height: 1.5;
-  max-width: 46rem;
-}
-
-/* ---- At a glance --------------------------------------------------------
- * All seven states legible in one pass, before any prose. Analytical rather
- * than decorative: the dot is the datum. */
-
-.roadmap-glance {
-  display: grid;
-  gap: 0.3rem 1.1rem;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  margin: 1.25rem 0 1.75rem;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.12));
-  border-radius: 4px;
-}
-
-.roadmap-glance a {
-  display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  padding: 0.16rem 0;
-  color: var(--md-default-fg-color);
+  margin: 0 0 0.7rem;
+  color: var(--crystal-copy, #294b7e);
   font-size: 0.86rem;
-  text-decoration: none;
-  border-bottom: none;
 }
 
-.roadmap-glance a:hover { color: var(--md-accent-fg-color, var(--md-primary-fg-color)); }
+.roadmap-moments .moment-split li { margin-bottom: 0.28rem; }
 
-.roadmap-glance a > span {
-  flex: 0 0 auto;
-  min-width: 1.05rem;
-  color: var(--md-default-fg-color--light);
-  font-family: var(--md-code-font-family, monospace);
-  font-size: 0.72rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.roadmap-glance a::after {
-  content: "";
-  flex: 0 0 auto;
-  margin-left: auto;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--roadmap-rail);
-}
-
-.roadmap-glance a[data-status="available"] { --roadmap-rail: #2f7a5a; }
-.roadmap-glance a[data-status="partial"]   { --roadmap-rail: #8f6412; }
-.roadmap-glance a[data-status="planned"]   { --roadmap-rail: #c3c8d0; }
-
-/* ---- Acceptance test ----------------------------------------------------
- * A checklist that states its own verdict per clause. */
+/* ---- Acceptance test ---------------------------------------------------- */
 
 .roadmap-test {
   list-style: none;
-  margin: 1.1rem 0 1rem;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.12));
-  border-left: 3px solid var(--md-primary-fg-color, #5b6675);
-  border-radius: 0 4px 4px 0;
+  margin: 1.25rem 0 1.1rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
+  border-radius: 10px;
+  background:
+    linear-gradient(117deg, rgba(255, 255, 255, 0.8) 0 26%, rgba(238, 247, 255, 0.4) 26.35% 63%, rgba(255, 255, 255, 0.66) 63.35%),
+    var(--crystal-surface, rgba(248, 252, 255, 0.62));
+  backdrop-filter: blur(8px) saturate(112%) brightness(1.03);
+  -webkit-backdrop-filter: blur(8px) saturate(112%) brightness(1.03);
+  box-shadow: var(--crystal-shadow, 0 22px 58px rgba(32, 65, 145, 0.1));
   counter-reset: roadmap-clause;
 }
 
 .roadmap-test li {
   position: relative;
-  margin: 0 0 0.4rem;
-  padding-left: 2.4rem;
-  font-size: 0.9rem;
+  margin: 0 0 0.55rem;
+  padding-left: 2.5rem;
+  color: var(--crystal-copy, #294b7e);
+  font-size: 0.92rem;
   line-height: 1.5;
 }
 
@@ -188,30 +257,55 @@
   content: counter(roadmap-clause);
   position: absolute;
   left: 0;
-  top: 0.05rem;
-  width: 1.35rem;
-  height: 1.35rem;
-  border: 1px solid var(--roadmap-mark, #c3c8d0);
+  top: 0.02rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid #fff;
   border-radius: 50%;
-  color: var(--roadmap-mark, #8a94a3);
+  background: var(--road-signal);
+  box-shadow: 0 0 10px var(--road-glow);
+  color: #fff;
   font-family: var(--md-code-font-family, monospace);
-  font-size: 0.68rem;
-  line-height: 1.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.5rem;
   text-align: center;
 }
 
-.roadmap-test li[data-result="yes"]  { --roadmap-mark: #2f7a5a; }
-.roadmap-test li[data-result="part"] { --roadmap-mark: #8f6412; }
-.roadmap-test li[data-result="no"]   { --roadmap-mark: #9c3b2c; }
+.roadmap-test li[data-result="yes"]  { --road-signal: var(--road-available); --road-glow: rgba(20, 180, 143, 0.62); }
+.roadmap-test li[data-result="part"] { --road-signal: var(--road-partial);   --road-glow: rgba(232, 150, 26, 0.56); }
+.roadmap-test li[data-result="no"]   { --road-signal: var(--road-blocked);   --road-glow: rgba(210, 77, 106, 0.5); }
 
 .roadmap-test li em {
-  color: var(--md-default-fg-color--light);
-  font-size: 0.85em;
+  color: var(--crystal-muted, #536d9c);
+  font-size: 0.86em;
   font-style: normal;
 }
 
-[data-md-color-scheme="slate"] .roadmap-glance a[data-status="available"],
-[data-md-color-scheme="slate"] .roadmap-test li[data-result="yes"]  { --roadmap-rail: #63ba8e; --roadmap-mark: #63ba8e; }
-[data-md-color-scheme="slate"] .roadmap-glance a[data-status="partial"],
-[data-md-color-scheme="slate"] .roadmap-test li[data-result="part"] { --roadmap-rail: #d3a44f; --roadmap-mark: #d3a44f; }
-[data-md-color-scheme="slate"] .roadmap-test li[data-result="no"]   { --roadmap-mark: #db7a64; }
+/* ---- Narrow viewports --------------------------------------------------- */
+
+@media screen and (max-width: 44.9375em) {
+  .roadmap-moments .moment { padding: 1rem 1.05rem 0.85rem; }
+  .roadmap-moments .moment > h3::after { display: block; margin: 0.35rem 0 0; width: max-content; }
+  .roadmap-glance { padding: 0.85rem 0.9rem; }
+}
+
+/* ---- Dark scheme --------------------------------------------------------
+ * The site ships light-only today; kept in step with the other crystal files
+ * so enabling slate later does not strand this page. */
+
+[data-md-color-scheme="slate"] .roadmap-glance,
+[data-md-color-scheme="slate"] .roadmap-moments .moment,
+[data-md-color-scheme="slate"] .roadmap-test {
+  background: rgba(22, 28, 37, 0.72);
+  border-color: rgba(127, 170, 214, 0.22);
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.35);
+}
+
+[data-md-color-scheme="slate"] .roadmap-thesis,
+[data-md-color-scheme="slate"] .roadmap-moments .moment > h3 { color: #e3e8ef; }
+
+[data-md-color-scheme="slate"] .roadmap-glance a,
+[data-md-color-scheme="slate"] .roadmap-moments .moment > p,
+[data-md-color-scheme="slate"] .roadmap-moments .moment-split ul,
+[data-md-color-scheme="slate"] .roadmap-test li { color: #b6c2d2; }
