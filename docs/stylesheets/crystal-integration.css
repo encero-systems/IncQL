@@ -1360,10 +1360,22 @@ body:has(.incql-architecture)::after {
 }
 
 .md-typeset .roadmap-cta .incql-actions .incql-button {
-  margin: 0;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
   text-align: center;
   white-space: nowrap;
+}
+
+/* Only the action that leaves the docs site carries a mark, so the mark itself
+ * is the signal. Sized to the cap height of the label beside it. */
+.md-typeset .roadmap-cta .incql-button__mark {
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  opacity: 0.85;
 }
 
 @media screen and (max-width: 59.9375em) {
