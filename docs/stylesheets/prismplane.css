@@ -7682,3 +7682,64 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
   line-height: 1;
   vertical-align: -0.12em;
 }
+
+/* ---- Convergence map: measured connectors -------------------------------
+ * Drawn by prismplane.js from the live card positions. Sits under the cards
+ * and the mark, above the map's ambient wash. The pre-rendered raster stays as
+ * the no-JS fallback and is only hidden once these have been drawn. */
+
+.incql-map-links {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.incql-map-link {
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* The continuous relationship. */
+.incql-map-link--base {
+  stroke-width: 1.1;
+  stroke-opacity: 0.34;
+}
+
+/* The travelling pulse on top: a long dash with a long gap reads as movement
+ * rather than as a dotted line. */
+.incql-map-link--pulse {
+  stroke-width: 1.7;
+  stroke-dasharray: 9 42;
+  animation: incql-map-flow 3.1s linear infinite;
+}
+
+.incql-map-link--in { stroke: url(#incql-map-in); }
+.incql-map-link--out { stroke: url(#incql-map-out); }
+.incql-map-link--out.incql-map-link--pulse { animation-duration: 3.6s; }
+
+@keyframes incql-map-flow {
+  from { stroke-dashoffset: 51; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .incql-map-link--pulse { display: none; }
+  .incql-map-link--base { stroke-opacity: 0.55; stroke-width: 1.3; }
+}
+
+/* Once the measured lines exist, the blurred stand-in is redundant. */
+.incql-map-body.has-links::before {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .incql-map-link {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-opacity: 0.75;
+  }
+}

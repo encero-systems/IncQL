@@ -1359,6 +1359,139 @@
     };
   };
 
+
+  /* ---- Convergence map connectors -------------------------------------
+   * The landing page's semantic map used a pre-rendered raster for the lines
+   * flowing from each authoring surface through the mark and out to the plan
+   * and runtime boundaries. Card positions are responsive, so the raster never
+   * lined up and had to be blurred to hide the mismatch. These paths are
+   * measured from the live layout instead, so they land on the cards at any
+   * width. The raster stays as the no-JS fallback and is hidden only once this
+   * has drawn. */
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  const convergenceMapContract = {
+    /* A cubic with horizontal control handles: the line leaves a card and
+     * arrives at the hub flat, which reads as flow rather than a straight
+     * ruler line. */
+    connector(from, to) {
+      const bend = Math.max(28, Math.abs(to.x - from.x) * 0.46);
+      return `M ${from.x} ${from.y} C ${from.x + bend} ${from.y}, ${to.x - bend} ${to.y}, ${to.x} ${to.y}`;
+    },
+    /* Stop short of the mark so the strokes meet its edge rather than crossing
+     * over the logo itself. */
+    shorten(point, hub, radius) {
+      const dx = hub.x - point.x;
+      const dy = hub.y - point.y;
+      const length = Math.hypot(dx, dy) || 1;
+      return { x: hub.x - (dx / length) * radius, y: hub.y - (dy / length) * radius };
+    },
+  };
+
+  const initializeConvergenceMap = (root = document) => {
+    const body = root.querySelector(".incql-map-body");
+    if (!body) {
+      return;
+    }
+    const core = body.querySelector(".incql-map-core");
+    const sources = [...body.querySelectorAll(".incql-map-sources > article")];
+    const targets = [...body.querySelectorAll(".incql-map-targets > article")];
+    if (!core || (!sources.length && !targets.length)) {
+      return;
+    }
+
+    let svg = body.querySelector(".incql-map-links");
+    if (!svg) {
+      svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("class", "incql-map-links");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+      svg.setAttribute("preserveAspectRatio", "none");
+      body.prepend(svg);
+    }
+
+    const draw = () => {
+      const bounds = body.getBoundingClientRect();
+      if (!bounds.width || !bounds.height) {
+        return;
+      }
+      /* The map stacks into a single column at narrow widths, where lines
+       * between columns no longer describe anything. */
+      const stacked = window.matchMedia("(max-width: 62em)").matches;
+      body.classList.toggle("has-links", !stacked);
+      if (stacked) {
+        svg.replaceChildren();
+        return;
+      }
+
+      svg.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
+      const coreBox = core.getBoundingClientRect();
+      const hub = {
+        x: coreBox.left - bounds.left + coreBox.width / 2,
+        y: coreBox.top - bounds.top + coreBox.height / 2,
+      };
+      const radius = coreBox.width / 2 + 6;
+
+      const markup = [
+        `<defs>
+          <linearGradient id="incql-map-in" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#6db4ff" stop-opacity="0.15"/>
+            <stop offset="55%" stop-color="#5b73ff" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#8f6bff" stop-opacity="0.8"/>
+          </linearGradient>
+          <linearGradient id="incql-map-out" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8f6bff" stop-opacity="0.8"/>
+            <stop offset="45%" stop-color="#7a6cff" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#be62ff" stop-opacity="0.14"/>
+          </linearGradient>
+        </defs>`,
+      ];
+
+      /* Each connector is drawn twice: a faint continuous base so the
+       * relationship still reads between dashes, and a travelling pulse on top
+       * so the direction of flow is legible. Delays are set per element rather
+       * than by `nth-of-type`, which would break as soon as the path count or
+       * order changes. */
+      const addConnector = (from, to, direction, index) => {
+        const d = convergenceMapContract.connector(from, to);
+        const delay = (index * -0.55).toFixed(2);
+        markup.push(`<path class="incql-map-link incql-map-link--base incql-map-link--${direction}" d="${d}"/>`);
+        markup.push(
+          `<path class="incql-map-link incql-map-link--pulse incql-map-link--${direction}" d="${d}" style="animation-delay:${delay}s"/>`
+        );
+      };
+
+      sources.forEach((card, index) => {
+        const box = card.getBoundingClientRect();
+        const from = { x: box.right - bounds.left, y: box.top - bounds.top + box.height / 2 };
+        addConnector(from, convergenceMapContract.shorten(from, hub, radius), "in", index);
+      });
+
+      targets.forEach((card, index) => {
+        const box = card.getBoundingClientRect();
+        const to = { x: box.left - bounds.left, y: box.top - bounds.top + box.height / 2 };
+        addConnector(convergenceMapContract.shorten(to, hub, radius), to, "out", index);
+      });
+
+      svg.innerHTML = markup.join("");
+    };
+
+    draw();
+
+    if (!body.dataset.linksObserved) {
+      body.dataset.linksObserved = "true";
+      if (typeof ResizeObserver === "function") {
+        new ResizeObserver(() => draw()).observe(body);
+      } else {
+        window.addEventListener("resize", draw);
+      }
+      /* Card heights settle after webfonts swap in. */
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(draw).catch(() => {});
+      }
+    }
+  };
+
   const initializePage = () => {
     initializeSiteNavigation();
     initializeSiteDrawerToggle();
@@ -1367,6 +1500,7 @@
     initializeArchitectureNav();
     initializePrimaryNavCollapse();
     initializeRfcReader();
+    initializeConvergenceMap();
   };
 
   let materialSubscriptionReady = false;
