@@ -1930,7 +1930,7 @@ body:has(.incql-launch) .md-typeset li {
 .incql-map-body {
   position: relative;
   display: block;
-  min-height: clamp(21rem, 26vw, 28rem);
+  min-height: clamp(22rem, 28vw, 30rem);
   margin-top: clamp(0.95rem, 1.6vw, 1.45rem);
   border-radius: clamp(1rem, 1.55vw, 1.4rem);
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0.2) 100%);
@@ -1977,15 +1977,17 @@ body:has(.incql-launch) .md-typeset li {
 }
 
 .incql-map-sources {
-  top: 19%;
+  top: 50%;
   left: 6.2%;
   width: 24%;
+  transform: translateY(-50%);
 }
 
 .incql-map-targets {
-  top: 19%;
+  top: 50%;
   right: 3.4%;
   width: 23.4%;
+  transform: translateY(-50%);
 }
 
 .incql-map-sources article,
@@ -3062,6 +3064,7 @@ body:has(.incql-launch) .md-typeset li {
     position: relative;
     inset: auto;
     width: auto;
+    transform: none;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
