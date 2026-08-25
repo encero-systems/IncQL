@@ -18,7 +18,9 @@ IncQL's direction is to make relational work **checkable in source**, then to ke
 
 Raw SQL strings and untyped rows defer mistakes to runtime. IncQL keeps schemas as ordinary Incan `model` types, resolves names the same way across every authoring surface, and lowers to Apache Substrait so logical intent stays portable while execution, credentials, and physical reads stay in the layer below.
 
-The v0.1 target is described below as seven moments rather than as a feature list. A feature list says what a tool contains; these say what using it should feel like, which is a more useful thing to be held to.
+The v0.1 target is described below as **seven moments** rather than as a feature list. A feature list says what a tool contains; a moment says what using it should feel like, which is a more useful thing to be held to.
+
+<p class="roadmap-thesis" markdown>Strip away the RFC numbering and IncQL makes one promise: your data mistakes become compile errors instead of 3am pager duty. Everything else serves that — and the loop you live in every day decides whether anyone stays long enough to find out.</p>
 
 | Status | Meaning |
 | ------ | ------- |
@@ -26,7 +28,17 @@ The v0.1 target is described below as seven moments rather than as a feature lis
 | **Partial** | Usable, but does not yet cover everything the moment implies. |
 | **Planned** | Designed and specified in an RFC; not yet implemented. |
 
-## The v0.1 experience
+## The seven moments
+
+<div class="roadmap-glance">
+  <a href="#1-it-caught-it" data-status="partial"><span>1</span>It caught it</a>
+  <a href="#2-i-never-left-the-language" data-status="available"><span>2</span>I never left the language</a>
+  <a href="#3-it-ran-and-the-result-is-still-typed" data-status="available"><span>3</span>It ran, and the result is still typed</a>
+  <a href="#4-i-saw-what-it-would-do-before-it-did-it" data-status="partial"><span>4</span>I saw what it would do before it did it</a>
+  <a href="#5-it-told-me-the-truth-about-its-limits" data-status="available"><span>5</span>It told me the truth about its limits</a>
+  <a href="#6-it-works-on-my-actual-data" data-status="planned"><span>6</span>It works on my actual data</a>
+  <a href="#7-i-can-work-without-stepping-on-anyone" data-status="planned"><span>7</span>I can work without stepping on anyone</a>
+</div>
 
 <div class="roadmap-moments" markdown>
 
@@ -216,6 +228,22 @@ Because lineage is typed and tracks fields rather than only relations, selection
 </div>
 
 </div>
+
+## The acceptance test
+
+v0.1 is done when a stranger can do all of this in one sitting, without reading a single RFC.
+
+<ol class="roadmap-test">
+  <li data-result="yes">Point IncQL at a real CSV and define a model for its rows</li>
+  <li data-result="yes">Write a query against it</li>
+  <li data-result="part">Make a genuine mistake and get an error that says what is wrong <em>— caught at plan lowering today, not at compile time</em></li>
+  <li data-result="yes">Fix it and run it</li>
+  <li data-result="no">Read the plan it will execute <em>— no rendered form yet</em></li>
+  <li data-result="no">Point it at data that is not on their laptop</li>
+  <li data-result="no">Rebuild just the part they changed, into their own space</li>
+</ol>
+
+Four of the seven hold today. The three that do not are the three moments still marked planned or partial above — which is the whole distance between a package that works and a tool someone adopts.
 
 ## Status by area
 

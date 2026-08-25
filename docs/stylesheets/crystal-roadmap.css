@@ -48,6 +48,7 @@
   content: attr(data-status);
   display: inline-block;
   margin-left: 0.6rem;
+  white-space: nowrap;
   padding: 0.08rem 0.42rem;
   border: 1px solid var(--roadmap-rail);
   border-radius: 3px;
@@ -96,3 +97,121 @@
   .roadmap-moments .moment { padding: 0.9rem 1rem 0.7rem; }
   .roadmap-moments .moment > h3::after { display: block; margin: 0.3rem 0 0; width: max-content; }
 }
+
+/* ---- Thesis -------------------------------------------------------------
+ * One claim, set apart. Weight comes from scale and a rail, not ornament. */
+
+.roadmap-thesis {
+  margin: 1.1rem 0 0;
+  padding: 0.15rem 0 0.15rem 1.1rem;
+  border-left: 3px solid var(--md-primary-fg-color, #5b6675);
+  font-size: 1.06rem;
+  line-height: 1.5;
+  max-width: 46rem;
+}
+
+/* ---- At a glance --------------------------------------------------------
+ * All seven states legible in one pass, before any prose. Analytical rather
+ * than decorative: the dot is the datum. */
+
+.roadmap-glance {
+  display: grid;
+  gap: 0.3rem 1.1rem;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  margin: 1.25rem 0 1.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.12));
+  border-radius: 4px;
+}
+
+.roadmap-glance a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.16rem 0;
+  color: var(--md-default-fg-color);
+  font-size: 0.86rem;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.roadmap-glance a:hover { color: var(--md-accent-fg-color, var(--md-primary-fg-color)); }
+
+.roadmap-glance a > span {
+  flex: 0 0 auto;
+  min-width: 1.05rem;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.roadmap-glance a::after {
+  content: "";
+  flex: 0 0 auto;
+  margin-left: auto;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--roadmap-rail);
+}
+
+.roadmap-glance a[data-status="available"] { --roadmap-rail: #2f7a5a; }
+.roadmap-glance a[data-status="partial"]   { --roadmap-rail: #8f6412; }
+.roadmap-glance a[data-status="planned"]   { --roadmap-rail: #c3c8d0; }
+
+/* ---- Acceptance test ----------------------------------------------------
+ * A checklist that states its own verdict per clause. */
+
+.roadmap-test {
+  list-style: none;
+  margin: 1.1rem 0 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.12));
+  border-left: 3px solid var(--md-primary-fg-color, #5b6675);
+  border-radius: 0 4px 4px 0;
+  counter-reset: roadmap-clause;
+}
+
+.roadmap-test li {
+  position: relative;
+  margin: 0 0 0.4rem;
+  padding-left: 2.4rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.roadmap-test li:last-child { margin-bottom: 0; }
+
+.roadmap-test li::before {
+  counter-increment: roadmap-clause;
+  content: counter(roadmap-clause);
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid var(--roadmap-mark, #c3c8d0);
+  border-radius: 50%;
+  color: var(--roadmap-mark, #8a94a3);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.68rem;
+  line-height: 1.3rem;
+  text-align: center;
+}
+
+.roadmap-test li[data-result="yes"]  { --roadmap-mark: #2f7a5a; }
+.roadmap-test li[data-result="part"] { --roadmap-mark: #8f6412; }
+.roadmap-test li[data-result="no"]   { --roadmap-mark: #9c3b2c; }
+
+.roadmap-test li em {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.85em;
+  font-style: normal;
+}
+
+[data-md-color-scheme="slate"] .roadmap-glance a[data-status="available"],
+[data-md-color-scheme="slate"] .roadmap-test li[data-result="yes"]  { --roadmap-rail: #63ba8e; --roadmap-mark: #63ba8e; }
+[data-md-color-scheme="slate"] .roadmap-glance a[data-status="partial"],
+[data-md-color-scheme="slate"] .roadmap-test li[data-result="part"] { --roadmap-rail: #d3a44f; --roadmap-mark: #d3a44f; }
+[data-md-color-scheme="slate"] .roadmap-test li[data-result="no"]   { --roadmap-mark: #db7a64; }

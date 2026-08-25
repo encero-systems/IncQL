@@ -63,7 +63,7 @@ extra_css:
   - stylesheets/crystal-integration.css?v=20260723-architecture-readability-4
   - stylesheets/crystal-learn.css?v=20260722-learn-crystal-9
   - stylesheets/crystal-book.css?v=20260723-book-concepts-7
-  - stylesheets/crystal-roadmap.css?v=20260825-roadmap-1
+  - stylesheets/crystal-roadmap.css?v=20260825-roadmap-3
 
 extra_javascript:
   - javascripts/prismplane.js?v=20260723-architecture-nav-28
