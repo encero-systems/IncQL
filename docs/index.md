@@ -66,31 +66,33 @@ def paid_orders(
 </div>
 
 <div class="incql-showcase__notes" markdown="1">
-<p class="incql-section-kicker">Reading the example</p>
+<p class="incql-section-kicker">What this buys you</p>
 
-<article class="incql-showcase__note--lead" markdown="1">
-### Yes, this is long for a CSV
+<article markdown="1">
+### Mistakes surface before anything runs
 
-Three lines would do it in most tools. What those three lines cannot do is tell you, before anything runs, that `amount` is still a `float` and `status` still exists. Every line here that looks like ceremony is a check moved earlier: the models are the schema, the annotations are what the query block is checked against, and `?` is the failure path made visible.
+Three lines would do this elsewhere. Those three cannot tell you `amount` is still a `float`.
 
-Click any <span class="incql-annot-hint">+</span> above to see what a line is doing.
+[Dataset carriers](language/reference/dataset_carriers.md)
 </article>
 
 <article markdown="1">
-### The same logic, written either way
+### Switch surface without a rewrite
 
-That block and the equivalent `LazyFrame` method chain resolve names by one set of rules and produce one plan. Pick the surface that fits the task, not the one that fits the tool.
+The equivalent `LazyFrame` method chain resolves the same names and produces the same plan.
 
 [Query blocks](language/reference/query_blocks.md)
 </article>
 
 <article markdown="1">
-### Nothing has run yet
+### You decide when data moves
 
-`paid_orders` returns deferred intent. The plan is inspectable and lowers to Substrait before anything executes; `session.collect(...)` is where you choose to cross that line.
+Nothing runs until `collect(...)`. Until then the plan is inspectable and lowers to Substrait.
 
 [Execution context](language/reference/execution_context.md)
 </article>
+
+<p class="incql-showcase__hint">Click any <span class="incql-annot-hint">+</span> to see what a line does.</p>
 </div>
 </section>
 

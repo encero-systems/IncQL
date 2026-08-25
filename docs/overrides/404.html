@@ -1,13 +1,22 @@
-{# A missing page is a navigation failure, so answer the reader's actual
-   question — "where do I go now?" — instead of only naming the status code. #}
+{# A missing page is a navigation failure, so answer the reader's real
+   question — "where do I go now?" — and take the chance to make the joke
+   only this project can make. #}
 {% extends "base.html" %}
 {% block content %}
 <div class="incql-notfound">
-  <p class="incql-section-kicker">404 &middot; No page at this address</p>
+  <p class="incql-section-kicker">404 &middot; No rows returned</p>
 
-  <h1>That page isn&rsquo;t here</h1>
+  <h1>That page isn&rsquo;t in the schema</h1>
 
-  <p class="incql-notfound__lead">It may have moved, or the link may be wrong. These are the places most people are heading.</p>
+  <div class="incql-notfound__joke">
+    <pre><code><span class="k">query</span> {
+    <span class="k">FROM</span> pages
+    <span class="k">WHERE</span> .url == <span class="s">"the one you just tried"</span>
+}</code></pre>
+    <p><b>0 rows.</b> An unresolved reference, discovered at runtime, by you. We are aware of the irony &mdash; it is <a href="https://github.com/encero-systems/IncQL/issues/116">issue #116</a>.</p>
+  </div>
+
+  <p class="incql-notfound__lead">In the meantime, these do resolve:</p>
 
   <div class="incql-notfound__grid">
     <a href="{{ 'language/' | url }}">
@@ -28,6 +37,6 @@
     </a>
   </div>
 
-  <p class="incql-notfound__search">Looking for something specific? Press <kbd>/</kbd> to search the whole site.</p>
+  <p class="incql-notfound__search">Or press <kbd>/</kbd> and search the whole site.</p>
 </div>
 {% endblock %}
