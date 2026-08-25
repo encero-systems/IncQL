@@ -27,21 +27,24 @@
 <p class="incql-showcase__label">Reading paid orders from a CSV</p>
 
 ```incan
-model Order:  # (1)!
+import pub::incql  # (1)!
+from pub::incql import LazyFrame, Session, SessionError, desc
+
+model Order:  # (2)!
     order_id: int
     customer_id: str
     status: str
     amount: float
 
-model PaidOrder:  # (2)!
+model PaidOrder:  # (3)!
     order_id: int
     amount: float
 
 def paid_orders(
-    mut session: Session,  # (3)!
-) -> Result[LazyFrame[PaidOrder], SessionError]:  # (4)!
-    orders: LazyFrame[Order] = session.read_csv("orders", "orders.csv")?  # (5)!
-    paid: LazyFrame[PaidOrder] = query {  # (6)!
+    mut session: Session,  # (4)!
+) -> Result[LazyFrame[PaidOrder], SessionError]:  # (5)!
+    orders: LazyFrame[Order] = session.read_csv("orders", "orders.csv")?  # (6)!
+    paid: LazyFrame[PaidOrder] = query {  # (7)!
         FROM orders
         WHERE .status == "paid"
         SELECT
@@ -52,12 +55,13 @@ def paid_orders(
     return Ok(paid)
 ```
 
-1.  **`model` is an ordinary Incan record type** — not an IncQL construct. It declares a row's fields and their types in source, so the schema is something written down rather than something the file reveals at runtime.
-2.  **The output shape gets a name too.** Projecting to `PaidOrder` is what keeps the result typed. Without it you would be back to "some rows with some columns".
-3.  **`mut` means this call changes the Session.** Incan is explicit about mutation, and registering a source mutates the registry — so you can see, at the call site, that something was written to.
-4.  **`Result` and `?` are Incan's failure path.** There are no exceptions: a read that can fail returns `Result`, and `?` hands the failure to the caller. Nothing fails invisibly.
-5.  **`LazyFrame[Order]` is a carrier that knows its row type — and has not run.** `LazyFrame` is the deferred one; `DataFrame[T]` is its eager sibling and `DataStream[T]` the unbounded one. The `[Order]` is what later clauses are checked against.
-6.  **The query block is typed against that carrier.** `.status` resolves against `Order`'s fields, so this is checked relational logic, not a string handed to an engine.
+1.  **Two imports, doing different jobs.** `import pub::incql` activates IncQL's vocabulary — it is what lets `query { }` parse as syntax at all. The `from ... import` line brings in the names this program uses. A program with a query block needs both.
+2.  **`model` is an ordinary Incan record type** — not an IncQL construct. It declares a row's fields and their types in source, so the schema is something written down rather than something the file reveals at runtime.
+3.  **The output shape gets a name too.** Projecting to `PaidOrder` is what keeps the result typed. Without it you would be back to "some rows with some columns".
+4.  **`mut` means this call changes the Session.** Incan is explicit about mutation, and registering a source mutates the registry — so you can see, at the call site, that something was written to.
+5.  **`Result` and `?` are Incan's failure path.** There are no exceptions: a read that can fail returns `Result`, and `?` hands the failure to the caller. Nothing fails invisibly.
+6.  **`LazyFrame[Order]` is a carrier that knows its row type — and has not run.** `LazyFrame` is the deferred one; `DataFrame[T]` is its eager sibling and `DataStream[T]` the unbounded one. The `[Order]` is what later clauses are checked against.
+7.  **The query block is typed against that carrier.** `.status` resolves against `Order`'s fields, so this is checked relational logic, not a string handed to an engine.
 
 </div>
 
