@@ -248,16 +248,44 @@ Because lineage is typed and tracks fields rather than only relations, selection
 v0.1 is done when a stranger can do all of this in one sitting, without reading a single RFC.
 
 <ol class="roadmap-test">
-  <li data-result="yes">Point IncQL at a real CSV and define a model for its rows</li>
-  <li data-result="yes">Write a query against it</li>
-  <li data-result="part">Make a genuine mistake and get an error that says what is wrong <em>— caught at plan lowering today, not at compile time</em></li>
-  <li data-result="yes">Fix it and run it</li>
-  <li data-result="no">Read the plan it will execute <em>— no rendered form yet</em></li>
-  <li data-result="no">Point it at data that is not on their laptop</li>
-  <li data-result="no">Rebuild just the part they changed, into their own space</li>
+  <li data-result="yes">
+    <span class="clause">Point IncQL at a real CSV and define a model for its rows</span>
+    <span class="verdict"><b aria-hidden="true">✓</b>works</span>
+    <span class="why">The row shape is an ordinary Incan <code>model</code>. There is no schema DSL and no separate registry to learn.</span>
+  </li>
+  <li data-result="yes">
+    <span class="clause">Write a query against it</span>
+    <span class="verdict"><b aria-hidden="true">✓</b>works</span>
+    <span class="why">Either a SQL-familiar <code>query { }</code> block or a method chain on the carrier. Both resolve names the same way.</span>
+  </li>
+  <li data-result="part">
+    <span class="clause">Make a genuine mistake and get an error that says what is wrong</span>
+    <span class="verdict"><b aria-hidden="true">◑</b>partial</span>
+    <span class="why">A mistyped column is caught — but when the plan lowers, not when it compiles, because column names are still strings internally. Earlier than most tools manage, since nothing touches the data first, but not the compile error IncQL is aiming for. Tracked in <a href="https://github.com/encero-systems/IncQL/issues/116">#116</a>.</span>
+  </li>
+  <li data-result="yes">
+    <span class="clause">Fix it and run it</span>
+    <span class="verdict"><b aria-hidden="true">✓</b>works</span>
+    <span class="why">DataFusion executes the lowered Substrait plan, and the result still carries its row type.</span>
+  </li>
+  <li data-result="no">
+    <span class="clause">Read the plan it will execute</span>
+    <span class="verdict"><b aria-hidden="true">✗</b>not yet</span>
+    <span class="why">Inspection already returns typed records — plan nodes, schema flow, lineage — but nothing renders them for a person to read. Tracked in <a href="https://github.com/encero-systems/IncQL/issues/117">#117</a>.</span>
+  </li>
+  <li data-result="no">
+    <span class="clause">Point it at data that is not on their laptop</span>
+    <span class="verdict"><b aria-hidden="true">✗</b>not yet</span>
+    <span class="why">Local CSV and Parquet only today. Object storage and partitioned datasets are <a href="https://github.com/encero-systems/IncQL/issues/112">#112</a>; Iceberg and Delta tables are RFC&nbsp;069.</span>
+  </li>
+  <li data-result="no">
+    <span class="clause">Rebuild just the part they changed, into their own space</span>
+    <span class="verdict"><b aria-hidden="true">✗</b>not yet</span>
+    <span class="why">Specified across RFCs 058, 059 and 062 — projects as typed assets, materialization intent, and selector-driven builds — but not yet implemented.</span>
+  </li>
 </ol>
 
-Four of the seven hold today. The three that do not are the three moments still marked planned or partial above — which is the whole distance between a package that works and a tool someone adopts.
+Three of the seven hold outright, one holds partially, and three do not hold at all. That gap is the distance between a package that works and a tool someone adopts — and it maps exactly onto the moments still marked partial or planned above.
 
 ## Status by area
 

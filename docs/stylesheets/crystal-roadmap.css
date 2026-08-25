@@ -236,14 +236,20 @@
 
 .roadmap-moments .moment-split li { margin-bottom: 0.28rem; }
 
-/* ---- Acceptance test ---------------------------------------------------- */
+/* ---- Acceptance test ----------------------------------------------------
+ * Each clause states its own verdict. Status is encoded three ways so it does
+ * not depend on hue alone: the marker is filled, half-filled, or hollow; the
+ * verdict carries a glyph; and the verdict is spelled out in words. A reader
+ * with deuteranopia or protanopia gets the same answer as anyone else.
+ * Clauses are given room to explain themselves rather than trailing an aside.
+ */
 
 .roadmap-test {
   list-style: none;
-  margin: 1.25rem 0 1.1rem;
-  padding: 1.1rem 1.3rem;
+  margin: 1.35rem 0 1.2rem;
+  padding: 0.5rem 1.4rem;
   border: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
-  border-radius: 10px;
+  border-radius: 12px;
   background:
     linear-gradient(117deg, rgba(255, 255, 255, 0.8) 0 26%, rgba(238, 247, 255, 0.4) 26.35% 63%, rgba(255, 255, 255, 0.66) 63.35%),
     var(--crystal-surface, rgba(248, 252, 255, 0.62));
@@ -254,44 +260,107 @@
 }
 
 .roadmap-test li {
-  position: relative;
-  margin: 0 0 0.55rem;
-  padding-left: 2.5rem;
-  color: var(--crystal-copy, #294b7e);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  display: grid;
+  grid-template-columns: 1.6rem 1fr auto;
+  grid-template-areas:
+    "mark clause verdict"
+    ".    why    why";
+  column-gap: 0.85rem;
+  row-gap: 0.3rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--crystal-line, rgba(68, 103, 182, 0.16));
 }
 
-.roadmap-test li:last-child { margin-bottom: 0; }
+.roadmap-test li:first-child { border-top: none; }
 
+/* Marker: fill carries status independently of hue.
+ * works = solid, partial = ringed, not yet = hollow. */
 .roadmap-test li::before {
   counter-increment: roadmap-clause;
   content: counter(roadmap-clause);
-  position: absolute;
-  left: 0;
-  top: 0.02rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 1px solid #fff;
+  grid-area: mark;
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 50%;
-  background: var(--road-signal);
-  box-shadow: 0 0 10px var(--road-glow);
-  color: #fff;
+  border: 2px solid var(--road-signal);
   font-family: var(--md-code-font-family, monospace);
-  font-size: 0.7rem;
-  font-weight: 600;
-  line-height: 1.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.3rem;
   text-align: center;
 }
+
+.roadmap-test li[data-result="yes"]::before {
+  background: var(--road-signal);
+  box-shadow: 0 0 10px var(--road-glow), inset 0 0 0 1px #fff;
+  color: #fff;
+}
+
+.roadmap-test li[data-result="part"]::before {
+  background: #fff;
+  box-shadow: inset 0 0 0 3px var(--road-signal), 0 0 8px var(--road-glow);
+  color: var(--road-signal);
+}
+
+.roadmap-test li[data-result="no"]::before {
+  background: transparent;
+  border-style: dashed;
+  color: var(--road-signal);
+}
+
+.roadmap-test .clause {
+  grid-area: clause;
+  align-self: center;
+  color: var(--crystal-ink, #08245f);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.roadmap-test .verdict {
+  grid-area: verdict;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.5rem 0.1rem 0.4rem;
+  border: 1px solid var(--road-signal);
+  border-radius: 999px;
+  color: var(--road-signal);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.roadmap-test .verdict b { font-size: 0.78rem; line-height: 1; }
+
+.roadmap-test .why {
+  grid-area: why;
+  color: var(--crystal-muted, #536d9c);
+  font-size: 0.83rem;
+  line-height: 1.6;
+  max-width: 58ch;
+}
+
+.roadmap-test .why code { font-size: 0.85em; }
 
 .roadmap-test li[data-result="yes"]  { --road-signal: var(--road-available); --road-glow: rgba(20, 180, 143, 0.62); }
 .roadmap-test li[data-result="part"] { --road-signal: var(--road-partial);   --road-glow: rgba(232, 150, 26, 0.56); }
 .roadmap-test li[data-result="no"]   { --road-signal: var(--road-blocked);   --road-glow: rgba(210, 77, 106, 0.5); }
 
-.roadmap-test li em {
-  color: var(--crystal-muted, #536d9c);
-  font-size: 0.86em;
-  font-style: normal;
+@media screen and (max-width: 44.9375em) {
+  .roadmap-test li {
+    grid-template-columns: 1.6rem 1fr;
+    grid-template-areas:
+      "mark clause"
+      ".    verdict"
+      ".    why";
+    row-gap: 0.4rem;
+  }
+  .roadmap-test .verdict { justify-self: start; }
 }
 
 /* ---- Narrow viewports --------------------------------------------------- */
