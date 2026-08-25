@@ -177,6 +177,8 @@ Teams lose time to expression, semantics drift, and opaque pipelines that lock t
 </div>
 </section>
 
+<p class="incql-bridge"><span class="incql-bridge__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>That one plan is the whole trick. Everything below is a closer look at it.</p>
+
 <section class="incql-process" markdown="1">
 <div class="incql-section-heading incql-process-heading" markdown="1">
 ## How <span class="incql-gradient-text">IncQL</span> works
@@ -266,6 +268,8 @@ model Order:
 </div>
 </section>
 
+<p class="incql-bridge"><span class="incql-bridge__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Stage three is the only one you can open and read. Here is what is inside.</p>
+
 <section class="incql-prism-visible" markdown="1">
 <div class="incql-section-heading" markdown="1">
 <p class="incql-section-kicker">Inspect before execution</p>
@@ -330,6 +334,8 @@ Source(orders)
 </div>
 </div>
 </section>
+
+<p class="incql-bridge"><span class="incql-bridge__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>If the plan is what matters, the way you write it should not. It does not.</p>
 
 <section class="incql-surfaces" markdown="1">
 <div class="incql-surfaces__copy" markdown="1">

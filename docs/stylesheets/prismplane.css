@@ -7952,3 +7952,50 @@ body:has(.incql-architecture) .md-typeset .incql-architecture-next a:focus-visib
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* ---- Section bridges ----------------------------------------------------
+ * The bands below the convergence map are a descent: the plan, then its
+ * stages, then its contents, then the guarantee. Each band was self-contained,
+ * which is how a slide deck works — a presenter narrates the joins aloud. On a
+ * page nobody does, so the joins have to be written.
+ *
+ * These sit between the bands rather than inside them, so they read as
+ * narration rather than as another section's opening line. The chevron points
+ * down because the movement being described is downward: into detail. */
+
+.incql-launch > .incql-bridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: min(100% - 2rem, 34rem);
+  margin: clamp(1.5rem, 2.8vw, 2.5rem) auto clamp(1.2rem, 2.2vw, 2rem);
+  color: var(--incql-page-copy);
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.incql-bridge__arrow {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid rgba(71, 109, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--incql-page-blue);
+}
+
+.incql-bridge__arrow svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+@media screen and (max-width: 44em) {
+  .incql-launch > .incql-bridge {
+    width: min(100% - 1.25rem, 34rem);
+    font-size: 0.92rem;
+  }
+}
