@@ -60,7 +60,7 @@ def paid_orders(
 3.  **The output shape gets a name too.** Projecting to `PaidOrder` is what keeps the result typed. Without it you would be back to "some rows with some columns".
 4.  **`mut` means this call changes the Session.** Incan is explicit about mutation, and registering a source mutates the registry — so you can see, at the call site, that something was written to.
 5.  **`Result` and `?` are Incan's failure path.** There are no exceptions: a read that can fail returns `Result`, and `?` hands the failure to the caller. Nothing fails invisibly.
-6.  **`LazyFrame[Order]` is a carrier that knows its row type — and has not run.** `LazyFrame` is the deferred one; `DataFrame[T]` is its eager sibling and `DataStream[T]` the unbounded one. The `[Order]` is what later clauses are checked against.
+6.  **`LazyFrame[Order]` is a carrier that knows its row type — and has not run.** `LazyFrame` is the deferred one; `DataFrame[T]` is its eager sibling and `DataStream[T]` the unbounded one. The `[Order]` is what later clauses are checked against. Nothing in the arguments implies the row type, so it has to be given: either by this annotation, or explicitly as `session.read_csv[Order](...)`.
 7.  **The query block is typed against that carrier.** `.status` resolves against `Order`'s fields, so this is checked relational logic, not a string handed to an engine.
 
 </div>
