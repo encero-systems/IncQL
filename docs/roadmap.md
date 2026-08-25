@@ -28,59 +28,194 @@ The v0.1 target is described below as seven moments rather than as a feature lis
 
 ## The v0.1 experience
 
-### 1. "It caught it." · Partial
+<div class="roadmap-moments" markdown>
+
+<div class="moment" data-status="partial" markdown>
+
+### 1. "It caught it." {: data-status="partial" }
 
 You reference a column that does not exist, compare mismatched types, or aggregate the wrong thing — and you find out before anything runs.
 
-`query { }` blocks are typechecked against the current query schema. Row shapes are ordinary `model` types, so a transformation that changes shape changes type: `LazyFrame[Order]` becoming `LazyFrame[PaidOrder]` is checked, not asserted. Typed helpers validate their scalar inputs, so `add(col("amount"), 1)` and `cast(col("amount_text"), float)` are checked at the call site.
+<div class="moment-split" markdown>
 
-Column *names* are still strings internally, so a mistyped column is caught when the plan lowers rather than when it compiles. That is earlier than most tools manage — nothing touches your data first — but it is not the compile error IncQL is aiming for. Making leading-dot field references resolve against the declared model closes this ([#116][i116]). Unbounded carriers do not yet reject operations that only make sense on finite input ([#114][i114]).
+<div markdown>
+Available
 
-### 2. "I never left the language." · Available
+- `query { }` blocks typechecked against the current query schema
+- Row shapes are ordinary `model` types, so `LazyFrame[Order]` becoming `LazyFrame[PaidOrder]` is checked, not asserted
+- Typed helpers validate scalar inputs at the call site
+</div>
+
+<div markdown>
+Planned
+
+- Column names are still strings internally, so a typo is caught at plan lowering rather than at compile time ([#116][i116])
+- Unbounded carriers do not yet reject operations that need finite input ([#114][i114])
+</div>
+
+</div>
+</div>
+
+<div class="moment" data-status="available" markdown>
+
+### 2. "I never left the language." {: data-status="available" }
 
 No SQL strings. No stringly-typed row access. Your schema is a `model`, and your query is source your editor and compiler both understand.
 
-Both authoring surfaces resolve the same way: SQL-familiar `query { }` blocks, and method chains on `DataSet[T]` carriers. The [ten-minute quickstart][quickstart] carries the whole shape in about fifty lines.
+<div class="moment-split" markdown>
 
-Optional pipe-forward (`|>`) is specified in [RFC 005][rfc005] and is deliberately out of scope for v0.1.
+<div markdown>
+Available
 
-### 3. "It ran, and the result is still typed." · Available
+- SQL-familiar `query { }` blocks and `DataSet[T]` method chains resolve identically
+- The [ten-minute quickstart][quickstart] carries the whole shape in about fifty lines
+</div>
+
+<div markdown>
+Out of scope
+
+- Optional pipe-forward (`|>`) is specified in [RFC 005][rfc005] and deliberately excluded from v0.1
+</div>
+
+</div>
+</div>
+
+<div class="moment" data-status="available" markdown>
+
+### 3. "It ran, and the result is still typed." {: data-status="available" }
 
 Read a source, transform it, get rows back that still carry their row type.
 
-Sessions provide typed read, execute, collect, and write, with typed sink descriptors and structured materialization rather than rendered text as the contract. Apache DataFusion is the reference execution adapter, reached through a backend boundary over Substrait plans rather than wired into session state.
+<div class="moment-split" markdown>
 
-Still planned: constructing a relation directly from in-memory values ([#20][i20]), an explicit catalog model for logical-name schema binding, and a real output-schema contract for joins between different row types.
+<div markdown>
+Available
 
-### 4. "I saw what it would do before it did it." · Partial
+- Typed read, execute, collect, and write, with typed sink descriptors
+- Structured materialization rather than rendered text as the contract
+- DataFusion as reference adapter behind a Substrait backend boundary
+</div>
+
+<div markdown>
+Planned
+
+- Constructing a relation directly from in-memory values ([#20][i20])
+- An explicit catalog model for logical-name schema binding
+- A real output-schema contract for joins between different row types
+</div>
+
+</div>
+</div>
+
+<div class="moment" data-status="partial" markdown>
+
+### 4. "I saw what it would do before it did it." {: data-status="partial" }
 
 You can inspect a plan — its structure, its schema flow, and where each field came from — without executing it.
 
-`inspect_plan(...)` and `inspect_lineage(...)` return typed records over Prism-backed plans: semantic targets, output schema, authored and rewritten plan nodes, and lineage edges across value, control, grouping, join, sort, window, policy and quality dependencies, each carrying exact, conservative, or unknown confidence. Evidence that could not be computed is marked as such rather than silently omitted.
+<div class="moment-split" markdown>
 
-Those records are not yet written as versioned artifacts, and there is no rendered report — so the evidence is available to code but not yet to a person reading it ([#117][i117]). Prism currently backs `LazyFrame[T]`; extending it to the other carriers is tracked in [#16][i16].
+<div markdown>
+Available
 
-### 5. "It told me the truth about its limits." · Available
+- Typed inspection records over Prism-backed plans
+- Lineage across value, control, grouping, join, sort, window, policy and quality dependencies, each with exact, conservative, or unknown confidence
+- Evidence that could not be computed is marked, not silently omitted
+</div>
+
+<div markdown>
+Planned
+
+- Records are not yet written as versioned artifacts, and there is no rendered report ([#117][i117])
+- Prism currently backs `LazyFrame[T]` only ([#16][i16])
+</div>
+
+</div>
+</div>
+
+<div class="moment" data-status="available" markdown>
+
+### 5. "It told me the truth about its limits." {: data-status="available" }
 
 IncQL says "I cannot do this here" instead of degrading quietly.
 
-Adapter coverage reports whether a plan is covered, partially covered, uncovered, or unknown against a target. Execution, collection, and writes have observed variants that capture structured evidence for both success and failure. Quality assertions produce observations without acting as invisible filters — a failed check is reported, never silently applied. Where a backend has no implementation for a helper, it reports a planning diagnostic rather than approximating.
+<div class="moment-split" markdown>
 
-### 6. "It works on my actual data." · Planned
+<div markdown>
+Available
+
+- Adapter coverage reports covered, partially covered, uncovered, or unknown
+- Execution, collection and writes have observed variants capturing evidence for success and failure
+- Quality assertions produce observations without acting as invisible filters
+- A backend with no implementation reports a planning diagnostic rather than approximating
+</div>
+
+<div markdown>
+Planned
+
+- Coverage and unsupported evidence share the rendered-report gap from moment 4
+</div>
+
+</div>
+</div>
+
+<div class="moment" data-status="planned" markdown>
+
+### 6. "It works on my actual data." {: data-status="planned" }
 
 A typed data logic plane is only interesting when it operates on data you actually govern. Today IncQL reads local CSV and Parquet files.
 
-Planned for v0.1: object-store locations and partitioned datasets, with schema inference that does not read a file into memory to find its header ([#112][i112]). Then Apache Iceberg and Delta Lake tables as typed sources ([RFC 069][rfc069], [#115][i115]), delivered as addon packages through a component registry ([#113][i113]) so a lakehouse stack is never something you compile without asking for it.
+<div class="moment-split" markdown>
+
+<div markdown>
+Available
+
+- Local CSV and Parquet sources with typed row shapes
+</div>
+
+<div markdown>
+Planned
+
+- Object-store locations and partitioned datasets, with inference that does not read a file into memory ([#112][i112])
+- Iceberg and Delta tables as typed sources ([RFC 069][rfc069], [#115][i115])
+- Delivered as addon packages through a component registry ([#113][i113]), so a lakehouse stack is never compiled unasked
+</div>
+
+</div>
 
 Table formats change the schema story in IncQL's favour. A CSV has no schema, so one must be inferred. An Iceberg or Delta table carries an authoritative schema and tracks its evolution — so a declared `model` can be reconciled against the table's real, current shape before any data is read, and a renamed column can be reported as a rename rather than as a disappearance.
 
-### 7. "I can work without stepping on anyone." · Planned
+</div>
+
+<div class="moment" data-status="planned" markdown>
+
+### 7. "I can work without stepping on anyone." {: data-status="planned" }
 
 Your own materialization target, and a way to rebuild only the part you changed.
 
-This is specified across three RFCs: data projects as [named relational assets][rfc058] with a typed dependency graph available without executing your code, [materialization intent][rfc059] resolved against one destination binding, and a [build lifecycle][rfc062] where structured selectors resolve to an immutable build set and emit a build receipt.
+<div class="moment-split" markdown>
 
-The lineage graph behind moment 4 is what makes this interesting rather than familiar. Because lineage is typed and tracks fields rather than only relations, selection can be **column-level**: rebuild what actually depends on a given column, rather than everything downstream of the relation that happens to contain it.
+<div markdown>
+Available
+
+- The typed lineage graph this depends on already exists
+</div>
+
+<div markdown>
+Planned
+
+- Data projects as [named relational assets][rfc058] with a typed dependency graph available without executing your code
+- [Materialization intent][rfc059] resolved against one destination binding
+- A [build lifecycle][rfc062] where structured selectors resolve to an immutable build set and emit a receipt
+</div>
+
+</div>
+
+Because lineage is typed and tracks fields rather than only relations, selection can be **column-level**: rebuild what actually depends on a given column, rather than everything downstream of the relation that happens to contain it.
+
+</div>
+
+</div>
 
 ## Status by area
 

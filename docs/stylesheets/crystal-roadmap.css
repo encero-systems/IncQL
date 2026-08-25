@@ -1,0 +1,98 @@
+/* Crystal roadmap
+ *
+ * Owns the roadmap page's moment cards only. Everything here is scoped beneath
+ * `.roadmap-moments` so it refines shared primitives without introducing a
+ * global override, per the ordered cascade in
+ * docs/contributing/prismplane_docs_theme.md.
+ *
+ * Status is carried by an edge rail and a small signal label rather than by a
+ * decorative badge: color belongs in rails and signal accents, and the page
+ * must stay analytical rather than ceremonial. The markup degrades to ordinary
+ * headings, paragraphs, and lists when this file is absent.
+ */
+
+.roadmap-moments {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.roadmap-moments .moment {
+  position: relative;
+  border: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.12));
+  border-left: 3px solid var(--roadmap-rail, var(--md-default-fg-color--lighter));
+  border-radius: 4px;
+  padding: 1.05rem 1.25rem 0.85rem;
+  background: var(--md-default-bg-color);
+}
+
+/* Signal accents. Available reads settled, planned reads deliberately quiet. */
+.roadmap-moments .moment[data-status="available"] { --roadmap-rail: #2f7a5a; --roadmap-ink: #2f7a5a; }
+.roadmap-moments .moment[data-status="partial"]   { --roadmap-rail: #8f6412; --roadmap-ink: #8f6412; }
+.roadmap-moments .moment[data-status="planned"]   { --roadmap-rail: #4a5568; --roadmap-ink: #5b6675; }
+
+[data-md-color-scheme="slate"] .roadmap-moments .moment[data-status="available"] { --roadmap-rail: #63ba8e; --roadmap-ink: #63ba8e; }
+[data-md-color-scheme="slate"] .roadmap-moments .moment[data-status="partial"]   { --roadmap-rail: #d3a44f; --roadmap-ink: #d3a44f; }
+[data-md-color-scheme="slate"] .roadmap-moments .moment[data-status="planned"]   { --roadmap-rail: #8792a2; --roadmap-ink: #94a1b2; }
+
+.roadmap-moments .moment > h3 {
+  margin: 0 0 0.15rem;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+/* The status word is generated from the data attribute so the Markdown source
+ * carries the state once, on the element that is actually styled by it. */
+.roadmap-moments .moment > h3::after {
+  content: attr(data-status);
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.08rem 0.42rem;
+  border: 1px solid var(--roadmap-rail);
+  border-radius: 3px;
+  color: var(--roadmap-ink);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.roadmap-moments .moment > p {
+  margin: 0.35rem 0 0.7rem;
+  font-size: 0.9rem;
+}
+
+/* Two lanes: what a reader can use now, and what is still ahead. Collapses to
+ * one column on narrow viewports rather than scrolling sideways. */
+.roadmap-moments .moment-split {
+  display: grid;
+  gap: 0 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  border-top: 1px solid var(--md-default-fg-color--lightest, rgba(0, 0, 0, 0.1));
+  padding-top: 0.75rem;
+}
+
+.roadmap-moments .moment-split > div > p:first-child {
+  margin: 0 0 0.3rem;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.roadmap-moments .moment-split ul {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+}
+
+.roadmap-moments .moment-split li { margin-bottom: 0.2rem; }
+
+@media screen and (max-width: 44.9375em) {
+  .roadmap-moments .moment { padding: 0.9rem 1rem 0.7rem; }
+  .roadmap-moments .moment > h3::after { display: block; margin: 0.3rem 0 0; width: max-content; }
+}
