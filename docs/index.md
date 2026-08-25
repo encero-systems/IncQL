@@ -9,15 +9,9 @@
 
 <div class="incql-actions">
 <a class="incql-button incql-button--primary" href="language/">Start learning IncQL</a>
-<a class="incql-button" href="language/how-to/inspect_plan_lineage/">See Prism in action</a>
+<a class="incql-button" href="language/how-to/inspect_plan_lineage/">See a plan before it runs</a>
 </div>
 
-<div class="incql-proof-row" aria-label="IncQL proof points">
-<span><strong>Typed & safe</strong> Catch issues early with static typing</span>
-<span><strong>Inspectable</strong> See the plan before execution</span>
-<span><strong>Portable</strong> Compile to Substrait</span>
-<span><strong>Governed</strong> Observe and verify behavior</span>
-</div>
 </div>
 
 <div class="incql-hero__visual" aria-label="Prism refracts data logic into inspectable typed plan layers.">
@@ -25,6 +19,67 @@
 <source srcset="shared/prismplane/prismplane-hero-light.webp" type="image/webp">
 <img src="shared/prismplane/prismplane-hero-light.png" width="1672" height="941" decoding="async" fetchpriority="high" alt="A glass prism refracting data logic into layered plan stages.">
 </picture>
+</div>
+</section>
+
+<section class="incql-showcase" markdown="1">
+<div class="incql-showcase__code" markdown="1">
+<p class="incql-showcase__label">Reading paid orders from a CSV</p>
+
+```incan
+model Order:
+    order_id: int
+    customer_id: str
+    status: str
+    amount: float
+
+model PaidOrder:
+    order_id: int
+    amount: float
+
+def paid_orders(
+    mut session: Session,
+) -> Result[LazyFrame[PaidOrder], SessionError]:
+    orders: LazyFrame[Order] = session.read_csv("orders", "orders.csv")?
+    paid: LazyFrame[PaidOrder] = query {
+        FROM orders
+        WHERE .status == "paid"
+        SELECT
+            .order_id as order_id,
+            .amount as amount,
+        ORDER BY desc(.amount)
+    }
+    return Ok(paid)
+```
+
+</div>
+
+<div class="incql-showcase__notes" markdown="1">
+<p class="incql-section-kicker">What that buys you</p>
+
+<article markdown="1">
+### The row shape is a type
+
+`Order` is an ordinary Incan `model`. The query block is typed against it, so the schema is something the compiler knows rather than something the data reveals at runtime.
+
+[Dataset carriers](language/reference/dataset_carriers.md)
+</article>
+
+<article markdown="1">
+### The same logic, written either way
+
+That block and the equivalent `LazyFrame` method chain resolve names by one set of rules and produce one plan. Pick the surface that fits the task, not the one that fits the tool.
+
+[Query blocks](language/reference/query_blocks.md)
+</article>
+
+<article markdown="1">
+### Nothing has run yet
+
+`paid_orders` returns deferred intent. The plan is inspectable and lowers to Substrait before anything executes; `session.collect(...)` is where you choose to cross that line.
+
+[Execution context](language/reference/execution_context.md)
+</article>
 </div>
 </section>
 
@@ -36,35 +91,23 @@ Teams lose time to expression, semantics drift, and opaque pipelines that lock t
 
 <div class="incql-friction-list">
 <article>
-<span>01</span>
-<div>
 <h3>Too many ways to express logic</h3>
 <p>SQL, DataFrames, pipelines, and notebooks each carry their own shape.</p>
-</div>
 </article>
 
 <article>
-<span>02</span>
-<div>
 <h3>Different semantics and behaviors</h3>
 <p>Small rewrites can change meaning before anyone sees the plan.</p>
-</div>
 </article>
 
 <article>
-<span>03</span>
-<div>
 <h3>Hard to inspect and debug</h3>
 <p>You see results, but not the logic, lineage, or rechecking behavior.</p>
-</div>
 </article>
 
 <article>
-<span>04</span>
-<div>
 <h3>Tied to specific engines</h3>
 <p>Porting usually means rewriting logic and revalidating behavior.</p>
-</div>
 </article>
 </div>
 </div>

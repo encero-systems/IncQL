@@ -1,0 +1,33 @@
+{# A missing page is a navigation failure, so answer the reader's actual
+   question — "where do I go now?" — instead of only naming the status code. #}
+{% extends "base.html" %}
+{% block content %}
+<div class="incql-notfound">
+  <p class="incql-section-kicker">404 &middot; No page at this address</p>
+
+  <h1>That page isn&rsquo;t here</h1>
+
+  <p class="incql-notfound__lead">It may have moved, or the link may be wrong. These are the places most people are heading.</p>
+
+  <div class="incql-notfound__grid">
+    <a href="{{ 'language/' | url }}">
+      <strong>Learn IncQL</strong>
+      <span>One guided project, from typed input to evidence you can use.</span>
+    </a>
+    <a href="{{ 'language/reference/' | url }}">
+      <strong>Reference</strong>
+      <span>Exact types, signatures, clauses, and support boundaries.</span>
+    </a>
+    <a href="{{ 'language/how-to/' | url }}">
+      <strong>Guides</strong>
+      <span>Task-shaped answers for a specific outcome.</span>
+    </a>
+    <a href="{{ 'architecture/' | url }}">
+      <strong>Architecture</strong>
+      <span>Where each layer stops and the next one begins.</span>
+    </a>
+  </div>
+
+  <p class="incql-notfound__search">Looking for something specific? Press <kbd>/</kbd> to search the whole site.</p>
+</div>
+{% endblock %}
