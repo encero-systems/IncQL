@@ -2,6 +2,12 @@
 name = "incql"
 version = "0.1.0"
 
+# Oven bakes only `src/main.incn`, `src/lib.incn`, and the entry points declared
+# here. `make registry-metadata` runs the checker below through `incan run`, so
+# it has to be a declared target or its dependency closure is never compiled.
+[project.scripts]
+check_function_registry_metadata = "scripts/check_function_registry_metadata.incn"
+
 [rust-dependencies]
 # Protobuf serialization and deserialization are provided via prost in the proto module.
 prost = "0.14"

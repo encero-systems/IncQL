@@ -155,11 +155,12 @@ jobs:
       - name: Test style check
         run: make test-style
 
-      - name: Function registry metadata check
-        run: make registry-metadata
 
       - name: Bake Oven project authority
         run: make bake
+
+      - name: Function registry metadata check
+        run: make registry-metadata
 
       - name: Build library
         run: make build
