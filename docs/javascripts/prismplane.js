@@ -1538,6 +1538,85 @@
     }
   };
 
+
+  /* ---- Process rail connector -----------------------------------------
+   * Author -> Compile -> Prism -> Optimize -> Execute is a real sequence, but
+   * it rendered as five unconnected boxes. One measured line threads the
+   * stages so the order is visible rather than only implied by the numbering.
+   *
+   * Deliberately static: the animated flow stays exclusive to the convergence
+   * map, so reusing the motif reads as a shared visual language rather than as
+   * the same trick twice. */
+  const initializeProcessRail = (root = document) => {
+    const rail = root.querySelector(".incql-process-rail");
+    if (!rail) {
+      return;
+    }
+    const cards = [...rail.querySelectorAll(".incql-step-card")];
+    if (cards.length < 2) {
+      return;
+    }
+
+    let svg = rail.querySelector(".incql-rail-link");
+    if (!svg) {
+      svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("class", "incql-rail-link");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+      svg.setAttribute("preserveAspectRatio", "none");
+      rail.prepend(svg);
+    }
+
+    const draw = () => {
+      const bounds = rail.getBoundingClientRect();
+      /* The rail collapses to a stack at narrow widths, where a horizontal
+       * thread describes nothing. */
+      const stacked = window.matchMedia("(max-width: 62em)").matches;
+      rail.classList.toggle("has-thread", !stacked);
+      if (stacked || !bounds.width) {
+        svg.replaceChildren();
+        return;
+      }
+      svg.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
+
+      const points = cards.map((card) => {
+        const box = card.getBoundingClientRect();
+        return {
+          left: box.left - bounds.left,
+          right: box.right - bounds.left,
+          y: box.top - bounds.top + box.height / 2,
+        };
+      });
+
+      /* The cards sit 13px apart on nearly the same centre line, so a drawn
+       * line between them is a stub behind their shadows. A chevron in each
+       * gap is legible at that size and says the one thing the gap should:
+       * this hands off to that, in this direction. */
+      const chevrons = points.slice(0, -1).map((point, index) => {
+        const next = points[index + 1];
+        const x = (point.right + next.left) / 2;
+        const y = (point.y + next.y) / 2;
+        return `<path class="incql-rail-chevron" d="M ${x - 2.6} ${y - 4} L ${x + 2.2} ${y} L ${x - 2.6} ${y + 4}"/>`;
+      });
+
+      svg.innerHTML = chevrons.join("");
+    };
+
+    draw();
+
+    if (!rail.dataset.threadObserved) {
+      rail.dataset.threadObserved = "true";
+      if (typeof ResizeObserver === "function") {
+        new ResizeObserver(() => draw()).observe(rail);
+      } else {
+        window.addEventListener("resize", draw);
+      }
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(draw).catch(() => {});
+      }
+    }
+  };
+
   const initializePage = () => {
     initializeSiteNavigation();
     initializeSiteDrawerToggle();
@@ -1547,6 +1626,7 @@
     initializePrimaryNavCollapse();
     initializeRfcReader();
     initializeConvergenceMap();
+    initializeProcessRail();
   };
 
   let materialSubscriptionReady = false;
