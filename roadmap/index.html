@@ -1,0 +1,3970 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Typed relational logic for governed data systems">
+      
+      
+      
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/roadmap/">
+      
+      
+        <link rel="prev" href="../whitepapers/incql_db/">
+      
+      
+        <link rel="next" href="../project/">
+      
+      
+      <link rel="icon" href="../shared/brand/incql-favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Roadmap - IncQL</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/prismplane.css?v=20260825-bridges-1">
+    
+      <link rel="stylesheet" href="../stylesheets/crystalline.css?v=20260825-flatten-nested-1">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-integration.css?v=20260825-roadmap-cta-gh-1">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+    
+      <link rel="stylesheet" href="../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="cyan">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#incql-roadmap" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+
+
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+  
+    
+      
+      
+    
+  
+
+  
+    
+  
+    
+  
+    
+  
+    
+  
+
+<header class="topbar crystal-strip" data-md-component="header">
+  <a class="brand" href=".." aria-label="IncQL home">
+    <img src="../shared/brand/incql-logo-header.png" alt="">
+    <span>
+      <strong>IncQL</strong>
+      <small>Incan Query Layer</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Documentation sections">
+    
+      <a
+        data-site-section="home"
+        data-path-prefixes=""
+        data-search-label="Search"
+        
+        href=".."
+      >Home</a>
+    
+      <a
+        data-site-section="learn"
+        data-path-prefixes="language/"
+        data-search-label="Search learning paths"
+        
+        href="../language/"
+      >Learn</a>
+    
+      <a
+        data-site-section="reference"
+        data-path-prefixes="language/reference/"
+        data-search-label="Search reference"
+        
+        href="../language/reference/"
+      >Reference</a>
+    
+      <a
+        data-site-section="design"
+        data-path-prefixes="architecture/,rfcs/,design_records/,whitepapers/"
+        data-search-label="Search architecture and RFCs"
+        
+        href="../architecture/"
+      >Design</a>
+    
+      <a
+        data-site-section="roadmap"
+        data-path-prefixes="roadmap/"
+        data-search-label="Search the roadmap"
+        class="is-active" aria-current="page"
+        href="./"
+      >Roadmap</a>
+    
+      <a
+        data-site-section="project"
+        data-path-prefixes="project/,docs_map/,release_notes/,contributing/"
+        data-search-label="Search project docs"
+        
+        href="../project/"
+      >Project</a>
+    
+  </nav>
+
+  <div class="top-actions">
+    <button
+      type="button"
+      class="site-nav-toggle md-icon"
+      aria-label="Open navigation"
+      aria-controls="__drawer"
+      aria-expanded="false"
+      data-site-nav-toggle
+    >
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </button>
+    
+      <label class="docs-search" for="__search" aria-label="Search documentation">
+        <span data-site-search-label>Search the roadmap</span>
+        <kbd>/</kbd>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
+      <img src="../shared/icons/source-branch.svg" alt="">
+      <span>encero-systems/IncQL</span>
+    </a>
+  </div>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+      
+  <img src="../shared/brand/incql-logo-header.png" alt="logo">
+
+    </a>
+    IncQL
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/encero-systems/IncQL" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    encero-systems/IncQL
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../language/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Learn
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Learn
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ten-minute quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Choose by background
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Choose by background
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/from_sql/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From SQL
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/from_spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    From Spark and DataFrame APIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/what_incql_is/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    What IncQL is and is not
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../language/tutorials/book/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    The IncQL Book
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            The IncQL Book
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_2" id="__nav_2_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part I · Model the work
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Part I · Model the work
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. Read a typed relation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2. Build deferred work
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_3" id="__nav_2_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part II · Explain and execute it
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Part II · Explain and execute it
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3. Inspect the plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    4. Collect an observed result
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    5. Check adapter coverage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part III · Decide what happens next
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Part III · Decide what happens next
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    6. Observe data quality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/07_governed_write/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    7. Make the write decision
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_5" id="__nav_2_4_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Part IV · Query blocks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Part IV · Query blocks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8. Write your first query
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    9. Summarize and order results
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/dataset_carriers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset carriers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/explanation/execution_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../language/how-to/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Start and connect
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Start and connect
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/read_write_data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read and write data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Transform and query
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Transform and query
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/dataset_transformations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset transformations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/joins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Join typed relations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Normalize semi-structured fields
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/nested_row_values/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nested row values
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/generator_rows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator rows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/window_columns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Window columns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspect and trust
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspect and trust
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inspect plan lineage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/execution_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution observations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/quality_observations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quality observations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/governed_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced and capability-dependent
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced and capability-dependent
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/approximate_metrics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximate metrics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/typed_hll_sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Typed HLL sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/how-to/variant_payloads/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variant payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../language/reference/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Language and relational authoring
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Language and relational authoring
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/dataset_carriers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset carriers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/dataset_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataset methods
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/query_blocks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Query blocks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2_4" id="__nav_4_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Builders
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Builders
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/builders/filters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Filters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/builders/projections/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projections
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/builders/aggregates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Runtime and I/O
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Runtime and I/O
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/execution_context/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Execution context
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/capabilities/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backend capability matrix
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Inspection, quality, and governance
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Inspection, quality, and governance
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/inspection/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inspection
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/quality/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../language/reference/functions/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Function catalog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            Function catalog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/approximate/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximate
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/format/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Format
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/generators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/nested/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nested
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/sketches/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sketches
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/variants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/functions/windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windows
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Interchange and adapter authoring
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            Interchange and adapter authoring
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/substrait/conformance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Conformance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/substrait/operator_catalog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operator catalog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Read root binding contract
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Revision and extension policy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../rfcs/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Design records
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Design records
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design_records/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../whitepapers/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Whitepapers
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            Whitepapers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../whitepapers/incql_db/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IncQL-DB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#strategic-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategic direction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-seven-moments" class="md-nav__link">
+    <span class="md-ellipsis">
+      The seven moments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The seven moments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#it-caught-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It caught it."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-never-left-the-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      "I never left the language."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#it-ran-and-the-result-is-still-typed" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It ran, and the result is still typed."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-saw-what-it-would-do-before-it-did-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      "I saw what it would do before it did it."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#it-told-me-the-truth-about-its-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It told me the truth about its limits."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#it-works-on-my-actual-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It works on my actual data."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-can-work-without-stepping-on-anyone" class="md-nav__link">
+    <span class="md-ellipsis">
+      "I can work without stepping on anyone."
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-acceptance-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      The acceptance test
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-by-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status by area
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deliberately-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deliberately out of scope
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#want-to-shape-what-lands-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      Want to shape what lands next?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Project
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Project
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs_map/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docs map
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Release notes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Release notes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release_notes/v0_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    v0.1
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributor architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/writing_rfcs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Writing RFCs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rfcs/TEMPLATE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RFC template
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/prismplane_docs_theme/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prismplane docs theme
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#strategic-direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategic direction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-seven-moments" class="md-nav__link">
+    <span class="md-ellipsis">
+      The seven moments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The seven moments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#it-caught-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It caught it."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-never-left-the-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      "I never left the language."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#it-ran-and-the-result-is-still-typed" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It ran, and the result is still typed."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-saw-what-it-would-do-before-it-did-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      "I saw what it would do before it did it."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#it-told-me-the-truth-about-its-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It told me the truth about its limits."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#it-works-on-my-actual-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      "It works on my actual data."
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-can-work-without-stepping-on-anyone" class="md-nav__link">
+    <span class="md-ellipsis">
+      "I can work without stepping on anyone."
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-acceptance-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      The acceptance test
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-by-area" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status by area
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deliberately-out-of-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deliberately out of scope
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#want-to-shape-what-lands-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      Want to shape what lands next?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="incql-roadmap">IncQL Roadmap</h1>
+<p>This page tracks implementation status, release scope, and sequencing.</p>
+<p>IncQL development is driven by RFCs (Request for Comments).</p>
+<ul>
+<li>An RFC captures a design proposal, including syntax, semantics, typing rules, and lowering contracts.</li>
+<li>RFCs are not necessarily implemented in the order they are written.</li>
+<li>Milestones track release posture and sequencing. They define scope, not urgency.</li>
+</ul>
+<p>See the <a href="../rfcs/">RFC index</a> for the full set and each document's current status.</p>
+<p>IncQL is a library package for the <a href="https://github.com/encero-systems/incan">Incan</a> language, so parts of this roadmap depend on compiler and toolchain work landing there first. <strong>v0.1 is sequenced behind Incan v0.6.</strong></p>
+<h2 id="strategic-direction">Strategic direction</h2>
+<p>IncQL's direction is to make relational work <strong>checkable in source</strong>, then to keep everything downstream of that honest.</p>
+<p>Raw SQL strings and untyped rows defer mistakes to runtime. IncQL keeps schemas as ordinary Incan <code>model</code> types, resolves names the same way across every authoring surface, and lowers to Apache Substrait so logical intent stays portable while execution, credentials, and physical reads stay in the layer below.</p>
+<p>The v0.1 target is described below as <strong>seven moments</strong> rather than as a feature list. A feature list says what a tool contains; a moment says what using it should feel like, which is a more useful thing to be held to.</p>
+<p class="roadmap-thesis">Strip away the RFC numbering and IncQL makes one promise: your data mistakes become compile errors instead of 3am pager duty. Everything else serves that — and the loop you live in every day decides whether anyone stays long enough to find out.</p>
+<div class="roadmap-legend crystal-surface">
+  <p class="roadmap-legend__label">How to read this page</p>
+  <ol>
+    <li data-state="available"><span>Available</span><strong>Works today in the published package</strong></li>
+    <li data-state="partial"><span>Partial</span><strong>Usable, but does not yet cover everything the moment implies</strong></li>
+    <li data-state="planned"><span>Planned</span><strong>Designed and specified in an RFC; not yet implemented</strong></li>
+  </ol>
+</div>
+
+<h2 id="the-seven-moments">The seven moments</h2>
+<div class="roadmap-glance crystal-surface">
+  <a href="#it-caught-it" data-status="partial"><span>1</span>It caught it</a>
+  <a href="#i-never-left-the-language" data-status="available"><span>2</span>I never left the language</a>
+  <a href="#it-ran-and-the-result-is-still-typed" data-status="available"><span>3</span>It ran, and the result is still typed</a>
+  <a href="#i-saw-what-it-would-do-before-it-did-it" data-status="partial"><span>4</span>I saw what it would do before it did it</a>
+  <a href="#it-told-me-the-truth-about-its-limits" data-status="available"><span>5</span>It told me the truth about its limits</a>
+  <a href="#it-works-on-my-actual-data" data-status="planned"><span>6</span>It works on my actual data</a>
+  <a href="#i-can-work-without-stepping-on-anyone" data-status="planned"><span>7</span>I can work without stepping on anyone</a>
+</div>
+
+<div class="roadmap-moments">
+<div class="moment crystal-surface" data-status="partial">
+<p><span class="moment__num" aria-hidden="true">1</span></p>
+<h3 data-status="partial" id="it-caught-it">"It caught it."</h3>
+<p>You reference a column that does not exist, compare mismatched types, or aggregate the wrong thing — and you find out before anything runs.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>Every data team has shipped a rename that passed review, ran green, and quietly
+poisoned a dashboard for a week. The mistake was cheap; the distance between
+making it and hearing about it was expensive.</p>
+<p>That distance is the whole cost. A typo caught while you still hold the context
+that created it costs seconds. The same typo caught by a stakeholder costs a
+morning of archaeology, a correction, and some of the trust that made anyone
+look at the number in the first place.</p>
+<p>The promise is not that you stop making mistakes. It is that the feedback
+arrives while you are still the person best placed to fix them.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what"><code>query { }</code> blocks typechecked against the current query schema</span><span class="cap-state">available</span></summary>
+<p>Clause-oriented syntax that is checked, not templated. Names resolve against the query schema at the point you write them.</p>
+<p><a href="../language/reference/query_blocks/">Query blocks</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Row shapes are ordinary <code>model</code> types</span><span class="cap-state">available</span></summary>
+<p>A projection that changes shape changes type: <code>LazyFrame[Order]</code> becomes <code>LazyFrame[PaidOrder]</code> because the SELECT says so, and the compiler agrees.</p>
+<p><a href="../language/reference/dataset_carriers/">Dataset carriers</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Typed helpers validate their scalar inputs</span><span class="cap-state">available</span></summary>
+<p>Helpers accept primitives where that is the natural shape — <code>add(col("amount"), 1)</code> — while still rejecting inputs whose types cannot combine.</p>
+<p><a href="../language/reference/dataset_methods/">Dataset methods</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Field references resolved against the declared model</span><span class="cap-state">planned</span></summary>
+<p>Today <code>.amount</code> lowers to <code>col("amount")</code>, a string, so a typo surfaces at plan lowering rather than at compile time. Making the shorthand resolve against the model closes the gap, with <code>col("…")</code> left as the explicit escape for reaching past a partial model.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/116">#116</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Unbounded carriers reject bounded-only operations</span><span class="cap-state">planned</span></summary>
+<p>The root <code>DataSet[T]</code> trait currently declares every operation, so <code>DataStream[T]</code> inherits joins, grouping and ordering. Compiler support for the gating landed upstream in April; adoption here has not.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/114">#114</a></p>
+</details>
+</div>
+</div>
+<div class="moment crystal-surface" data-status="available">
+<p><span class="moment__num" aria-hidden="true">2</span></p>
+<h3 data-status="available" id="i-never-left-the-language">"I never left the language."</h3>
+<p>No SQL strings. No stringly-typed row access. Your schema is a <code>model</code>, and your query is source your editor and compiler both understand.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>When your logic lives inside strings, your tools go blind. Your editor cannot
+follow a reference it cannot parse. Rename a column and grep becomes your
+refactoring tool. Every guarantee the language gives you stops at the quote
+mark.</p>
+<p>Staying in the language means those guarantees keep applying to the part of
+your work that handles the most valuable thing you own. Your schema is a type,
+so it can be shared, imported, and reasoned about. Your query is source, so it
+is navigable, diffable, and reviewable like everything else.</p>
+<p>The alternative is not worse syntax. It is a smaller set of things your tools
+can help you with.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what">SQL-familiar <code>query { }</code> blocks</span><span class="cap-state">available</span></summary>
+<p>Both the brace spelling and the expression-position <code>query:</code> form, covering SELECT aliases, grouped aggregates, DISTINCT, joins, generators and named windows.</p>
+<p><a href="../language/reference/query_blocks/">Query blocks</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what"><code>DataSet[T]</code> method chains resolving identically</span><span class="cap-state">available</span></summary>
+<p>The same naming and schema rules apply whichever surface you author in, so the two are equivalent where it counts rather than merely similar.</p>
+<p><a href="../language/reference/dataset_methods/">Dataset methods</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Schemas as ordinary Incan <code>model</code> types</span><span class="cap-state">available</span></summary>
+<p>No schema DSL and no separate registry. A row shape is a type you can share, import, and reason about like any other.</p>
+<p><a href="../language/explanation/dataset_carriers/">Dataset carriers</a></p>
+</details>
+<details class="cap" data-state="out of scope">
+<summary><span class="cap-what">Optional pipe-forward (<code>\|&gt;</code>)</span><span class="cap-state">out of scope</span></summary>
+<p>Specified and dependent on Incan's scoped DSL glyph mechanism, which shipped. Deliberately excluded from v0.1 rather than unfinished.</p>
+<p><a href="../rfcs/005_incql_pipe_forward/">RFC 005</a></p>
+</details>
+</div>
+</div>
+<div class="moment crystal-surface" data-status="available">
+<p><span class="moment__num" aria-hidden="true">3</span></p>
+<h3 data-status="available" id="it-ran-and-the-result-is-still-typed">"It ran, and the result is still typed."</h3>
+<p>Read a source, transform it, get rows back that still carry their row type.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>In most data tooling, types survive right up until the data arrives, and then
+evaporate. You carefully describe a schema, run the query, and get back
+something the compiler knows nothing about. Every line after that is guessing.</p>
+<p>Keeping the row type through execution means the code downstream of a query is
+as checked as the code upstream of it. The result is not a bag of columns you
+hope has the right shape — it is a value whose shape the compiler already
+agreed to.</p>
+<p>That matters most where data work usually gets fragile: the transformation
+after the transformation, written weeks later by someone else.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Typed read, execute, collect and write</span><span class="cap-state">available</span></summary>
+<p><code>read_csv</code>, <code>read_parquet</code>, <code>execute</code>, <code>collect</code>, <code>write</code> and the file-specific sink helpers, each carrying the row type through.</p>
+<p><a href="../language/how-to/read_write_data/">Read and write data</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Typed sink descriptors and structured materialization</span><span class="cap-state">available</span></summary>
+<p><code>collect(...)</code> returns a <code>DataFrame[T]</code> with resolved columns and row counts, not rendered text that happens to look tabular.</p>
+<p><a href="../language/reference/execution_context/">Execution context</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">DataFusion behind a Substrait backend boundary</span><span class="cap-state">available</span></summary>
+<p>Session dispatch routes through an adapter boundary over Substrait plans, so the reference engine is not wired into Session state.</p>
+<p><a href="../language/explanation/execution_context/">Execution context</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Relations constructed from in-memory values</span><span class="cap-state">planned</span></summary>
+<p><code>Session.from_values(...)</code> needs a canonical Incan-to-Arrow row encoding before it can join the core Session surface.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/20">#20</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">An explicit catalog model for schema binding</span><span class="cap-state">planned</span></summary>
+<p>Logical-name binding is an implicit global registry today. It needs a catalog or snapshot model with real overwrite diagnostics.</p>
+<p><a href="../rfcs/004_incql_execution_context/">RFC 004</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">An output-schema contract for heterogeneous joins</span><span class="cap-state">planned</span></summary>
+<p>Joins are <code>Self</code>-only, so two different row types cannot yet produce a third with a checked shape.</p>
+<p><a href="../language/how-to/joins/">Joins</a></p>
+</details>
+</div>
+</div>
+<div class="moment crystal-surface" data-status="partial">
+<p><span class="moment__num" aria-hidden="true">4</span></p>
+<h3 data-status="partial" id="i-saw-what-it-would-do-before-it-did-it">"I saw what it would do before it did it."</h3>
+<p>You can inspect a plan — its structure, its schema flow, and where each field came from — without executing it.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>Reviewing data logic today usually means reading the code and hoping you
+correctly imagined what it would do — then finding out afterwards by reading
+logs. The feedback arrives after the compute is spent and the table is written.</p>
+<p>Being able to inspect the plan before execution moves review from post-mortem
+to pre-flight. You can see which sources it touches, how the schema flows, and
+where each output field actually came from, without running anything.</p>
+<p>This is also what makes the other moments compound: lineage that exists before
+execution is what lets a build system know precisely what your change affects.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Typed plan inspection without executing</span><span class="cap-state">available</span></summary>
+<p><code>inspect_plan(...)</code> and <code>inspect_lineage(...)</code> read Prism state locally. No execution, no backend binding, no physical plan.</p>
+<p><a href="../language/how-to/inspect_plan_lineage/">Inspect plan and lineage</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Lineage across eight relationship kinds</span><span class="cap-state">available</span></summary>
+<p>Value, control, grouping, join, sort, window, policy and quality dependencies, each carrying exact, conservative or unknown confidence.</p>
+<p><a href="../language/reference/inspection/">Inspection</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Uncomputed evidence marked, not omitted</span><span class="cap-state">available</span></summary>
+<p>An empty lineage graph is distinguishable from one that was never computed or is unsupported — which is what makes the absence trustworthy.</p>
+<p><a href="../language/reference/inspection/">Inspection</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Serialized artifacts and a rendered report</span><span class="cap-state">planned</span></summary>
+<p>Inspection returns typed records but writes no artifacts, and nothing renders them for a person. A local spike proved the shape; productionising it is the work.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/117">#117</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Prism backing beyond <code>LazyFrame[T]</code></span><span class="cap-state">planned</span></summary>
+<p><code>DataFrame[T]</code> and <code>DataStream[T]</code> are not Prism-backed, so inspection does not reach them.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/16">#16</a></p>
+</details>
+</div>
+</div>
+<div class="moment crystal-surface" data-status="available">
+<p><span class="moment__num" aria-hidden="true">5</span></p>
+<h3 data-status="available" id="it-told-me-the-truth-about-its-limits">"It told me the truth about its limits."</h3>
+<p>IncQL says "I cannot do this here" instead of degrading quietly.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>A tool that quietly approximates is more dangerous than one that refuses.
+Silent degradation is how a number ends up subtly wrong in a way nobody
+notices for two quarters — an unsupported operation gets emulated, a guarantee
+is assumed rather than checked, and the result looks exactly like a correct one.</p>
+<p>Saying "I cannot do this here" is a feature. So is distinguishing <em>this is
+unsupported</em> from <em>this was not checked</em> from <em>this passed</em>, because a reviewer
+needs to tell those apart and a log line cannot.</p>
+<p>The goal is that nothing IncQL reports is more confident than the evidence
+behind it.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Adapter coverage with four honest states</span><span class="cap-state">available</span></summary>
+<p>Covered, partially covered, uncovered, or unknown — against the selected adapter, for requirements inferred from plan evidence or supplied by a caller.</p>
+<p><a href="../language/reference/capabilities/">Capabilities</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Observed execution, collection and write attempts</span><span class="cap-state">available</span></summary>
+<p>The observed variants return a structured record for both success and failure, so an attempt can be audited rather than reconstructed from logs.</p>
+<p><a href="../language/how-to/execution_observations/">Execution observations</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Quality observations that never filter silently</span><span class="cap-state">available</span></summary>
+<p>A failed check is reported, never applied. Row counts, null rates, uniqueness and cross-relation equality produce evidence, not hidden WHERE clauses.</p>
+<p><a href="../language/reference/quality/">Quality</a></p>
+</details>
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Governed attributes and policy checkpoints</span><span class="cap-state">available</span></summary>
+<p>Provenance, confidence, authority, lifetime and visibility attach to semantic targets without turning IncQL into a policy engine.</p>
+<p><a href="../language/reference/governance/">Governance</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">A rendered form for coverage evidence</span><span class="cap-state">planned</span></summary>
+<p>Coverage and unsupported evidence share the same gap as plan inspection: available to code, not yet to a person.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/117">#117</a></p>
+</details>
+</div>
+</div>
+<div class="moment crystal-surface" data-status="planned">
+<p><span class="moment__num" aria-hidden="true">6</span></p>
+<h3 data-status="planned" id="it-works-on-my-actual-data">"It works on my actual data."</h3>
+<p>A typed data logic plane is only interesting when it operates on data you actually govern. Today IncQL reads local CSV and Parquet files.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>Local files are where tools go to look good. Reading a CSV from disk proves
+nothing a dozen libraries have not already proven with less ceremony, and every
+demo works.</p>
+<p>The data an organization actually governs lives somewhere else: object storage,
+lakehouse tables with schemas that evolve, sources someone else owns and
+changes without telling you. That last part is the point — when the schema is
+authoritative and versioned, a typed layer can compare your declared contract
+against reality <em>before</em> reading anything, and tell you precisely how they
+have drifted apart.</p>
+<p>Until that works, IncQL is a good demonstration rather than a tool.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what">Local CSV and Parquet with typed row shapes</span><span class="cap-state">available</span></summary>
+<p>Enough to demonstrate the authoring model end to end, and not much more.</p>
+<p><a href="../language/how-to/read_write_data/">Read and write data</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Object-store locations and partitioned datasets</span><span class="cap-state">planned</span></summary>
+<p><code>read_csv</code> already takes a URI, but validation only checks non-emptiness and no object store is registered, so a remote path fails as a missing local file.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/112">#112</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Schema inference that does not read the whole file</span><span class="cap-state">planned</span></summary>
+<p>CSV inference currently reads the entire file into a string to find a header, which is local-only and does not scale.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/112">#112</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Iceberg and Delta as typed, reconciled sources</span><span class="cap-state">planned</span></summary>
+<p>The table's schema is authoritative, so a declared model can be reconciled against it before any data is read — and a renamed column reported as a rename rather than a disappearance.</p>
+<p><a href="../rfcs/069_lakehouse_table_format_sources/">RFC 069</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Addon registry so a lakehouse stack is opt-in</span><span class="cap-state">planned</span></summary>
+<p>Table formats arrive as addon packages rather than core dependencies, so nobody compiles an engine they never call.</p>
+<p><a href="https://github.com/encero-systems/IncQL/issues/113">#113</a></p>
+</details>
+</div>
+</div>
+<div class="moment crystal-surface" data-status="planned">
+<p><span class="moment__num" aria-hidden="true">7</span></p>
+<h3 data-status="planned" id="i-can-work-without-stepping-on-anyone">"I can work without stepping on anyone."</h3>
+<p>Your own materialization target, and a way to rebuild only the part you changed.</p>
+<details class="note">
+<summary>Why this matters</summary>
+<p>Ask a data engineer what actually slows them down and they rarely say the SQL.
+They say the shared development database where someone else's rebuild
+overwrites the table you were mid-test on, and the twenty-minute full refresh
+you run because nobody can tell you what your change affects.</p>
+<p>Having your own target removes the first. Being able to rebuild precisely what
+you touched removes the second. Neither has anything to do with the query
+language, and together they are what a team feels every single day.</p>
+<p>Because lineage here is typed and tracks fields rather than only relations,
+that selection can be column-level: rebuild what depends on <em>this column</em>, not
+everything downstream of the table that happens to contain it. That is a
+distinction a string-addressed dependency graph cannot make.</p>
+</details>
+<div class="moment-caps">
+<details class="cap" data-state="available">
+<summary><span class="cap-what">The typed lineage graph the loop depends on</span><span class="cap-state">available</span></summary>
+<p>Already built, and the reason selection can be column-level rather than relation-level.</p>
+<p><a href="../language/reference/inspection/">Inspection</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Projects as named relational assets</span><span class="cap-state">planned</span></summary>
+<p>A statically discoverable asset graph available without executing user logic, opening connections, or resolving secrets.</p>
+<p><a href="../rfcs/058_data_projects_named_relational_assets/">RFC 058</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Materialization intent against one destination</span><span class="cap-state">planned</span></summary>
+<p>Typed, backend-neutral policy resolved against a destination binding — which is what gives each developer their own target.</p>
+<p><a href="../rfcs/059_materialization_applied_asset_lifecycle/">RFC 059</a></p>
+</details>
+<details class="cap" data-state="planned">
+<summary><span class="cap-what">Selector-driven builds with an append-only receipt</span><span class="cap-state">planned</span></summary>
+<p>Structured selectors resolve to an immutable build set, execute in dependency order, and record what actually happened.</p>
+<p><a href="../rfcs/062_project_build_lifecycle_selectors_state/">RFC 062</a></p>
+</details>
+</div>
+</div>
+</div>
+<h2 id="the-acceptance-test">The acceptance test</h2>
+<p>v0.1 is done when a stranger can do all of this in one sitting, without reading a single RFC.</p>
+<ol class="roadmap-test crystal-surface">
+  <li data-result="yes">
+    <span class="clause">Point IncQL at a real CSV and define a model for its rows</span>
+    <span class="verdict"><b aria-hidden="true">✓</b>works</span>
+    <span class="why">The row shape is an ordinary Incan <code>model</code>. There is no schema DSL and no separate registry to learn.</span>
+  </li>
+  <li data-result="yes">
+    <span class="clause">Write a query against it</span>
+    <span class="verdict"><b aria-hidden="true">✓</b>works</span>
+    <span class="why">Either a SQL-familiar <code>query { }</code> block or a method chain on the carrier. Both resolve names the same way.</span>
+  </li>
+  <li data-result="part">
+    <span class="clause">Make a genuine mistake and get an error that says what is wrong</span>
+    <span class="verdict"><b aria-hidden="true">◑</b>partial</span>
+    <span class="why">A mistyped column is caught — but when the plan lowers, not when it compiles, because column names are still strings internally. Earlier than most tools manage, since nothing touches the data first, but not the compile error IncQL is aiming for. Tracked in <a href="https://github.com/encero-systems/IncQL/issues/116">#116</a>.</span>
+  </li>
+  <li data-result="yes">
+    <span class="clause">Fix it and run it</span>
+    <span class="verdict"><b aria-hidden="true">✓</b>works</span>
+    <span class="why">DataFusion executes the lowered Substrait plan, and the result still carries its row type.</span>
+  </li>
+  <li data-result="no">
+    <span class="clause">Read the plan it will execute</span>
+    <span class="verdict"><b aria-hidden="true">✗</b>not yet</span>
+    <span class="why">Inspection already returns typed records — plan nodes, schema flow, lineage — but nothing renders them for a person to read. Tracked in <a href="https://github.com/encero-systems/IncQL/issues/117">#117</a>.</span>
+  </li>
+  <li data-result="no">
+    <span class="clause">Point it at data that is not on their laptop</span>
+    <span class="verdict"><b aria-hidden="true">✗</b>not yet</span>
+    <span class="why">Local CSV and Parquet only today. Object storage and partitioned datasets are <a href="https://github.com/encero-systems/IncQL/issues/112">#112</a>; Iceberg and Delta tables are RFC&nbsp;069.</span>
+  </li>
+  <li data-result="no">
+    <span class="clause">Rebuild just the part they changed, into their own space</span>
+    <span class="verdict"><b aria-hidden="true">✗</b>not yet</span>
+    <span class="why">Specified across RFCs 058, 059 and 062 — projects as typed assets, materialization intent, and selector-driven builds — but not yet implemented.</span>
+  </li>
+</ol>
+
+<h2 id="status-by-area">Status by area</h2>
+<div class="roadmap-areas">
+<div class="roadmap-area" data-state="available">
+<p><strong>Function catalogue</strong></p>
+<p>Complete. Core operators, aggregates and modifiers, common scalars, window helpers, generators, nested-data helpers, format and approximate functions, typed sketches and variant values all ship through one registry-backed helper model.</p>
+</div>
+<div class="roadmap-area" data-state="available">
+<p><strong>Authoring and language</strong></p>
+<p><code>query { }</code> blocks and carrier method chains share one resolution model. See <a href="../rfcs/000_incql_syntax/">RFC 000</a> and <a href="../rfcs/closed/implemented/003_incql_query_blocks/">RFC 003</a>.</p>
+</div>
+<div class="roadmap-area" data-state="partial">
+<p><strong>Dataset carriers</strong></p>
+<p>The bounded/unbounded split exists; static capability gating is the remaining work. See <a href="../rfcs/001_incql_dataset/">RFC 001</a>.</p>
+</div>
+<div class="roadmap-area" data-state="partial">
+<p><strong>Planning and interchange</strong></p>
+<p>Substrait is the normative interchange. Prism backs <code>LazyFrame[T]</code> only. See <a href="../rfcs/002_apache_substrait_integration/">RFC 002</a> and <a href="../rfcs/007_prism_planning_engine/">RFC 007</a>.</p>
+</div>
+<div class="roadmap-area" data-state="partial">
+<p><strong>Evidence and inspection</strong></p>
+<p>Targets, attachments, lineage, observations, coverage, quality and governed attributes ship. Serialized artifacts and a rendered report do not. See <a href="../rfcs/027_relational_evidence_program/">RFC 027</a>.</p>
+</div>
+<div class="roadmap-area" data-state="available">
+<p><strong>Execution</strong></p>
+<p>DataFusion is the reference adapter behind a portable backend boundary. See <a href="../rfcs/004_incql_execution_context/">RFC 004</a>.</p>
+</div>
+<div class="roadmap-area" data-state="planned">
+<p><strong>Data access</strong></p>
+<p>The immediate release surface: object storage, partitioned datasets, and lakehouse table formats. See <a href="../rfcs/069_lakehouse_table_format_sources/">RFC 069</a>.</p>
+</div>
+</div>
+<h2 id="deliberately-out-of-scope">Deliberately out of scope</h2>
+<p>These are boundaries, not backlog. Each belongs to a layer below or beside IncQL.</p>
+<div class="roadmap-bounds">
+<ul>
+<li><strong>Pipeline and workflow orchestration</strong> — scheduling, retries and DAG execution stay downstream.</li>
+<li><strong>A semantic catalog</strong> — logical registration and backend-resolved reads are in scope; a portable catalog API across vendors is not.</li>
+<li><strong>Credential and secret management</strong> — provider configuration resolves at the binding and never enters a plan, artifact, or evidence record.</li>
+<li><strong>A second execution engine</strong> — the portable backend boundary is the requirement, and it is satisfied. Additional adapters are tracked separately and do not gate v0.1.</li>
+</ul>
+</div>
+<section class="incql-final-cta roadmap-cta">
+<div class="incql-final-cta__copy">
+<p class="incql-section-kicker">Seven moments, three of them still ahead</p>
+<h2 id="want-to-shape-what-lands-next">Want to shape what lands next?</h2>
+<p>The gaps on this page are specific, scoped, and written down. Several are unclaimed — and the ones that decide whether IncQL feels like a tool are not the hardest ones.</p>
+</div>
+<div class="incql-actions">
+<a class="incql-button incql-button--primary" href="https://github.com/encero-systems/IncQL/milestone/1" target="_blank" rel="noreferrer"><svg class="incql-button__mark" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></svg>The v0.1 milestone on GitHub</a>
+<a class="incql-button" href="../rfcs/">Read the RFCs</a>
+<a class="incql-button" href="../project/">Contributor guide</a>
+</div>
+</section>
+<!-- References -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
+      
+        <script src="../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+      
+    
+  </body>
+</html>
