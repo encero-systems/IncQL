@@ -6,7 +6,7 @@
 </div>
 <nav class="rail-nav">
 <a href="../design_records/"><span>Overview</span><small>Start here</small></a>
-<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>69 durable records</small></a>
+<a class="is-active" href="#reader" aria-current="page"><span>RFC Context Reader</span><small>70 durable records</small></a>
 <a href="#how-the-rfc-lifecycle-works"><span>Lifecycle guide</span><small>From draft to shipped</small></a>
 </nav>
 <div class="rail-section">
@@ -15,7 +15,7 @@
 </div>
 <div class="rail-note">
 <span class="health-light"></span>
-<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 69 records</small></div>
+<div><strong>Catalog synchronized</strong><small>Generated from the RFC catalog · 70 records</small></div>
 </div>
 </aside>
 
