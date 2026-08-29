@@ -1,63 +1,35 @@
-# Project
+<main class="incql-design-records" markdown="1">
+<header class="incql-design-records__intro" markdown="1">
+<p class="incql-design-records__kicker">Project · how IncQL is made</p>
 
-Everything about IncQL itself: the decisions behind it, how it is built and released, and how to contribute one.
+# Everything about IncQL itself
 
-<div class="incql-hub" markdown>
+The decisions behind it, how it is built and released, and how to contribute one.
+</header>
 
-<article class="incql-hub__card incql-hub__card--wide" markdown>
-<p class="incql-section-kicker">Design records</p>
-
-## Why IncQL is shaped this way
-
-Normative design lives in **RFCs**; longer-form exploration lives in **whitepapers**. Both are durable records, not current-state documentation — for what the package does today, use [Reference][reference].
-
-<div class="incql-hub__links" markdown>
-[**RFCs** <span>Numbered, normative design decisions and their status</span>][rfcs]
-[**Whitepapers** <span>Longer-form exploration beyond a single decision</span>][whitepapers]
-[**Design records overview** <span>How the two fit together</span>][design-records]
-</div>
+<div class="incql-design-records__grid">
+<article class="incql-design-records__card incql-design-records__card--primary">
+<span class="incql-design-records__number">01 · Durable context</span>
+<h2>Design records</h2>
+<p>Normative design lives in <a href="../rfcs/">RFCs</a>; longer-form exploration lives in <a href="../whitepapers/">whitepapers</a>. Both are moment-in-time records of a decision, not documentation of current behavior.</p>
+<p>For what the package does today, use the <a href="../language/reference/">Reference</a> pages. Come here when you need the normative contract, the rationale, the alternatives that were rejected, or the design history.</p>
+<p class="incql-design-records__action"><a href="../design_records/">Open design records</a></p>
 </article>
 
-<article class="incql-hub__card" markdown>
-<p class="incql-section-kicker">Build and release</p>
-
-## How it is put together
-
-<div class="incql-hub__links" markdown>
-[**Contributor architecture** <span>System boundaries mapped to modules, build commands, and the compiler seam</span>][contributor-architecture]
-[**Docs map** <span>Compact inventory of the documentation set</span>][docs-map]
-[**Release notes** <span>Shipped, user-visible changes</span>][release-notes]
-</div>
+<article class="incql-design-records__card">
+<span class="incql-design-records__number">02 · Build and release</span>
+<h2>How it is put together</h2>
+<p><a href="../contributing/architecture/">Contributor architecture</a> maps the conceptual system boundaries to source modules, build commands, and the Incan compiler seam. The <a href="../docs_map/">docs map</a> is a compact inventory of the documentation set, and <a href="../release_notes/v0_1/">release notes</a> summarize shipped, user-visible changes.</p>
+<p class="incql-design-records__action"><a href="../contributing/architecture/">Read the architecture</a></p>
 </article>
 
-<article class="incql-hub__card" markdown>
-<p class="incql-section-kicker">Contribute</p>
-
-## How to add to it
-
-<div class="incql-hub__links" markdown>
-[**Writing RFCs** <span>The design-record workflow and formatting contract</span>][writing-rfcs]
-[**RFC template** <span>Start a new record from the canonical shape</span>][rfc-template]
-[**Prismplane docs theme** <span>The site's visual and authoring conventions</span>][theme]
-[**CONTRIBUTING guide** <span>Setup, testing, pull requests, and release hygiene</span>][contributing]
-</div>
+<article class="incql-design-records__card">
+<span class="incql-design-records__number">03 · Make the next change</span>
+<h2>Contributing</h2>
+<p>Read <a href="../contributing/writing_rfcs/">Writing RFCs</a> before proposing a normative change; new records start from the <a href="../rfcs/TEMPLATE/">RFC template</a>. The <a href="../contributing/prismplane_docs_theme/">Prismplane docs theme</a> documents this site's visual and authoring conventions, and the repository <a href="https://github.com/encero-systems/IncQL/blob/main/CONTRIBUTING.md">CONTRIBUTING guide</a> covers setup, testing, and release hygiene.</p>
+<p class="incql-design-records__action"><a href="../contributing/writing_rfcs/">Start contributing</a></p>
 </article>
-
 </div>
 
-Looking for how to *use* IncQL rather than how it is made? Start at [Learn][learn], answer a specific question in [Guides][guides], or look up an exact contract in [Reference][reference].
-
-<!-- References -->
-[contributing]: https://github.com/encero-systems/IncQL/blob/main/CONTRIBUTING.md
-[contributor-architecture]: contributing/architecture.md
-[design-records]: design_records.md
-[docs-map]: docs_map.md
-[guides]: language/how-to/README.md
-[learn]: language/README.md
-[reference]: language/reference/README.md
-[release-notes]: release_notes/v0_1.md
-[rfc-template]: rfcs/TEMPLATE.md
-[rfcs]: rfcs/README.md
-[theme]: contributing/prismplane_docs_theme.md
-[whitepapers]: whitepapers/README.md
-[writing-rfcs]: contributing/writing_rfcs.md
+<p class="incql-design-records__footnote">Looking for how to <em>use</em> IncQL rather than how it is made? Start at <a href="../language/">Learn</a>, answer a specific question in <a href="../language/how-to/">Guides</a>, or look up an exact contract in <a href="../language/reference/">Reference</a>.</p>
+</main>

@@ -1,3 +1,8 @@
+---
+hide:
+  - navigation
+---
+
 # IncQL Roadmap
 
 This page tracks implementation status, release scope, and sequencing.
