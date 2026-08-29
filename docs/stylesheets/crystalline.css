@@ -335,6 +335,17 @@ body[data-md-color-scheme="default"] .md-tabs {
     font-size: 0.7rem;
   }
 
+  /* Material wraps a section that owns an index page in `.md-nav__container`,
+   * which is itself an `.md-nav__link` — so the rule above pads the container
+   * and the anchor inside it, and the section label lands ~12px right of its
+   * own children. Material ships a fix for this, but at lower specificity than
+   * the rule above, so it never applies here. Drop the container's own inline
+   * padding and let the anchor supply it; the toggle keeps its side. */
+  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__container,
+  body:has(.incql-design-records) .md-sidebar--primary .md-nav__container {
+    padding-inline: 0;
+  }
+
   body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__link--active,
   body:has(.incql-design-records) .md-sidebar--primary .md-nav__link--active {
     border: 1px solid rgba(255, 255, 255, 0.9);
