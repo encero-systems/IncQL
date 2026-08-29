@@ -57,7 +57,7 @@ markdown_extensions:
 extra_css:
   # Ordered ownership contract: see docs/contributing/prismplane_docs_theme.md.
   - stylesheets/prismplane.css?v=20260829-nav-container-2
-  - stylesheets/crystalline.css?v=20260829-rail-decouple-1
+  - stylesheets/crystalline.css?v=20260829-hub-align-3
   - stylesheets/crystal-prototype.css?v=20260723-guides-nav-2
   - stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1
   - stylesheets/crystal-integration.css?v=20260829-project-hub-1

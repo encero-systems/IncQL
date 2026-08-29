@@ -551,14 +551,6 @@ body:has(.incql-launch) .incql-hero h1 {
 
 /* Design records landing ------------------------------------------------ */
 
-body:has(.incql-design-records) .md-sidebar--secondary {
-  display: none;
-}
-
-body:has(.incql-design-records) .md-main__inner {
-  max-width: 1380px;
-}
-
 body:has(.incql-design-records) .md-content__inner {
   padding-top: 1.2rem;
 }
@@ -569,8 +561,7 @@ body:has(.incql-design-records) .md-content__inner {
 
 .incql-design-records__intro {
   max-width: 58rem;
-  margin: 0 auto 1.4rem;
-  text-align: center;
+  margin: 0 0 1.4rem;
 }
 
 .md-typeset .incql-design-records__kicker {
@@ -593,7 +584,7 @@ body:has(.incql-design-records) .md-content__inner {
 
 .md-typeset .incql-design-records__intro > p:last-child {
   max-width: 46rem;
-  margin: 0.9rem auto 0;
+  margin: 0.9rem 0 0;
   color: var(--crystal-copy);
   font-size: 0.95rem;
   line-height: 1.65;
@@ -601,7 +592,7 @@ body:has(.incql-design-records) .md-content__inner {
 
 .incql-design-records__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1rem;
   max-width: 66rem;
   margin: 0 auto;
