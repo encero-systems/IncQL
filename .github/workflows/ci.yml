@@ -34,8 +34,8 @@ env:
   CARGO_TERM_COLOR: always
   # Pinned Incan release. INCAN_TAG selects both the toolchain archive and the
   # stdlib-source checkout; the two must always name the same release.
-  INCAN_TAG: v0.5.0
-  EXPECTED_INCAN_VERSION: 0.5.0
+  INCAN_TAG: v0.5.1
+  EXPECTED_INCAN_VERSION: 0.5.1
   # The release Loafs are sealed against an exact `rustc --version` identity and
   # are verified against it, so this must name a concrete version. A floating
   # `stable` channel drifts out from under the release the moment upstream
@@ -71,10 +71,16 @@ jobs:
           ref: ${{ env.INCAN_TAG }}
           path: incan
 
+      # `targets` is not optional here: IncQL declares a `[vocab]` companion, and
+      # its desugarer is compiled to wasm32-wasip1. The toolchain the official
+      # installer provisions includes that target; a workflow that provisions
+      # rustup itself has to add it, or `oven bake` stops with
+      # "vocab desugarer target `wasm32-wasip1` is not installed".
       - name: Install Rust ${{ env.RUST_VERSION }}
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.RUST_VERSION }}
+          targets: wasm32-wasip1
 
       - name: Cache Incan release toolchain
         id: toolchain-cache
@@ -141,6 +147,67 @@ jobs:
           restore-keys: |
             incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
             incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
+
+      # The release archive vendors only Incan's own crates by design; a
+      # project's extension dependencies build from the consumer's `~/.cargo`,
+      # resolved `--offline` by the Oven publisher. On a cold runner that fails
+      # on the first extension crate it needs — for IncQL, `blake2`, pulled in by
+      # the stdlib hashing components. Keyed on the lock, mirroring Incan's own
+      # `incan-oven-pr-sources` cache.
+      - name: Cache Cargo registry for Oven extension sources
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          restore-keys: |
+            incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
+            incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-
+
+      # One online fetch before the bake, so a cold runner degrades to a slow
+      # run rather than an aborted bake. `incan.lock` already names every
+      # registry crate and exact version in the closure, so seed precisely
+      # those rather than guessing.
+      #
+      # This matters beyond the immediate failure: a bake that stops mid-flight
+      # damages the checkout's inspection authority (encero-systems/incan#1229),
+      # and every later bake in that checkout then reports spurious `Box` type
+      # errors until `.incan`, `target/incan_lock` and `target/incan` are
+      # removed. Failing before the bake starts is much cheaper than failing
+      # inside it.
+      - name: Warm Oven extension sources
+        run: |
+          set -euo pipefail
+          seed="$(mktemp -d)"
+          python3 - "$seed" <<'SEED'
+          import re, sys, pathlib
+          lock = pathlib.Path("incan.lock").read_text(encoding="utf-8")
+          entries = []
+          for block in re.split(r"\n\[\[package\]\]\n", lock)[1:]:
+              name = re.search(r'name = "([^"]+)"', block)
+              version = re.search(r'version = "([^"]+)"', block)
+              source = re.search(r'source = "([^"]+)"', block)
+              if name and version and source and source.group(1).startswith("registry+"):
+                  entries.append((name.group(1), version.group(1)))
+          # Several crates appear at more than one version, so each needs its own
+          # renamed key: a [dependencies] table cannot repeat a name.
+          lines = []
+          for name, version in sorted(set(entries)):
+              key = re.sub(r"[^A-Za-z0-9_]", "_", f"{name}_{version}")
+              lines.append(f'{key} = {{ package = "{name}", version = "={version}" }}')
+          root = pathlib.Path(sys.argv[1])
+          (root / "src").mkdir(parents=True, exist_ok=True)
+          (root / "src" / "lib.rs").write_text("", encoding="utf-8")
+          (root / "Cargo.toml").write_text(
+              '[package]\nname = "incql-oven-source-seed"\nversion = "0.0.0"\n'
+              'edition = "2021"\n\n[dependencies]\n' + "\n".join(lines) + "\n",
+              encoding="utf-8",
+          )
+          print(f"seeding {len(set(entries))} registry crates named by incan.lock")
+          SEED
+          cargo fetch --manifest-path "$seed/Cargo.toml"
+          rm -rf "$seed"
 
       - name: Show toolchain
         run: |
