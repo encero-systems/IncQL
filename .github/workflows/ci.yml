@@ -81,6 +81,7 @@ jobs:
         with:
           toolchain: ${{ env.RUST_VERSION }}
           targets: wasm32-wasip1
+          components: llvm-tools
 
       - name: Cache Incan release toolchain
         id: toolchain-cache
@@ -210,6 +211,13 @@ jobs:
             exit 1
           fi
           rm -rf .incan target/incan_lock target/incan
+          # The store is in INCAN_HOME, not the project, so the line above does
+          # not touch it. Staging capacity for the real bake is the store limit
+          # minus what is already retained, so anything the warm-up sealed comes
+          # straight off the budget the real bake needs.
+          incan oven store prune --max-physical-bytes 0 \
+            --max-domain-physical-bytes 0 --max-domain-logical-bytes 0 \
+            || echo "Nothing to prune from the Oven store."
 
       - name: Show toolchain
         run: |
