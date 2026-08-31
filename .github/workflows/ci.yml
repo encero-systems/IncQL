@@ -176,38 +176,40 @@ jobs:
       # errors until `.incan`, `target/incan_lock` and `target/incan` are
       # removed. Failing before the bake starts is much cheaper than failing
       # inside it.
+      # Seeding from `incan.lock` is not enough: the project Cargo manifest that
+      # Oven generates uses caret ranges (`blake2 = "0.10"`, `datafusion = "53"`),
+      # so it resolves to the newest compatible versions rather than the lock's
+      # pins. The only reliable description of what the bake needs is the
+      # manifest the bake itself writes.
+      #
+      # So: let a first bake generate that manifest and fail offline, fetch what
+      # it asked for while online, then clear the damaged state and let the real
+      # bake step run against a warm registry.
+      #
+      # The clear is not optional. A bake that stops mid-flight damages the
+      # checkout's inspection authority (encero-systems/incan#1229), and every
+      # later bake in that checkout then reports spurious `Box` type errors —
+      # `expected 'prost::alloc::boxed::Box<…>', found 'rust::std::boxed::Box'` —
+      # until `.incan`, `target/incan_lock` and `target/incan` are removed.
       - name: Warm Oven extension sources
         run: |
           set -euo pipefail
-          seed="$(mktemp -d)"
-          python3 - "$seed" <<'SEED'
-          import re, sys, pathlib
-          lock = pathlib.Path("incan.lock").read_text(encoding="utf-8")
-          entries = []
-          for block in re.split(r"\n\[\[package\]\]\n", lock)[1:]:
-              name = re.search(r'name = "([^"]+)"', block)
-              version = re.search(r'version = "([^"]+)"', block)
-              source = re.search(r'source = "([^"]+)"', block)
-              if name and version and source and source.group(1).startswith("registry+"):
-                  entries.append((name.group(1), version.group(1)))
-          # Several crates appear at more than one version, so each needs its own
-          # renamed key: a [dependencies] table cannot repeat a name.
-          lines = []
-          for name, version in sorted(set(entries)):
-              key = re.sub(r"[^A-Za-z0-9_]", "_", f"{name}_{version}")
-              lines.append(f'{key} = {{ package = "{name}", version = "={version}" }}')
-          root = pathlib.Path(sys.argv[1])
-          (root / "src").mkdir(parents=True, exist_ok=True)
-          (root / "src" / "lib.rs").write_text("", encoding="utf-8")
-          (root / "Cargo.toml").write_text(
-              '[package]\nname = "incql-oven-source-seed"\nversion = "0.0.0"\n'
-              'edition = "2021"\n\n[dependencies]\n' + "\n".join(lines) + "\n",
-              encoding="utf-8",
-          )
-          print(f"seeding {len(set(entries))} registry crates named by incan.lock")
-          SEED
-          cargo fetch --manifest-path "$seed/Cargo.toml"
-          rm -rf "$seed"
+          if make bake; then
+            echo "Bake succeeded during warm-up; registry was already populated."
+            exit 0
+          fi
+          echo "Bake could not resolve offline. Fetching what it generated."
+          fetched=0
+          for manifest in target/incan_lock/rust_inspect/*/Cargo.toml; do
+            [ -f "$manifest" ] || continue
+            cargo fetch --manifest-path "$manifest"
+            fetched=1
+          done
+          if [ "$fetched" -eq 0 ]; then
+            echo "::error::No generated Cargo manifest to fetch from; the bake failed earlier than dependency resolution."
+            exit 1
+          fi
+          rm -rf .incan target/incan_lock target/incan
 
       - name: Show toolchain
         run: |
