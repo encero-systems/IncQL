@@ -1,0 +1,344 @@
+"""
+IncQL read-model adapter for the semantic-memory brain spike.
+
+The brain remains the authority for admission, immutable revisions, and retrieval
+receipts. This module makes the read shapes explicit typed relations so IncQL can
+describe and inspect them before an IncQL-DB execution/storage boundary exists.
+"""
+
+import pub::incql
+from brain import RetrievalRun
+from pub::incql import (
+    LazyFrame,
+    PlanInspection,
+    RowColumnSpec,
+    SubstraitPrimitiveKind,
+    inspect_plan,
+    register_named_table_schema,
+)
+from pub::incql.dataset import lazy_frame_named_table
+
+pub const MEMORY_REVISIONS_TABLE: str = "memory_revisions"
+pub const MEMORY_PROJECTIONS_TABLE: str = "memory_projections"
+pub const MEMORY_SCOPES_TABLE: str = "memory_scopes"
+pub const MEMORY_SCOPE_PARENTS_TABLE: str = "memory_scope_parents"
+pub const MEMORY_LINKS_TABLE: str = "memory_links"
+
+
+@derive(Clone)
+pub model RevisionRow:
+    """Relational read shape for one immutable record revision."""
+
+    pub reference: str
+    pub family: str
+    pub logical_id: str
+    pub revision: int
+    pub snapshot_id: int
+    pub content_digest: str
+
+
+@derive(Clone)
+pub model ProjectionRow:
+    """Relational read shape for one source-pinned context projection."""
+
+    pub projection_id: str
+    pub source_reference: str
+    pub source_digest: str
+    pub level: str
+    pub declared_token_count: int
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model ScopeRow:
+    """Relational read shape for one stored semantic-memory scope node."""
+
+    pub scope_id: str
+    pub kind: str
+    pub subject_reference: str
+    pub parent_scope_id: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model LinkRow:
+    """Relational read shape for one snapshot-scoped provenance edge."""
+
+    pub source_reference: str
+    pub target_reference: str
+    pub relation_kind: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model RevisionLookupRow:
+    """A snapshot-bounded immutable revision lookup result."""
+
+    pub reference: str
+    pub family: str
+    pub logical_id: str
+    pub revision: int
+    pub snapshot_id: int
+    pub content_digest: str
+
+
+@derive(Clone)
+pub model ScopeLookupRow:
+    """A snapshot-bounded semantic-memory scope lookup result."""
+
+    pub scope_id: str
+    pub kind: str
+    pub subject_reference: str
+    pub parent_scope_id: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model ProjectionSelectionRow:
+    """A selected source-pinned projection visible at one named snapshot."""
+
+    pub projection_id: str
+    pub source_reference: str
+    pub source_digest: str
+    pub level: str
+    pub declared_token_count: int
+    pub projection_snapshot_id: int
+
+
+@derive(Clone)
+pub model ScopeParentRow:
+    """One concrete child-to-parent scope hop in the typed scope hierarchy."""
+
+    pub scope_id: str
+    pub kind: str
+    pub subject_reference: str
+    pub parent_scope_id: str
+    pub parent_subject_reference: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model PredecessorRow:
+    """One visible direct provenance predecessor at one named snapshot."""
+
+    pub source_reference: str
+    pub target_reference: str
+    pub relation_kind: str
+    pub link_snapshot_id: int
+
+
+@derive(Clone)
+pub model MemoryRelationSources:
+    """Named typed read roots for the brain's durable semantic record families."""
+
+    pub revisions: LazyFrame[RevisionRow]
+    pub projections: LazyFrame[ProjectionRow]
+    pub scopes: LazyFrame[ScopeRow]
+    pub scope_parents: LazyFrame[ScopeRow]
+    pub links: LazyFrame[LinkRow]
+
+
+@derive(Clone)
+pub model RelationalRetrievalRun:
+    """An existing retrieval receipt paired with its inspectable relational read plan."""
+
+    pub run: RetrievalRun
+    pub selection_plan: PlanInspection
+
+
+pub def memory_relation_sources() -> MemoryRelationSources:
+    """
+    Return typed logical sources after registering their planning schemas.
+
+    These are plan roots only. They deliberately do not materialize brain lists,
+    execute a query, or introduce a second source of truth.
+    """
+    _register_memory_relation_schemas()
+    return MemoryRelationSources(
+        revisions=lazy_frame_named_table(MEMORY_REVISIONS_TABLE),
+        projections=lazy_frame_named_table(MEMORY_PROJECTIONS_TABLE),
+        scopes=lazy_frame_named_table(MEMORY_SCOPES_TABLE),
+        scope_parents=lazy_frame_named_table(MEMORY_SCOPE_PARENTS_TABLE),
+        links=lazy_frame_named_table(MEMORY_LINKS_TABLE),
+    )
+
+
+pub def visible_revision_plan(
+    revisions: LazyFrame[RevisionRow],
+    reference: str,
+    input_snapshot_id: int,
+) -> LazyFrame[RevisionLookupRow]:
+    """Describe the snapshot-bounded revision lookup behind revision existence checks."""
+    return query {
+        FROM revisions
+        WHERE .reference == reference
+        AND.snapshot_id <= input_snapshot_id
+        SELECT
+            .reference as reference,
+            .family as family,
+            .logical_id as logical_id,
+            .revision as revision,
+            .snapshot_id as snapshot_id,
+            .content_digest as content_digest,
+    }
+
+
+pub def visible_scope_plan(
+    scopes: LazyFrame[ScopeRow],
+    scope_id: str,
+    input_snapshot_id: int,
+) -> LazyFrame[ScopeLookupRow]:
+    """Describe the snapshot-bounded scope lookup behind scope existence checks."""
+    return query {
+        FROM scopes
+        WHERE .scope_id == scope_id
+        AND.snapshot_id <= input_snapshot_id
+        SELECT
+            .scope_id as scope_id,
+            .kind as kind,
+            .subject_reference as subject_reference,
+            .parent_scope_id as parent_scope_id,
+            .snapshot_id as snapshot_id,
+    }
+
+
+pub def selected_projection_plan(
+    projections: LazyFrame[ProjectionRow],
+    source_reference: str,
+    level: str,
+    input_snapshot_id: int,
+) -> LazyFrame[ProjectionSelectionRow]:
+    """
+    Describe projection selection as a source-pinned, snapshot-bounded typed read.
+
+    The projection source remains an exact revision reference. Current IncQL carrier
+    joins accept only the same row type, so validating that reference against
+    `RevisionRow` is deliberately retained as a separate lookup plan below.
+    """
+    return query {
+        FROM projections
+        WHERE .source_reference == source_reference
+        AND.level == level
+        AND.snapshot_id <= input_snapshot_id
+        SELECT
+            .projection_id as projection_id,
+            .source_reference as source_reference,
+            .source_digest as source_digest,
+            .level as level,
+            .declared_token_count as declared_token_count,
+            .snapshot_id as projection_snapshot_id,
+    }
+
+
+pub def scope_parent_plan(
+    scopes: LazyFrame[ScopeRow],
+    parents: LazyFrame[ScopeRow],
+    scope_id: str,
+    input_snapshot_id: int,
+) -> LazyFrame[ScopeParentRow]:
+    """Describe one direct child-to-parent scope hop using the hierarchy relation itself."""
+    return query {
+        FROM scopes
+        JOIN parents
+        ON .parent_scope_id == parents.scope_id
+        WHERE .scope_id == scope_id
+        AND.snapshot_id <= input_snapshot_id
+        SELECT
+            .scope_id as scope_id,
+            .kind as kind,
+            .subject_reference as subject_reference,
+            .parent_scope_id as parent_scope_id,
+            parents.subject_reference as parent_subject_reference,
+            .snapshot_id as snapshot_id,
+    }
+
+
+pub def predecessor_plan(
+    links: LazyFrame[LinkRow],
+    target_reference: str,
+    input_snapshot_id: int,
+) -> LazyFrame[PredecessorRow]:
+    """
+    Describe direct predecessor traversal as a snapshot-bounded provenance read.
+
+    A caller may pair each returned source reference with `visible_revision_plan`.
+    Keeping them separate is intentional for this spike: cross-family IncQL joins
+    are not yet accepted by the current `LazyFrame[T]` carrier contract.
+    """
+    return query {
+        FROM links
+        WHERE .target_reference == target_reference
+        AND.snapshot_id <= input_snapshot_id
+        SELECT
+            .source_reference as source_reference,
+            .target_reference as target_reference,
+            .relation_kind as relation_kind,
+            .snapshot_id as link_snapshot_id,
+    }
+
+
+pub def attach_selection_plan(
+    run: RetrievalRun,
+    selection: LazyFrame[ProjectionSelectionRow],
+) -> RelationalRetrievalRun:
+    """Attach local plan evidence to an existing retrieval receipt without executing or mutating it."""
+    return RelationalRetrievalRun(run=run, selection_plan=inspect_plan(selection))
+
+
+def _register_memory_relation_schemas() -> None:
+    """Register the flat physical read shapes required by the current plan-only adapter."""
+    register_named_table_schema(
+        MEMORY_REVISIONS_TABLE,
+        [RowColumnSpec(name="reference", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+            name="family",
+            kind=SubstraitPrimitiveKind.String,
+            nullable=false,
+        ), RowColumnSpec(name="logical_id", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+            name="revision",
+            kind=SubstraitPrimitiveKind.I64,
+            nullable=false,
+        ), RowColumnSpec(name="snapshot_id", kind=SubstraitPrimitiveKind.I64, nullable=false), RowColumnSpec(
+            name="content_digest",
+            kind=SubstraitPrimitiveKind.String,
+            nullable=false,
+        )],
+    )
+    register_named_table_schema(
+        MEMORY_PROJECTIONS_TABLE,
+        [RowColumnSpec(name="projection_id", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+            name="source_reference",
+            kind=SubstraitPrimitiveKind.String,
+            nullable=false,
+        ), RowColumnSpec(name="source_digest", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+            name="level",
+            kind=SubstraitPrimitiveKind.String,
+            nullable=false,
+        ), RowColumnSpec(name="declared_token_count", kind=SubstraitPrimitiveKind.I64, nullable=false), RowColumnSpec(
+            name="snapshot_id",
+            kind=SubstraitPrimitiveKind.I64,
+            nullable=false,
+        )],
+    )
+    scope_columns = [RowColumnSpec(name="scope_id", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+        name="kind",
+        kind=SubstraitPrimitiveKind.String,
+        nullable=false,
+    ), RowColumnSpec(name="subject_reference", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+        name="parent_scope_id",
+        kind=SubstraitPrimitiveKind.String,
+        nullable=false,
+    ), RowColumnSpec(name="snapshot_id", kind=SubstraitPrimitiveKind.I64, nullable=false)]
+    register_named_table_schema(MEMORY_SCOPES_TABLE, scope_columns)
+    register_named_table_schema(MEMORY_SCOPE_PARENTS_TABLE, scope_columns)
+    register_named_table_schema(
+        MEMORY_LINKS_TABLE,
+        [RowColumnSpec(name="source_reference", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+            name="target_reference",
+            kind=SubstraitPrimitiveKind.String,
+            nullable=false,
+        ), RowColumnSpec(name="relation_kind", kind=SubstraitPrimitiveKind.String, nullable=false), RowColumnSpec(
+            name="snapshot_id",
+            kind=SubstraitPrimitiveKind.I64,
+            nullable=false,
+        )],
+    )

@@ -1,0 +1,133 @@
+"""Adapter from a bounded HyperQuant run into one live semantic-memory Quant."""
+
+from brain import Quant, QuantProfile, RecordRevision, RetrievalCandidate, ScreeningOutcome
+
+
+@derive(Clone)
+pub enum HyperquantAdapterError(str):
+    """Fail-closed reasons why a HyperQuant run cannot become an active Quant."""
+
+    EmptyRunFingerprint = "empty_run_fingerprint"
+    ProfileMismatch = "profile_mismatch"
+    InvalidRank = "invalid_rank"
+    InvalidRelevance = "invalid_relevance"
+    DuplicateNomination = "duplicate_nomination"
+    MissingRevision = "missing_revision"
+    WrongRecordFamily = "wrong_record_family"
+    MissingScreening = "missing_screening"
+    DuplicateScreening = "duplicate_screening"
+    UnexpectedScreening = "unexpected_screening"
+
+
+@derive(Clone)
+pub model HyperquantNomination:
+    """One non-authoritative ranked record-revision reference emitted by HyperQuant."""
+
+    pub record_reference: str
+    pub rank: int
+    pub relevance_bps: int
+
+
+@derive(Clone)
+pub model PolicyScreening:
+    """One policy-owned outcome that the adapter carries without interpreting it."""
+
+    pub record_reference: str
+    pub outcome: ScreeningOutcome
+    pub reason: str
+
+
+@derive(Clone)
+pub model HyperquantRun:
+    """Immutable HyperQuant candidate run, including the exact profile that produced it."""
+
+    pub profile: QuantProfile
+    pub provider_run_fingerprint: str
+    pub nominations: list[HyperquantNomination]
+
+
+pub def adapt_hyperquant_run(
+    run: HyperquantRun,
+    expected_profile: QuantProfile,
+    revisions: list[RecordRevision],
+    screenings: list[PolicyScreening],
+) -> Result[Quant, HyperquantAdapterError]:
+    """Create a loaded Quant only from a complete, profile-compatible HyperQuant run."""
+    if run.provider_run_fingerprint == "":
+        return Err(HyperquantAdapterError.EmptyRunFingerprint)
+    if not _profiles_match(run.profile, expected_profile):
+        return Err(HyperquantAdapterError.ProfileMismatch)
+
+    mut candidates: list[RetrievalCandidate] = []
+    mut nominated_references: list[str] = []
+    mut expected_rank = 0
+    for nomination in run.nominations:
+        if nomination.rank != expected_rank:
+            return Err(HyperquantAdapterError.InvalidRank)
+        if nomination.relevance_bps < 0 or nomination.relevance_bps > 10000:
+            return Err(HyperquantAdapterError.InvalidRelevance)
+        if nomination.record_reference in nominated_references:
+            return Err(HyperquantAdapterError.DuplicateNomination)
+
+        revision = _revision_for_reference(revisions, nomination.record_reference)
+        match revision:
+            Some(resolved_revision) =>
+                if resolved_revision.family != expected_profile.candidate_family:
+                    return Err(HyperquantAdapterError.WrongRecordFamily)
+                screening = _screening_for_reference(screenings, nomination.record_reference)
+                match screening:
+                    Some(policy_screening) =>
+                        candidates.append(
+                            RetrievalCandidate(
+                                revision=resolved_revision,
+                                rank=nomination.rank,
+                                relevance_bps=nomination.relevance_bps,
+                                screening=policy_screening.outcome,
+                                screening_reason=policy_screening.reason,
+                            ),
+                        )
+                    None => return Err(HyperquantAdapterError.MissingScreening)
+            None => return Err(HyperquantAdapterError.MissingRevision)
+
+        nominated_references.append(nomination.record_reference)
+        expected_rank = expected_rank + 1
+
+    mut screened_references: list[str] = []
+    for screening in screenings:
+        if screening.record_reference not in nominated_references:
+            return Err(HyperquantAdapterError.UnexpectedScreening)
+        if screening.record_reference in screened_references:
+            return Err(HyperquantAdapterError.DuplicateScreening)
+        screened_references.append(screening.record_reference)
+
+    return Ok(
+        Quant(profile=expected_profile, provider_run_fingerprint=run.provider_run_fingerprint, candidates=candidates),
+    )
+
+
+def _profiles_match(left: QuantProfile, right: QuantProfile) -> bool:
+    """Require exact identity agreement before reusing a run through another active Quant."""
+    return (
+        left.quant_id == right.quant_id
+        and left.corpus_revision == right.corpus_revision
+        and left.model_identity == right.model_identity
+        and left.vector_space_identity == right.vector_space_identity
+        and left.index_identity == right.index_identity
+        and left.candidate_family == right.candidate_family
+    )
+
+
+def _revision_for_reference(revisions: list[RecordRevision], reference: str) -> Option[RecordRevision]:
+    """Resolve one exact immutable revision reference without falling back to the latest revision."""
+    for revision in revisions:
+        if revision.reference() == reference:
+            return Some(revision)
+    return None
+
+
+def _screening_for_reference(screenings: list[PolicyScreening], reference: str) -> Option[PolicyScreening]:
+    """Resolve one policy-owned outcome by exact record revision reference."""
+    for screening in screenings:
+        if screening.record_reference == reference:
+            return Some(screening)
+    return None
