@@ -85,7 +85,7 @@ jobs:
 
       - name: Cache Incan release toolchain
         id: toolchain-cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/incan-toolchain
           key: incql-incan-release-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_TAG }}
@@ -128,7 +128,8 @@ jobs:
           echo "INCAN_STDLIB_DIR=$stdlib" >> "$GITHUB_ENV"
 
       - name: Cache generated IncQL Cargo artifacts
-        uses: actions/cache@v4
+        id: generated-cargo-cache
+        uses: actions/cache/restore@v4
         with:
           path: .incan-generated-cargo-target
           key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
@@ -136,7 +137,8 @@ jobs:
             incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-
 
       - name: Cache generated IncQL Rust metadata
-        uses: actions/cache@v4
+        id: rust-inspect-cache
+        uses: actions/cache/restore@v4
         with:
           path: |
             target/incan_lock/rust_inspect/**/Cargo.toml
@@ -156,7 +158,8 @@ jobs:
       # the stdlib hashing components. Keyed on the lock, mirroring Incan's own
       # `incan-oven-pr-sources` cache.
       - name: Cache Cargo registry for Oven extension sources
-        uses: actions/cache@v4
+        id: oven-sources-cache
+        uses: actions/cache/restore@v4
         with:
           path: |
             ~/.cargo/registry
@@ -268,3 +271,48 @@ jobs:
 
       - name: Pub consumer smoke check
         run: make smoke-consumer
+
+      # `actions/cache` only saves when the job succeeds. Every cache above was
+      # therefore never written while this workflow was red: the repository held
+      # two caches, both from the docs workflow, so each run re-downloaded the
+      # toolchain, re-fetched 220 registry crates, and re-ran the rust-analyzer
+      # inspection that is ~62% of a cold bake. Saving on `always()` decouples
+      # "was this run green" from "is this artifact reusable" — the inputs a
+      # cache key names have not changed just because a later step failed.
+
+      - name: Save cache — Incan release toolchain
+        if: always() && steps.toolchain-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ runner.temp }}/incan-toolchain
+          key: incql-incan-release-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_TAG }}
+
+      - name: Save cache — generated IncQL Cargo artifacts
+        if: always() && steps.generated-cargo-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .incan-generated-cargo-target
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+
+      - name: Save cache — generated IncQL Rust metadata
+        if: always() && steps.rust-inspect-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            target/incan_lock/rust_inspect/**/Cargo.toml
+            target/incan_lock/rust_inspect/**/Cargo.lock
+            target/incan_lock/rust_inspect/**/src/main.rs
+            target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
+            target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+
+      - name: Save cache — Cargo registry for Oven extension sources
+        if: always() && steps.oven-sources-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
