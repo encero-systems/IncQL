@@ -213,11 +213,28 @@ jobs:
           rm -rf .incan target/incan_lock target/incan
           # The store is in INCAN_HOME, not the project, so the line above does
           # not touch it. Staging capacity for the real bake is the store limit
-          # minus what is already retained, so anything the warm-up sealed comes
-          # straight off the budget the real bake needs.
-          incan oven store prune --max-physical-bytes 0 \
-            --max-domain-physical-bytes 0 --max-domain-logical-bytes 0 \
-            || echo "Nothing to prune from the Oven store."
+          # minus what is already retained (`transient_limit_bytes` in Incan's
+          # `src/oven/store.rs`), so toolchain-install leftovers come straight
+          # off the budget the real bake needs for its ~3.4 GiB unified Cargo
+          # staging directory.
+          #
+          # The floor is 1, not 0: `incan oven store prune` rejects a zero
+          # policy outright ("Oven storage policy limits must be greater than
+          # zero"), so a 0 here reclaims nothing at all. Print the store both
+          # sides of the prune, and surface the exit status rather than hiding
+          # it behind `||` — a prune that silently does nothing looks exactly
+          # like a prune that worked, and the bake then fails an hour later
+          # with an allowance nobody can account for.
+          echo "--- Oven store before prune ---"
+          incan oven store inspect || true
+          if incan oven store prune --max-physical-bytes 1 \
+            --max-domain-physical-bytes 1 --max-domain-logical-bytes 1; then
+            echo "Pruned the Oven store."
+          else
+            echo "::warning::Oven store prune exited non-zero; the bake may be short on staging capacity."
+          fi
+          echo "--- Oven store after prune ---"
+          incan oven store inspect || true
 
       - name: Show toolchain
         run: |
