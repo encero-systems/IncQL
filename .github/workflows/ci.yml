@@ -1,21 +1,28 @@
 # IncQL CI — Incan library package
 #
-# Installs the pinned Incan **release** toolchain and runs the IncQL package
-# checks against it.
+# Builds the pinned Incan compiler from source, packages it the way Incan's own
+# release workflow does, and runs the IncQL package checks against that
+# toolchain.
 #
-# Why the release archive rather than a source build: since Incan 0.5, a project
-# that declares a `[vocab]` companion (IncQL does — see `incan.toml`) needs a
-# compiler-owned vocabulary helper drawn from a release-cohort Oven Loaf. Those
-# Loafs are sealed into the release archive by Incan's packaging and are *not*
-# produced by `cargo build` on a source checkout, so a from-source compiler
-# cannot build this package at all.
+# Why a source build rather than a release archive: IncQL tracks Incan's 0.6
+# development line, whose versions are branches (`0.6.0-dev.<slice>[.<n>]`),
+# not tagged releases, so there is no archive to download. INCAN_REF names one
+# commit on that line. The packaged toolchain is cached under that commit, so
+# the build is paid once per pin and per host, not once per run.
 #
-# Why an Incan checkout is still needed: the release archive deliberately drops
-# the stdlib component sources (`crates/incan_stdlib/stdlib`). `incan tools
-# metadata api`, used by the registry-metadata gate, prepares SDK components
-# from that tree. So CI takes the binary and its Loafs from the release, and the
-# stdlib sources from a checkout at the matching tag, wired up via INCAN_STDLIB.
-# Nothing is compiled from the checkout.
+# Why the release packaging script rather than `cargo build` alone: since Incan
+# 0.5, a project that declares a `[vocab]` companion (IncQL does — see
+# `incan.toml`) needs a compiler-owned vocabulary helper drawn from a
+# release-cohort Oven Loaf. A bare `cargo build` produces no Loafs. Incan's
+# `workspaces/release/toolchain/package_archive.sh` seals them beside the
+# binary (`share/incan/oven/loafs`), where the compiler looks for them, along
+# with the SDK provider seed and the support crates. Running that script here
+# gives CI the same layout an installed release has.
+#
+# Why the checkout stays on the job after the build: the packaged toolchain
+# deliberately drops the stdlib component sources (`crates/incan_stdlib/stdlib`).
+# `incan tools metadata api`, used by the registry-metadata gate, prepares SDK
+# components from that tree, so INCAN_STDLIB points at the checkout.
 
 name: CI
 
@@ -32,19 +39,27 @@ concurrency:
 
 env:
   CARGO_TERM_COLOR: always
-  # Pinned Incan release. INCAN_TAG selects both the toolchain archive and the
-  # stdlib-source checkout; the two must always name the same release.
-  INCAN_TAG: v0.5.1
-  EXPECTED_INCAN_VERSION: 0.5.1
-  # The release Loafs are sealed against an exact `rustc --version` identity and
-  # are verified against it, so this must name a concrete version. A floating
-  # `stable` channel drifts out from under the release the moment upstream
-  # publishes a new compiler.
+  # Pinned Incan commit on the 0.6 development line. Dev versions are branches,
+  # so a branch name would drift under the pin; keep this a full commit SHA and
+  # keep it in every compiler-dependent cache key, because several commits can
+  # share one version string.
+  INCAN_REF: d75668423c1bcb5fe228f5932964dcc997d13ac5
+  EXPECTED_INCAN_VERSION: 0.6.0-dev.1.2
+  # The Loafs the packaging step seals bind to the exact `rustc --version` that
+  # sealed them and are verified against it, so this must name a concrete
+  # version. A floating `stable` channel drifts out from under the cached
+  # toolchain the moment upstream publishes a new compiler.
   RUST_VERSION: 1.98.0
   RUST_BACKTRACE: 1
   INCAN_NO_BANNER: 1
   INCAN_GENERATED_CARGO_TARGET_DIR: ${{ github.workspace }}/.incan-generated-cargo-target
   INCAN_TEST_SHARED_TARGET_DIR: ${{ github.workspace }}/.incan-generated-cargo-target
+  # `oven bake` materializes debug and release unless told otherwise. `make ci`
+  # builds and tests debug only, and the release half was ~77% of compiler time
+  # for artifacts nothing here loads. Workflow-wide on purpose: `build` verifies
+  # the inspection authority across the profile set the bake produced, so a
+  # bake-only setting leaves the consumers disagreeing with the bake.
+  INCAN_OVEN_BAKE_PROFILES: debug
 
 jobs:
   incql:
@@ -63,12 +78,13 @@ jobs:
       - name: Check out IncQL
         uses: actions/checkout@v4
 
-      # Checked out for its stdlib component sources only — never built here.
-      - name: Check out Incan stdlib sources
+      # The compiler source at the pinned commit: built only on a toolchain
+      # cache miss, always used for its stdlib component sources.
+      - name: Check out Incan
         uses: actions/checkout@v4
         with:
           repository: encero-systems/incan
-          ref: ${{ env.INCAN_TAG }}
+          ref: ${{ env.INCAN_REF }}
           path: incan
 
       # `targets` is not optional here: IncQL declares a `[vocab]` companion, and
@@ -83,45 +99,56 @@ jobs:
           targets: wasm32-wasip1
           components: llvm-tools
 
-      - name: Cache Incan release toolchain
+      - name: Cache Incan toolchain
         id: toolchain-cache
         uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/incan-toolchain
-          key: incql-incan-release-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_TAG }}
+          key: incql-incan-source-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}
 
-      - name: Install Incan release toolchain
+      # Same commands as Incan's toolchain release workflow, minus its
+      # cross-target build: the packaging script takes host binaries, and this
+      # job only ever packages for the host it runs on. No Cargo build cache is
+      # kept for this step on purpose: the packaged toolchain itself is cached
+      # under the pinned commit, so this runs once per pin and per host.
+      - name: Build and package Incan from source
         if: steps.toolchain-cache.outputs.cache-hit != 'true'
+        working-directory: incan
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET: ${{ matrix.target }}
         run: |
           set -euo pipefail
-          archive="incan-${INCAN_TAG}-${{ matrix.target }}.tar.gz"
-          workdir="$(mktemp -d)"
-          gh release download "$INCAN_TAG" \
-            --repo encero-systems/incan \
-            --pattern "$archive" \
-            --pattern "$archive.sha256" \
-            --dir "$workdir"
-          # The published .sha256 holds a bare digest, so compare it directly
-          # rather than feeding it to `shasum -c`, which wants "digest  name".
-          expected="$(tr -d '[:space:]' < "$workdir/$archive.sha256")"
-          actual="$(shasum -a 256 "$workdir/$archive" | awk '{ print $1 }')"
-          if [ "$expected" != "$actual" ]; then
-            echo "::error::Incan archive checksum mismatch (expected $expected, got $actual)"
+          cargo build --locked --release --features lsp --bin incan --bin incan-lsp
+          # package_archive.sh resolves its support workspace with
+          # `cargo metadata --offline`; warm the registry while network access
+          # is still expected, exactly as the release workflow does.
+          workspaces/release/toolchain/fetch_release_support_workspace_sources.sh
+          package_dir="${RUNNER_TEMP}/incan-package"
+          INCAN_BIN=target/release/incan \
+          INCAN_LSP_BIN=target/release/incan-lsp \
+          TOOLCHAIN_RELEASE="v${EXPECTED_INCAN_VERSION}" \
+            workspaces/release/toolchain/package_archive.sh "${TARGET}" --out-dir "${package_dir}"
+          # The packaging records which rustc sealed the Loafs. A toolchain whose
+          # Loafs the job's own rustc would reject is not worth caching.
+          sealed="$(tr -d '[:space:]' < "${package_dir}/rust-channel-${TARGET}.txt")"
+          if [ "${sealed}" != "${RUST_VERSION}" ]; then
+            echo "::error::Oven Loafs were sealed by rustc ${sealed}, but this job pins ${RUST_VERSION}"
             exit 1
           fi
-          mkdir -p "${{ runner.temp }}/incan-toolchain"
-          tar -xzf "$workdir/$archive" -C "${{ runner.temp }}/incan-toolchain"
-          rm -rf "$workdir"
+          mkdir -p "${RUNNER_TEMP}/incan-toolchain"
+          tar -xzf "${package_dir}/incan-v${EXPECTED_INCAN_VERSION}-${TARGET}.tar.gz" \
+            -C "${RUNNER_TEMP}/incan-toolchain"
+          # Reclaim the compiler build tree before the IncQL bake stages its own
+          # multi-GiB unified Cargo directory; nothing below reads it.
+          rm -rf "${package_dir}" target
 
       - name: Expose Incan on PATH
         run: |
           set -euo pipefail
           echo "${{ runner.temp }}/incan-toolchain/bin" >> "$GITHUB_PATH"
-          # The release archive ships no stdlib component sources; point the
-          # toolchain at the matching checkout so SDK component preparation
-          # (used by `incan tools metadata api`) can resolve them.
+          # The packaged toolchain ships no stdlib component sources; point it
+          # at the checkout so SDK component preparation (used by
+          # `incan tools metadata api`) can resolve them.
           stdlib="${{ github.workspace }}/incan/crates/incan_stdlib/stdlib"
           test -d "$stdlib" || { echo "::error::stdlib sources missing at $stdlib"; exit 1; }
           echo "INCAN_STDLIB=$stdlib" >> "$GITHUB_ENV"
@@ -132,10 +159,14 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .incan-generated-cargo-target
-          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
           restore-keys: |
-            incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-
+            incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-
 
+      # Keyed on the lock and manifest only. Incan's own cache fingerprint hashes
+      # the generated `Cargo.toml`/`Cargo.lock` and local path dependencies, not
+      # `.incn` sources, so a key that also hashed the sources forced a
+      # `restore-keys` fallback on every edit for no gain.
       - name: Cache generated IncQL Rust metadata
         id: rust-inspect-cache
         uses: actions/cache/restore@v4
@@ -146,12 +177,11 @@ jobs:
             target/incan_lock/rust_inspect/**/src/main.rs
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
-          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
           restore-keys: |
-            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
-            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
+            incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
 
-      # The release archive vendors only Incan's own crates by design; a
+      # The packaged toolchain vendors only Incan's own crates by design; a
       # project's extension dependencies build from the consumer's `~/.cargo`,
       # resolved `--offline` by the Oven publisher. On a cold runner that fails
       # on the first extension crate it needs — for IncQL, `blake2`, pulled in by
@@ -164,10 +194,27 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
           restore-keys: |
-            incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-
+            incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
             incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-
+
+      # The Oven store holds the sealed Loafs a bake produces: the project's
+      # own and its dependency closure's. Loaf entries are immutable and
+      # content-addressed, so a restored store lets `oven bake` reuse every
+      # Loaf whose inputs did not change — the single largest saving available
+      # to this job, measured locally at seconds against minutes cold. The key
+      # hashes the sources because the project Loaf depends on them; the
+      # fallbacks still hand a source edit its dependency Loafs.
+      - name: Cache Oven store
+        id: oven-store-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.incan/oven/store
+          key: incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          restore-keys: |
+            incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
+            incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-
 
       # One online fetch before the bake, so a cold runner degrades to a slow
       # run rather than an aborted bake. `incan.lock` already names every
@@ -262,10 +309,6 @@ jobs:
       - name: Build library
         run: make build
 
-      # Known red: blocked upstream on encero-systems/incan#1189 — `incan test`
-      # cannot reconcile project inspection sources for a package whose Rust
-      # dependency closure requires unified Cargo resolution, which IncQL's
-      # datafusion/substrait closure does. Remove this comment when that lands.
       - name: Run tests
         run: make test
 
@@ -280,13 +323,13 @@ jobs:
       # "was this run green" from "is this artifact reusable" — the inputs a
       # cache key names have not changed just because a later step failed.
 
-      - name: Save cache — Incan release toolchain
+      - name: Save cache — Incan toolchain
         if: always() && steps.toolchain-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: |
             ${{ runner.temp }}/incan-toolchain
-          key: incql-incan-release-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_TAG }}
+          key: incql-incan-source-${{ runner.os }}-${{ matrix.target }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}
 
       - name: Save cache — generated IncQL Cargo artifacts
         if: always() && steps.generated-cargo-cache.outputs.cache-hit != 'true'
@@ -294,7 +337,7 @@ jobs:
         with:
           path: |
             .incan-generated-cargo-target
-          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
 
       - name: Save cache — generated IncQL Rust metadata
         if: always() && steps.rust-inspect-cache.outputs.cache-hit != 'true'
@@ -306,7 +349,7 @@ jobs:
             target/incan_lock/rust_inspect/**/src/main.rs
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
-          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
 
       - name: Save cache — Cargo registry for Oven extension sources
         if: always() && steps.oven-sources-cache.outputs.cache-hit != 'true'
@@ -315,4 +358,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+
+      - name: Save cache — Oven store
+        if: always() && steps.oven-store-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.incan/oven/store
+          key: incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
