@@ -249,6 +249,7 @@ jobs:
             echo "Bake succeeded during warm-up; registry was already populated."
             echo "--- Oven store after the warm-up bake ---"
             incan oven store inspect || true
+            python3 scripts/ci_oven_store_dump.py . || true
             exit 0
           fi
           echo "Bake could not resolve offline. Fetching what it generated."
@@ -305,9 +306,11 @@ jobs:
       - name: Bake Oven project authority
         run: |
           set -euo pipefail
-          make bake
+          make bake || bake_status=$?
           echo "--- Oven store after the bake ---"
           incan oven store inspect || true
+          python3 scripts/ci_oven_store_dump.py . || true
+          exit "${bake_status:-0}"
 
       - name: Function registry metadata check
         run: make registry-metadata
