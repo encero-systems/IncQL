@@ -110,21 +110,17 @@ pub def field_ref_expr(index: int) -> Expression:
     return Expression(
         rex_type=Some(
             RexType.Selection(
-                Box.new(
-                    FieldReference(
-                        reference_type=Some(
-                            FieldReferenceType.DirectReference(
-                                ReferenceSegment(
-                                    reference_type=Some(
-                                        SegmentReferenceType.StructField(
-                                            Box.new(StructField(field=to_rust_i32(index), child=None)),
-                                        ),
-                                    ),
+                FieldReference(
+                    reference_type=Some(
+                        FieldReferenceType.DirectReference(
+                            ReferenceSegment(
+                                reference_type=Some(
+                                    SegmentReferenceType.StructField(StructField(field=to_rust_i32(index), child=None)),
                                 ),
                             ),
                         ),
-                        root_type=Some(RootType.RootReference(RootReference())),
                     ),
+                    root_type=Some(RootType.RootReference(RootReference())),
                 ),
             ),
         ),
@@ -178,9 +174,7 @@ def _cast_expr(input: Expression, target_type: Type, failure_behavior: FailureBe
     return Expression(
         rex_type=Some(
             RexType.Cast(
-                Box.new(
-                    Cast(type=Some(target_type), input=Some(Box.new(input)), failure_behavior=failure_behavior.into()),
-                ),
+                Cast(type=Some(target_type), input=Some(Box.new(input)), failure_behavior=failure_behavior.into()),
             ),
         ),
     )
@@ -188,14 +182,12 @@ def _cast_expr(input: Expression, target_type: Type, failure_behavior: FailureBe
 
 def _singular_or_list_expr(value: Expression, options: list[Expression]) -> Expression:
     """Build one Substrait SingularOrList Rex expression for membership predicates."""
-    return Expression(
-        rex_type=Some(RexType.SingularOrList(Box.new(SingularOrList(value=Some(Box.new(value)), options=options)))),
-    )
+    return Expression(rex_type=Some(RexType.SingularOrList(SingularOrList(value=Some(Box.new(value)), options=options))))
 
 
 def _if_then_expr(ifs: list[IfClause], otherwise: Expression) -> Expression:
     """Build one Substrait IfThen Rex expression for searched case expressions."""
-    return Expression(rex_type=Some(RexType.IfThen(Box.new(IfThen(ifs=ifs, else=Some(Box.new(otherwise)))))))
+    return Expression(rex_type=Some(RexType.IfThen(IfThen(ifs=ifs, else=Some(Box.new(otherwise))))))
 
 
 def _if_clause(condition: Expression, result: Expression) -> IfClause:

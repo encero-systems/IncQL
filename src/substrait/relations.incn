@@ -180,47 +180,47 @@ def _direct_common() -> RelCommon:
 
 def _rel_read(read: ReadRel) -> Rel:
     """Wrap ReadRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Read(Box.new(read))))
+    return Rel(rel_type=Some(RelType.Read(read)))
 
 
 def _rel_filter(filter: FilterRel) -> Rel:
     """Wrap FilterRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Filter(Box.new(filter))))
+    return Rel(rel_type=Some(RelType.Filter(filter)))
 
 
 def _rel_project(project: ProjectRel) -> Rel:
     """Wrap ProjectRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Project(Box.new(project))))
+    return Rel(rel_type=Some(RelType.Project(project)))
 
 
 def _rel_join(join: JoinRel) -> Rel:
     """Wrap JoinRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Join(Box.new(join))))
+    return Rel(rel_type=Some(RelType.Join(join)))
 
 
 def _rel_cross(cross: CrossRel) -> Rel:
     """Wrap CrossRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Cross(Box.new(cross))))
+    return Rel(rel_type=Some(RelType.Cross(cross)))
 
 
 def _rel_aggregate(aggregate: AggregateRel) -> Rel:
     """Wrap AggregateRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Aggregate(Box.new(aggregate))))
+    return Rel(rel_type=Some(RelType.Aggregate(aggregate)))
 
 
 def _rel_window(window: ConsistentPartitionWindowRel) -> Rel:
     """Wrap ConsistentPartitionWindowRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Window(Box.new(window))))
+    return Rel(rel_type=Some(RelType.Window(window)))
 
 
 def _rel_sort(sort: SortRel) -> Rel:
     """Wrap SortRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Sort(Box.new(sort))))
+    return Rel(rel_type=Some(RelType.Sort(sort)))
 
 
 def _rel_fetch(fetch: FetchRel) -> Rel:
     """Wrap FetchRel payload into one generic Rel union value."""
-    return Rel(rel_type=Some(RelType.Fetch(Box.new(fetch))))
+    return Rel(rel_type=Some(RelType.Fetch(fetch)))
 
 
 def _rel_set(set_rel: SetRel) -> Rel:
@@ -237,14 +237,14 @@ def _rel_extension_single(input: Rel, extension_uri: str) -> Rel:
     """Wrap one input relation in an ExtensionSingleRel with the provided URI."""
     detail = Any(type_url=extension_uri, value=b"")
     rel = ExtensionSingleRel(common=Some(_direct_common()), input=Some(Box.new(input)), detail=Some(detail))
-    return Rel(rel_type=Some(RelType.ExtensionSingle(Box.new(rel))))
+    return Rel(rel_type=Some(RelType.ExtensionSingle(rel)))
 
 
 def _rel_extension_single_with_payload(input: Rel, extension_uri: str, payload: bytes) -> Rel:
     """Wrap one input relation in an ExtensionSingleRel with relation-extension payload bytes."""
     detail = Any(type_url=extension_uri, value=payload)
     rel = ExtensionSingleRel(common=Some(_direct_common()), input=Some(Box.new(input)), detail=Some(detail))
-    return Rel(rel_type=Some(RelType.ExtensionSingle(Box.new(rel))))
+    return Rel(rel_type=Some(RelType.ExtensionSingle(rel)))
 
 
 def _join_type_from_kind(kind: SubstraitJoinKind) -> RustI32:
@@ -1234,8 +1234,8 @@ pub def fetch_rel(input: Rel, offset: int, count: int) -> Rel:
             common=Some(_direct_common()),
             input=Some(Box.new(input)),
             advanced_extension=None,
-            offset_mode=Some(OffsetMode.OffsetExpr(Box.new(i64_expr(offset)))),
-            count_mode=Some(CountMode.CountExpr(Box.new(i64_expr(count)))),
+            offset_mode=Some(OffsetMode.OffsetExpr(i64_expr(offset))),
+            count_mode=Some(CountMode.CountExpr(i64_expr(count))),
         ),
     )
 

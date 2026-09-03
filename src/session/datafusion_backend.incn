@@ -575,13 +575,11 @@ def _replace_filter_generator_child(original: Rel, filter: FilterRel, path: str)
             return Rel(
                 rel_type=Some(
                     RelType.Filter(
-                        Box.new(
-                            FilterRel(
-                                common=filter.common,
-                                input=Some(_rewritten_generator_child(child, f"{path}_filter")),
-                                condition=filter.condition,
-                                advanced_extension=filter.advanced_extension,
-                            ),
+                        FilterRel(
+                            common=filter.common,
+                            input=Some(_rewritten_generator_child(child, f"{path}_filter")),
+                            condition=filter.condition,
+                            advanced_extension=filter.advanced_extension,
                         ),
                     ),
                 ),
@@ -596,13 +594,11 @@ def _replace_project_generator_child(original: Rel, project: ProjectRel, path: s
             return Rel(
                 rel_type=Some(
                     RelType.Project(
-                        Box.new(
-                            ProjectRel(
-                                common=project.common,
-                                input=Some(_rewritten_generator_child(child, f"{path}_project")),
-                                expressions=project.expressions,
-                                advanced_extension=project.advanced_extension,
-                            ),
+                        ProjectRel(
+                            common=project.common,
+                            input=Some(_rewritten_generator_child(child, f"{path}_project")),
+                            expressions=project.expressions,
+                            advanced_extension=project.advanced_extension,
                         ),
                     ),
                 ),
@@ -621,16 +617,14 @@ def _replace_join_generator_children(join: JoinRel, path: str) -> Rel:
     return Rel(
         rel_type=Some(
             RelType.Join(
-                Box.new(
-                    JoinRel(
-                        common=join.common,
-                        left=left,
-                        right=right,
-                        expression=join.expression,
-                        post_join_filter=join.post_join_filter,
-                        type=join.type,
-                        advanced_extension=join.advanced_extension,
-                    ),
+                JoinRel(
+                    common=join.common,
+                    left=left,
+                    right=right,
+                    expression=join.expression,
+                    post_join_filter=join.post_join_filter,
+                    type=join.type,
+                    advanced_extension=join.advanced_extension,
                 ),
             ),
         ),
@@ -648,9 +642,7 @@ def _replace_cross_generator_children(cross: CrossRel, path: str) -> Rel:
     return Rel(
         rel_type=Some(
             RelType.Cross(
-                Box.new(
-                    CrossRel(common=cross.common, left=left, right=right, advanced_extension=cross.advanced_extension),
-                ),
+                CrossRel(common=cross.common, left=left, right=right, advanced_extension=cross.advanced_extension),
             ),
         ),
     )
@@ -663,15 +655,13 @@ def _replace_aggregate_generator_child(original: Rel, aggregate: AggregateRel, p
             return Rel(
                 rel_type=Some(
                     RelType.Aggregate(
-                        Box.new(
-                            AggregateRel(
-                                common=aggregate.common,
-                                input=Some(_rewritten_generator_child(child, f"{path}_aggregate")),
-                                groupings=aggregate.groupings,
-                                measures=aggregate.measures,
-                                grouping_expressions=aggregate.grouping_expressions,
-                                advanced_extension=aggregate.advanced_extension,
-                            ),
+                        AggregateRel(
+                            common=aggregate.common,
+                            input=Some(_rewritten_generator_child(child, f"{path}_aggregate")),
+                            groupings=aggregate.groupings,
+                            measures=aggregate.measures,
+                            grouping_expressions=aggregate.grouping_expressions,
+                            advanced_extension=aggregate.advanced_extension,
                         ),
                     ),
                 ),
@@ -686,13 +676,11 @@ def _replace_sort_generator_child(original: Rel, sort: SortRel, path: str) -> Re
             return Rel(
                 rel_type=Some(
                     RelType.Sort(
-                        Box.new(
-                            SortRel(
-                                common=sort.common,
-                                input=Some(_rewritten_generator_child(child, f"{path}_sort")),
-                                sorts=sort.sorts,
-                                advanced_extension=sort.advanced_extension,
-                            ),
+                        SortRel(
+                            common=sort.common,
+                            input=Some(_rewritten_generator_child(child, f"{path}_sort")),
+                            sorts=sort.sorts,
+                            advanced_extension=sort.advanced_extension,
                         ),
                     ),
                 ),
@@ -707,14 +695,12 @@ def _replace_fetch_generator_child(original: Rel, fetch: FetchRel, path: str) ->
             return Rel(
                 rel_type=Some(
                     RelType.Fetch(
-                        Box.new(
-                            FetchRel(
-                                common=fetch.common,
-                                input=Some(_rewritten_generator_child(child, f"{path}_fetch")),
-                                advanced_extension=fetch.advanced_extension,
-                                offset_mode=fetch.offset_mode,
-                                count_mode=fetch.count_mode,
-                            ),
+                        FetchRel(
+                            common=fetch.common,
+                            input=Some(_rewritten_generator_child(child, f"{path}_fetch")),
+                            advanced_extension=fetch.advanced_extension,
+                            offset_mode=fetch.offset_mode,
+                            count_mode=fetch.count_mode,
                         ),
                     ),
                 ),
@@ -733,7 +719,7 @@ def _replace_window_generator_child(original: Rel, window: ConsistentPartitionWi
             sorts=window.sorts,
             advanced_extension=window.advanced_extension,
         )
-        return Rel(rel_type=Some(RelType.Window(Box.new(rewritten_window))))
+        return Rel(rel_type=Some(RelType.Window(rewritten_window)))
     return original
 
 
@@ -767,12 +753,10 @@ def _replace_extension_generator_child(original: Rel, extension: ExtensionSingle
             return Rel(
                 rel_type=Some(
                     RelType.ExtensionSingle(
-                        Box.new(
-                            ExtensionSingleRel(
-                                common=extension.common,
-                                input=Some(_rewritten_generator_child(child, f"{path}_extension")),
-                                detail=extension.detail,
-                            ),
+                        ExtensionSingleRel(
+                            common=extension.common,
+                            input=Some(_rewritten_generator_child(child, f"{path}_extension")),
+                            detail=extension.detail,
                         ),
                     ),
                 ),
@@ -856,13 +840,11 @@ def _replace_filter_window_child(original: Rel, filter: FilterRel, path: str) ->
             return Rel(
                 rel_type=Some(
                     RelType.Filter(
-                        Box.new(
-                            FilterRel(
-                                common=filter.common,
-                                input=Some(_rewritten_window_child(child, f"{path}_filter")),
-                                condition=filter.condition,
-                                advanced_extension=filter.advanced_extension,
-                            ),
+                        FilterRel(
+                            common=filter.common,
+                            input=Some(_rewritten_window_child(child, f"{path}_filter")),
+                            condition=filter.condition,
+                            advanced_extension=filter.advanced_extension,
                         ),
                     ),
                 ),
@@ -877,13 +859,11 @@ def _replace_project_window_child(original: Rel, project: ProjectRel, path: str)
             return Rel(
                 rel_type=Some(
                     RelType.Project(
-                        Box.new(
-                            ProjectRel(
-                                common=project.common,
-                                input=Some(_rewritten_window_child(child, f"{path}_project")),
-                                expressions=project.expressions,
-                                advanced_extension=project.advanced_extension,
-                            ),
+                        ProjectRel(
+                            common=project.common,
+                            input=Some(_rewritten_window_child(child, f"{path}_project")),
+                            expressions=project.expressions,
+                            advanced_extension=project.advanced_extension,
                         ),
                     ),
                 ),
@@ -902,16 +882,14 @@ def _replace_join_window_children(join: JoinRel, path: str) -> Rel:
     return Rel(
         rel_type=Some(
             RelType.Join(
-                Box.new(
-                    JoinRel(
-                        common=join.common,
-                        left=left,
-                        right=right,
-                        expression=join.expression,
-                        post_join_filter=join.post_join_filter,
-                        type=join.type,
-                        advanced_extension=join.advanced_extension,
-                    ),
+                JoinRel(
+                    common=join.common,
+                    left=left,
+                    right=right,
+                    expression=join.expression,
+                    post_join_filter=join.post_join_filter,
+                    type=join.type,
+                    advanced_extension=join.advanced_extension,
                 ),
             ),
         ),
@@ -929,9 +907,7 @@ def _replace_cross_window_children(cross: CrossRel, path: str) -> Rel:
     return Rel(
         rel_type=Some(
             RelType.Cross(
-                Box.new(
-                    CrossRel(common=cross.common, left=left, right=right, advanced_extension=cross.advanced_extension),
-                ),
+                CrossRel(common=cross.common, left=left, right=right, advanced_extension=cross.advanced_extension),
             ),
         ),
     )
@@ -944,15 +920,13 @@ def _replace_aggregate_window_child(original: Rel, aggregate: AggregateRel, path
             return Rel(
                 rel_type=Some(
                     RelType.Aggregate(
-                        Box.new(
-                            AggregateRel(
-                                common=aggregate.common,
-                                input=Some(_rewritten_window_child(child, f"{path}_aggregate")),
-                                groupings=aggregate.groupings,
-                                measures=aggregate.measures,
-                                grouping_expressions=aggregate.grouping_expressions,
-                                advanced_extension=aggregate.advanced_extension,
-                            ),
+                        AggregateRel(
+                            common=aggregate.common,
+                            input=Some(_rewritten_window_child(child, f"{path}_aggregate")),
+                            groupings=aggregate.groupings,
+                            measures=aggregate.measures,
+                            grouping_expressions=aggregate.grouping_expressions,
+                            advanced_extension=aggregate.advanced_extension,
                         ),
                     ),
                 ),
@@ -967,13 +941,11 @@ def _replace_sort_window_child(original: Rel, sort: SortRel, path: str) -> Rel:
             return Rel(
                 rel_type=Some(
                     RelType.Sort(
-                        Box.new(
-                            SortRel(
-                                common=sort.common,
-                                input=Some(_rewritten_window_child(child, f"{path}_sort")),
-                                sorts=sort.sorts,
-                                advanced_extension=sort.advanced_extension,
-                            ),
+                        SortRel(
+                            common=sort.common,
+                            input=Some(_rewritten_window_child(child, f"{path}_sort")),
+                            sorts=sort.sorts,
+                            advanced_extension=sort.advanced_extension,
                         ),
                     ),
                 ),
@@ -988,14 +960,12 @@ def _replace_fetch_window_child(original: Rel, fetch: FetchRel, path: str) -> Re
             return Rel(
                 rel_type=Some(
                     RelType.Fetch(
-                        Box.new(
-                            FetchRel(
-                                common=fetch.common,
-                                input=Some(_rewritten_window_child(child, f"{path}_fetch")),
-                                advanced_extension=fetch.advanced_extension,
-                                offset_mode=fetch.offset_mode,
-                                count_mode=fetch.count_mode,
-                            ),
+                        FetchRel(
+                            common=fetch.common,
+                            input=Some(_rewritten_window_child(child, f"{path}_fetch")),
+                            advanced_extension=fetch.advanced_extension,
+                            offset_mode=fetch.offset_mode,
+                            count_mode=fetch.count_mode,
                         ),
                     ),
                 ),
@@ -1033,12 +1003,10 @@ def _replace_extension_window_child(original: Rel, extension: ExtensionSingleRel
             return Rel(
                 rel_type=Some(
                     RelType.ExtensionSingle(
-                        Box.new(
-                            ExtensionSingleRel(
-                                common=extension.common,
-                                input=Some(_rewritten_window_child(child, f"{path}_extension")),
-                                detail=extension.detail,
-                            ),
+                        ExtensionSingleRel(
+                            common=extension.common,
+                            input=Some(_rewritten_window_child(child, f"{path}_extension")),
+                            detail=extension.detail,
                         ),
                     ),
                 ),
@@ -1237,18 +1205,16 @@ def _datafusion_window_expr(
     function_name = window_function_name_from_anchor(window_function.function_reference)
     return Ok(
         DataFusionExpr.WindowFunction(
-            Box.new(
-                DataFusionWindowFunction(
-                    fun=_datafusion_window_function_definition(ctx.clone(), function_name)?,
-                    params=DataFusionWindowFunctionParams(
-                        args=_datafusion_window_arguments(ctx.clone(), window_function.clone(), input_columns.clone())?,
-                        partition_by=[_datafusion_expr(ctx.clone(), expr, input_columns.clone())? for expr in window_rel.partition_expressions],
-                        order_by=[_datafusion_sort(ctx.clone(), sort, input_columns.clone())? for sort in window_rel.sorts],
-                        window_frame=_datafusion_window_frame(window_function, len(window_rel.sorts) > 0)?,
-                        filter=None,
-                        null_treatment=_datafusion_null_treatment(window_function.options),
-                        distinct=_datafusion_window_distinct(window_function.invocation),
-                    ),
+            DataFusionWindowFunction(
+                fun=_datafusion_window_function_definition(ctx.clone(), function_name)?,
+                params=DataFusionWindowFunctionParams(
+                    args=_datafusion_window_arguments(ctx.clone(), window_function.clone(), input_columns.clone())?,
+                    partition_by=[_datafusion_expr(ctx.clone(), expr, input_columns.clone())? for expr in window_rel.partition_expressions],
+                    order_by=[_datafusion_sort(ctx.clone(), sort, input_columns.clone())? for sort in window_rel.sorts],
+                    window_frame=_datafusion_window_frame(window_function, len(window_rel.sorts) > 0)?,
+                    filter=None,
+                    null_treatment=_datafusion_null_treatment(window_function.options),
+                    distinct=_datafusion_window_distinct(window_function.invocation),
                 ),
             ),
         ),
@@ -1377,13 +1343,13 @@ def _datafusion_unary_expr(kind: str, rendered_args: list[DataFusionExpr]) -> Re
     if len(rendered_args) != 1:
         return Err(_unsupported_window_expr(f"{kind} requires one argument"))
     if kind == "not":
-        return Ok(DataFusionExpr.Not(Box.new(rendered_args[0].clone())))
+        return Ok(DataFusionExpr.Not(rendered_args[0].clone()))
     if kind == "negate":
-        return Ok(DataFusionExpr.Negative(Box.new(rendered_args[0].clone())))
+        return Ok(DataFusionExpr.Negative(rendered_args[0].clone()))
     if kind == "is_null":
-        return Ok(DataFusionExpr.IsNull(Box.new(rendered_args[0].clone())))
+        return Ok(DataFusionExpr.IsNull(rendered_args[0].clone()))
     if kind == "is_not_null":
-        return Ok(DataFusionExpr.IsNotNull(Box.new(rendered_args[0].clone())))
+        return Ok(DataFusionExpr.IsNotNull(rendered_args[0].clone()))
     return Err(_unsupported_window_expr(f"unknown unary expression `{kind}`"))
 
 
