@@ -247,6 +247,8 @@ jobs:
           set -euo pipefail
           if make bake; then
             echo "Bake succeeded during warm-up; registry was already populated."
+            echo "--- Oven store after the warm-up bake ---"
+            incan oven store inspect || true
             exit 0
           fi
           echo "Bake could not resolve offline. Fetching what it generated."
@@ -301,7 +303,11 @@ jobs:
 
 
       - name: Bake Oven project authority
-        run: make bake
+        run: |
+          set -euo pipefail
+          make bake
+          echo "--- Oven store after the bake ---"
+          incan oven store inspect || true
 
       - name: Function registry metadata check
         run: make registry-metadata
