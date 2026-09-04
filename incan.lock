@@ -4,7 +4,7 @@
 [incan]
 format = 2
 incan-version = "0.6.0-dev.1.3"
-deps-fingerprint = "sha256:77aa19f4fdc197ca311bc8de6b833962b29d3bc7bbaf7c0176e7938cd35a2a66"
+deps-fingerprint = "sha256:679fd8fb59873537fb8adbc20cb3bf21354c43978419a45c6ef0582108e57bd0"
 cargo-features = []
 cargo-no-default-features = false
 cargo-all-features = false
@@ -109,9 +109,9 @@ backend_requirements = []
 identity = "incan_stdlib_data@0.5.0#sha256:f6cac589f0dcd4db5120c83783984445b1578354e8367054508352420d7e53ae[]"
 participation = "used"
 namespace_claims = [["std", "collections"], ["std", "datetime"], ["std", "datetime", "civil"], ["std", "datetime", "civil", "intervals"], ["std", "datetime", "civil", "naive"], ["std", "datetime", "civil", "offset"], ["std", "datetime", "error"], ["std", "datetime", "runtime"], ["std", "graph"], ["std", "hash"], ["std", "hash", "_core"], ["std", "hash", "_streaming"], ["std", "json"], ["std", "math"], ["std", "regex"], ["std", "regex", "_core"], ["std", "regex", "_replacement"], ["std", "regex", "types"], ["std", "serde"], ["std", "serde", "json"], ["std", "uuid"]]
-used_modules = [["std", "collections"], ["std", "datetime"], ["std", "datetime", "civil"], ["std", "datetime", "runtime"], ["std", "hash"], ["std", "json"], ["std", "regex"]]
-implementation_facets = ["rust_collections", "rust_datetime", "rust_hash", "rust_json", "rust_regex"]
-backend_requirements = ["cargo-dependency:blake2", "cargo-dependency:blake3", "cargo-dependency:md5", "cargo-dependency:regex", "cargo-dependency:serde", "cargo-dependency:sha1", "cargo-dependency:sha2", "cargo-dependency:sha3", "cargo-dependency:xxhash_rust", "cargo-feature:incan_stdlib/json", "cargo-feature:incan_stdlib/ordinal"]
+used_modules = [["std", "collections"], ["std", "datetime"], ["std", "datetime", "civil"], ["std", "datetime", "runtime"], ["std", "hash"], ["std", "json"], ["std", "regex"], ["std", "uuid"]]
+implementation_facets = ["rust_collections", "rust_datetime", "rust_hash", "rust_json", "rust_regex", "rust_uuid"]
+backend_requirements = ["cargo-dependency:blake2", "cargo-dependency:blake3", "cargo-dependency:md5", "cargo-dependency:rand", "cargo-dependency:regex", "cargo-dependency:serde", "cargo-dependency:sha1", "cargo-dependency:sha2", "cargo-dependency:sha3", "cargo-dependency:xxhash_rust", "cargo-feature:incan_stdlib/json", "cargo-feature:incan_stdlib/ordinal"]
 
 [[semantic.providers]]
 identity = "incan_stdlib_interop@0.5.0#sha256:8648b99ead9130f4ab7f98dc79aace551ea1f918604c8f15983b05fed9311834[]"

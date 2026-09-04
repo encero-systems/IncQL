@@ -64,7 +64,13 @@ from quality import (
 from prism.types import PrismStoreId
 from substrait.errors import SubstraitLoweringError, SubstraitLoweringErrorKind
 from substrait.schema_registry import register_named_table_schema
-from substrait.inspect import relation_output_columns, root_rel, read_kind_name, read_named_table_name
+from substrait.inspect import (
+    read_kind_name,
+    read_named_table_name,
+    plan_source_named_table_names,
+    relation_output_columns,
+    root_rel,
+)
 
 
 model _ExecutionClockStart:
@@ -246,6 +252,11 @@ pub class Session:
         match observed.data:
             Some(frame) => return Ok(frame)
             None => return Err(_observed_error_or_internal(observed.error))
+
+    def validate_plan[T with Clone](self, data: LazyFrame[T]) -> Result[None, SessionError]:
+        """Lower one lazy plan and validate every Session-owned logical binding without executing it."""
+        plan = _plan_from_lazy_frame(data)?
+        return _validate_named_table_bindings(self._registrations, plan)
 
     def execute_observed[T with Clone](self, data: LazyFrame[T]) -> ObservedLazyFrame[T]:
         """Execute one lazy plan and return structured observation evidence for success or failure."""
@@ -438,15 +449,15 @@ pub class SessionBuilder:
 
     def with_backend(self, backend: BackendSelection) -> Self:
         """Select one backend through the portable backend-selection envelope."""
-        return SessionBuilder(_backend=backend.clone())
+        return SessionBuilder(_backend=backend)
 
     def with_datafusion(self, backend: DataFusion) -> Self:
         """Select DataFusion backend options for the Session being built."""
-        return self.with_backend(datafusion_backend_selection(backend.clone()))
+        return self.with_backend(datafusion_backend_selection(backend))
 
     def build(self) -> Session:
         """Build one Session from the current builder backend selection."""
-        return Session(_backend=self._backend.clone(), _registrations=[])
+        return Session(_backend=self._backend, _registrations=[])
 
 
 def _start_execution_clock() -> _ExecutionClockStart:
@@ -1207,7 +1218,7 @@ def _execute_validated_plan(
     plan: Plan,
 ) -> Result[None, SessionError]:
     """Validate bindings for one plan, then execute it through the selected backend."""
-    _validate_named_table_binding(registrations, plan.clone())?
+    _validate_named_table_bindings(registrations, plan)?
     return backend_execute_plan(backend, _to_backend_registrations(registrations), plan).map_err(
         _session_error_from_backend_error,
     )
@@ -1219,7 +1230,7 @@ def _collect_validated_plan[T with Clone](
     plan: Plan,
 ) -> Result[DataFrame[T], SessionError]:
     """Validate bindings for one plan, then collect it into a materialized DataFrame."""
-    _validate_named_table_binding(registrations, plan.clone())?
+    _validate_named_table_bindings(registrations, plan)?
     materialization = backend_collect_plan(backend, _to_backend_registrations(registrations), plan.clone()).map_err(
         _session_error_from_backend_error,
     )?
@@ -1234,7 +1245,7 @@ def _write_validated_plan(
 ) -> Result[None, SessionError]:
     """Validate sink and table bindings, then write one plan through the selected backend."""
     sink_uri = _sink_uri_from_text(target.uri)?
-    _validate_named_table_binding(registrations, plan.clone())?
+    _validate_named_table_bindings(registrations, plan)?
     return backend_write_plan(backend, _to_backend_registrations(registrations), plan, sink_uri.0, target.sink_kind).map_err(
         _session_error_from_backend_error,
     )
@@ -1290,13 +1301,14 @@ pub def collect_with_active_session[T with Clone](data: LazyFrame[T]) -> Result[
     return active.collect(data)
 
 
-def _validate_named_table_binding(registrations: list[SessionRegistration], plan: Plan) -> Result[None, SessionError]:
-    """Ensure a named-table root in the plan has a matching Session registration."""
-    table_name = read_named_table_name(root_rel(plan))
-    if len(table_name) == 0:
-        return Ok(None)
-    if _find_registration_index(registrations, table_name) < 0:
-        return Err(SessionError(kind=SessionErrorKind.UnknownTable, message=f"table '{table_name}' is not registered"))
+def _validate_named_table_bindings(registrations: list[SessionRegistration], plan: Plan) -> Result[None, SessionError]:
+    """Ensure every named-table read in one plan has a matching Session registration."""
+    registered_names = set([registration.logical_name for registration in registrations])
+    for table_name in plan_source_named_table_names(plan):
+        if table_name not in registered_names:
+            return Err(
+                SessionError(kind=SessionErrorKind.UnknownTable, message=f"table '{table_name}' is not registered"),
+            )
     return Ok(None)
 
 

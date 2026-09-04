@@ -14,6 +14,7 @@ from rust::substrait::proto import (
     FunctionArgument,
     FunctionOption,
     Plan,
+    PlanRel,
     ReadRel,
     Rel,
     RelCommon,
@@ -507,14 +508,40 @@ pub def read_named_table_name(rel: Rel) -> str:
 
 pub def source_named_table_name(rel: Rel) -> str:
     """Return the first reachable named-table identifier in one relation subtree, or empty when absent."""
-    direct_name = read_named_table_name(rel.clone())
-    if len(direct_name) > 0:
-        return direct_name
-    for child in relation_children(rel):
-        child_name = source_named_table_name(child)
-        if len(child_name) > 0:
-            return child_name
+    names = source_named_table_names(rel)
+    if len(names) > 0:
+        return names[0]
     return ""
+
+
+pub def source_named_table_names(rel: Rel) -> list[str]:
+    """Return every reachable named-table identifier in deterministic relation-tree order."""
+    direct_name = read_named_table_name(rel)
+    if len(direct_name) > 0:
+        return [direct_name]
+    mut names: list[str] = []
+    for child in relation_children(rel):
+        names.extend(source_named_table_names(child))
+    return names
+
+
+def _plan_rel_source_named_table_names(plan_rel: PlanRel) -> list[str]:
+    """Return named-table identifiers reachable from one top-level plan relation."""
+    match plan_rel.rel_type:
+        Some(PlanRelType.Root(root)) =>
+            match root.input:
+                Some(rel) => return source_named_table_names(rel)
+                None => return []
+        Some(PlanRelType.Rel(rel)) => return source_named_table_names(rel)
+        _ => return []
+
+
+pub def plan_source_named_table_names(plan: Plan) -> list[str]:
+    """Return named-table identifiers reachable across every relation in one plan envelope."""
+    mut names: list[str] = []
+    for plan_rel in plan.relations:
+        names.extend(_plan_rel_source_named_table_names(plan_rel))
+    return names
 
 
 pub def set_operation_name(rel: Rel) -> str:

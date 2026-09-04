@@ -80,7 +80,9 @@ pub from substrait.inspect import (
     sort_field_count,
     sort_field_direction_name,
     sort_field_expr_index,
+    plan_source_named_table_names,
     source_named_table_name,
+    source_named_table_names,
 )
 pub from substrait.function_extensions import (
     EXPLODE_EXTENSION_URI,
