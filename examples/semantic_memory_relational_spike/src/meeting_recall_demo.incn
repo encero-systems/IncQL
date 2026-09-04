@@ -1,0 +1,521 @@
+"""A fictional but operationally credible Minutary meeting-recall scenario."""
+
+from agent_demo import (
+    BrainAgentMemoryWrite,
+    BrainAgentObservation,
+    BrainAgentRequest,
+    MinutaryMeetingRecall,
+    brain_agent,
+)
+from brain import (
+    ContextProjection,
+    ContextProjectionLevel,
+    MemoryScope,
+    MemoryScopeKind,
+    QuantProfile,
+    RecordRevision,
+    RelationKind,
+    RetrievalRun,
+    RetrievalScopeHop,
+    ReviewOutcome,
+    ScreeningOutcome,
+    empty_brain,
+)
+from hyperquant_adapter import HyperquantNomination, HyperquantRun, PolicyScreening, adapt_hyperquant_run
+
+
+@derive(Clone)
+pub model MeetingFact:
+    """One governed fact resolved by the application after the agent selects its immutable reference."""
+
+    pub revision: RecordRevision
+    pub title: str
+    pub detail: str
+    pub source: str
+
+
+@derive(Clone)
+pub model MeetingRecallDemoResult:
+    """Inspectable result of changing one agent from its product context to a recalled meeting and back."""
+
+    pub user_fact: MeetingFact
+    pub meeting_fact: MeetingFact
+    pub restored_user_fact: MeetingFact
+    pub binding_reference: str
+
+
+pub def run_meeting_recall_demo() -> MeetingRecallDemoResult:
+    """Run one fictional local-pilot conversation through user and Minutary memory focuses."""
+    mut brain = empty_brain()
+    minutes = brain.record(
+        "MeetingMinutesRevision",
+        "northbridge-architecture-2026-08-28",
+        "sha256:northbridge-minutes-v1",
+    )
+    local_boundary = brain.record(
+        "KnowledgeRevision",
+        "northbridge-local-only-boundary",
+        "sha256:northbridge-local-boundary-v1",
+    )
+    release_gate = brain.record(
+        "KnowledgeRevision",
+        "northbridge-pilot-release-gate",
+        "sha256:northbridge-release-gate-v1",
+    )
+    activation_contract = brain.record(
+        "KnowledgeRevision",
+        "northbridge-memory-activation-contract",
+        "sha256:northbridge-memory-activation-v1",
+    )
+    performance_budget = brain.record(
+        "KnowledgeRevision",
+        "northbridge-memory-performance-budget",
+        "sha256:northbridge-memory-performance-v1",
+    )
+    unrelated_risk = brain.record(
+        "KnowledgeRevision",
+        "northbridge-finance-export-risk",
+        "sha256:northbridge-finance-risk-v1",
+    )
+    brain.link(minutes, local_boundary, RelationKind.DerivedFrom)
+    brain.link(minutes, release_gate, RelationKind.DerivedFrom)
+    brain.link(minutes, activation_contract, RelationKind.DerivedFrom)
+    brain.link(minutes, performance_budget, RelationKind.DerivedFrom)
+    approved_boundary = brain.decide(local_boundary, ReviewOutcome.Approved, "hees.ai", "reviewed for the local pilot")
+    binding = brain.bind_approved("pilot:northbridge-local", approved_boundary)
+    match binding:
+        Some(pinned_binding) =>
+            assert pinned_binding.revision.reference() == local_boundary.reference()
+        None =>
+            assert false, "the reviewed pilot boundary must create its artifact binding"
+
+    facts = [MeetingFact(
+        revision=local_boundary,
+        title="Local-only boundary",
+        detail="Pilot knowledge stays in the on-device workspace. No client document or embedding is sent to a remote provider by default.",
+        source="Northbridge product checkpoint, 28 August 2026",
+    ), MeetingFact(
+        revision=release_gate,
+        title="Pilot release gate",
+        detail="Before the 17 September review, the build needs an inspectable package receipt and an offline fallback for every recalled answer.",
+        source="Northbridge architecture review, 28 August 2026",
+    ), MeetingFact(
+        revision=activation_contract,
+        title="Memory activation contract",
+        detail="A Minutary recall supplies a bounded atom set. Changing topic replaces the agent focus instead of rebuilding the conversation history.",
+        source="Northbridge architecture review, 28 August 2026",
+    ), MeetingFact(
+        revision=performance_budget,
+        title="Memory performance budget",
+        detail="A recalled meeting may contribute at most 48 atoms. Focus switching and constrained retrieval are benchmarked separately.",
+        source="Northbridge architecture review, 28 August 2026",
+    ), MeetingFact(
+        revision=unrelated_risk,
+        title="Finance export risk",
+        detail="The finance workstream's export taxonomy remains under review and is not part of the product checkpoint or architecture recall.",
+        source="Northbridge finance status, 27 August 2026",
+    )]
+
+    profile = QuantProfile(
+        quant_id="hyperquant-northbridge-local",
+        corpus_revision="northbridge-pilot:v1",
+        model_identity="embedding:local-pilot-v1",
+        vector_space_identity="vector-space:northbridge-v1",
+        index_identity="index:northbridge-pilot-v1",
+        candidate_family="KnowledgeRevision",
+    )
+    run = HyperquantRun(
+        profile=profile,
+        provider_run_fingerprint="sha256:northbridge-product-question-001",
+        nominations=[HyperquantNomination(record_reference=activation_contract.reference(), rank=0, relevance_bps=9900), HyperquantNomination(
+            record_reference=local_boundary.reference(),
+            rank=1,
+            relevance_bps=9700,
+        ), HyperquantNomination(record_reference=release_gate.reference(), rank=2, relevance_bps=9400), HyperquantNomination(
+            record_reference=performance_budget.reference(),
+            rank=3,
+            relevance_bps=9300,
+        ), HyperquantNomination(record_reference=unrelated_risk.reference(), rank=4, relevance_bps=9200)],
+    )
+    screenings = [PolicyScreening(
+        record_reference=activation_contract.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="reviewed architecture decision",
+    ), PolicyScreening(
+        record_reference=local_boundary.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="approved pilot constraint",
+    ), PolicyScreening(
+        record_reference=release_gate.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="approved delivery constraint",
+    ), PolicyScreening(
+        record_reference=performance_budget.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="reviewed engineering budget",
+    ), PolicyScreening(
+        record_reference=unrelated_risk.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="reviewed but outside this conversation focus",
+    )]
+    adapted = adapt_hyperquant_run(
+        run,
+        profile,
+        [local_boundary, release_gate, activation_contract, performance_budget, unrelated_risk],
+        screenings,
+    )
+    match adapted:
+        Ok(quant) => brain.install_quant(quant)
+        Err(_) =>
+            assert false, "the complete Northbridge HyperQuant run must adapt"
+
+    mut agent = brain_agent(brain, "northbridge-product-checkpoint")
+    assert agent.activate_quant("hyperquant-northbridge-local", "northbridge-pilot:v1")
+    user_memory = agent.store_memory(
+        BrainAgentMemoryWrite(
+            source_id="turn-004",
+            detail="Prepare a product-checkpoint brief about the Northbridge local pilot.",
+            memory_atoms=[local_boundary, release_gate],
+            content_digest="sha256:northbridge-user-turn-004",
+        ),
+    )
+    meeting_memory = agent.store_minutary_recall(
+        MinutaryMeetingRecall(
+            meeting_id="minutary:northbridge-architecture-2026-08-28",
+            summary="Architecture review settled the memory activation contract and the performance budget for meeting recall.",
+            action_items=["Benchmark a 48-atom recall set.", "Attach the activation trace to the pilot inspection view."],
+            memory_atoms=[activation_contract, performance_budget, release_gate],
+            recall_digest="sha256:northbridge-minutary-recall-v1",
+        ),
+    )
+    memories = agent.recall_memories("northbridge-product-checkpoint", agent.current_snapshot(), 4)
+    match memories:
+        Some(recalled) =>
+            assert len(recalled) == 2
+            assert recalled[1].revision.reference() == meeting_memory.revision.reference()
+        None =>
+            assert false, "the local conversation must recall its supplied Minutary meeting"
+
+    conversation_abstract = _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:conversation:abstract",
+            user_memory.revision,
+            ContextProjectionLevel.Abstract,
+            "Product checkpoint: local pilot constraints and delivery evidence.",
+            9,
+        ),
+        user_memory.revision,
+    )
+    meeting_abstract = _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:meeting:abstract",
+            meeting_memory.revision,
+            ContextProjectionLevel.Abstract,
+            "Architecture recall: activation contract and performance budget.",
+            8,
+        ),
+        meeting_memory.revision,
+    )
+    minutes_abstract = _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:minutes:abstract",
+            minutes,
+            ContextProjectionLevel.Abstract,
+            "Architecture review retained explicit recall and release evidence.",
+            8,
+        ),
+        minutes,
+    )
+    local_abstract = _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:local-boundary:abstract",
+            local_boundary,
+            ContextProjectionLevel.Abstract,
+            "Northbridge pilot knowledge remains on-device by default.",
+            7,
+        ),
+        local_boundary,
+    )
+    activation_abstract = _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:activation:abstract",
+            activation_contract,
+            ContextProjectionLevel.Abstract,
+            "Meeting recall swaps a bounded atom set instead of rebuilding history.",
+            10,
+        ),
+        activation_contract,
+    )
+    _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:local-boundary:overview",
+            local_boundary,
+            ContextProjectionLevel.Overview,
+            "The product checkpoint keeps client documents and embeddings in the local workspace. The approved pilot boundary is pinned to the reviewed knowledge revision.",
+            24,
+        ),
+        local_boundary,
+    )
+    _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:local-boundary:evidence",
+            local_boundary,
+            ContextProjectionLevel.EvidenceExcerpt,
+            "Reviewed pilot boundary: no client document or embedding is sent to a remote provider by default.",
+            17,
+        ),
+        local_boundary,
+    )
+    _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:activation:overview",
+            activation_contract,
+            ContextProjectionLevel.Overview,
+            "Minutary supplies a bounded memory-atom set. Topic changes replace the active focus and preserve the original conversation history and evidence trace.",
+            23,
+        ),
+        activation_contract,
+    )
+    _projection_or_fail(
+        agent.register_context_projection(
+            "projection:northbridge:activation:evidence",
+            activation_contract,
+            ContextProjectionLevel.EvidenceExcerpt,
+            "Architecture decision: changing topic replaces the agent focus rather than rebuilding the conversation history.",
+            15,
+        ),
+        activation_contract,
+    )
+
+    conversation_scope = _scope_or_fail(
+        agent.define_memory_scope(
+            "scope:northbridge:conversation",
+            MemoryScopeKind.Conversation,
+            user_memory.revision,
+            None,
+        ),
+        user_memory.revision,
+    )
+    product_atom_scope = _scope_or_fail(
+        agent.define_memory_scope(
+            "scope:northbridge:product:local-boundary",
+            MemoryScopeKind.MemoryAtom,
+            local_boundary,
+            Some(conversation_scope.scope_id),
+        ),
+        local_boundary,
+    )
+    meeting_scope = _scope_or_fail(
+        agent.define_memory_scope(
+            "scope:northbridge:meeting",
+            MemoryScopeKind.Meeting,
+            meeting_memory.revision,
+            Some(conversation_scope.scope_id),
+        ),
+        meeting_memory.revision,
+    )
+    decision_scope = _scope_or_fail(
+        agent.define_memory_scope(
+            "scope:northbridge:architecture-decision",
+            MemoryScopeKind.Decision,
+            minutes,
+            Some(meeting_scope.scope_id),
+        ),
+        minutes,
+    )
+    meeting_atom_scope = _scope_or_fail(
+        agent.define_memory_scope(
+            "scope:northbridge:meeting:activation-contract",
+            MemoryScopeKind.MemoryAtom,
+            activation_contract,
+            Some(decision_scope.scope_id),
+        ),
+        activation_contract,
+    )
+    product_hops = [RetrievalScopeHop(scope=conversation_scope, projection=conversation_abstract), RetrievalScopeHop(
+        scope=product_atom_scope,
+        projection=local_abstract,
+    )]
+    meeting_hops = [RetrievalScopeHop(scope=conversation_scope, projection=conversation_abstract), RetrievalScopeHop(
+        scope=meeting_scope,
+        projection=meeting_abstract,
+    ), RetrievalScopeHop(scope=decision_scope, projection=minutes_abstract), RetrievalScopeHop(
+        scope=meeting_atom_scope,
+        projection=activation_abstract,
+    )]
+
+    user_focus_snapshot = agent.current_snapshot()
+    assert agent.focus_memory(
+        user_memory,
+        user_focus_snapshot,
+        "policy:northbridge-pilot-v1",
+        "sha256:northbridge-focus-product-checkpoint",
+    )
+    assert agent.current_snapshot() == user_focus_snapshot
+    user_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="northbridge-product-checkpoint",
+            input_snapshot_id=user_focus_snapshot,
+            policy_identity="policy:northbridge-pilot-v1",
+            replay_fingerprint="sha256:northbridge-product-checkpoint",
+            bound=1,
+        ),
+    )
+    user_fact = _selected_fact(user_observation, facts)
+    match user_observation:
+        Some(observation) =>
+            _assert_recorded_run(
+                agent.record_retrieval_run(
+                    "run:northbridge-product-checkpoint",
+                    "What constraint should guide the product checkpoint?",
+                    observation,
+                    ContextProjectionLevel.Abstract,
+                    product_hops,
+                    "receipt:northbridge-product-checkpoint-v1",
+                ),
+                [local_boundary.reference()],
+                2,
+            )
+        None =>
+            assert false, "the product checkpoint must record a retrieval trace before receipt creation"
+
+    meeting_focus_snapshot = agent.current_snapshot()
+    assert agent.focus_memory(
+        meeting_memory,
+        meeting_focus_snapshot,
+        "policy:northbridge-pilot-v1",
+        "sha256:northbridge-focus-architecture-review",
+    )
+    assert agent.current_snapshot() == meeting_focus_snapshot
+    meeting_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="northbridge-architecture-recall",
+            input_snapshot_id=meeting_focus_snapshot,
+            policy_identity="policy:northbridge-pilot-v1",
+            replay_fingerprint="sha256:northbridge-architecture-recall",
+            bound=1,
+        ),
+    )
+    meeting_fact = _selected_fact(meeting_observation, facts)
+    match meeting_observation:
+        Some(observation) =>
+            _assert_recorded_run(
+                agent.record_retrieval_run(
+                    "run:northbridge-architecture-recall",
+                    "What did the architecture review decide about meeting recall?",
+                    observation,
+                    ContextProjectionLevel.Abstract,
+                    meeting_hops,
+                    "receipt:northbridge-architecture-recall-v1",
+                ),
+                [activation_contract.reference()],
+                4,
+            )
+        None =>
+            assert false, "the recalled meeting must record a retrieval trace before receipt creation"
+
+    restored_focus_snapshot = agent.current_snapshot()
+    assert agent.focus_memory(
+        user_memory,
+        restored_focus_snapshot,
+        "policy:northbridge-pilot-v1",
+        "sha256:northbridge-focus-product-checkpoint-restored",
+    )
+    assert agent.current_snapshot() == restored_focus_snapshot
+    restored_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="northbridge-product-checkpoint-restored",
+            input_snapshot_id=restored_focus_snapshot,
+            policy_identity="policy:northbridge-pilot-v1",
+            replay_fingerprint="sha256:northbridge-product-checkpoint-restored",
+            bound=1,
+        ),
+    )
+    restored_user_fact = _selected_fact(restored_observation, facts)
+    match restored_observation:
+        Some(observation) =>
+            _assert_recorded_run(
+                agent.record_retrieval_run(
+                    "run:northbridge-product-checkpoint-restored",
+                    "What constraint should guide the product checkpoint?",
+                    observation,
+                    ContextProjectionLevel.Abstract,
+                    product_hops,
+                    "receipt:northbridge-product-checkpoint-restored-v1",
+                ),
+                [local_boundary.reference()],
+                2,
+            )
+        None =>
+            assert false, "the restored product focus must record a retrieval trace before receipt creation"
+
+    return MeetingRecallDemoResult(
+        user_fact=user_fact,
+        meeting_fact=meeting_fact,
+        restored_user_fact=restored_user_fact,
+        binding_reference=local_boundary.reference(),
+    )
+
+
+def _selected_fact(observation: Option[BrainAgentObservation], facts: list[MeetingFact]) -> MeetingFact:
+    """Resolve one selected immutable reference through the application-owned governed fact collection."""
+    match observation:
+        Some(recorded_observation) =>
+            assert len(recorded_observation.selected_references) == 1
+            selected_reference = recorded_observation.selected_references[0]
+            for fact in facts:
+                if fact.revision.reference() == selected_reference:
+                    return fact
+            assert false, "the selected revision must resolve through the governed fact collection"
+            return facts[0]
+        None =>
+            assert false, "this deterministic demonstration must produce a bounded observation"
+            return facts[0]
+
+
+def _projection_or_fail(projection: Option[ContextProjection], source: RecordRevision) -> ContextProjection:
+    """Keep fixture setup explicit while failing closed on an invalid projection declaration."""
+    match projection:
+        Some(recorded_projection) => return recorded_projection
+        None =>
+            assert false, "the fixture's supplied projection must be bounded and source-pinned"
+            return ContextProjection(
+                projection_id="invalid",
+                source=source,
+                level=ContextProjectionLevel.Abstract,
+                content="invalid",
+                declared_token_count=1,
+                source_digest=source.content_digest,
+                snapshot_id=0,
+            )
+
+
+def _scope_or_fail(scope: Option[MemoryScope], subject: RecordRevision) -> MemoryScope:
+    """Keep fixture scope creation explicit while rejecting a malformed parent hierarchy."""
+    match scope:
+        Some(recorded_scope) => return recorded_scope
+        None =>
+            assert false, "the fixture's typed retrieval scope must resolve its subject and parent"
+            return MemoryScope(
+                scope_id="invalid",
+                kind=MemoryScopeKind.MemoryAtom,
+                subject=subject,
+                parent_scope_id=None,
+                snapshot_id=0,
+            )
+
+
+def _assert_recorded_run(run: Option[RetrievalRun], selected_references: list[str], scope_hop_count: int) -> None:
+    """Require the fixture to retain both its selected projection and inspectable scope trajectory."""
+    match run:
+        Some(recorded_run) =>
+            assert recorded_run.projection_level == ContextProjectionLevel.Abstract
+            assert len(recorded_run.selected_projections) == len(selected_references)
+            assert len(recorded_run.scope_hops) == scope_hop_count
+            assert recorded_run.result_receipt != ""
+            for selected_reference in selected_references:
+                assert selected_reference in recorded_run.active_atom_references
+            for projection in recorded_run.selected_projections:
+                assert projection.source.reference() in selected_references
+        None =>
+            assert false, "an observation must produce a replayable retrieval receipt"

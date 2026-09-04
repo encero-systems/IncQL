@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>IncQL-DB Memory Activation Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <div>
+            <p class="eyebrow">INCQL-DB / INTERACTIVE TRACE</p>
+            <h1>Active Memory</h1>
+          </div>
+        </div>
+        <div class="fixture-status"><span></span>Northbridge local pilot fixture</div>
+      </header>
+
+      <section class="context-bar" aria-label="Conversation context">
+        <div>
+          <span class="context-label">Conversation</span>
+          <strong>Northbridge product checkpoint</strong>
+        </div>
+        <div>
+          <span class="context-label">Quant</span>
+          <strong>hyperquant-northbridge-local</strong>
+        </div>
+        <div>
+          <span class="context-label">Policy</span>
+          <strong>northbridge-pilot-v1</strong>
+        </div>
+        <div>
+          <span class="context-label">Binding</span>
+          <strong>local-only-boundary@1</strong>
+        </div>
+      </section>
+
+      <div class="layout">
+        <aside class="timeline" aria-labelledby="memory-history-heading">
+          <div class="section-heading">
+            <p class="eyebrow">CONVERSATION</p>
+            <h2 id="memory-history-heading">Memory history</h2>
+          </div>
+          <ol>
+            <li data-timeline="product">
+              <span class="step">01</span>
+              <div>
+                <strong>Product checkpoint</strong>
+                <p>Turn 004</p>
+                <small>2 memory atoms</small>
+              </div>
+            </li>
+            <li data-timeline="meeting">
+              <span class="step">02</span>
+              <div>
+                <strong>Minutary recall</strong>
+                <p>Architecture review</p>
+                <small>3 memory atoms</small>
+              </div>
+            </li>
+            <li data-timeline="restored">
+              <span class="step">03</span>
+              <div>
+                <strong>Product restored</strong>
+                <p>Same conversation</p>
+                <small>2 memory atoms</small>
+              </div>
+            </li>
+          </ol>
+          <div class="timeline-note">
+            Stored revisions and the pilot binding do not change when focus changes.
+          </div>
+        </aside>
+
+        <section class="workbench" aria-label="Agent memory demo">
+          <div class="focus-control" role="group" aria-label="Active memory focus">
+            <button class="focus-button" type="button" data-focus="product" aria-pressed="true">Product checkpoint</button>
+            <button class="focus-button" type="button" data-focus="meeting" aria-pressed="false">Recall meeting</button>
+            <button class="focus-button" type="button" data-focus="restored" aria-pressed="false">Restore product</button>
+          </div>
+
+          <div class="projection-control" role="group" aria-label="Stored context projection inspection">
+            <span class="control-label">Stored projection</span>
+            <div>
+              <button class="projection-button" type="button" data-projection="abstract" aria-pressed="true">Abstract</button>
+              <button class="projection-button" type="button" data-projection="overview" aria-pressed="false">Overview</button>
+              <button class="projection-button" type="button" data-projection="evidence" aria-pressed="false">Evidence excerpt</button>
+            </div>
+          </div>
+
+          <section class="answer-surface" aria-live="polite">
+            <div class="surface-head">
+              <div>
+                <p class="eyebrow">SELECTED CONTEXT</p>
+                <h2 id="response-title">Local-only boundary</h2>
+              </div>
+              <div class="snapshot" id="snapshot">Input snapshot 28</div>
+            </div>
+            <p class="question" id="question">What constraint should guide the product checkpoint?</p>
+            <p class="answer" id="answer">Pilot knowledge stays in the on-device workspace. No client document or embedding is sent to a remote provider by default.</p>
+            <dl class="fact-meta">
+              <div>
+                <dt>Source</dt>
+                <dd id="source">Northbridge product checkpoint, 28 August 2026</dd>
+              </div>
+              <div>
+                <dt>Selected atom</dt>
+                <dd id="selected-atom">northbridge-local-only-boundary@1</dd>
+              </div>
+              <div>
+                <dt>Trace result</dt>
+                <dd id="trace-result">1 selected / 4 excluded</dd>
+              </div>
+              <div>
+                <dt>Projection</dt>
+                <dd id="projection-meta">Abstract / 7 declared tokens</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="trace-surface" aria-labelledby="trace-heading">
+            <div class="section-heading trace-heading">
+              <div>
+                <p class="eyebrow">INSPECTABLE TRACE</p>
+                <h2 id="trace-heading">Candidate treatment</h2>
+              </div>
+              <span id="trace-id">trace: product checkpoint</span>
+            </div>
+            <section class="trajectory" aria-labelledby="trajectory-heading">
+              <div class="trajectory-heading">
+                <div>
+                  <p class="eyebrow">RETRIEVAL RUN</p>
+                  <h3 id="trajectory-heading">Scope trajectory</h3>
+                </div>
+                <span id="run-receipt">receipt: product checkpoint</span>
+              </div>
+              <ol class="scope-path" id="scope-path"></ol>
+            </section>
+            <div class="candidate-list" id="candidate-list"></div>
+          </section>
+        </section>
+
+        <aside class="activation-panel" aria-labelledby="activation-heading">
+          <div class="section-heading">
+            <p class="eyebrow">EPHEMERAL HANDLE</p>
+            <h2 id="activation-heading">Memory activation</h2>
+          </div>
+          <div class="activation-state">
+            <span class="pulse" aria-hidden="true"></span>
+            <div>
+              <strong id="activation-name">Product checkpoint focus</strong>
+              <p id="activation-status">Active now</p>
+            </div>
+          </div>
+          <dl class="activation-meta">
+            <div>
+              <dt>Source memory</dt>
+              <dd id="source-memory">turn-004</dd>
+            </div>
+            <div>
+              <dt>Atom set</dt>
+              <dd id="atom-count">2 exact revisions</dd>
+            </div>
+            <div>
+              <dt>Persistent write</dt>
+              <dd>None</dd>
+            </div>
+          </dl>
+          <div class="atom-list-wrap">
+            <p class="list-label">ACTIVE MEMORY ATOMS</p>
+            <ul class="atom-list" id="atom-list"></ul>
+          </div>
+          <div class="activation-footer">
+            The agent swaps this small handle. The Brain records the later retrieval trace, not a duplicate of the memory set.
+          </div>
+        </aside>
+      </div>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
