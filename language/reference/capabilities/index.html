@@ -3387,7 +3387,7 @@
 
 
 <h1 id="backend-capability-matrix">Backend capability matrix</h1>
-<p>This page summarizes current IncQL v0.1 package behavior and the first DataFusion adapter. It is a decision aid, not a promise that every combination of operation, input type, and backend version has been certified.</p>
+<p>This page summarizes current IncQL v0.1 package behavior and the DataFusion execution adapter. It is a decision aid, not a promise that every combination of operation, input type, and backend version has been certified.</p>
 <p>Use three status meanings:</p>
 <ul>
 <li><strong>Executable</strong> — covered by the current DataFusion implementation and repository tests for the listed path.</li>
@@ -3422,6 +3422,12 @@
 <td>Plan/type boundary only</td>
 <td>no streaming execution path</td>
 <td>streaming-specific execution semantics remain future work</td>
+</tr>
+<tr>
+<td><code>Session.validate_plan(...)</code></td>
+<td>Plan/evidence only</td>
+<td>lowers a <code>LazyFrame[T]</code> and validates every named-table binding without adapter dispatch</td>
+<td>it does not execute rows or prove backend capability</td>
 </tr>
 <tr>
 <td><code>Session.execute(...)</code></td>

@@ -3749,6 +3749,11 @@
 </thead>
 <tbody>
 <tr>
+<td><code>session.validate_plan(data)</code></td>
+<td><code>Result[None, SessionError]</code></td>
+<td>Lower the plan and validate every Session-owned logical binding without adapter dispatch</td>
+</tr>
+<tr>
 <td><code>session.execute(data)</code></td>
 <td><code>Result[LazyFrame[T], SessionError]</code></td>
 <td>Execute the backend path as a validation/checkpoint boundary without materializing locally</td>
@@ -3765,8 +3770,9 @@
 </tr>
 </tbody>
 </table>
-<p><code>execute(...)</code> and <code>collect(...)</code> are intentionally different:</p>
+<p><code>validate_plan(...)</code>, <code>execute(...)</code>, and <code>collect(...)</code> are intentionally different:</p>
 <ul>
+<li><code>validate_plan(...)</code> proves that the authored carrier lowers and that every named-table read has a matching Session registration. It does not dispatch to an adapter or claim that work ran.</li>
 <li><code>execute(...)</code> proves the plan can bind, lower, and run.</li>
 <li><code>collect(...)</code> performs that same work and materializes a local <code>DataFrame[T]</code>.</li>
 </ul>
@@ -3872,7 +3878,7 @@
 <tr>
 <td><code>backend_name</code></td>
 <td><code>str</code></td>
-<td>Selected backend name, currently <code>datafusion</code> by default</td>
+<td>Selected backend name, currently <code>datafusion</code></td>
 </tr>
 <tr>
 <td><code>adapter_version</code></td>
@@ -4276,7 +4282,7 @@
 <li>Preview text is for display/debugging; resolved output columns are the schema contract surfaced by collection.</li>
 </ul>
 <h2 id="backend-note">Backend note</h2>
-<p>DataFusion is the implemented execution backend. <code>Session</code> stores a backend kind plus encoded options, lowers work to Substrait, and dispatches through an internal backend adapter boundary. DataFusion is the first adapter behind that boundary; it is not the shape of the <code>Session</code> state.</p>
+<p>DataFusion is the implemented execution backend. <code>Session</code> stores a backend kind plus encoded options, lowers work to Substrait, and dispatches through an internal backend adapter boundary. DataFusion is the first adapter behind that boundary; it is not the shape of the <code>Session</code> state. <code>Session.validate_plan(...)</code> remains outside adapter dispatch because successful local validation is not evidence that an execution backend accepted or ran the plan.</p>
 <h2 id="related-docs">Related docs</h2>
 <ul>
 <li>For the conceptual model behind this surface, see <a href="../../explanation/execution_context/">Execution context (Explanation)</a></li>
