@@ -1,0 +1,9 @@
+[project]
+name = "incql_semantic_memory_brain"
+version = "0.1.0"
+
+[dependencies]
+incql = { path = "../.." }
+
+[project.scripts]
+main = "src/main.incn"

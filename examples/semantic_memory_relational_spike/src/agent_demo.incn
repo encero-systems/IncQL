@@ -1,0 +1,194 @@
+"""Minimal local agent surface for observing a semantic-memory Brain through active Quants."""
+
+from brain import (
+    CandidateDisposition,
+    ContextProjection,
+    ContextProjectionLevel,
+    MemoryActivation,
+    MemoryBrain,
+    MemoryKind,
+    MemoryScope,
+    MemoryScopeKind,
+    RecordRevision,
+    RetrievalRun,
+    RetrievalScopeHop,
+    RetrievalTrace,
+    StoredMemory,
+)
+
+
+@derive(Clone)
+pub model BrainAgentRequest:
+    """One bounded agent observation request with explicit replay context."""
+
+    pub request_id: str
+    pub input_snapshot_id: int
+    pub policy_identity: str
+    pub replay_fingerprint: str
+    pub bound: int
+
+
+@derive(Clone)
+pub model BrainAgentObservation:
+    """References selected by one active Quant plus the full inspectable retrieval trace."""
+
+    pub request_id: str
+    pub trace: RetrievalTrace
+    pub selected_references: list[str]
+
+
+@derive(Clone)
+pub model BrainAgentMemoryWrite:
+    """One explicit, concise user detail the caller elects to retain."""
+
+    pub source_id: str
+    pub detail: str
+    pub memory_atoms: list[RecordRevision]
+    pub content_digest: str
+
+
+@derive(Clone)
+pub model MinutaryMeetingRecall:
+    """A bounded meeting recall supplied by Minutary rather than inferred by the agent."""
+
+    pub meeting_id: str
+    pub summary: str
+    pub action_items: list[str]
+    pub memory_atoms: list[RecordRevision]
+    pub recall_digest: str
+
+
+pub class BrainAgent:
+    """A conversation-bound local agent with an ephemeral focus over caller-supplied memory atoms."""
+
+    brain: MemoryBrain
+    conversation_id: str
+    active_memory: Option[MemoryActivation]
+
+    def activate_quant(mut self, quant_id: str, corpus_revision: str) -> bool:
+        """Hot-swap the candidate provider for subsequent observations."""
+        return self.brain.activate_quant(quant_id, corpus_revision)
+
+    def current_snapshot(self) -> int:
+        """Return the Brain snapshot available to the agent before it makes an observation."""
+        return self.brain.current_snapshot()
+
+    def store_memory(mut self, memory: BrainAgentMemoryWrite) -> StoredMemory:
+        """Persist a caller-supplied user detail; this agent never infers interaction memories itself."""
+        return self.brain.store_memory(
+            self.conversation_id,
+            memory.source_id,
+            MemoryKind.UserDetail,
+            memory.detail,
+            [],
+            memory.memory_atoms,
+            memory.content_digest,
+        )
+
+    def store_minutary_recall(mut self, recall: MinutaryMeetingRecall) -> StoredMemory:
+        """Persist one supplied meeting recall with its meeting identity and explicit action items."""
+        return self.brain.store_memory(
+            self.conversation_id,
+            recall.meeting_id,
+            MemoryKind.MeetingRecall,
+            recall.summary,
+            recall.action_items,
+            recall.memory_atoms,
+            recall.recall_digest,
+        )
+
+    def recall_memories(self, conversation_id: str, input_snapshot_id: int, bound: int) -> Option[list[StoredMemory]]:
+        """Return a bounded conversation slice visible to the supplied snapshot."""
+        return self.brain.recall_memories(conversation_id, input_snapshot_id, bound)
+
+    def register_context_projection(
+        mut self,
+        projection_id: str,
+        source: RecordRevision,
+        level: ContextProjectionLevel,
+        content: str,
+        declared_token_count: int,
+    ) -> Option[ContextProjection]:
+        """Persist a caller-authored context view without asking the agent to invent a summary."""
+        return self.brain.register_context_projection(projection_id, source, level, content, declared_token_count)
+
+    def define_memory_scope(
+        mut self,
+        scope_id: str,
+        kind: MemoryScopeKind,
+        subject: RecordRevision,
+        parent_scope_id: Option[str],
+    ) -> Option[MemoryScope]:
+        """Persist a typed retrieval scope for this conversation's inspectable context hierarchy."""
+        return self.brain.define_memory_scope(scope_id, kind, subject, parent_scope_id)
+
+    def focus_memory(
+        mut self,
+        memory: StoredMemory,
+        input_snapshot_id: int,
+        policy_identity: str,
+        activation_fingerprint: str,
+    ) -> bool:
+        """Hot-swap this agent's topic without writing or duplicating the underlying memory atoms."""
+        if memory.conversation_id != self.conversation_id:
+            return false
+        activation = self.brain.create_memory_activation(
+            memory,
+            input_snapshot_id,
+            policy_identity,
+            activation_fingerprint,
+        )
+        match activation:
+            Some(prepared_activation) =>
+                self.active_memory = Some(prepared_activation)
+                return true
+            None => return false
+
+    def observe(mut self, request: BrainAgentRequest) -> Option[BrainAgentObservation]:
+        """Request a bounded trace and expose only the selected immutable revision references."""
+        trace = self.brain.retrieve_active_with_memory(
+            request.request_id,
+            request.input_snapshot_id,
+            request.policy_identity,
+            request.replay_fingerprint,
+            request.bound,
+            self.active_memory,
+        )
+        match trace:
+            Some(recorded_trace) =>
+                mut selected_references: list[str] = []
+                for observation in recorded_trace.candidates:
+                    if observation.disposition == CandidateDisposition.Selected:
+                        selected_references.append(observation.candidate.revision.reference())
+                return Some(
+                    BrainAgentObservation(
+                        request_id=request.request_id,
+                        trace=recorded_trace,
+                        selected_references=selected_references,
+                    ),
+                )
+            None => return None
+
+    def record_retrieval_run(
+        mut self,
+        run_id: str,
+        query: str,
+        observation: BrainAgentObservation,
+        projection_level: ContextProjectionLevel,
+        scope_hops: list[RetrievalScopeHop],
+        result_receipt: str,
+    ) -> Option[RetrievalRun]:
+        """Attach the agent's observed trace to caller-supplied projections and typed scope hops."""
+        return self.brain.record_retrieval_run(
+            run_id,
+            query,
+            observation.trace,
+            projection_level,
+            scope_hops,
+            result_receipt,
+        )
+
+
+pub def brain_agent(brain: MemoryBrain, conversation_id: str) -> BrainAgent:
+    """Create one conversation-bound local agent around a caller-owned Brain."""
+    return BrainAgent(brain=brain, conversation_id=conversation_id, active_memory=None)

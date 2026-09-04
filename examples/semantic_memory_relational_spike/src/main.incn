@@ -1,0 +1,16 @@
+"""Run the fictional Northbridge local-pilot meeting-recall demonstration."""
+
+from meeting_recall_demo import run_meeting_recall_demo
+
+
+def main() -> None:
+    """Show the fact selected before, during, and after a Minutary topic switch."""
+    result = run_meeting_recall_demo()
+    println("Northbridge Local Pilot (fictional meeting-recall fixture)")
+    println(f"product checkpoint: {result.user_fact.title}")
+    println(result.user_fact.detail)
+    println(f"Minutary architecture recall: {result.meeting_fact.title}")
+    println(result.meeting_fact.detail)
+    println(f"product checkpoint restored: {result.restored_user_fact.title}")
+    println(result.restored_user_fact.detail)
+    println(f"binding remains: {result.binding_reference}")

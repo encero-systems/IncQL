@@ -1,0 +1,937 @@
+"""Behavioral contract for the in-memory semantic-memory brain spike."""
+
+from agent_demo import BrainAgentMemoryWrite, BrainAgentRequest, MinutaryMeetingRecall, brain_agent
+from brain import (
+    CandidateDisposition,
+    ContextProjectionLevel,
+    MemoryKind,
+    MemoryScopeKind,
+    Quant,
+    QuantProfile,
+    RelationKind,
+    RetrievalCandidate,
+    RetrievalScopeHop,
+    ReviewOutcome,
+    ScreeningOutcome,
+    empty_brain,
+)
+from hyperquant_adapter import (
+    HyperquantAdapterError,
+    HyperquantNomination,
+    HyperquantRun,
+    PolicyScreening,
+    adapt_hyperquant_run,
+)
+from meeting_recall_demo import run_meeting_recall_demo
+
+
+def _fast_profile() -> QuantProfile:
+    """Return one compatible local HyperQuant profile for retrieval fixtures."""
+    return QuantProfile(
+        quant_id="hyperquant-fast-local",
+        corpus_revision="content-dna:v1",
+        model_identity="embedding:local-fast-v1",
+        vector_space_identity="vector-space:fast-v1",
+        index_identity="index:fast-v1",
+        candidate_family="KnowledgeRevision",
+    )
+
+
+def _quality_profile() -> QuantProfile:
+    """Return a second compatible profile that can rank the same semantic atoms differently."""
+    return QuantProfile(
+        quant_id="hyperquant-quality-local",
+        corpus_revision="content-dna:v1",
+        model_identity="embedding:local-quality-v1",
+        vector_space_identity="vector-space:quality-v1",
+        index_identity="index:quality-v1",
+        candidate_family="KnowledgeRevision",
+    )
+
+
+def test_rejected_candidate_cannot_become_an_artifact_binding() -> None:
+    """A stored candidate stays non-active until an explicit approving decision exists."""
+    mut brain = empty_brain()
+    candidate = brain.record("KnowledgeRevision", "candidate", "sha256:candidate-v1")
+    rejected = brain.decide(candidate, ReviewOutcome.Rejected, "hees.ai", "missing evidence")
+
+    binding = brain.bind_approved("artifact:demo", rejected)
+
+    match binding:
+        None =>
+            assert true
+        Some(_) =>
+            assert false, "rejection must not create an active binding"
+
+
+def test_binding_pins_an_exact_revision_after_a_successor_exists() -> None:
+    """A later revision cannot silently replace a release's pinned knowledge revision."""
+    mut brain = empty_brain()
+    first = brain.record("KnowledgeRevision", "sleep-routine", "sha256:v1")
+    approved = brain.decide(first, ReviewOutcome.Approved, "hees.ai", "review complete")
+    binding = brain.bind_approved("artifact:sleep", approved)
+    successor = brain.record("KnowledgeRevision", "sleep-routine", "sha256:v2")
+
+    match binding:
+        Some(pinned_binding) =>
+            assert pinned_binding.revision.reference() == first.reference()
+        None =>
+            assert false, "approval must create an active binding"
+    assert successor.reference() != first.reference()
+
+
+def test_retrieval_trace_distinguishes_screening_snapshot_and_bound_exclusions() -> None:
+    """A bounded trace must preserve why each returned candidate was not selected."""
+    mut brain = empty_brain()
+    first = brain.record("KnowledgeRevision", "first", "sha256:first")
+    second = brain.record("KnowledgeRevision", "second", "sha256:second")
+    future = brain.record("KnowledgeRevision", "future", "sha256:future")
+
+    brain.install_quant(
+        Quant(
+            profile=_fast_profile(),
+            provider_run_fingerprint="sha256:hyperquant-fast-run-1",
+            candidates=[RetrievalCandidate(
+                revision=first,
+                rank=1,
+                relevance_bps=9400,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=second,
+                rank=2,
+                relevance_bps=8300,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=future,
+                rank=3,
+                relevance_bps=7600,
+                screening=ScreeningOutcome.Rejected,
+                screening_reason="not visible at input snapshot",
+            )],
+        ),
+    )
+    assert brain.activate_quant("hyperquant-fast-local", "content-dna:v1")
+    trace = brain.retrieve_active("trace-1", second.snapshot_id, "policy:learner-v1", "sha256:trace-1", 1)
+
+    match trace:
+        Some(recorded_trace) =>
+            assert recorded_trace.candidates[0].disposition == CandidateDisposition.Selected
+            assert recorded_trace.candidates[1].disposition == CandidateDisposition.ExcludedByBound
+            assert recorded_trace.candidates[2].disposition == CandidateDisposition.ExcludedBySnapshot
+        None =>
+            assert false, "an active compatible quant must record a trace"
+
+
+def test_context_projections_and_memory_scopes_are_explicit_source_pinned_records() -> None:
+    """Caller-authored tiered views and hierarchy cannot be created for missing sources or parents."""
+    mut brain = empty_brain()
+    source = brain.record("KnowledgeRevision", "local-boundary", "sha256:local-boundary-v1")
+
+    too_large = brain.register_context_projection(
+        "projection:local-boundary:too-large",
+        source,
+        ContextProjectionLevel.Abstract,
+        "This supplied abstract exceeds the declared abstract context budget.",
+        129,
+    )
+    abstract = brain.register_context_projection(
+        "projection:local-boundary:abstract",
+        source,
+        ContextProjectionLevel.Abstract,
+        "Knowledge stays local by default.",
+        5,
+    )
+    missing_parent = brain.define_memory_scope(
+        "scope:orphan",
+        MemoryScopeKind.MemoryAtom,
+        source,
+        Some("scope:missing"),
+    )
+    root = brain.define_memory_scope("scope:conversation", MemoryScopeKind.Conversation, source, None)
+
+    assert too_large is None
+    assert missing_parent is None
+    match abstract:
+        Some(recorded_projection) =>
+            assert recorded_projection.source.reference() == source.reference()
+            assert recorded_projection.source_digest == source.content_digest
+            match root:
+                Some(recorded_scope) =>
+                    assert recorded_scope.parent_scope_id is None
+                    assert recorded_scope.snapshot_id > recorded_projection.snapshot_id
+                None => assert false, "a root scope must accept an existing typed revision"
+        None => assert false, "a bounded caller-authored abstract must be stored"
+
+
+def test_retrieval_run_retains_scope_hops_selected_projection_and_active_atoms() -> None:
+    """A receipt augments a recorded trace; it neither reruns retrieval nor loses excluded candidates."""
+    mut brain = empty_brain()
+    selected = brain.record("KnowledgeRevision", "local-boundary", "sha256:local-boundary-v1")
+    excluded = brain.record("KnowledgeRevision", "unrelated-risk", "sha256:unrelated-risk-v1")
+    memory = brain.store_memory(
+        "conversation-1",
+        "turn-1",
+        MemoryKind.UserDetail,
+        "Keep the local-only boundary active for this conversation.",
+        [],
+        [selected],
+        "sha256:conversation-turn-1",
+    )
+    conversation_projection = brain.register_context_projection(
+        "projection:conversation-1:abstract",
+        memory.revision,
+        ContextProjectionLevel.Abstract,
+        "Product checkpoint memory.",
+        4,
+    )
+    selected_projection = brain.register_context_projection(
+        "projection:local-boundary:abstract",
+        selected,
+        ContextProjectionLevel.Abstract,
+        "Keep Northbridge knowledge local.",
+        5,
+    )
+    conversation_scope = brain.define_memory_scope(
+        "scope:conversation-1",
+        MemoryScopeKind.Conversation,
+        memory.revision,
+        None,
+    )
+    atom_scope = brain.define_memory_scope(
+        "scope:conversation-1:local-boundary",
+        MemoryScopeKind.MemoryAtom,
+        selected,
+        Some("scope:conversation-1"),
+    )
+    profile = _fast_profile()
+    brain.install_quant(
+        Quant(
+            profile=profile,
+            provider_run_fingerprint="sha256:hyperquant-run-1",
+            candidates=[RetrievalCandidate(
+                revision=selected,
+                rank=1,
+                relevance_bps=9700,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=excluded,
+                rank=2,
+                relevance_bps=9100,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="outside the active memory focus",
+            )],
+        ),
+    )
+    assert brain.activate_quant("hyperquant-fast-local", "content-dna:v1")
+    input_snapshot_id = brain.current_snapshot()
+    activation = brain.create_memory_activation(
+        memory,
+        input_snapshot_id,
+        "policy:local-pilot-v1",
+        "sha256:memory-focus-1",
+    )
+
+    match activation:
+        Some(prepared_activation) =>
+            trace = brain.retrieve_active_with_memory(
+                "trace:local-boundary",
+                input_snapshot_id,
+                "policy:local-pilot-v1",
+                "sha256:trace-local-boundary",
+                1,
+                Some(prepared_activation),
+            )
+            match trace:
+                Some(recorded_trace) =>
+                    match conversation_projection:
+                        Some(conversation_view) =>
+                            match selected_projection:
+                                Some(selected_view) =>
+                                    match conversation_scope:
+                                        Some(conversation) =>
+                                            match atom_scope:
+                                                Some(atom) =>
+                                                    run = brain.record_retrieval_run(
+                                                        "run:local-boundary",
+                                                        "What constraint should guide the product checkpoint?",
+                                                        recorded_trace,
+                                                        ContextProjectionLevel.Abstract,
+                                                        [RetrievalScopeHop(
+                                                            scope=conversation,
+                                                            projection=conversation_view,
+                                                        ), RetrievalScopeHop(scope=atom, projection=selected_view)],
+                                                        "receipt:local-boundary-v1",
+                                                    )
+                                                    match run:
+                                                        Some(recorded_run) =>
+                                                            assert recorded_run.input_snapshot_id == input_snapshot_id
+                                                            assert recorded_run.active_atom_references == [selected.reference()]
+                                                            assert len(recorded_run.scope_hops) == 2
+                                                            assert recorded_run.selected_projections[0].source.reference() == selected.reference()
+                                                            assert recorded_run.trace.candidates[1].disposition == CandidateDisposition.ExcludedByMemoryFocus
+                                                        None => assert false, "a complete trace, projection tier, and scope path must create a receipt"
+                                                None => assert false, "the atom scope must resolve"
+                                        None => assert false, "the conversation scope must resolve"
+                                None => assert false, "the selected candidate needs a matching context projection"
+                        None => assert false, "the conversation scope needs a matching context projection"
+                None => assert false, "the focused active Quant must record candidate treatment"
+        None => assert false, "the stored memory must prepare one active atom set"
+
+
+def test_replay_requires_the_exact_provider_model_policy_corpus_and_snapshot() -> None:
+    """Replay identity cannot silently substitute a newer corpus, model, policy, or snapshot."""
+    mut brain = empty_brain()
+    candidate = brain.record("KnowledgeRevision", "candidate", "sha256:candidate")
+    profile = _fast_profile()
+    brain.install_quant(
+        Quant(
+            profile=profile,
+            provider_run_fingerprint="sha256:hyperquant-fast-run-1",
+            candidates=[RetrievalCandidate(
+                revision=candidate,
+                rank=1,
+                relevance_bps=9400,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            )],
+        ),
+    )
+    assert brain.activate_quant("hyperquant-fast-local", "content-dna:v1")
+    trace = brain.retrieve_active("trace-1", candidate.snapshot_id, "policy:learner-v1", "sha256:trace-1", 1)
+
+    match trace:
+        Some(recorded_trace) =>
+            matches = brain.replay_matches(
+                recorded_trace,
+                candidate.snapshot_id,
+                profile,
+                "sha256:hyperquant-fast-run-1",
+                "policy:learner-v1",
+                "sha256:trace-1",
+                None,
+            )
+            changed_policy = brain.replay_matches(
+                recorded_trace,
+                candidate.snapshot_id,
+                profile,
+                "sha256:hyperquant-fast-run-1",
+                "policy:learner-v2",
+                "sha256:trace-1",
+                None,
+            )
+            changed_quant = brain.replay_matches(
+                recorded_trace,
+                candidate.snapshot_id,
+                _quality_profile(),
+                "sha256:hyperquant-quality-run-1",
+                "policy:learner-v1",
+                "sha256:trace-1",
+                None,
+            )
+            changed_provider = brain.replay_matches(
+                recorded_trace,
+                candidate.snapshot_id,
+                profile,
+                "sha256:hyperquant-fast-run-2",
+                "policy:learner-v1",
+                "sha256:trace-1",
+                None,
+            )
+
+            assert matches
+            assert changed_policy is false
+            assert changed_quant is false
+            assert changed_provider is false
+        None =>
+            assert false, "an active compatible quant must record a trace"
+
+
+def test_hot_swap_changes_the_quant_trace_without_rewriting_the_brain() -> None:
+    """Two compatible quants can select different atoms while an existing binding remains exact."""
+    mut brain = empty_brain()
+    first = brain.record("KnowledgeRevision", "first", "sha256:first")
+    second = brain.record("KnowledgeRevision", "second", "sha256:second")
+    approval = brain.decide(first, ReviewOutcome.Approved, "hees.ai", "review complete")
+    binding = brain.bind_approved("artifact:demo", approval)
+    brain.install_quant(
+        Quant(
+            profile=_fast_profile(),
+            provider_run_fingerprint="sha256:hyperquant-fast-run-1",
+            candidates=[RetrievalCandidate(
+                revision=first,
+                rank=1,
+                relevance_bps=9400,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=second,
+                rank=2,
+                relevance_bps=8300,
+                screening=ScreeningOutcome.Rejected,
+                screening_reason="lower confidence",
+            )],
+        ),
+    )
+    brain.install_quant(
+        Quant(
+            profile=_quality_profile(),
+            provider_run_fingerprint="sha256:hyperquant-quality-run-1",
+            candidates=[RetrievalCandidate(
+                revision=second,
+                rank=1,
+                relevance_bps=9800,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=first,
+                rank=2,
+                relevance_bps=8100,
+                screening=ScreeningOutcome.Rejected,
+                screening_reason="lower confidence",
+            )],
+        ),
+    )
+
+    snapshot_before_activation = brain.current_snapshot()
+    assert brain.activate_quant("hyperquant-fast-local", "content-dna:v1")
+    fast_trace = brain.retrieve_active(
+        "trace-fast",
+        brain.current_snapshot(),
+        "policy:learner-v1",
+        "sha256:trace-fast",
+        1,
+    )
+    assert brain.current_snapshot() == snapshot_before_activation + 1
+    snapshot_before_hot_swap = brain.current_snapshot()
+    assert brain.activate_quant("hyperquant-quality-local", "content-dna:v1")
+    assert brain.current_snapshot() == snapshot_before_hot_swap
+    quality_trace = brain.retrieve_active(
+        "trace-quality",
+        brain.current_snapshot(),
+        "policy:learner-v1",
+        "sha256:trace-quality",
+        1,
+    )
+
+    match fast_trace:
+        Some(recorded_fast_trace) =>
+            match quality_trace:
+                Some(recorded_quality_trace) =>
+                    assert recorded_fast_trace.quant_profile.quant_id == "hyperquant-fast-local"
+                    assert recorded_quality_trace.quant_profile.quant_id == "hyperquant-quality-local"
+                    assert recorded_fast_trace.candidates[0].candidate.revision.reference() == first.reference()
+                    assert recorded_quality_trace.candidates[0].candidate.revision.reference() == second.reference()
+                    match binding:
+                        Some(pinned_binding) =>
+                            assert pinned_binding.revision.reference() == first.reference()
+                        None =>
+                            assert false, "approval must create an active binding"
+                None =>
+                    assert false, "the quality quant must record a trace"
+        None =>
+            assert false, "the fast quant must record a trace"
+
+
+def test_agent_observes_through_the_newly_activated_quant() -> None:
+    """An agent observes a new candidate stream after a compatible live Quant switch."""
+    mut brain = empty_brain()
+    first = brain.record("KnowledgeRevision", "first", "sha256:first")
+    second = brain.record("KnowledgeRevision", "second", "sha256:second")
+    brain.install_quant(
+        Quant(
+            profile=_fast_profile(),
+            provider_run_fingerprint="sha256:hyperquant-fast-agent-run-1",
+            candidates=[RetrievalCandidate(
+                revision=first,
+                rank=0,
+                relevance_bps=9400,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            )],
+        ),
+    )
+    brain.install_quant(
+        Quant(
+            profile=_quality_profile(),
+            provider_run_fingerprint="sha256:hyperquant-quality-agent-run-1",
+            candidates=[RetrievalCandidate(
+                revision=second,
+                rank=0,
+                relevance_bps=9800,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            )],
+        ),
+    )
+    mut agent = brain_agent(brain, "conversation-agent")
+
+    assert agent.activate_quant("hyperquant-fast-local", "content-dna:v1")
+    fast_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="agent-fast",
+            input_snapshot_id=agent.current_snapshot(),
+            policy_identity="policy:learner-v1",
+            replay_fingerprint="sha256:agent-fast",
+            bound=1,
+        ),
+    )
+    snapshot_before_hot_swap = agent.current_snapshot()
+    assert agent.activate_quant("hyperquant-quality-local", "content-dna:v1")
+    assert agent.current_snapshot() == snapshot_before_hot_swap
+    quality_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="agent-quality",
+            input_snapshot_id=agent.current_snapshot(),
+            policy_identity="policy:learner-v1",
+            replay_fingerprint="sha256:agent-quality",
+            bound=1,
+        ),
+    )
+
+    match fast_observation:
+        Some(fast) =>
+            assert fast.selected_references == [first.reference()]
+        None =>
+            assert false, "the fast Quant must produce an agent observation"
+    match quality_observation:
+        Some(quality) =>
+            assert quality.selected_references == [second.reference()]
+            assert quality.trace.provider_run_fingerprint == "sha256:hyperquant-quality-agent-run-1"
+        None =>
+            assert false, "the quality Quant must produce an agent observation"
+
+
+def test_agent_stores_user_details_and_minutary_recall_as_typed_memory() -> None:
+    """Interaction memory is explicit, typed, bounded, and fenced by the requested snapshot."""
+    mut agent = brain_agent(empty_brain(), "conversation-42")
+    user_memory = agent.store_memory(
+        BrainAgentMemoryWrite(
+            source_id="turn-001",
+            detail="The user prefers local, inspectable storage.",
+            memory_atoms=[],
+            content_digest="sha256:conversation-turn-001",
+        ),
+    )
+    snapshot_before_meeting = agent.current_snapshot()
+    meeting_memory = agent.store_minutary_recall(
+        MinutaryMeetingRecall(
+            meeting_id="minutary:meeting-042",
+            summary="The team agreed to keep retrieval traces inspectable.",
+            action_items=["Build the local recall demo.", "Review the trace before an artifact binding."],
+            memory_atoms=[],
+            recall_digest="sha256:minutary-recall-042",
+        ),
+    )
+
+    current = agent.recall_memories("conversation-42", agent.current_snapshot(), 3)
+    prior = agent.recall_memories("conversation-42", snapshot_before_meeting, 3)
+
+    assert user_memory.revision.family == "ConversationMemoryRevision"
+    assert user_memory.kind == MemoryKind.UserDetail
+    assert meeting_memory.kind == MemoryKind.MeetingRecall
+    assert meeting_memory.revision.content_digest == "sha256:minutary-recall-042"
+    match current:
+        Some(memories) =>
+            assert len(memories) == 2
+            assert memories[0].revision.reference() == user_memory.revision.reference()
+            assert memories[1].revision.reference() == meeting_memory.revision.reference()
+            assert memories[1].action_items == ["Build the local recall demo.", "Review the trace before an artifact binding."]
+        None =>
+            assert false, "the current snapshot must recall both interaction memories"
+    match prior:
+        Some(memories) =>
+            assert len(memories) == 1
+            assert memories[0].revision.reference() == user_memory.revision.reference()
+        None =>
+            assert false, "a prior snapshot must return only its visible interaction memory"
+
+
+def test_agent_hot_swaps_precomputed_memory_atoms_without_rewriting_the_brain() -> None:
+    """A Minutary recall changes one agent's active atoms without rewriting records, bindings, or history."""
+    mut brain = empty_brain()
+    user_atom = brain.record("KnowledgeRevision", "product-plan", "sha256:product-plan")
+    meeting_atom = brain.record("KnowledgeRevision", "meeting-decision", "sha256:meeting-decision")
+    unrelated_atom = brain.record("KnowledgeRevision", "unrelated", "sha256:unrelated")
+    approval = brain.decide(user_atom, ReviewOutcome.Approved, "hees.ai", "review complete")
+    binding = brain.bind_approved("artifact:product-plan", approval)
+    foreign_memory = brain.store_memory(
+        "conversation-other",
+        "turn-other",
+        MemoryKind.UserDetail,
+        "A detail from a different conversation.",
+        [],
+        [unrelated_atom],
+        "sha256:other-conversation",
+    )
+    brain.install_quant(
+        Quant(
+            profile=_fast_profile(),
+            provider_run_fingerprint="sha256:hyperquant-fast-memory-focus",
+            candidates=[RetrievalCandidate(
+                revision=meeting_atom,
+                rank=0,
+                relevance_bps=9900,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=unrelated_atom,
+                rank=1,
+                relevance_bps=9800,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible but not in this focus",
+            ), RetrievalCandidate(
+                revision=user_atom,
+                rank=2,
+                relevance_bps=9700,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            )],
+        ),
+    )
+    brain.install_quant(
+        Quant(
+            profile=_quality_profile(),
+            provider_run_fingerprint="sha256:hyperquant-quality-memory-focus",
+            candidates=[RetrievalCandidate(
+                revision=meeting_atom,
+                rank=0,
+                relevance_bps=9900,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            ), RetrievalCandidate(
+                revision=unrelated_atom,
+                rank=1,
+                relevance_bps=9800,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible but not in this focus",
+            ), RetrievalCandidate(
+                revision=user_atom,
+                rank=2,
+                relevance_bps=9700,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="eligible",
+            )],
+        ),
+    )
+    mut agent = brain_agent(brain, "conversation-42")
+    user_memory = agent.store_memory(
+        BrainAgentMemoryWrite(
+            source_id="turn-001",
+            detail="The user is working on the product plan.",
+            memory_atoms=[user_atom],
+            content_digest="sha256:conversation-turn-001",
+        ),
+    )
+    snapshot_before_meeting = agent.current_snapshot()
+    meeting_memory = agent.store_minutary_recall(
+        MinutaryMeetingRecall(
+            meeting_id="minutary:meeting-042",
+            summary="The meeting settled the current product decision.",
+            action_items=["Review the product plan."],
+            memory_atoms=[meeting_atom],
+            recall_digest="sha256:minutary-recall-042",
+        ),
+    )
+    assert agent.activate_quant("hyperquant-fast-local", "content-dna:v1")
+
+    snapshot_before_failed_focus = agent.current_snapshot()
+    assert agent.focus_memory(
+        meeting_memory,
+        snapshot_before_meeting,
+        "policy:learner-v1",
+        "sha256:memory-focus-too-early",
+    ) is false
+    assert agent.focus_memory(
+        foreign_memory,
+        snapshot_before_failed_focus,
+        "policy:learner-v1",
+        "sha256:memory-focus-cross-conversation",
+    ) is false
+    assert agent.current_snapshot() == snapshot_before_failed_focus
+
+    user_focus_snapshot = agent.current_snapshot()
+    assert agent.focus_memory(user_memory, user_focus_snapshot, "policy:learner-v1", "sha256:memory-focus-user")
+    assert agent.current_snapshot() == user_focus_snapshot
+    assert agent.activate_quant("hyperquant-quality-local", "content-dna:v1")
+    mismatched_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="memory-focus-profile-mismatch",
+            input_snapshot_id=user_focus_snapshot,
+            policy_identity="policy:learner-v1",
+            replay_fingerprint="sha256:memory-focus-profile-mismatch",
+            bound=1,
+        ),
+    )
+    match mismatched_observation:
+        None =>
+            assert agent.current_snapshot() == user_focus_snapshot
+        Some(_) =>
+            assert false, "an activation must not silently cross to another Quant profile"
+    assert agent.activate_quant("hyperquant-fast-local", "content-dna:v1")
+
+    user_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="memory-focus-user",
+            input_snapshot_id=user_focus_snapshot,
+            policy_identity="policy:learner-v1",
+            replay_fingerprint="sha256:memory-focus-user",
+            bound=1,
+        ),
+    )
+    match user_observation:
+        Some(observation) =>
+            assert observation.selected_references == [user_atom.reference()]
+            assert observation.trace.candidates[0].disposition == CandidateDisposition.ExcludedByMemoryFocus
+            assert observation.trace.candidates[2].disposition == CandidateDisposition.Selected
+            match observation.trace.memory_activation:
+                Some(activation) =>
+                    assert activation.memory_reference == user_memory.revision.reference()
+                    assert activation.atom_references == [user_atom.reference()]
+                None =>
+                    assert false, "a focused trace must retain its memory activation"
+        None =>
+            assert false, "the user focus must constrain the active Quant to its atom set"
+
+    meeting_focus_snapshot = agent.current_snapshot()
+    assert agent.focus_memory(meeting_memory, meeting_focus_snapshot, "policy:learner-v1", "sha256:memory-focus-meeting")
+    assert agent.current_snapshot() == meeting_focus_snapshot
+    meeting_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="memory-focus-meeting",
+            input_snapshot_id=meeting_focus_snapshot,
+            policy_identity="policy:learner-v1",
+            replay_fingerprint="sha256:memory-focus-meeting",
+            bound=1,
+        ),
+    )
+    match meeting_observation:
+        Some(observation) =>
+            assert observation.selected_references == [meeting_atom.reference()]
+            match observation.trace.memory_activation:
+                Some(activation) =>
+                    assert activation.memory_reference == meeting_memory.revision.reference()
+                    assert activation.atom_references == [meeting_atom.reference()]
+                None =>
+                    assert false, "a Minutary focus must retain its source meeting memory"
+        None =>
+            assert false, "the meeting focus must constrain the active Quant to its atom set"
+
+    restored_focus_snapshot = agent.current_snapshot()
+    assert agent.focus_memory(
+        user_memory,
+        restored_focus_snapshot,
+        "policy:learner-v1",
+        "sha256:memory-focus-user-restored",
+    )
+    assert agent.current_snapshot() == restored_focus_snapshot
+    restored_observation = agent.observe(
+        BrainAgentRequest(
+            request_id="memory-focus-user-restored",
+            input_snapshot_id=restored_focus_snapshot,
+            policy_identity="policy:learner-v1",
+            replay_fingerprint="sha256:memory-focus-user-restored",
+            bound=1,
+        ),
+    )
+    match restored_observation:
+        Some(observation) =>
+            assert observation.selected_references == [user_atom.reference()]
+        None =>
+            assert false, "restoring the user focus must reproduce its atom selection"
+    match binding:
+        Some(pinned_binding) =>
+            assert pinned_binding.revision.reference() == user_atom.reference()
+        None =>
+            assert false, "the pre-existing artifact binding must survive focus changes"
+
+
+def test_fictional_minutary_fixture_changes_the_resolved_meeting_fact() -> None:
+    """A concrete meeting corpus makes the user-to-meeting-to-user focus change inspectable."""
+    result = run_meeting_recall_demo()
+
+    assert result.user_fact.title == "Local-only boundary"
+    assert result.user_fact.detail == "Pilot knowledge stays in the on-device workspace. No client document or embedding is sent to a remote provider by default."
+    assert result.meeting_fact.title == "Memory activation contract"
+    assert result.meeting_fact.detail == "A Minutary recall supplies a bounded atom set. Changing topic replaces the agent focus instead of rebuilding the conversation history."
+    assert result.restored_user_fact.revision.reference() == result.user_fact.revision.reference()
+    assert result.binding_reference == result.user_fact.revision.reference()
+
+
+def test_hot_swap_rejects_a_quant_for_another_corpus_revision() -> None:
+    """The active brain never substitutes a quant index for a different Content DNA corpus revision."""
+    mut brain = empty_brain()
+    incompatible = QuantProfile(
+        quant_id="hyperquant-archive",
+        corpus_revision="content-dna:v2",
+        model_identity="embedding:archive-v1",
+        vector_space_identity="vector-space:archive-v1",
+        index_identity="index:archive-v1",
+        candidate_family="KnowledgeRevision",
+    )
+    brain.install_quant(
+        Quant(profile=incompatible, provider_run_fingerprint="sha256:hyperquant-archive-run-1", candidates=[]),
+    )
+
+    activated = brain.activate_quant("hyperquant-archive", "content-dna:v1")
+
+    assert activated is false
+
+
+def test_active_quant_rejects_candidates_from_another_record_family() -> None:
+    """A quant cannot silently cross the Brain's typed semantic boundary."""
+    mut brain = empty_brain()
+    source = brain.record("SourceRevision", "source", "sha256:source")
+    brain.install_quant(
+        Quant(
+            profile=_fast_profile(),
+            provider_run_fingerprint="sha256:hyperquant-fast-run-1",
+            candidates=[RetrievalCandidate(
+                revision=source,
+                rank=1,
+                relevance_bps=9400,
+                screening=ScreeningOutcome.Allowed,
+                screening_reason="invalid family for this quant",
+            )],
+        ),
+    )
+    assert brain.activate_quant("hyperquant-fast-local", "content-dna:v1")
+    snapshot_before_rejection = brain.current_snapshot()
+
+    trace = brain.retrieve_active(
+        "trace-wrong-family",
+        brain.current_snapshot(),
+        "policy:learner-v1",
+        "sha256:trace-wrong-family",
+        1,
+    )
+
+    match trace:
+        None =>
+            assert brain.current_snapshot() == snapshot_before_rejection
+        Some(_) =>
+            assert false, "a quant must not create a cross-family trace"
+
+
+def test_hyperquant_adapter_creates_a_live_quant_with_traceable_scores() -> None:
+    """A bounded HyperQuant run becomes the active candidate source without becoming an authority."""
+    mut brain = empty_brain()
+    first = brain.record("KnowledgeRevision", "first", "sha256:first")
+    second = brain.record("KnowledgeRevision", "second", "sha256:second")
+    profile = _fast_profile()
+    run = HyperquantRun(
+        profile=profile,
+        provider_run_fingerprint="sha256:hyperquant-run-42",
+        nominations=[HyperquantNomination(record_reference=first.reference(), rank=0, relevance_bps=9700), HyperquantNomination(
+            record_reference=second.reference(),
+            rank=1,
+            relevance_bps=8800,
+        )],
+    )
+    screenings = [PolicyScreening(
+        record_reference=first.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="eligible for learner profile",
+    ), PolicyScreening(
+        record_reference=second.reference(),
+        outcome=ScreeningOutcome.Rejected,
+        reason="rights review incomplete",
+    )]
+
+    adapted = adapt_hyperquant_run(run, profile, [first, second], screenings)
+
+    match adapted:
+        Ok(quant) =>
+            brain.install_quant(quant)
+            assert brain.activate_quant("hyperquant-fast-local", "content-dna:v1")
+            trace = brain.retrieve_active(
+                "trace-hyperquant-42",
+                brain.current_snapshot(),
+                "policy:learner-v1",
+                "sha256:trace-hyperquant-42",
+                1,
+            )
+            match trace:
+                Some(recorded_trace) =>
+                    assert recorded_trace.provider_run_fingerprint == "sha256:hyperquant-run-42"
+                    assert recorded_trace.candidates[0].candidate.rank == 0
+                    assert recorded_trace.candidates[0].candidate.relevance_bps == 9700
+                    assert recorded_trace.candidates[0].disposition == CandidateDisposition.Selected
+                    assert recorded_trace.candidates[1].candidate.relevance_bps == 8800
+                    assert recorded_trace.candidates[1].disposition == CandidateDisposition.RejectedByScreening
+                None =>
+                    assert false, "the adapted quant must record a trace"
+        Err(_) =>
+            assert false, "a complete compatible HyperQuant run must adapt"
+
+
+def test_hyperquant_adapter_rejects_a_run_without_policy_screening() -> None:
+    """HyperQuant nomination alone cannot bypass the policy-owned screening boundary."""
+    mut brain = empty_brain()
+    candidate = brain.record("KnowledgeRevision", "candidate", "sha256:candidate")
+    profile = _fast_profile()
+    run = HyperquantRun(
+        profile=profile,
+        provider_run_fingerprint="sha256:hyperquant-run-43",
+        nominations=[HyperquantNomination(record_reference=candidate.reference(), rank=0, relevance_bps=9700)],
+    )
+
+    adapted = adapt_hyperquant_run(run, profile, [candidate], [])
+
+    match adapted:
+        Err(HyperquantAdapterError.MissingScreening) =>
+            assert true
+        Err(_) =>
+            assert false, "the adapter must expose the missing-screening failure"
+        Ok(_) =>
+            assert false, "an unscreened HyperQuant nomination must not become a Quant"
+
+
+def test_hyperquant_adapter_rejects_ambiguous_policy_screening() -> None:
+    """A nominated revision must have exactly one policy-owned screening outcome."""
+    mut brain = empty_brain()
+    candidate = brain.record("KnowledgeRevision", "candidate", "sha256:candidate")
+    profile = _fast_profile()
+    run = HyperquantRun(
+        profile=profile,
+        provider_run_fingerprint="sha256:hyperquant-run-44",
+        nominations=[HyperquantNomination(record_reference=candidate.reference(), rank=0, relevance_bps=9700)],
+    )
+    screenings = [PolicyScreening(
+        record_reference=candidate.reference(),
+        outcome=ScreeningOutcome.Allowed,
+        reason="eligible",
+    ), PolicyScreening(
+        record_reference=candidate.reference(),
+        outcome=ScreeningOutcome.Rejected,
+        reason="conflicting duplicate outcome",
+    )]
+
+    adapted = adapt_hyperquant_run(run, profile, [candidate], screenings)
+
+    match adapted:
+        Err(HyperquantAdapterError.DuplicateScreening) =>
+            assert true
+        Err(_) =>
+            assert false, "the adapter must expose the duplicate-screening failure"
+        Ok(_) =>
+            assert false, "ambiguous screening must not become a Quant"
+
+
+def test_predecessors_are_bounded_and_snapshot_specific() -> None:
+    """Direct provenance traversal returns only visible links and respects a caller bound."""
+    mut brain = empty_brain()
+    source_one = brain.record("SourceRevision", "one", "sha256:one")
+    source_two = brain.record("SourceRevision", "two", "sha256:two")
+    knowledge = brain.record("KnowledgeRevision", "target", "sha256:target")
+    first_link = brain.link(source_one, knowledge, RelationKind.DerivedFrom)
+    brain.link(source_two, knowledge, RelationKind.Supports)
+
+    links = brain.predecessors(knowledge, brain.current_snapshot(), 1)
+    earlier_links = brain.predecessors(knowledge, first_link.snapshot_id - 1, 4)
+
+    assert len(links) == 1
+    assert links[0].source.reference() == source_one.reference()
+    assert len(earlier_links) == 0

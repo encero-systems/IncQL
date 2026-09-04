@@ -172,11 +172,7 @@ def _list_type(element_type: Type, nullable: bool) -> Type:
         n = Nullability.Nullable
     return Type(
         kind=Some(
-            Kind.List(
-                Box.new(
-                    SubstraitList(type=Some(Box.new(element_type)), type_variation_reference=0, nullability=n.into()),
-                ),
-            ),
+            Kind.List(SubstraitList(type=Some(Box.new(element_type)), type_variation_reference=0, nullability=n.into())),
         ),
     )
 
