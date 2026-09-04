@@ -43,7 +43,7 @@ env:
   # so a branch name would drift under the pin; keep this a full commit SHA and
   # keep it in every compiler-dependent cache key, because several commits can
   # share one version string.
-  INCAN_REF: 412b870ecaa75e7de6db0511340dff1f88e64521
+  INCAN_REF: 26db5aa8cb58de0e9e543c24cc19eb18c70eb60c
   EXPECTED_INCAN_VERSION: 0.6.0-dev.1.3
   # The Loafs the packaging step seals bind to the exact `rustc --version` that
   # sealed them and are verified against it, so this must name a concrete
