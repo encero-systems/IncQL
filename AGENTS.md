@@ -162,6 +162,26 @@ This repository does **not** host the compiler Rust codebase. If your task inclu
 - Treat **[Incan `AGENTS.md`][incan-agents]** as authoritative for **no `.unwrap()` / `.expect()`**, clippy, rustdoc, and pipeline boundaries.
 - Use `cargo test`, `cargo clippy`, and snapshot workflows **there**, not as substitutes for `make ci` **here** when you only touch IncQL.
 
+## Agent skills
+
+Agent skills are **shared with Incan**, not vendored here. Wire them once per
+checkout or worktree:
+
+```bash
+make skills
+```
+
+That links `.claude/skills` at the workspace's `.agents/skills` (via
+`encero/.agents`, which points at the Incan repository). The link is not
+committed: it is absolute and depth-dependent, so a canonical checkout and a
+worktree under `tmp/` cannot share one relative path.
+
+Because there is one canonical copy, a skill that is wrong for IncQL should be
+**altered in place** rather than forked — the fix then benefits both
+repositories. Several still assume an Incan checkout (`cargo`, `crates/`,
+clippy, `workspaces/docs-site/docs/RFCs/`); the IncQL equivalents are `make ci`
+and `docs/rfcs/`. Where a skill and this document conflict, `AGENTS.md` wins.
+
 ## Cursor skills (optional)
 
 Reusable Incan workflows live in the Incan repo under `.cursor/skills/` (e.g. `/write-rfc`, `/review-rfc`, `/bump-rfc`). Use them when the task spans Incan or when drafting/reviewing IncQL RFCs and you want the same structural discipline — adapted to **`docs/rfcs/`** and IncQL’s numbering.

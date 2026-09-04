@@ -74,7 +74,6 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset {
   position: relative;
@@ -101,7 +100,6 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset::after {
   content: "";
@@ -118,14 +116,12 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset p,
 body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset li {
   line-height: 1.65;
@@ -135,7 +131,6 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset > h1 {
   margin-bottom: 0.72em;
@@ -150,7 +145,6 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset > h2 {
   font-family: "Outfit", "Manrope", sans-serif;
@@ -164,7 +158,6 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset > h3 {
   font-family: "Outfit", "Manrope", sans-serif;
@@ -178,14 +171,12 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset .highlight pre,
 body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-content__inner.md-typeset > pre {
   font-size: 15.8px;
@@ -228,7 +219,6 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-sidebar--primary .md-nav__title {
   font-size: 13.5px;
@@ -238,14 +228,12 @@ body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-sidebar--primary .md-nav__link,
 body:not(:has(:is(
   .incql-launch,
   .incql-architecture,
   .pp-rfc-reader-host,
-  .incql-design-records,
   .incql-learn-shell
 ))) .md-sidebar--secondary .md-nav__link {
   font-size: 13px;
@@ -305,8 +293,7 @@ body[data-md-color-scheme="default"] .md-tabs {
 /* Shared docs rail ------------------------------------------------------- */
 
 @media screen and (min-width: 76.25em) {
-  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-sidebar__scrollwrap,
-  body:has(.incql-design-records) .md-sidebar--primary .md-sidebar__scrollwrap {
+  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-sidebar__scrollwrap {
     margin: 0.65rem 0.45rem 1rem 0;
     padding: 0.78rem;
     overflow: hidden auto;
@@ -318,15 +305,13 @@ body[data-md-color-scheme="default"] .md-tabs {
     -webkit-backdrop-filter: blur(16px) saturate(112%);
   }
 
-  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__title,
-  body:has(.incql-design-records) .md-sidebar--primary .md-nav__title {
+  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__title {
     padding: 0.72rem 0.62rem;
     border-bottom: 1px solid var(--crystal-line);
     font-size: 0.72rem;
   }
 
-  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__link,
-  body:has(.incql-design-records) .md-sidebar--primary .md-nav__link {
+  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__link {
     min-height: 2.3rem;
     align-items: center;
     padding: 0.52rem 0.58rem;
@@ -335,8 +320,17 @@ body[data-md-color-scheme="default"] .md-tabs {
     font-size: 0.7rem;
   }
 
-  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__link--active,
-  body:has(.incql-design-records) .md-sidebar--primary .md-nav__link--active {
+  /* Material wraps a section that owns an index page in `.md-nav__container`,
+   * which is itself an `.md-nav__link` — so the rule above pads the container
+   * and the anchor inside it, and the section label lands ~12px right of its
+   * own children. Material ships a fix for this, but at lower specificity than
+   * the rule above, so it never applies here. Drop the container's own inline
+   * padding and let the anchor supply it; the toggle keeps its side. */
+  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__container {
+    padding-inline: 0;
+  }
+
+  body:has(.pp-rfc-reader-host) .md-sidebar--primary .md-nav__link--active {
     border: 1px solid rgba(255, 255, 255, 0.9);
     background: linear-gradient(128deg, rgba(255, 255, 255, 0.78), rgba(211, 237, 255, 0.28) 62%, rgba(239, 229, 255, 0.36));
     color: var(--crystal-blue);
@@ -545,14 +539,6 @@ body:has(.incql-launch) .incql-hero h1 {
 
 /* Design records landing ------------------------------------------------ */
 
-body:has(.incql-design-records) .md-sidebar--secondary {
-  display: none;
-}
-
-body:has(.incql-design-records) .md-main__inner {
-  max-width: 1380px;
-}
-
 body:has(.incql-design-records) .md-content__inner {
   padding-top: 1.2rem;
 }
@@ -563,8 +549,7 @@ body:has(.incql-design-records) .md-content__inner {
 
 .incql-design-records__intro {
   max-width: 58rem;
-  margin: 0 auto 1.4rem;
-  text-align: center;
+  margin: 0 0 1.4rem;
 }
 
 .md-typeset .incql-design-records__kicker {
@@ -579,23 +564,23 @@ body:has(.incql-design-records) .md-content__inner {
 .md-typeset .incql-design-records__intro h1 {
   margin: 0;
   color: var(--crystal-ink);
-  font-size: clamp(2.4rem, 5vw, 4.4rem);
-  font-weight: 620;
-  letter-spacing: -0.055em;
-  line-height: 0.98;
+  font-family: "Outfit", "Manrope", sans-serif;
+  font-size: 1.84em;
+  font-weight: 560;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
 }
 
 .md-typeset .incql-design-records__intro > p:last-child {
   max-width: 46rem;
-  margin: 0.9rem auto 0;
+  margin: 0.9rem 0 0;
   color: var(--crystal-copy);
-  font-size: 0.95rem;
   line-height: 1.65;
 }
 
 .incql-design-records__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1rem;
   max-width: 66rem;
   margin: 0 auto;
@@ -630,12 +615,15 @@ body:has(.incql-design-records) .md-content__inner {
 .md-typeset .incql-design-records__card h2 {
   margin: 0.6rem 0 0.8rem;
   color: var(--crystal-ink);
-  font-size: 1.65rem;
+  font-family: "Outfit", "Manrope", sans-serif;
+  font-size: 26px;
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  line-height: 1.16;
 }
 
 .md-typeset .incql-design-records__card p {
-  font-size: 0.82rem;
-  line-height: 1.68;
+  line-height: 1.65;
 }
 
 .md-typeset .incql-design-records__action {

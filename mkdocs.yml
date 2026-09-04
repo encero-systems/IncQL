@@ -56,11 +56,11 @@ markdown_extensions:
 
 extra_css:
   # Ordered ownership contract: see docs/contributing/prismplane_docs_theme.md.
-  - stylesheets/prismplane.css?v=20260825-bridges-1
-  - stylesheets/crystalline.css?v=20260825-flatten-nested-1
+  - stylesheets/prismplane.css?v=20260829-nav-container-2
+  - stylesheets/crystalline.css?v=20260829-hub-type-2
   - stylesheets/crystal-prototype.css?v=20260723-guides-nav-2
   - stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1
-  - stylesheets/crystal-integration.css?v=20260825-roadmap-cta-gh-1
+  - stylesheets/crystal-integration.css?v=20260829-project-hub-1
   - stylesheets/crystal-learn.css?v=20260722-learn-crystal-9
   - stylesheets/crystal-book.css?v=20260723-book-concepts-7
 
@@ -160,20 +160,21 @@ nav:
           - Read root binding contract: language/reference/substrait/read_root_binding_contract.md
           - Revision and extension policy: language/reference/substrait/revision_and_extension_policy.md
   - Architecture: architecture.md
-  - Design records:
-      - RFCs: rfcs/README.md
-      - Overview: design_records.md
-      - Whitepapers:
-          - Overview: whitepapers/README.md
-          - IncQL-DB: whitepapers/incql_db.md
   - Roadmap: roadmap.md
   - Project:
       - Overview: project.md
+      - Design records: design_records.md
+      - RFCs:
+          - Overview: rfcs/README.md
+          - RFC template: rfcs/TEMPLATE.md
+      - Whitepapers:
+          - Overview: whitepapers/README.md
+          - IncQL-DB: whitepapers/incql_db.md
+          - Prism relational reasoning: whitepapers/prism_relational_reasoning.md
       - Docs map: docs_map.md
       - Release notes:
           - v0.1: release_notes/v0_1.md
       - Contributing:
           - Contributor architecture: contributing/architecture.md
           - Writing RFCs: contributing/writing_rfcs.md
-          - RFC template: rfcs/TEMPLATE.md
           - Prismplane docs theme: contributing/prismplane_docs_theme.md

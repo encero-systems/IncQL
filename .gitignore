@@ -72,3 +72,8 @@ workspaces/docs-site/docs/_snippets/tables/rfcs_index.md
 
 # Local docs-preview scaffolding (per developer; .claude/settings.json stays tracked)
 .claude/launch.json
+
+# Agent skills are shared from the workspace (`make skills`), not vendored here.
+# The link is absolute and depth-dependent, so it cannot be committed: the
+# canonical checkout and a worktree under tmp/ sit at different depths.
+.claude/skills
