@@ -30,6 +30,23 @@ QUICKSTART_DIR := examples/quickstart
 
 .DEFAULT_GOAL := help
 
+.PHONY: skills
+skills: ## Link .claude/skills at the shared workspace agent skills
+	@shared=""; dir="$(CURDIR)"; \
+	while [ "$$dir" != "/" ]; do \
+		if [ -d "$$dir/.agents/skills" ] && [ "$$dir" != "$(CURDIR)" ]; then shared="$$dir/.agents/skills"; break; fi; \
+		dir="$$(dirname "$$dir")"; \
+	done; \
+	if [ -z "$$shared" ]; then \
+		echo "\033[31mNo shared .agents/skills found above $(CURDIR).\033[0m"; \
+		echo "Expected a workspace checkout such as encero/ containing .agents/skills."; \
+		exit 1; \
+	fi; \
+	mkdir -p .claude; \
+	rm -rf .claude/skills; \
+	ln -s "$$shared" .claude/skills; \
+	echo "\033[32m✓\033[0m .claude/skills -> $$shared ($$(ls -1 "$$shared" | wc -l | tr -d ' ') skills)"
+
 .PHONY: help
 help: ## Show Make targets
 	@echo "\033[1mIncQL\033[0m — typed relational layer (Incan library)."
