@@ -1,0 +1,799 @@
+"""In-memory semantic-memory contract spike for governed AI retrieval."""
+
+
+@derive(Clone)
+pub enum ReviewOutcome(str):
+    """A supplied review or validation outcome; the store does not infer one."""
+
+    Approved = "approved"
+    Rejected = "rejected"
+    NeedsRevision = "needs_revision"
+
+
+@derive(Clone)
+pub enum RelationKind(str):
+    """Typed provenance edges retained by the semantic-memory layer."""
+
+    DerivedFrom = "derived_from"
+    Supports = "supports"
+    EvaluatedBy = "evaluated_by"
+    SelectedFor = "selected_for"
+
+
+@derive(Clone)
+pub enum ScreeningOutcome(str):
+    """A candidate-screening result supplied by a policy or validation owner."""
+
+    Allowed = "allowed"
+    Rejected = "rejected"
+
+
+@derive(Clone)
+pub enum CandidateDisposition(str):
+    """Why a returned candidate was selected or excluded from one bounded trace."""
+
+    Selected = "selected"
+    RejectedByScreening = "rejected_by_screening"
+    ExcludedBySnapshot = "excluded_by_snapshot"
+    ExcludedByMemoryFocus = "excluded_by_memory_focus"
+    ExcludedByBound = "excluded_by_bound"
+
+
+@derive(Clone)
+pub enum ContextProjectionLevel(str):
+    """One bounded representation of a source revision selected by the caller."""
+
+    Abstract = "abstract"
+    Overview = "overview"
+    EvidenceExcerpt = "evidence_excerpt"
+
+
+@derive(Clone)
+pub enum MemoryScopeKind(str):
+    """The semantic role of one stored retrieval scope, never a filesystem path."""
+
+    Conversation = "conversation"
+    Meeting = "meeting"
+    Decision = "decision"
+    MemoryAtom = "memory_atom"
+
+
+@derive(Clone)
+pub model RecordRevision:
+    """One immutable typed record state visible at one semantic-memory snapshot."""
+
+    pub family: str
+    pub logical_id: str
+    pub revision: int
+    pub snapshot_id: int
+    pub content_digest: str
+
+    def reference(self) -> str:
+        """Return a readable reference that pins this exact immutable revision."""
+        return f"{self.family}:{self.logical_id}@{self.revision}"
+
+
+@derive(Clone)
+pub model ContextProjection:
+    """One caller-authored, token-bounded view of one immutable source revision."""
+
+    pub projection_id: str
+    pub source: RecordRevision
+    pub level: ContextProjectionLevel
+    pub content: str
+    pub declared_token_count: int
+    pub source_digest: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model MemoryScope:
+    """One typed node in a stored retrieval hierarchy rooted in an exact revision."""
+
+    pub scope_id: str
+    pub kind: MemoryScopeKind
+    pub subject: RecordRevision
+    pub parent_scope_id: Option[str]
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model RetrievalScopeHop:
+    """One inspected scope and the exact bounded projection read at that hop."""
+
+    pub scope: MemoryScope
+    pub projection: ContextProjection
+
+
+@derive(Clone)
+pub model EvidenceLink:
+    """One typed, snapshot-scoped relationship between exact record revisions."""
+
+    pub source: RecordRevision
+    pub target: RecordRevision
+    pub kind: RelationKind
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model Decision:
+    """An explicit external decision over one exact revision."""
+
+    pub decision_id: str
+    pub subject: RecordRevision
+    pub outcome: ReviewOutcome
+    pub decision_owner: str
+    pub reason: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model Binding:
+    """A released artifact's pin to one approved revision and decision."""
+
+    pub artifact_id: str
+    pub revision: RecordRevision
+    pub decision: Decision
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model RetrievalCandidate:
+    """One HyperQuant-style candidate with a supplied screening outcome and rank."""
+
+    pub revision: RecordRevision
+    pub rank: int
+    pub relevance_bps: int
+    pub screening: ScreeningOutcome
+    pub screening_reason: str
+
+
+@derive(Clone)
+pub model QuantProfile:
+    """One hot-swappable candidate generator and its exact corpus/index compatibility contract."""
+
+    pub quant_id: str
+    pub corpus_revision: str
+    pub model_identity: str
+    pub vector_space_identity: str
+    pub index_identity: str
+    pub candidate_family: str
+
+
+@derive(Clone)
+pub model Quant:
+    """One loaded in-memory candidate generator, identified by its persisted profile."""
+
+    pub profile: QuantProfile
+    pub provider_run_fingerprint: str
+    pub candidates: list[RetrievalCandidate]
+
+
+@derive(Clone)
+pub model CandidateObservation:
+    """The trace-visible treatment of one candidate returned by a generator."""
+
+    pub candidate: RetrievalCandidate
+    pub disposition: CandidateDisposition
+
+
+@derive(Clone)
+pub model RetrievalTrace:
+    """Bounded retrieval evidence retaining every returned candidate's treatment."""
+
+    pub trace_id: str
+    pub input_snapshot_id: int
+    pub quant_profile: QuantProfile
+    pub provider_run_fingerprint: str
+    pub policy_identity: str
+    pub replay_fingerprint: str
+    pub memory_activation: Option[MemoryActivation]
+    pub candidates: list[CandidateObservation]
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model RetrievalRun:
+    """Replayable retrieval receipt joining one query to scopes, projections, and candidate treatment."""
+
+    pub run_id: str
+    pub query: str
+    pub input_snapshot_id: int
+    pub trace: RetrievalTrace
+    pub projection_level: ContextProjectionLevel
+    pub scope_hops: list[RetrievalScopeHop]
+    pub selected_projections: list[ContextProjection]
+    pub active_atom_references: list[str]
+    pub result_receipt: str
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub enum MemoryKind(str):
+    """The semantic role of a stored interaction memory."""
+
+    UserDetail = "user_detail"
+    MeetingRecall = "meeting_recall"
+
+
+@derive(Clone)
+pub model StoredMemory:
+    """Typed interaction memory retained with an exact record revision and bounded source context."""
+
+    pub revision: RecordRevision
+    pub conversation_id: str
+    pub source_id: str
+    pub kind: MemoryKind
+    pub detail: str
+    pub action_items: list[str]
+    pub memory_atoms: list[RecordRevision]
+    pub snapshot_id: int
+
+
+@derive(Clone)
+pub model MemoryActivation:
+    """One ephemeral topic focus over a precomputed, bounded set of immutable memory atoms."""
+
+    pub activation_id: str
+    pub memory_reference: str
+    pub conversation_id: str
+    pub kind: MemoryKind
+    pub input_snapshot_id: int
+    pub policy_identity: str
+    pub quant_profile: QuantProfile
+    pub atom_references: list[str]
+    pub activation_fingerprint: str
+
+
+pub class MemoryBrain:
+    """In-memory semantic ledger; it records supplied facts and never makes domain decisions."""
+
+    revisions: list[RecordRevision]
+    links: list[EvidenceLink]
+    decisions: list[Decision]
+    bindings: list[Binding]
+    traces: list[RetrievalTrace]
+    projections: list[ContextProjection]
+    scopes: list[MemoryScope]
+    retrieval_runs: list[RetrievalRun]
+    memories: list[StoredMemory]
+    quants: list[Quant]
+    active_quant: Option[Quant]
+    snapshot_id: int
+
+    def current_snapshot(self) -> int:
+        """Return the current durable semantic snapshot without exposing mutable state."""
+        return self.snapshot_id
+
+    def record(mut self, family: str, logical_id: str, content_digest: str) -> RecordRevision:
+        """Append one successor revision for a stable logical record identity."""
+        mut next_revision = 1
+        for existing in self.revisions:
+            if existing.family == family and existing.logical_id == logical_id and existing.revision >= next_revision:
+                next_revision = existing.revision + 1
+        self.snapshot_id = self.snapshot_id + 1
+        revision = RecordRevision(
+            family=family,
+            logical_id=logical_id,
+            revision=next_revision,
+            snapshot_id=self.snapshot_id,
+            content_digest=content_digest,
+        )
+        self.revisions.append(revision)
+        return revision
+
+    def register_context_projection(
+        mut self,
+        projection_id: str,
+        source: RecordRevision,
+        level: ContextProjectionLevel,
+        content: str,
+        declared_token_count: int,
+    ) -> Option[ContextProjection]:
+        """Record one supplied bounded projection without generating or altering its source revision."""
+        if (projection_id == "" or content == "" or declared_token_count <= 0 or declared_token_count > _projection_budget(
+            level,
+        ) or not _revision_exists(self.revisions, source) or _projection_id_exists(self.projections, projection_id)):
+            return None
+        self.snapshot_id = self.snapshot_id + 1
+        projection = ContextProjection(
+            projection_id=projection_id,
+            source=source,
+            level=level,
+            content=content,
+            declared_token_count=declared_token_count,
+            source_digest=source.content_digest,
+            snapshot_id=self.snapshot_id,
+        )
+        self.projections.append(projection)
+        return Some(projection)
+
+    def define_memory_scope(
+        mut self,
+        scope_id: str,
+        kind: MemoryScopeKind,
+        subject: RecordRevision,
+        parent_scope_id: Option[str],
+    ) -> Option[MemoryScope]:
+        """Record one typed retrieval scope whose parent has already been explicitly stored."""
+        if scope_id == "" or not _revision_exists(self.revisions, subject) or _scope_exists(self.scopes, scope_id):
+            return None
+        match parent_scope_id:
+            Some(parent_id) =>
+                if parent_id == scope_id or not _scope_exists(self.scopes, parent_id):
+                    return None
+            None => pass
+        self.snapshot_id = self.snapshot_id + 1
+        scope = MemoryScope(
+            scope_id=scope_id,
+            kind=kind,
+            subject=subject,
+            parent_scope_id=parent_scope_id,
+            snapshot_id=self.snapshot_id,
+        )
+        self.scopes.append(scope)
+        return Some(scope)
+
+    def link(mut self, source: RecordRevision, target: RecordRevision, kind: RelationKind) -> EvidenceLink:
+        """Record one provenance relationship without changing either revision."""
+        self.snapshot_id = self.snapshot_id + 1
+        link = EvidenceLink(source=source, target=target, kind=kind, snapshot_id=self.snapshot_id)
+        self.links.append(link)
+        return link
+
+    def decide(mut self, subject: RecordRevision, outcome: ReviewOutcome, decision_owner: str, reason: str) -> Decision:
+        """Record an externally supplied review or validation outcome."""
+        self.snapshot_id = self.snapshot_id + 1
+        decision = Decision(
+            decision_id=f"decision-{len(self.decisions) + 1}",
+            subject=subject,
+            outcome=outcome,
+            decision_owner=decision_owner,
+            reason=reason,
+            snapshot_id=self.snapshot_id,
+        )
+        self.decisions.append(decision)
+        return decision
+
+    def bind_approved(mut self, artifact_id: str, decision: Decision) -> Option[Binding]:
+        """Pin an artifact only when its caller supplied an explicit approval decision."""
+        if decision.outcome != ReviewOutcome.Approved:
+            return None
+        self.snapshot_id = self.snapshot_id + 1
+        binding = Binding(
+            artifact_id=artifact_id,
+            revision=decision.subject,
+            decision=decision,
+            snapshot_id=self.snapshot_id,
+        )
+        self.bindings.append(binding)
+        return Some(binding)
+
+    def store_memory(
+        mut self,
+        conversation_id: str,
+        source_id: str,
+        kind: MemoryKind,
+        detail: str,
+        action_items: list[str],
+        memory_atoms: list[RecordRevision],
+        content_digest: str,
+    ) -> StoredMemory:
+        """Store one typed interaction memory as an immutable semantic record revision."""
+        revision = self.record("ConversationMemoryRevision", f"{conversation_id}:{source_id}", content_digest)
+        memory = StoredMemory(
+            revision=revision,
+            conversation_id=conversation_id,
+            source_id=source_id,
+            kind=kind,
+            detail=detail,
+            action_items=action_items,
+            memory_atoms=memory_atoms,
+            snapshot_id=revision.snapshot_id,
+        )
+        self.memories.append(memory)
+        return memory
+
+    def recall_memories(self, conversation_id: str, input_snapshot_id: int, bound: int) -> Option[list[StoredMemory]]:
+        """Return chronological interaction memories visible to one bounded conversation snapshot."""
+        if input_snapshot_id > self.snapshot_id:
+            return None
+        mut result: list[StoredMemory] = []
+        for memory in self.memories:
+            if len(result) >= bound:
+                return Some(result)
+            if memory.conversation_id == conversation_id and memory.snapshot_id <= input_snapshot_id:
+                result.append(memory)
+        return Some(result)
+
+    def create_memory_activation(
+        self,
+        memory: StoredMemory,
+        input_snapshot_id: int,
+        policy_identity: str,
+        activation_fingerprint: str,
+    ) -> Option[MemoryActivation]:
+        """Prepare a bounded, replayable memory focus without mutating durable Brain state."""
+        if input_snapshot_id > self.snapshot_id or activation_fingerprint == "":
+            return None
+        if memory.snapshot_id > input_snapshot_id or not _stored_memory_exists(self.memories, memory):
+            return None
+        active_quant = match self.active_quant:
+            Some(quant) => quant
+            None => return None
+
+        if len(memory.memory_atoms) == 0:
+            return None
+
+        mut atom_references: list[str] = []
+        for atom in memory.memory_atoms:
+            if atom.snapshot_id > input_snapshot_id:
+                return None
+            if atom.family != active_quant.profile.candidate_family:
+                return None
+            if atom.reference() in atom_references or not _revision_exists(self.revisions, atom):
+                return None
+            atom_references.append(atom.reference())
+
+        return Some(
+            MemoryActivation(
+                activation_id=f"memory-focus:{memory.revision.reference()}:{input_snapshot_id}",
+                memory_reference=memory.revision.reference(),
+                conversation_id=memory.conversation_id,
+                kind=memory.kind,
+                input_snapshot_id=input_snapshot_id,
+                policy_identity=policy_identity,
+                quant_profile=active_quant.profile,
+                atom_references=atom_references,
+                activation_fingerprint=activation_fingerprint,
+            ),
+        )
+
+    def install_quant(mut self, quant: Quant) -> None:
+        """Load one candidate generator without changing durable semantic state."""
+        self.quants.append(quant)
+
+    def activate_quant(mut self, quant_id: str, corpus_revision: str) -> bool:
+        """Hot-swap to a quant only when it declares the requested corpus revision."""
+        for quant in self.quants:
+            if quant.profile.quant_id == quant_id and quant.profile.corpus_revision == corpus_revision:
+                self.active_quant = Some(quant)
+                return true
+        return false
+
+    def retrieve_active(
+        mut self,
+        trace_id: str,
+        input_snapshot_id: int,
+        policy_identity: str,
+        replay_fingerprint: str,
+        bound: int,
+    ) -> Option[RetrievalTrace]:
+        """Record a bounded retrieval trace without an active memory focus."""
+        return self.retrieve_active_with_memory(
+            trace_id,
+            input_snapshot_id,
+            policy_identity,
+            replay_fingerprint,
+            bound,
+            None,
+        )
+
+    def retrieve_active_with_memory(
+        mut self,
+        trace_id: str,
+        input_snapshot_id: int,
+        policy_identity: str,
+        replay_fingerprint: str,
+        bound: int,
+        memory_activation: Option[MemoryActivation],
+    ) -> Option[RetrievalTrace]:
+        """Record bounded candidate treatment supplied by the active compatible quant."""
+        if input_snapshot_id > self.snapshot_id:
+            return None
+        active_quant = match self.active_quant:
+            Some(quant) => quant
+            None => return None
+
+        if not _memory_activation_is_compatible(
+            memory_activation,
+            active_quant,
+            self.memories,
+            input_snapshot_id,
+            policy_identity,
+        ):
+            return None
+        memory_atom_references = _memory_atom_references(memory_activation)
+
+        mut observations: list[CandidateObservation] = []
+        mut selected_count = 0
+        for candidate in active_quant.candidates:
+            if candidate.revision.family != active_quant.profile.candidate_family:
+                return None
+            disposition = _candidate_disposition(
+                candidate,
+                input_snapshot_id,
+                selected_count,
+                bound,
+                memory_atom_references,
+            )
+            if disposition == CandidateDisposition.Selected:
+                selected_count = selected_count + 1
+            observations.append(CandidateObservation(candidate=candidate, disposition=disposition))
+
+        self.snapshot_id = self.snapshot_id + 1
+        trace = RetrievalTrace(
+            trace_id=trace_id,
+            input_snapshot_id=input_snapshot_id,
+            quant_profile=active_quant.profile,
+            provider_run_fingerprint=active_quant.provider_run_fingerprint,
+            policy_identity=policy_identity,
+            replay_fingerprint=replay_fingerprint,
+            memory_activation=memory_activation,
+            candidates=observations,
+            snapshot_id=self.snapshot_id,
+        )
+        self.traces.append(trace)
+        return Some(trace)
+
+    def record_retrieval_run(
+        mut self,
+        run_id: str,
+        query: str,
+        trace: RetrievalTrace,
+        projection_level: ContextProjectionLevel,
+        scope_hops: list[RetrievalScopeHop],
+        result_receipt: str,
+    ) -> Option[RetrievalRun]:
+        """Record how one existing trace reached its selected bounded context without rerunning retrieval."""
+        if (run_id == "" or query == "" or result_receipt == "" or len(scope_hops) == 0 or not _trace_exists(
+            self.traces,
+            trace,
+        ) or _retrieval_run_id_exists(self.retrieval_runs, run_id)):
+            return None
+
+        mut previous_scope_id: Option[str] = None
+        for hop in scope_hops:
+            if (hop.projection.level != projection_level or hop.projection.source.reference() != hop.scope.subject.reference() or hop.scope.snapshot_id > trace.input_snapshot_id or hop.projection.snapshot_id > trace.input_snapshot_id or not _scope_exists(
+                self.scopes,
+                hop.scope.scope_id,
+            ) or not _projection_exists(self.projections, hop.projection.projection_id) or hop.scope.parent_scope_id != previous_scope_id):
+                return None
+            previous_scope_id = Some(hop.scope.scope_id)
+
+        mut selected_projections: list[ContextProjection] = []
+        for observation in trace.candidates:
+            if observation.disposition == CandidateDisposition.Selected:
+                projection = _projection_for_source(self.projections, observation.candidate.revision, projection_level)
+                match projection:
+                    Some(selected_projection) => selected_projections.append(selected_projection)
+                    None => return None
+
+        if len(selected_projections) == 0:
+            return None
+
+        self.snapshot_id = self.snapshot_id + 1
+        run = RetrievalRun(
+            run_id=run_id,
+            query=query,
+            input_snapshot_id=trace.input_snapshot_id,
+            trace=trace,
+            projection_level=projection_level,
+            scope_hops=scope_hops,
+            selected_projections=selected_projections,
+            active_atom_references=_memory_atom_references(trace.memory_activation),
+            result_receipt=result_receipt,
+            snapshot_id=self.snapshot_id,
+        )
+        self.retrieval_runs.append(run)
+        return Some(run)
+
+    def predecessors(self, target: RecordRevision, input_snapshot_id: int, bound: int) -> list[EvidenceLink]:
+        """Return a bounded direct provenance traversal at one named snapshot."""
+        mut result: list[EvidenceLink] = []
+        for link in self.links:
+            if len(result) >= bound:
+                return result
+            if link.snapshot_id <= input_snapshot_id and link.target.reference() == target.reference():
+                result.append(link)
+        return result
+
+    def replay_matches(
+        self,
+        trace: RetrievalTrace,
+        input_snapshot_id: int,
+        quant_profile: QuantProfile,
+        provider_run_fingerprint: str,
+        policy_identity: str,
+        replay_fingerprint: str,
+        memory_activation: Option[MemoryActivation],
+    ) -> bool:
+        """Check that an attempted replay names the exact bounded retrieval context."""
+        return (trace.input_snapshot_id == input_snapshot_id and trace.quant_profile.quant_id == quant_profile.quant_id and trace.quant_profile.corpus_revision == quant_profile.corpus_revision and trace.quant_profile.model_identity == quant_profile.model_identity and trace.quant_profile.vector_space_identity == quant_profile.vector_space_identity and trace.quant_profile.index_identity == quant_profile.index_identity and trace.quant_profile.candidate_family == quant_profile.candidate_family and trace.provider_run_fingerprint == provider_run_fingerprint and trace.policy_identity == policy_identity and trace.replay_fingerprint == replay_fingerprint and _memory_activations_match(
+            trace.memory_activation,
+            memory_activation,
+        ))
+
+
+pub def empty_brain() -> MemoryBrain:
+    """Create an empty in-memory semantic ledger at the initial snapshot."""
+    return MemoryBrain(
+        revisions=[],
+        links=[],
+        decisions=[],
+        bindings=[],
+        traces=[],
+        projections=[],
+        scopes=[],
+        retrieval_runs=[],
+        memories=[],
+        quants=[],
+        active_quant=None,
+        snapshot_id=0,
+    )
+
+
+def _candidate_disposition(
+    candidate: RetrievalCandidate,
+    input_snapshot_id: int,
+    selected_count: int,
+    bound: int,
+    memory_atom_references: list[str],
+) -> CandidateDisposition:
+    """Preserve the distinction between screening, snapshot visibility, and result bounds."""
+    if candidate.revision.snapshot_id > input_snapshot_id:
+        return CandidateDisposition.ExcludedBySnapshot
+    if len(memory_atom_references) > 0 and candidate.revision.reference() not in memory_atom_references:
+        return CandidateDisposition.ExcludedByMemoryFocus
+    if candidate.screening == ScreeningOutcome.Rejected:
+        return CandidateDisposition.RejectedByScreening
+    if selected_count >= bound:
+        return CandidateDisposition.ExcludedByBound
+    return CandidateDisposition.Selected
+
+
+def _projection_budget(level: ContextProjectionLevel) -> int:
+    """Keep declared projection sizes explicit without pretending this spike tokenizes content."""
+    match level:
+        ContextProjectionLevel.Abstract => return 128
+        ContextProjectionLevel.Overview => return 2048
+        ContextProjectionLevel.EvidenceExcerpt => return 1024
+
+
+def _projection_id_exists(projections: list[ContextProjection], projection_id: str) -> bool:
+    """Require one projection identifier to name exactly one stored source view."""
+    for projection in projections:
+        if projection.projection_id == projection_id:
+            return true
+    return false
+
+
+def _projection_exists(projections: list[ContextProjection], projection_id: str) -> bool:
+    """Resolve a retrieval hop only through an already stored projection identifier."""
+    return _projection_id_exists(projections, projection_id)
+
+
+def _projection_for_source(
+    projections: list[ContextProjection],
+    source: RecordRevision,
+    level: ContextProjectionLevel,
+) -> Option[ContextProjection]:
+    """Find the caller-authored projection that pins one selected immutable candidate revision."""
+    for projection in projections:
+        if projection.source.reference() == source.reference() and projection.level == level:
+            return Some(projection)
+    return None
+
+
+def _scope_exists(scopes: list[MemoryScope], scope_id: str) -> bool:
+    """Resolve scope parentage through stored typed scope identities only."""
+    for scope in scopes:
+        if scope.scope_id == scope_id:
+            return true
+    return false
+
+
+def _trace_exists(traces: list[RetrievalTrace], trace: RetrievalTrace) -> bool:
+    """Prevent a receipt from being attached to a trace the Brain did not record."""
+    for existing in traces:
+        if existing.trace_id == trace.trace_id and existing.snapshot_id == trace.snapshot_id:
+            return true
+    return false
+
+
+def _retrieval_run_id_exists(runs: list[RetrievalRun], run_id: str) -> bool:
+    """Keep receipt identifiers stable and unambiguous inside one Brain."""
+    for run in runs:
+        if run.run_id == run_id:
+            return true
+    return false
+
+
+def _stored_memory_exists(memories: list[StoredMemory], memory: StoredMemory) -> bool:
+    """Resolve one stored interaction memory by its exact immutable revision reference."""
+    for existing in memories:
+        if existing.revision.reference() == memory.revision.reference():
+            return true
+    return false
+
+
+def _revision_exists(revisions: list[RecordRevision], expected: RecordRevision) -> bool:
+    """Require every memory atom to name a record revision already held by this Brain."""
+    for revision in revisions:
+        if revision.reference() == expected.reference():
+            return true
+    return false
+
+
+def _memory_activation_is_compatible(
+    memory_activation: Option[MemoryActivation],
+    active_quant: Quant,
+    memories: list[StoredMemory],
+    input_snapshot_id: int,
+    policy_identity: str,
+) -> bool:
+    """Prevent a focused trace from silently crossing its source memory, profile, or policy boundary."""
+    match memory_activation:
+        Some(activation) =>
+            return (activation.input_snapshot_id == input_snapshot_id and activation.policy_identity == policy_identity and activation.activation_fingerprint != "" and len(
+                activation.atom_references,
+            ) > 0 and _profiles_match(activation.quant_profile, active_quant.profile) and _memory_reference_exists(
+                memories,
+                activation.memory_reference,
+                activation.conversation_id,
+                activation.kind,
+            ))
+        None => return true
+
+
+def _memory_reference_exists(
+    memories: list[StoredMemory],
+    memory_reference: str,
+    conversation_id: str,
+    kind: MemoryKind,
+) -> bool:
+    """Check that an activation still names the exact stored memory it was prepared from."""
+    for memory in memories:
+        if (
+            memory.revision.reference() == memory_reference
+            and memory.conversation_id == conversation_id
+            and memory.kind == kind
+        ):
+            return true
+    return false
+
+
+def _memory_atom_references(memory_activation: Option[MemoryActivation]) -> list[str]:
+    """Return the active atom set, or the empty set when retrieval has no memory focus."""
+    match memory_activation:
+        Some(activation) => return activation.atom_references
+        None => return []
+
+
+def _profiles_match(left: QuantProfile, right: QuantProfile) -> bool:
+    """Require the exact Quant profile that prepared a focused memory activation."""
+    return (
+        left.quant_id == right.quant_id
+        and left.corpus_revision == right.corpus_revision
+        and left.model_identity == right.model_identity
+        and left.vector_space_identity == right.vector_space_identity
+        and left.index_identity == right.index_identity
+        and left.candidate_family == right.candidate_family
+    )
+
+
+def _memory_activations_match(left: Option[MemoryActivation], right: Option[MemoryActivation]) -> bool:
+    """Compare the complete focus identity needed to replay a memory-constrained retrieval trace."""
+    match left:
+        Some(left_activation) =>
+            match right:
+                Some(right_activation) =>
+                    return (left_activation.activation_id == right_activation.activation_id and left_activation.memory_reference == right_activation.memory_reference and left_activation.conversation_id == right_activation.conversation_id and left_activation.kind == right_activation.kind and left_activation.input_snapshot_id == right_activation.input_snapshot_id and left_activation.policy_identity == right_activation.policy_identity and _profiles_match(
+                        left_activation.quant_profile,
+                        right_activation.quant_profile,
+                    ) and left_activation.atom_references == right_activation.atom_references and left_activation.activation_fingerprint == right_activation.activation_fingerprint)
+                None => return false
+        None =>
+            match right:
+                None => return true
+                Some(_) => return false

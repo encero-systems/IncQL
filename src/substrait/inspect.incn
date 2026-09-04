@@ -61,7 +61,7 @@ def _malformed_root_rel() -> Rel:
         advanced_extension=None,
         read_type=Some(ReadType.NamedTable(ReadNamedTable(names=["__malformed_plan__"], advanced_extension=None))),
     )
-    return Rel(rel_type=Some(RelType.Read(Box.new(read))))
+    return Rel(rel_type=Some(RelType.Read(read)))
 
 
 def _set_op_value(value: SetOp) -> RustI32:

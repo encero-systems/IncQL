@@ -1,0 +1,109 @@
+"""IncQL planning control for the semantic-memory relational adapter spike."""
+
+from brain import ContextProjectionLevel, QuantProfile, RetrievalRun, RetrievalTrace
+from pub::incql import InspectionNodeKind, PlanInspection, inspect_plan
+from relational_adapter import (
+    attach_selection_plan,
+    memory_relation_sources,
+    predecessor_plan,
+    scope_parent_plan,
+    selected_projection_plan,
+    visible_revision_plan,
+    visible_scope_plan,
+)
+
+
+def _node_kinds(inspection: PlanInspection) -> list[InspectionNodeKind]:
+    """Return public plan-node kinds without depending on private Prism identifiers."""
+    return [node.kind for node in inspection.authored_nodes]
+
+
+def _retrieval_run() -> RetrievalRun:
+    """Return a minimal existing receipt used only to prove plan evidence attachment."""
+    profile = QuantProfile(
+        quant_id="hyperquant-fast-local",
+        corpus_revision="content-dna:v1",
+        model_identity="embedding:local-fast-v1",
+        vector_space_identity="vector-space:fast-v1",
+        index_identity="index:fast-v1",
+        candidate_family="KnowledgeRevision",
+    )
+    trace = RetrievalTrace(
+        trace_id="trace:plan-only",
+        input_snapshot_id=7,
+        quant_profile=profile,
+        provider_run_fingerprint="sha256:provider-run",
+        policy_identity="policy:local-pilot-v1",
+        replay_fingerprint="sha256:replay",
+        memory_activation=None,
+        candidates=[],
+        snapshot_id=8,
+    )
+    return RetrievalRun(
+        run_id="run:plan-only",
+        query="What constraint governs this memory?",
+        input_snapshot_id=7,
+        trace=trace,
+        projection_level=ContextProjectionLevel.Abstract,
+        scope_hops=[],
+        selected_projections=[],
+        active_atom_references=[],
+        result_receipt="receipt:plan-only",
+        snapshot_id=9,
+    )
+
+
+def test_relation_read_shapes_expose_snapshot_bounded_lookup_plans() -> None:
+    """The former revision/scope list scans become explicit typed filter plans."""
+    # -- Arrange --
+    sources = memory_relation_sources()
+
+    # -- Act --
+    revision = inspect_plan(visible_revision_plan(sources.revisions, "KnowledgeRevision:local@1", 7))
+    scope = inspect_plan(visible_scope_plan(sources.scopes, "scope:conversation-1", 7))
+
+    # -- Assert --
+    assert InspectionNodeKind.ReadNamedTable in _node_kinds(revision)
+    assert InspectionNodeKind.Filter in _node_kinds(revision)
+    assert InspectionNodeKind.SelectProject in _node_kinds(revision)
+    assert InspectionNodeKind.ReadNamedTable in _node_kinds(scope)
+    assert InspectionNodeKind.Filter in _node_kinds(scope)
+    assert len(revision.lineage.edges) > 0
+    assert len(scope.lineage.edges) > 0
+
+
+def test_relation_reads_and_scope_traversal_expose_distinct_paths() -> None:
+    """The read model distinguishes source pins, scope hops, and provenance predecessors."""
+    # -- Arrange --
+    sources = memory_relation_sources()
+
+    # -- Act --
+    selection = inspect_plan(
+        selected_projection_plan(sources.projections, "KnowledgeRevision:local-boundary@1", "abstract", 7),
+    )
+    scope_hop = inspect_plan(scope_parent_plan(sources.scopes, sources.scope_parents, "scope:atom", 7))
+    predecessor = inspect_plan(predecessor_plan(sources.links, "KnowledgeRevision:target@2", 7))
+
+    # -- Assert --
+    assert InspectionNodeKind.Filter in _node_kinds(selection)
+    assert InspectionNodeKind.Join in _node_kinds(scope_hop)
+    assert InspectionNodeKind.Filter in _node_kinds(predecessor)
+    assert len(selection.lineage.edges) > 0
+    assert len(scope_hop.lineage.edges) > 0
+    assert len(predecessor.lineage.edges) > 0
+
+
+def test_retrieval_receipt_carries_the_inspected_projection_plan() -> None:
+    """Plan inspection augments an existing retrieval receipt without executing a query."""
+    # -- Arrange --
+    sources = memory_relation_sources()
+    selection = selected_projection_plan(sources.projections, "KnowledgeRevision:local-boundary@1", "abstract", 7)
+
+    # -- Act --
+    receipt = attach_selection_plan(_retrieval_run(), selection)
+
+    # -- Assert --
+    assert receipt.run.run_id == "run:plan-only"
+    assert InspectionNodeKind.Filter in _node_kinds(receipt.selection_plan)
+    assert len(receipt.selection_plan.output_fields) == 6
+    assert len(receipt.selection_plan.lineage.edges) > 0
