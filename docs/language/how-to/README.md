@@ -24,6 +24,12 @@ If IncQL is new to you, complete the [ten-minute quickstart][quickstart] first. 
 - [Capture execution observations and adapter coverage][execution-observations] records concrete attempts and coverage evidence.
 - [Observe data quality checks][quality-observations] evaluates typed assertions without hiding caller-owned policy.
 - [Inspect governed evidence][governed-evidence] carries local governance metadata into an explicit decision point.
+- [Package a governed plan bundle][governed-plan-bundles] keeps one planned relation and its local evidence together in a typed handoff value.
+- [Compare plans and produce blast-radius inputs][plan-diffs] classifies local semantic changes without claiming a global dependency graph.
+- [Exchange evidence with adjacent tools][evidence-exchange] projects and imports explicitly scoped evidence without transferring semantic ownership.
+- [Assess semantic profiles][semantic-profiles] records the source or target environment behind portability and coverage evidence.
+- [Analyze an external plan request][ingress] turns a supported unresolved ingress request into Prism-owned relational evidence.
+- [Record and project verification evidence][verification-evidence] keeps assertion, run, observation, assurance, scope, and waiver evidence separate.
 
 ## Advanced and capability-dependent
 
@@ -51,18 +57,24 @@ This structure is intentional: a code sample without a verification step or a ca
 [capabilities]: ../reference/capabilities.md
 [dataset-transformations]: dataset_transformations.md
 [execution-observations]: execution_observations.md
+[evidence-exchange]: evidence_exchange.md
 [generator-rows]: generator_rows.md
 [governed-evidence]: governed_evidence.md
+[governed-plan-bundles]: governed_plan_bundles.md
 [inspect-plan-lineage]: inspect_plan_lineage.md
+[ingress]: ingress.md
 [joins]: joins.md
 [nested-row-values]: nested_row_values.md
 [normalize-semistructured-fields]: normalize_semistructured_fields.md
+[plan-diffs]: plan_diffs.md
 [quality-observations]: quality_observations.md
 [quickstart]: ../quickstart.md
 [read-write]: read_write_data.md
+[semantic-profiles]: semantic_profiles.md
 [spark-bridge]: ../explanation/from_spark.md
 [sql-bridge]: ../explanation/from_sql.md
 [troubleshooting]: troubleshooting.md
 [typed-hll-sketches]: typed_hll_sketches.md
 [variant-payloads]: variant_payloads.md
+[verification-evidence]: verification_evidence.md
 [window-columns]: window_columns.md

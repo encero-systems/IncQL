@@ -2219,7 +2219,7 @@
   {
     "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-05-29",
-    "href": "036_governed_plan_bundle/",
+    "href": "closed/implemented/036_governed_plan_bundle/",
     "id": "036",
     "issue": "[IncQL #70](https://github.com/encero-systems/IncQL/issues/70)",
     "issue_label": "IncQL #70",
@@ -2230,7 +2230,7 @@
       }
     ],
     "issue_url": "https://github.com/encero-systems/IncQL/issues/70",
-    "lifecycle": "active",
+    "lifecycle": "implemented",
     "motivation": "Individual evidence artifacts are useful, but many consumers need a coherent handoff unit. A plan without its evidence can be executed without understanding requirements. Evidence without the plan cannot explain what computation it describes. The governed plan bundle gives IncQL a portable local package for the facts it owns while leaving hosted storage, global policy, approvals, and cross-system reasoning outside the contract.",
     "related": [
       "IncQL RFC 002 (Apache Substrait integration)",
@@ -2268,7 +2268,7 @@
       "046",
       "047"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83); [IncQL #95](https://github.com/encero-systems/IncQL/pull/95)",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -2278,13 +2278,17 @@
       {
         "label": "IncQL #83",
         "url": "https://github.com/encero-systems/IncQL/pull/83"
+      },
+      {
+        "label": "IncQL #95",
+        "url": "https://github.com/encero-systems/IncQL/pull/95"
       }
     ],
     "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/60",
-    "shipped_in": "—",
-    "source_path": "036_governed_plan_bundle.md",
-    "status": "Draft",
-    "status_key": "draft",
+    "shipped_in": "IncQL v0.1",
+    "source_path": "closed/implemented/036_governed_plan_bundle.md",
+    "status": "Implemented",
+    "status_key": "implemented",
     "summary": "This RFC defines the governed plan bundle as the local IncQL artifact that keeps relational computation and evidence together. A bundle contains a plan reference, schemas, lineage, governed attributes, policy checkpoints, quality assertions, verification evidence, canonical equality profiles, verifier statements, proof artifacts, constraint evidence, data contract evidence, product topology, semantic evidence graph projections, semantic profiles, ingress evidence, client session context, adapter requirements, coverage records, evidence references, and version metadata for the IncQL-owned parts of governed relational computation.",
     "tags": [
       {
@@ -2301,12 +2305,12 @@
       }
     ],
     "title": "Governed plan bundle",
-    "written_against": "Incan v0.3-era IncQL"
+    "written_against": "Incan v0.5-dev-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-05-29",
-    "href": "037_plan_diff_blast_radius_inputs/",
+    "href": "closed/implemented/037_plan_diff_blast_radius_inputs/",
     "id": "037",
     "issue": "[IncQL #71](https://github.com/encero-systems/IncQL/issues/71)",
     "issue_label": "IncQL #71",
@@ -2317,7 +2321,7 @@
       }
     ],
     "issue_url": "https://github.com/encero-systems/IncQL/issues/71",
-    "lifecycle": "active",
+    "lifecycle": "implemented",
     "motivation": "Typed relational evidence should help users understand change before it reaches production. If a query changes, tools should know whether output fields changed, dependencies changed, adapter requirements changed, or quality checks changed. IncQL can produce accurate local diff evidence because it owns the plan and lineage, but it should not claim to know every downstream consumer in every organization.",
     "related": [
       "IncQL RFC 007 (Prism logical planning and optimization engine)",
@@ -2337,19 +2341,23 @@
       "036",
       "040"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #95](https://github.com/encero-systems/IncQL/pull/95)",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
         "label": "IncQL #60",
         "url": "https://github.com/encero-systems/IncQL/pull/60"
+      },
+      {
+        "label": "IncQL #95",
+        "url": "https://github.com/encero-systems/IncQL/pull/95"
       }
     ],
     "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/60",
-    "shipped_in": "—",
-    "source_path": "037_plan_diff_blast_radius_inputs.md",
-    "status": "Draft",
-    "status_key": "draft",
+    "shipped_in": "IncQL v0.1",
+    "source_path": "closed/implemented/037_plan_diff_blast_radius_inputs.md",
+    "status": "Implemented",
+    "status_key": "implemented",
     "summary": "This RFC defines local IncQL plan diffs and blast-radius input artifacts. A plan diff compares two IncQL evidence artifacts and classifies changes in output schema, field identity, lineage, joins, filters, aggregates, windows, generators, quality assertions, semantic profiles, adapter requirements, and coverage. The result is a local input to downstream impact analysis, not an organization-wide blast-radius service.",
     "tags": [
       {
@@ -2362,12 +2370,12 @@
       }
     ],
     "title": "Plan diff and blast-radius inputs",
-    "written_against": "Incan v0.3-era IncQL"
+    "written_against": "Incan v0.5-dev-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-05-29",
-    "href": "038_evidence_exchange_bridges/",
+    "href": "closed/implemented/038_evidence_exchange_bridges/",
     "id": "038",
     "issue": "[IncQL #72](https://github.com/encero-systems/IncQL/issues/72)",
     "issue_label": "IncQL #72",
@@ -2378,7 +2386,7 @@
       }
     ],
     "issue_url": "https://github.com/encero-systems/IncQL/issues/72",
-    "lifecycle": "active",
+    "lifecycle": "implemented",
     "motivation": "IncQL evidence should be useful outside IncQL, and external project artifacts should be usable as evidence inputs when they are explicit about their source and scope. CI systems, lineage tools, telemetry pipelines, catalogs, notebooks, transformation frameworks, orchestrators, and agents may all consume or produce different formats. Systems such as dbt, Airflow, MWAA, Dagster, Prefect, Glue Data Catalog, Hive Metastore, DataHub, OpenMetadata, OpenLineage, and Great Expectations are useful ecosystem examples, but none of them should become IncQL's internal evidence model. If each integration reconstructs evidence independently, semantics will drift. IncQL should provide exchange bridges that preserve its local evidence model while acknowledging that external formats may be less expressive or may represent facts at a different semantic layer.",
     "related": [
       "IncQL RFC 002 (Apache Substrait integration)",
@@ -2412,7 +2420,7 @@
       "046",
       "047"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83)",
+    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #83](https://github.com/encero-systems/IncQL/pull/83); [IncQL #95](https://github.com/encero-systems/IncQL/pull/95)",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
@@ -2422,13 +2430,17 @@
       {
         "label": "IncQL #83",
         "url": "https://github.com/encero-systems/IncQL/pull/83"
+      },
+      {
+        "label": "IncQL #95",
+        "url": "https://github.com/encero-systems/IncQL/pull/95"
       }
     ],
     "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/60",
-    "shipped_in": "—",
-    "source_path": "038_evidence_exchange_bridges.md",
-    "status": "Draft",
-    "status_key": "draft",
+    "shipped_in": "IncQL v0.1",
+    "source_path": "closed/implemented/038_evidence_exchange_bridges.md",
+    "status": "Implemented",
+    "status_key": "implemented",
     "summary": "This RFC defines evidence exchange bridges between IncQL's internal evidence model and external or adjacent formats. Exchange bridges map IncQL plan, lineage, schema-flow, execution, quality, verification, canonical equality, proof artifact, constraint, contract, product topology, evidence graph, coverage, semantic profile, and bundle records into downstream views such as OpenLineage events, telemetry signals, semantic inspection fragments, transformation-project artifacts, data-contract artifacts, product-topology artifacts, graph projections, and catalog/governance integration artifacts. They may also ingest external evidence artifacts such as transformation manifests, source catalogs, schema catalogs, run results, verification results, proof results, constraint metadata, contract artifacts, product artifacts, runtime lineage events, and orchestration metadata. Representative artifact families include dbt manifests and run results, Open Data Contract Standard artifacts, Open Data Product Standard artifacts, legacy Data Contract Specification artifacts, Glue Data Catalog or Hive Metastore snapshots, Airflow or MWAA DAG metadata, Dagster assets, Prefect deployment metadata, OpenLineage events, DataHub or OpenMetadata catalog records, and Great Expectations-style quality results. Inbound artifacts and outbound projections are evidence exchange records, not the internal source of truth.",
     "tags": [
       {
@@ -2445,7 +2457,7 @@
       }
     ],
     "title": "Evidence exchange bridges",
-    "written_against": "Incan v0.3-era IncQL"
+    "written_against": "Incan v0.5-dev-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
@@ -2503,7 +2515,7 @@
   {
     "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-05-30",
-    "href": "040_interoperability_semantic_profiles/",
+    "href": "closed/implemented/040_interoperability_semantic_profiles/",
     "id": "040",
     "issue": "[IncQL #74](https://github.com/encero-systems/IncQL/issues/74)",
     "issue_label": "IncQL #74",
@@ -2514,7 +2526,7 @@
       }
     ],
     "issue_url": "https://github.com/encero-systems/IncQL/issues/74",
-    "lifecycle": "active",
+    "lifecycle": "implemented",
     "motivation": "Interoperability requires more than lowering a plan and asking whether an adapter has a support flag. Different target environments can share the same relational vocabulary while differing on edge semantics: type coercion, decimal overflow, timestamp and timezone behavior, identifier resolution, null and NaN ordering, collation, case sensitivity, function definitions, aggregate edge cases, window defaults, nested data behavior, row ordering, and fallback execution.",
     "related": [
       "IncQL RFC 000 (core language model and layer boundaries)",
@@ -2556,19 +2568,23 @@
       "038",
       "041"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #95](https://github.com/encero-systems/IncQL/pull/95)",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
         "label": "IncQL #60",
         "url": "https://github.com/encero-systems/IncQL/pull/60"
+      },
+      {
+        "label": "IncQL #95",
+        "url": "https://github.com/encero-systems/IncQL/pull/95"
       }
     ],
     "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/60",
-    "shipped_in": "—",
-    "source_path": "040_interoperability_semantic_profiles.md",
-    "status": "Draft",
-    "status_key": "draft",
+    "shipped_in": "IncQL v0.1",
+    "source_path": "closed/implemented/040_interoperability_semantic_profiles.md",
+    "status": "Implemented",
+    "status_key": "implemented",
     "summary": "This RFC defines interoperability semantic profiles for IncQL evidence. A profile describes the semantic environment a plan is being received from, compared with, targeted at, or observed under: an IncQL baseline, client protocol, plan ingress frontend, execution engine, adapter binding, SQL dialect, catalog/schema system, transformation project, interchange consumer, or conformance baseline. Profiles give ingress coverage records, adapter requirements, coverage records, execution observations, plan diffs, bundles, and exchanges a shared context without making any external system the owner of IncQL relational meaning.",
     "tags": [
       {
@@ -2581,12 +2597,12 @@
       }
     ],
     "title": "Interoperability semantic profiles",
-    "written_against": "Incan v0.3-era IncQL"
+    "written_against": "Incan v0.5-dev-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-05-30",
-    "href": "041_prism_plan_ingress_frontends/",
+    "href": "closed/implemented/041_prism_plan_ingress_frontends/",
     "id": "041",
     "issue": "[IncQL #75](https://github.com/encero-systems/IncQL/issues/75)",
     "issue_label": "IncQL #75",
@@ -2597,7 +2613,7 @@
       }
     ],
     "issue_url": "https://github.com/encero-systems/IncQL/issues/75",
-    "lifecycle": "active",
+    "lifecycle": "implemented",
     "motivation": "IncQL should be able to interoperate with established client APIs without pretending that those APIs own IncQL's semantics. Spark Connect is the clearest pressure: a PySpark client can submit plan-shaped calls over a protocol boundary, and those calls may depend on client session state such as configuration, current catalog, temporary views, or function aliases. IncQL should not route those calls through Spark just to recover meaning later. Prism should receive an unresolved representation, resolve names and functions, apply IncQL semantic rules under an explicit profile and session context, and then continue through the normal planning, evidence, Substrait, and execution paths.",
     "related": [
       "IncQL RFC 000 (core language model and layer boundaries)",
@@ -2627,19 +2643,23 @@
       "033",
       "040"
     ],
-    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60)",
+    "rfc_pr": "[IncQL #60](https://github.com/encero-systems/IncQL/pull/60); [IncQL #95](https://github.com/encero-systems/IncQL/pull/95)",
     "rfc_pr_label": "IncQL #60",
     "rfc_pr_links": [
       {
         "label": "IncQL #60",
         "url": "https://github.com/encero-systems/IncQL/pull/60"
+      },
+      {
+        "label": "IncQL #95",
+        "url": "https://github.com/encero-systems/IncQL/pull/95"
       }
     ],
     "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/60",
-    "shipped_in": "—",
-    "source_path": "041_prism_plan_ingress_frontends.md",
-    "status": "Draft",
-    "status_key": "draft",
+    "shipped_in": "IncQL v0.1",
+    "source_path": "closed/implemented/041_prism_plan_ingress_frontends.md",
+    "status": "Implemented",
+    "status_key": "implemented",
     "summary": "This RFC defines Prism plan ingress and external client frontends for IncQL. A frontend receives an external authoring or client protocol such as Spark Connect, SQL, or another unresolved relational plan surface, decodes it into a Prism-owned unresolved ingress plan, and asks Prism to analyze that plan into ordinary IncQL relational semantics. The frontend may preserve client-origin evidence, client-session evidence, protocol diagnostics, and ingress coverage records, but it must not make the external protocol, Spark, Substrait, DataFusion, or any backend adapter the semantic owner of the plan.",
     "tags": [
       {
@@ -2656,12 +2676,12 @@
       }
     ],
     "title": "Prism plan ingress and external client frontends",
-    "written_against": "Incan v0.3-era IncQL"
+    "written_against": "Incan v0.5-dev-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
     "created": "2026-06-20",
-    "href": "042_async_verification_evidence/",
+    "href": "closed/implemented/042_async_verification_evidence/",
     "id": "042",
     "issue": "[IncQL #77](https://github.com/encero-systems/IncQL/issues/77)",
     "issue_label": "IncQL #77",
@@ -2672,7 +2692,7 @@
       }
     ],
     "issue_url": "https://github.com/encero-systems/IncQL/issues/77",
-    "lifecycle": "active",
+    "lifecycle": "implemented",
     "motivation": "Migration, modernization, replicated analytics, and cross-system validation work rarely complete as one atomic yes-or-no check. Source counts may be reported by a connector before target data finishes loading. Partition digests may stream in over minutes or hours. A sampled comparison may later be replaced by a deterministic check. A mismatch may be waived for a specific partition while the rest of the relation remains verified. A proof verifier may also prove a bounded query result against committed inputs through the statement and artifact model defined by IncQL RFC 044. IncQL needs a vocabulary that can represent those movements without overwriting older evidence or collapsing weak and strong evidence into the same status.",
     "related": [
       "IncQL RFC 027 (relational evidence program)",
@@ -2713,10 +2733,10 @@
       }
     ],
     "rfc_pr_url": "https://github.com/encero-systems/IncQL/pull/83",
-    "shipped_in": "—",
-    "source_path": "042_async_verification_evidence.md",
-    "status": "Draft",
-    "status_key": "draft",
+    "shipped_in": "IncQL v0.1",
+    "source_path": "closed/implemented/042_async_verification_evidence.md",
+    "status": "Implemented",
+    "status_key": "implemented",
     "summary": "This RFC defines async verification evidence for IncQL. Verification assertions are stable semantic targets, verification runs emit append-only observations over time, and current verification state is a projection over those observations rather than a mutable field. The model separates lifecycle, outcome, assurance, scope, and commitment context so tools can distinguish deterministic verification, external attestations, sampled checks, accepted waivers, unknown evidence, and proof-backed verification without pretending that all checks carry the same trust.",
     "tags": [
       {
@@ -2729,7 +2749,7 @@
       }
     ],
     "title": "Async verification evidence",
-    "written_against": "Incan v0.3-era IncQL"
+    "written_against": "Incan v0.5-dev-era IncQL"
   },
   {
     "authors": "Danny Meijer (@dannymeijer)",
@@ -4784,13 +4804,13 @@
 | [033](closed/implemented/033_adapter_requirements_coverage.md) | Implemented | Evidence, Execution, Interoperability | Adapter requirements and coverage |
 | [034](closed/implemented/034_quality_assertions_observations.md) | Implemented | Authoring, Evidence, Execution | Quality assertions and observations |
 | [035](closed/implemented/035_governed_attributes_policy_checkpoints.md) | Implemented | Evidence, Governance, Planning | Governed attributes and policy checkpoints |
-| [036](036_governed_plan_bundle.md) | Draft | Evidence, Governance, Interoperability | Governed plan bundle |
-| [037](037_plan_diff_blast_radius_inputs.md) | Draft | Evidence, Planning | Plan diff and blast-radius inputs |
-| [038](038_evidence_exchange_bridges.md) | Draft | Evidence, Extensibility, Interoperability | Evidence exchange bridges |
+| [036](closed/implemented/036_governed_plan_bundle.md) | Implemented | Evidence, Governance, Interoperability | Governed plan bundle |
+| [037](closed/implemented/037_plan_diff_blast_radius_inputs.md) | Implemented | Evidence, Planning | Plan diff and blast-radius inputs |
+| [038](closed/implemented/038_evidence_exchange_bridges.md) | Implemented | Evidence, Extensibility, Interoperability | Evidence exchange bridges |
 | [039](039_pandas_familiar_exploration_api.md) | Draft | Authoring | Pandas-familiar exploration API |
-| [040](040_interoperability_semantic_profiles.md) | Draft | Evidence, Interoperability | Interoperability semantic profiles |
-| [041](041_prism_plan_ingress_frontends.md) | Draft | Authoring, Interoperability, Planning | Prism plan ingress and external client frontends |
-| [042](042_async_verification_evidence.md) | Draft | Evidence, Verification | Async verification evidence |
+| [040](closed/implemented/040_interoperability_semantic_profiles.md) | Implemented | Evidence, Interoperability | Interoperability semantic profiles |
+| [041](closed/implemented/041_prism_plan_ingress_frontends.md) | Implemented | Authoring, Interoperability, Planning | Prism plan ingress and external client frontends |
+| [042](closed/implemented/042_async_verification_evidence.md) | Implemented | Evidence, Verification | Async verification evidence |
 | [043](043_canonical_equality_digest_profiles.md) | Draft | Evidence, Interoperability, Verification | Canonical equality and digest profiles |
 | [044](044_verifier_statements_proof_artifacts.md) | Draft | Evidence, Verification | Verifier statements and proof artifacts |
 | [045](045_constraint_evidence_verification_planning.md) | Draft | Evidence, Planning, Verification | Constraint evidence and verification-aware planning |

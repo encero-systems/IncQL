@@ -21,6 +21,12 @@ Application developers should normally start here before reading interchange con
 - [Inspection][inspection] defines structured plan, schema, lineage, requirement, and artifact records available before execution.
 - [Quality][quality] defines typed assertions and quality observations.
 - [Governance][governance] defines governed attributes and policy-checkpoint evidence.
+- [Governed plan bundles][governed-plan-bundles] define the typed local handoff that keeps a plan and its evidence-section states together.
+- [Plan diffs][plan-diffs] define local semantic-change records and blast-radius input artifacts.
+- [Evidence exchange][evidence-exchange] defines typed inbound and outbound bridge records, explicit mapping loss, and stable JSON projections.
+- [Semantic profiles][semantic-profiles] define versioned source and target semantic contexts plus conservative assessment states.
+- [Plan ingress][ingress] defines unresolved external-plan records, client-session evidence, coverage, diagnostics, and Prism analysis results.
+- [Verification evidence][verification] defines append-only assertion, run, observation, assurance, waiver, and projection records.
 
 These APIs produce evidence. They do not silently make caller-owned enforcement or publication decisions.
 
@@ -47,17 +53,23 @@ These pages are not prerequisites for ordinary query authoring. Read [What IncQL
 [dataset-carriers]: dataset_carriers.md
 [dataset-methods]: dataset_methods.md
 [execution]: execution_context.md
+[evidence-exchange]: evidence_exchange.md
 [extensions]: substrait/revision_and_extension_policy.md
 [filter-builders]: builders/filters.md
 [functions]: functions/index.md
 [governance]: governance.md
+[governed-plan-bundles]: governed_plan_bundles.md
 [guides]: ../how-to/README.md
 [inspection]: inspection.md
+[ingress]: ingress.md
 [learn]: ../README.md
 [operators]: substrait/operator_catalog.md
 [ownership]: ../explanation/what_incql_is.md
+[plan-diffs]: plan_diffs.md
 [projection-builders]: builders/projections.md
 [quality]: quality.md
 [query-blocks]: query_blocks.md
 [read-roots]: substrait/read_root_binding_contract.md
+[semantic-profiles]: semantic_profiles.md
 [substrait]: substrait/conformance.md
+[verification]: verification.md
