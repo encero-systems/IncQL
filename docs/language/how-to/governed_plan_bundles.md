@@ -1,11 +1,17 @@
 # Package a governed plan bundle
 
+## When to use this
+
 Use a governed plan bundle when a local tool, CI job, notebook, or migration assistant needs one handoff value that keeps a planned relation and its evidence together. The bundle does not make policy decisions. It gives consumers a typed package with explicit section states, so missing quality observations, absent coverage records, and unsupported reserved evidence families cannot be mistaken for successful evidence.
+
+## Before you begin
+
+You need a Prism-backed `LazyFrame`, or an existing inspection from `inspect_plan(...)`, and whatever caller-owned evidence you want packaged with it: quality assertions and observations, coverage records, ingress evidence, semantic profiles, or verification evidence. Evidence you do not pass in is recorded as `Unavailable`, so gather it before building the bundle rather than expecting the bundle to compute it.
 
 ## Build a bundle from a lazy plan
 
 ```incan
-from pub::inql import governed_plan_bundle
+from pub::incql import governed_plan_bundle
 
 bundle = governed_plan_bundle(summary)
 
@@ -20,7 +26,7 @@ println(bundle.section_available("lineage_graph"))
 Caller-owned evidence can be included at creation time. This keeps inspection evidence, quality declarations, quality outcomes, execution attempts, adapter coverage records, and verification observations together without making inspection execute the plan.
 
 ```incan
-from pub::inql import Session, governed_plan_bundle, row_count
+from pub::incql import Session, governed_plan_bundle, row_count
 
 mut session = Session.default()
 orders = session.read_csv[Order]("orders", "orders.csv")?
@@ -52,7 +58,7 @@ The bundle records `quality_assertions`, `quality_observations`, and `coverage_r
 When a plan came through a frontend boundary, package the ingress analysis evidence with the inspection result. This preserves request identity, client-session context, origin mappings, frontend coverage, and diagnostics beside the normal Prism evidence.
 
 ```incan
-from pub::inql import (
+from pub::incql import (
     analyze_ingress_plan,
     governed_plan_bundle_from_inspection,
     ingress_named_table,
@@ -80,7 +86,7 @@ Ingress evidence is frontend-facing. It should be reviewed alongside, not instea
 Verification evidence records what should be checked, what runs attempted, which append-only observations arrived, and what current projection was derived from those observations.
 
 ```incan
-from pub::inql import (
+from pub::incql import (
     VerificationAssertionKind,
     VerificationAssurance,
     VerificationLifecycle,
@@ -138,7 +144,29 @@ Reserved evidence families such as digest profiles, proof artifacts, constraint 
 The typed bundle is the richest representation. When a tool only needs summary metadata and section states, write the stable JSON summary.
 
 ```incan
-bundle.write("target/inql/summary.bundle.json")?
+bundle.write("target/incql/summary.bundle.json")?
 ```
 
 The JSON file contains bundle metadata, plan/root target summaries, counts, section records, input schema references, and evidence references. It does not flatten every rich nested evidence record. Keep the typed bundle in memory when the consumer needs full lineage edges, governed attributes, quality records, execution observations, coverage diagnostics, semantic profiles, profile assessments, ingress evidence, or verification evidence.
+
+## Verify the result
+
+- Check `section_available(...)` or `section(...).availability` for every section a consumer depends on; a bundle builds successfully even when every optional section is `Unavailable`.
+- Confirm the sections you supplied evidence for report `Available` with the record counts you expect.
+- When you write the JSON summary, remember it carries counts and section states rather than the nested records; keep the typed bundle for anything that needs them.
+
+## Current support and failure boundaries
+
+The bundle packages evidence; it does not execute the plan, evaluate policy, or certify anything. Sections for digest profiles, proof artifacts, constraint evidence, data contract evidence, semantic graph projections, and exchange bridges are `Unsupported` until their owning RFCs add records; ingress and verification sections are `Unavailable` unless supplied. The JSON summary is stable but carries only metadata, counts, section records, input schema references, and evidence references.
+
+## Reference
+
+Use [Governed plan bundles][bundles-ref] for the bundle and section contracts and [Local inspection][inspection-ref] for the evidence envelope a bundle starts from. [Exchange evidence locally][exchange-guide], [Analyze external frontend intent][ingress-guide], and [Track async verification state][verification-guide] show the evidence families this guide packages.
+
+<!-- References -->
+
+[bundles-ref]: ../reference/governed_plan_bundles.md
+[inspection-ref]: ../reference/inspection.md
+[exchange-guide]: evidence_exchange.md
+[ingress-guide]: ingress.md
+[verification-guide]: verification_evidence.md

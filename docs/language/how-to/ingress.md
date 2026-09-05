@@ -1,11 +1,17 @@
 # Analyze external frontend intent
 
-Use ingress records when a local tool or frontend has already decoded external client intent and needs Prism to analyze that intent as InQL. The examples here model a Spark Connect-shaped request, but the same records can describe SQL, notebook, or API-client frontends.
+## When to use this
+
+Use ingress records when a local tool or frontend has already decoded external client intent and needs Prism to analyze that intent as IncQL. The examples here model a Spark Connect-shaped request, but the same records can describe SQL, notebook, or API-client frontends.
+
+## Before you begin
+
+You need the decoded client intent expressed as ingress records, a row model for the analyzed relation (`OrderSummary` and `Order` in the examples), and a frontend identity to name in the request. Analysis is typed: `analyze_ingress_plan[T](...)` needs the model that describes the plan's output, and the request and session context are evidence you construct, not values IncQL discovers from a live client.
 
 ## Create request and session context
 
 ```incan
-from pub::inql import (
+from pub::incql import (
     IngressFrontendKind,
     client_session_context,
     ingress_request,
@@ -35,7 +41,7 @@ The request identifies the frontend and protocol. The session context records an
 ## Preserve origin references
 
 ```incan
-from pub::inql import IngressOriginKind, ingress_origin_reference
+from pub::incql import IngressOriginKind, ingress_origin_reference
 
 orders_origin = ingress_origin_reference(
     request,
@@ -46,12 +52,12 @@ orders_origin = ingress_origin_reference(
 )
 ```
 
-Origin references map external protocol ids or paths to InQL evidence targets. They help inspection explain where a Prism target came from without making external ids the source of semantic identity.
+Origin references map external protocol ids or paths to IncQL evidence targets. They help inspection explain where a Prism target came from without making external ids the source of semantic identity.
 
 ## Analyze a supported relation plan
 
 ```incan
-from pub::inql import (
+from pub::incql import (
     IngressAnalysis,
     aggregate_as,
     analyze_ingress_plan,
@@ -105,7 +111,7 @@ Supported relation steps emit `Supported` frontend coverage. Unsupported command
 ## Attach a semantic profile
 
 ```incan
-from pub::inql import IngressAnalysis, inql_baseline_profile
+from pub::incql import IngressAnalysis, inql_baseline_profile
 
 profiled_plan = ingress_plan(
     request,
@@ -123,7 +129,7 @@ Profiles make compatibility assumptions explicit. They do not force compatibilit
 ## Package ingress evidence
 
 ```incan
-from pub::inql import governed_plan_bundle_from_inspection, inspect_plan
+from pub::incql import governed_plan_bundle_from_inspection, inspect_plan
 
 match analysis.plan:
     Some(summary) =>
@@ -142,7 +148,7 @@ Bundling ingress evidence keeps client-session context, origin mappings, coverag
 ## Handle commands deliberately
 
 ```incan
-from pub::inql import IngressAnalysis, IngressCommandKind, ingress_command
+from pub::incql import IngressAnalysis, IngressCommandKind, ingress_command
 
 command_plan = ingress_plan(
     request,
@@ -162,3 +168,23 @@ assert !command_analysis.is_accepted(), "unsupported commands reject before exec
 ```
 
 Commands are evidence first. They should become explicit client-session behavior in an integration package or reject with diagnostics; they should not be disguised as relation nodes.
+
+## Verify the result
+
+- Match on `analysis.plan`: `None` means analysis rejected the plan before execution, and the diagnostics say why.
+- Walk `analysis.evidence.coverage_records` and `analysis.evidence.diagnostics`; every relation step you sent should report `Supported` coverage.
+- After packaging, confirm the `ingress_mappings`, `frontend_coverage`, and `client_session_context` sections are `Available` on the bundle.
+
+## Current support and failure boundaries
+
+Ingress analysis accepts supported relation steps such as the named table, filter, group-by, aggregate, order-by, and limit steps shown here; unsupported commands and malformed relation order reject analysis with diagnostics rather than producing a partial plan. The session context is evidence about name resolution, function lookup, coercion, timezone, and case sensitivity; it is not an execution adapter and does not connect to Spark, a SQL engine, or a catalog. A requested profile records assumptions and never forces compatibility.
+
+## Reference
+
+Use [Prism plan ingress][ingress-ref] for the request, session, origin, and analysis contracts, [Interoperability semantic profiles][profiles-ref] for requested profiles, and [Package a governed plan bundle][bundles-guide] for carrying ingress evidence onward.
+
+<!-- References -->
+
+[ingress-ref]: ../reference/ingress.md
+[profiles-ref]: ../reference/semantic_profiles.md
+[bundles-guide]: governed_plan_bundles.md
