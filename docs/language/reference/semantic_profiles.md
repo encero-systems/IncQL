@@ -5,7 +5,7 @@ Semantic profiles describe the environment a plan is authored for, compared with
 ## Entry points
 
 ```incan
-from pub::inql import (
+from pub::incql import (
     inql_baseline_profile,
     adapter_binding_profile,
     execution_engine_profile,

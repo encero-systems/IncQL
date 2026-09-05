@@ -1,13 +1,19 @@
 # Track async verification state
 
-Use verification evidence when checks happen over time or come from different evidence strengths. A migration or reconciliation run might first receive an attested source count, then verified partition checks, then a waiver for a known mismatch. InQL keeps those as append-only observations and derives current state from them instead of overwriting older evidence.
+## When to use this
+
+Use verification evidence when checks happen over time or come from different evidence strengths. A migration or reconciliation run might first receive an attested source count, then verified partition checks, then a waiver for a known mismatch. IncQL keeps those as append-only observations and derives current state from them instead of overwriting older evidence.
+
+## Before you begin
+
+You need the semantic targets the checks are about (`orders_target` in the examples is a target taken from an inspection), stable identifiers for assertions, runs, observations, and waivers, and the evidence strength of each observation. Decide the assurance level honestly: attested, verified, and waived are recorded separately from outcome and lifecycle and are never inferred from execution success or quality status.
 
 ## Declare what should be checked
 
 A verification assertion describes intent. It is stable while observations change.
 
 ```incan
-from pub::inql import VerificationAssertionKind, VerificationScopeKind, verification_assertion
+from pub::incql import VerificationAssertionKind, VerificationScopeKind, verification_assertion
 
 assertion = verification_assertion(
     "orders_partition_digest",
@@ -26,7 +32,7 @@ The assertion does not say passed or failed. It anchors the check to semantic ta
 A run records the attempt. Observations record facts emitted by the run.
 
 ```incan
-from pub::inql import (
+from pub::incql import (
     VerificationAssurance,
     VerificationCaptureBasis,
     VerificationLifecycle,
@@ -64,7 +70,7 @@ Lifecycle, outcome, and assurance are separate. A check can be complete but fail
 Waivers are observations, not edits. Keep the failed observation and add a later waived observation that supersedes it for the current projection.
 
 ```incan
-from pub::inql import verification_waiver, waived_verification_observation
+from pub::incql import verification_waiver, waived_verification_observation
 
 waiver = verification_waiver(
     "waiver:orders:2026-06-19",
@@ -93,7 +99,7 @@ The current projection can show the waived observation as active, but the outcom
 Use `project_verification_state(...)` to derive the current state for an assertion and scope from the append-only observation stream.
 
 ```incan
-from pub::inql import project_verification_state
+from pub::incql import project_verification_state
 
 projection = project_verification_state(
     assertion,
@@ -112,7 +118,7 @@ No observations means `Unknown`, not passed and not covered. Mixed active observ
 Pass verification evidence into a governed plan bundle when a local tool needs one handoff value with the plan and evidence together.
 
 ```incan
-from pub::inql import governed_plan_bundle, verification_evidence
+from pub::incql import governed_plan_bundle, verification_evidence
 
 evidence = verification_evidence(
     [assertion],
@@ -130,3 +136,23 @@ println(bundle.section_available("verification_projections"))
 ```
 
 The bundle now exposes `verification_evidence`, `verification_assertions`, `verification_runs`, `verification_observations`, `verification_projections`, `verification_snapshots`, `verification_commitments`, and `verification_waivers` sections. Omitted verification evidence is `Unavailable`. Canonical equality profiles, digest profiles, proof artifacts, and constraint planning remain separate RFC families and stay `Unsupported` until implemented.
+
+## Verify the result
+
+- Project the state with `project_verification_state(...)` for the assertion and scope you care about; `Unknown` means no observations arrived, not that the check passed.
+- Confirm waived observations keep their `Failed` outcome and that each waiver supersedes the observation you intended, by id.
+- Check the assurance counts by label so a report can say how much of the evidence is verified, attested, or waived.
+- After bundling, confirm the verification sections are `Available` and counted.
+
+## Current support and failure boundaries
+
+Verification evidence is append-only: waivers and later observations supersede earlier ones in the projection without deleting them. IncQL stores and projects the evidence; it does not run the comparisons, fetch snapshots, or decide that a waiver is acceptable. Canonical equality profiles, digest profiles, proof artifacts, and constraint planning are separate RFC families and remain `Unsupported` sections until implemented.
+
+## Reference
+
+Use [Async verification evidence][verification-ref] for the assertion, run, observation, waiver, and projection contracts and [Governed plan bundles][bundles-ref] for the verification sections.
+
+<!-- References -->
+
+[verification-ref]: ../reference/verification.md
+[bundles-ref]: ../reference/governed_plan_bundles.md
