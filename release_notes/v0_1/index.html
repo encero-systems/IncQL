@@ -1468,6 +1468,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1576,6 +1588,132 @@
   
   <span class="md-ellipsis">
     Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/how-to/verification_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -2136,6 +2274,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
       
@@ -2223,6 +2373,132 @@
   
   <span class="md-ellipsis">
     Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language/reference/verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -3355,6 +3631,12 @@
 <li><strong>Execution observations and adapter coverage:</strong> RFC 032 adds observed <code>Session</code> variants for <code>execute</code>, <code>collect</code>, and <code>write</code> so callers can capture structured runtime evidence for success and failure attempts. RFC 033 adds adapter requirement and coverage records, inspection-inferred adapter requirements, <code>Session.check_coverage(requirements)</code> for explicit capability checks, and <code>Session.check_plan_coverage(data)</code> / <code>Session.check_inspection_coverage(inspection)</code> for plan-evidence-driven coverage checks with covered, partially covered, uncovered, and unknown states.</li>
 <li><strong>Quality observations:</strong> RFC 034 adds quality assertion declarations, <code>quality { ... }</code> / <code>quality:</code> assertion-list syntax, and <code>Session.observe_quality(...)</code> / <code>Session.observe_quality_pair(...)</code> so relation, field, group, and explicit cross-relation checks produce structured quality observations. The first helper set covers row-count thresholds, null-rate thresholds, uniqueness, group row-count thresholds, and cross-relation row-count equality without treating failed checks as implicit filters or pipeline gates.</li>
 <li><strong>Governed evidence:</strong> RFC 035 adds governed attribute and policy checkpoint records so callers can attach provenance, confidence, status, authority, lifetime, visibility, diagnostics, and evidence references to semantic targets. Local plan inspection now emits conservative schema-derived governed attributes and planning observation checkpoints without turning IncQL into a policy engine.</li>
+<li><strong>Governed plan bundles:</strong> RFC 036 adds <code>governed_plan_bundle(...)</code> and <code>governed_plan_bundle_from_inspection(...)</code> so local tools can package plan targets, schemas, lineage, metadata attachments, governed attributes, policy checkpoints, quality declarations and observations, execution observations, adapter requirements, coverage records, unsupported-evidence markers, and section-state metadata into one typed handoff value. Bundles distinguish required, optional, unavailable, and unsupported evidence sections and can write a stable JSON summary for tools that only need bundle metadata and section coverage.</li>
+<li><strong>Plan diffs:</strong> RFC 037 adds <code>diff_plans(...)</code> and <code>diff_governed_bundles(...)</code> so local tools can compare structured plan evidence, classify output, lineage, node-shape, and adapter-requirement changes, and produce explicit blast-radius input records. Unknown and incompatible comparisons remain explicit rather than collapsing to an empty diff.</li>
+<li><strong>Evidence exchange:</strong> RFC 038 adds typed inbound and outbound bridge records for native bundle summaries, OpenLineage-shaped lineage projections, OpenTelemetry-shaped observation projections, generic transformation-project suggestions, and external artifact identity. Lossy mappings remain explicit through <code>EvidenceExchangeLoss</code> records and IncQL-owned sidecar artifacts rather than becoming hidden semantic conversions.</li>
+<li><strong>Semantic profiles:</strong> RFC 040 adds typed interoperability profiles and assessments for IncQL baselines, client protocols, ingress frontends, execution engines, adapter bindings, SQL dialects, catalog systems, transformation projects, interchange consumers, and conformance baselines. Profiles record exact, constrained, unknown, and not-applicable semantic dimensions without turning a target environment into IncQL's semantic owner.</li>
+<li><strong>Plan ingress:</strong> RFC 041 adds a Prism-owned unresolved ingress model, client-session context, origin references, diagnostics, coverage records, and a first analyzer for linear named-table, filter, projection, grouping, aggregate, ordering, and limit requests. Unsupported commands and relation shapes produce explicit ingress diagnostics instead of falling through to an execution backend.</li>
+<li><strong>Verification evidence:</strong> RFC 042 adds stable verification assertions, append-only runs and observations, scoped assurance labels, waiver records, snapshot and commitment references, coverage records, evidence-section integration, and a versioned current-state projection. Lifecycle, outcome, assurance, scope, and commitment context remain separate so attested, sampled, waived, verified, proven, and unknown evidence cannot collapse into one status.</li>
 <li><strong>Execution:</strong> Session-oriented read, execute, and write (reference backend per RFC 004), with <code>collect(...)</code> now producing structured <code>DataFrame</code> materialization metadata plus preview text instead of treating rendered text as the canonical contract. Session execution dispatch now routes through a backend adapter boundary over Substrait plans; DataFusion remains the first adapter rather than being encoded directly into Session state.</li>
 <li><strong>Plan validation:</strong> <code>Session.validate_plan(...)</code> lowers a lazy plan and validates every logical named-table binding without adapter dispatch or a false execution-success observation. Execution, materialization, and sink writes remain backend operations.</li>
 <li><strong>Session API:</strong> <code>Session.write(data, target)</code> now accepts typed sink descriptors such as <code>csv_sink(uri)</code> and <code>parquet_sink(uri)</code>, while the file-specific <code>write_csv(...)</code> and <code>write_parquet(...)</code> helpers remain as convenience methods.</li>

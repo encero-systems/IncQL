@@ -10,24 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/038_evidence_exchange_bridges/">
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/language/reference/semantic_profiles/">
       
       
+        <link rel="prev" href="../evidence_exchange/">
       
       
-      <link rel="icon" href="../../shared/brand/incql-favicon.png">
+        <link rel="next" href="../ingress/">
+      
+      
+      <link rel="icon" href="../../../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>IncQL RFC 038: Evidence exchange bridges - IncQL</title>
+        <title>Semantic profiles - IncQL</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -40,21 +44,21 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260829-nav-container-2">
+      <link rel="stylesheet" href="../../../stylesheets/prismplane.css?v=20260829-nav-container-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260829-hub-type-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystalline.css?v=20260829-hub-type-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#incql-rfc-038-evidence-exchange-bridges" class="md-skip">
+        <a href="#interoperability-semantic-profiles-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -99,28 +103,31 @@
 
   
     
-  
-
-  
+      
+      
     
   
 
-  
-    
-  
-
-  
-    
-  
-
-  
-    
-  
-    
   
     
       
       
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+    
+  
     
   
     
@@ -133,8 +140,8 @@
   
 
 <header class="topbar crystal-strip" data-md-component="header">
-  <a class="brand" href="../.." aria-label="IncQL home">
-    <img src="../../shared/brand/incql-logo-header.png" alt="">
+  <a class="brand" href="../../.." aria-label="IncQL home">
+    <img src="../../../shared/brand/incql-logo-header.png" alt="">
     <span>
       <strong>IncQL</strong>
       <small>Incan Query Layer</small>
@@ -148,7 +155,7 @@
         data-path-prefixes=""
         data-search-label="Search"
         
-        href="../.."
+        href="../../.."
       >Home</a>
     
       <a
@@ -156,15 +163,15 @@
         data-path-prefixes="language/"
         data-search-label="Search learning paths"
         
-        href="../../language/"
+        href="../../"
       >Learn</a>
     
       <a
         data-site-section="reference"
         data-path-prefixes="language/reference/"
         data-search-label="Search reference"
-        
-        href="../../language/reference/"
+        class="is-active" aria-current="page"
+        href="../"
       >Reference</a>
     
       <a
@@ -172,7 +179,7 @@
         data-path-prefixes="architecture/"
         data-search-label="Explore layers"
         
-        href="../../architecture/"
+        href="../../../architecture/"
       >Architecture</a>
     
       <a
@@ -180,15 +187,15 @@
         data-path-prefixes="roadmap/"
         data-search-label="Search the roadmap"
         
-        href="../../roadmap/"
+        href="../../../roadmap/"
       >Roadmap</a>
     
       <a
         data-site-section="project"
         data-path-prefixes="project/,design_records/,rfcs/,whitepapers/,docs_map/,release_notes/,contributing/"
         data-search-label="Search project and design records"
-        class="is-active" aria-current="page"
-        href="../../project/"
+        
+        href="../../../project/"
       >Project</a>
     
   </nav>
@@ -207,7 +214,7 @@
     </button>
     
       <label class="docs-search" for="__search" aria-label="Search documentation">
-        <span data-site-search-label>Search project and design records</span>
+        <span data-site-search-label>Search reference</span>
         <kbd>/</kbd>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -244,7 +251,7 @@
 </div>
     
     <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
-      <img src="../../shared/icons/source-branch.svg" alt="">
+      <img src="../../../shared/icons/source-branch.svg" alt="">
       <span>encero-systems/IncQL</span>
     </a>
   </div>
@@ -271,9 +278,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+    <a href="../../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
+  <img src="../../../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -300,7 +307,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -351,7 +358,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -384,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/quickstart/" class="md-nav__link">
+      <a href="../../quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -453,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+      <a href="../../explanation/from_sql/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -474,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+      <a href="../../explanation/from_spark/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -495,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+      <a href="../../explanation/what_incql_is/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -555,7 +562,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/tutorials/book/" class="md-nav__link ">
+            <a href="../../tutorials/book/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -634,7 +641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+      <a href="../../tutorials/book/01_typed_relation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -655,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/02_deferred_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -732,7 +739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/03_inspect_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -753,7 +760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+      <a href="../../tutorials/book/04_collect_observed/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -774,7 +781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+      <a href="../../tutorials/book/05_adapter_coverage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -849,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+      <a href="../../tutorials/book/06_quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -870,7 +877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
+      <a href="../../tutorials/book/07_governed_write/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -945,7 +952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+      <a href="../../tutorials/book/08_first_query_block/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -966,7 +973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+      <a href="../../tutorials/book/09_summarize_query/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1049,7 +1056,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
+      <a href="../../explanation/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1070,7 +1077,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/execution_context/" class="md-nav__link">
+      <a href="../../explanation/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1137,7 +1144,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/how-to/" class="md-nav__link ">
+            <a href="../../how-to/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1216,7 +1223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+      <a href="../../how-to/read_write_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1237,7 +1244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+      <a href="../../how-to/troubleshooting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1320,7 +1327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
+      <a href="../../how-to/dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1341,7 +1348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/joins/" class="md-nav__link">
+      <a href="../../how-to/joins/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1362,7 +1369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+      <a href="../../how-to/normalize_semistructured_fields/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1383,7 +1390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
+      <a href="../../how-to/nested_row_values/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1404,7 +1411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
+      <a href="../../how-to/generator_rows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1425,7 +1432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/window_columns/" class="md-nav__link">
+      <a href="../../how-to/window_columns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1455,6 +1462,18 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -1504,7 +1523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../../how-to/inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1525,7 +1544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
+      <a href="../../how-to/execution_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1546,7 +1565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
+      <a href="../../how-to/quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1567,11 +1586,137 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
+      <a href="../../how-to/governed_evidence/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/verification_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -1644,7 +1789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
+      <a href="../../how-to/approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1665,7 +1810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+      <a href="../../how-to/typed_hll_sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1686,7 +1831,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../../how-to/variant_payloads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1719,6 +1864,8 @@
       
   
   
+    
+  
   
   
     
@@ -1741,21 +1888,24 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1766,13 +1916,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -1803,17 +1953,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1838,7 +1991,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
+      <a href="../dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1859,7 +2012,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
+      <a href="../dataset_methods/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1880,7 +2033,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/query_blocks/" class="md-nav__link">
+      <a href="../query_blocks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1949,7 +2102,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+      <a href="../builders/filters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1970,7 +2123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+      <a href="../builders/projections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1991,7 +2144,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+      <a href="../builders/aggregates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2039,17 +2192,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2074,7 +2230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/execution_context/" class="md-nav__link">
+      <a href="../execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2095,7 +2251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/capabilities/" class="md-nav__link">
+      <a href="../capabilities/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2121,10 +2277,24 @@
                 
   
   
+    
   
   
+  
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -2136,18 +2306,21 @@
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
         
           
-          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2158,7 +2331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_4">
             <span class="md-nav__icon md-icon"></span>
             Inspection, quality, and governance
@@ -2172,7 +2345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/inspection/" class="md-nav__link">
+      <a href="../inspection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2193,7 +2366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/quality/" class="md-nav__link">
+      <a href="../quality/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2214,11 +2387,231 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/governance/" class="md-nav__link">
+      <a href="../governance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entry points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#record-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Record types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enums
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#semanticprofile" class="md-nav__link">
+    <span class="md-ellipsis">
+      SemanticProfile
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assessments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Assessments
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bundle-and-coverage-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bundle and coverage integration
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -2268,10 +2661,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -2280,7 +2676,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/functions/" class="md-nav__link ">
+            <a href="../functions/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2291,7 +2687,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -2313,7 +2709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
+      <a href="../functions/approximate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2334,7 +2730,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/format/" class="md-nav__link">
+      <a href="../functions/format/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2355,7 +2751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/generators/" class="md-nav__link">
+      <a href="../functions/generators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2376,7 +2772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/nested/" class="md-nav__link">
+      <a href="../functions/nested/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2397,7 +2793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
+      <a href="../functions/sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2418,7 +2814,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/variants/" class="md-nav__link">
+      <a href="../functions/variants/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2439,7 +2835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/windows/" class="md-nav__link">
+      <a href="../functions/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2483,17 +2879,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2518,7 +2917,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
+      <a href="../substrait/conformance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2539,7 +2938,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
+      <a href="../substrait/operator_catalog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2560,7 +2959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+      <a href="../substrait/read_root_binding_contract/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2581,7 +2980,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+      <a href="../substrait/revision_and_extension_policy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2617,7 +3016,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/" class="md-nav__link">
+      <a href="../../../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2637,7 +3036,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../roadmap/" class="md-nav__link">
+      <a href="../../../roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2713,7 +3112,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../project/" class="md-nav__link">
+      <a href="../../../project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2734,7 +3133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design_records/" class="md-nav__link">
+      <a href="../../../design_records/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2780,7 +3179,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../rfcs/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2813,7 +3212,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../TEMPLATE/" class="md-nav__link">
+      <a href="../../../rfcs/TEMPLATE/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2869,7 +3268,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../whitepapers/" class="md-nav__link ">
+            <a href="../../../whitepapers/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2902,7 +3301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/incql_db/" class="md-nav__link">
+      <a href="../../../whitepapers/incql_db/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2923,7 +3322,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
+      <a href="../../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2952,7 +3351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs_map/" class="md-nav__link">
+      <a href="../../../docs_map/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3017,7 +3416,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release_notes/v0_1/" class="md-nav__link">
+      <a href="../../../release_notes/v0_1/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3094,7 +3493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/architecture/" class="md-nav__link">
+      <a href="../../../contributing/architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3115,7 +3514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
+      <a href="../../../contributing/writing_rfcs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3136,7 +3535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
+      <a href="../../../contributing/prismplane_docs_theme/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3192,150 +3591,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#entry-points" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Entry points
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#record-types" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Record types
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#goals" class="md-nav__link">
+  <a href="#enums" class="md-nav__link">
     <span class="md-ellipsis">
-      Goals
+      Enums
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#non-goals" class="md-nav__link">
+  <a href="#semanticprofile" class="md-nav__link">
     <span class="md-ellipsis">
-      Non-Goals
+      SemanticProfile
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+  <a href="#assessments" class="md-nav__link">
     <span class="md-ellipsis">
-      Guide-level explanation (how authors think about it)
+      Assessments
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+  <a href="#bundle-and-coverage-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Reference-level explanation (precise rules)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#design-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Design details
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Design details">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#syntax" class="md-nav__link">
-    <span class="md-ellipsis">
-      Syntax
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      Semantics
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#standards-alignment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Standards alignment
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interaction with other IncQL surfaces
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compatibility-migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compatibility / migration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#alternatives-considered" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternatives considered
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#drawbacks" class="md-nav__link">
-    <span class="md-ellipsis">
-      Drawbacks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#layers-affected" class="md-nav__link">
-    <span class="md-ellipsis">
-      Layers affected
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#unresolved-questions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Unresolved questions
+      Bundle and coverage integration
     </span>
   </a>
   
@@ -3359,132 +3662,255 @@
   
 
 
-<h1 id="incql-rfc-038-evidence-exchange-bridges">IncQL RFC 038: Evidence exchange bridges</h1>
-<ul>
-<li><strong>Status:</strong> Draft</li>
-<li><strong>Created:</strong> 2026-05-29</li>
-<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
-<li><strong>Related:</strong></li>
-<li>IncQL RFC 002 (Apache Substrait integration)</li>
-<li>IncQL RFC 027 (relational evidence program)</li>
-<li>IncQL RFC 029 (typed metadata attachments)</li>
-<li>IncQL RFC 030 (Prism lineage graph)</li>
-<li>IncQL RFC 031 (local inspection APIs and artifacts)</li>
-<li>IncQL RFC 032 (execution observations)</li>
-<li>IncQL RFC 036 (governed plan bundle)</li>
-<li>IncQL RFC 040 (interoperability semantic profiles)</li>
-<li>IncQL RFC 042 (async verification evidence)</li>
-<li>IncQL RFC 043 (canonical equality and digest profiles)</li>
-<li>IncQL RFC 044 (verifier statements and proof artifacts)</li>
-<li>IncQL RFC 045 (constraint evidence and verification-aware planning)</li>
-<li>IncQL RFC 046 (data contract ingress and product topology)</li>
-<li>IncQL RFC 047 (semantic evidence graph and agent query surface)</li>
-<li><strong>Issue:</strong> <a href="https://github.com/encero-systems/IncQL/issues/72">IncQL #72</a></li>
-<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a></li>
-<li><strong>Written against:</strong> Incan v0.3-era IncQL</li>
-<li><strong>Shipped in:</strong> —</li>
-</ul>
-<h2 id="summary">Summary</h2>
-<p>This RFC defines evidence exchange bridges between IncQL's internal evidence model and external or adjacent formats. Exchange bridges map IncQL plan, lineage, schema-flow, execution, quality, verification, canonical equality, proof artifact, constraint, contract, product topology, evidence graph, coverage, semantic profile, and bundle records into downstream views such as OpenLineage events, telemetry signals, semantic inspection fragments, transformation-project artifacts, data-contract artifacts, product-topology artifacts, graph projections, and catalog/governance integration artifacts. They may also ingest external evidence artifacts such as transformation manifests, source catalogs, schema catalogs, run results, verification results, proof results, constraint metadata, contract artifacts, product artifacts, runtime lineage events, and orchestration metadata. Representative artifact families include dbt manifests and run results, Open Data Contract Standard artifacts, Open Data Product Standard artifacts, legacy Data Contract Specification artifacts, Glue Data Catalog or Hive Metastore snapshots, Airflow or MWAA DAG metadata, Dagster assets, Prefect deployment metadata, OpenLineage events, DataHub or OpenMetadata catalog records, and Great Expectations-style quality results. Inbound artifacts and outbound projections are evidence exchange records, not the internal source of truth.</p>
-<h2 id="motivation">Motivation</h2>
-<p>IncQL evidence should be useful outside IncQL, and external project artifacts should be usable as evidence inputs when they are explicit about their source and scope. CI systems, lineage tools, telemetry pipelines, catalogs, notebooks, transformation frameworks, orchestrators, and agents may all consume or produce different formats. Systems such as dbt, Airflow, MWAA, Dagster, Prefect, Glue Data Catalog, Hive Metastore, DataHub, OpenMetadata, OpenLineage, and Great Expectations are useful ecosystem examples, but none of them should become IncQL's internal evidence model. If each integration reconstructs evidence independently, semantics will drift. IncQL should provide exchange bridges that preserve its local evidence model while acknowledging that external formats may be less expressive or may represent facts at a different semantic layer.</p>
-<h2 id="goals">Goals</h2>
-<ul>
-<li>Define exchange bridges as inbound and outbound mappings around IncQL evidence.</li>
-<li>Preserve semantic target references and evidence versions where possible.</li>
-<li>Allow lossy external mappings only when loss is explicit.</li>
-<li>Allow external artifacts to seed metadata, lineage hints, quality observations, verification observations, proof artifact references, constraint evidence, contract evidence, product topology, run observations, graph projections, and target mappings without becoming authoritative IncQL semantics.</li>
-<li>Prefer public standards and open ecosystem specifications for external projections when they fit the evidence being exchanged.</li>
-<li>Support transformation-framework artifacts such as manifests, catalogs, run results, source definitions, model metadata, tests, tags, and documentation scaffolds, including dbt-shaped artifacts where a bridge supports that profile.</li>
-<li>Keep provider configuration and hosted ingestion outside IncQL core.</li>
-<li>Support local exchange without requiring a specific external service.</li>
-</ul>
-<h2 id="non-goals">Non-Goals</h2>
-<ul>
-<li>Making any external format the internal IncQL evidence model.</li>
-<li>Defining hosted ingestion, storage, dashboards, or managed governance behavior.</li>
-<li>Defining a telemetry provider, collector, exporter, or sampling policy.</li>
-<li>Guaranteeing that every external tool can represent every IncQL evidence feature.</li>
-<li>Guaranteeing that imported transformation, catalog, or orchestration artifacts are complete or semantically authoritative.</li>
-<li>Defining a full migration product, transformation runtime, or orchestration engine.</li>
-</ul>
-<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
-<p>An author or CI job can exchange evidence with local artifacts:</p>
-<div class="language-incan highlight"><pre><span></span><code><span class="n">bundle</span> <span class="o">=</span> <span class="n">governed_plan_bundle</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
-<span class="n">bundle</span><span class="o">.</span><span class="n">export_openlineage</span><span class="p">(</span><span class="s2">"target/incql/openlineage.json"</span><span class="p">)</span>
-<span class="n">bundle</span><span class="o">.</span><span class="n">export_telemetry</span><span class="p">(</span><span class="s2">"target/incql/telemetry.json"</span><span class="p">)</span>
+<h1 id="interoperability-semantic-profiles-reference">Interoperability semantic profiles (Reference)</h1>
+<p>Semantic profiles describe the environment a plan is authored for, compared with, executed under, or exchanged with. They are evidence context. They do not replace Prism, Substrait, adapter requirements, coverage records, execution observations, or governed bundles.</p>
+<h2 id="entry-points">Entry points</h2>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+    <span class="n">inql_baseline_profile</span><span class="p">,</span>
+    <span class="n">adapter_binding_profile</span><span class="p">,</span>
+    <span class="n">execution_engine_profile</span><span class="p">,</span>
+    <span class="n">sql_dialect_profile</span><span class="p">,</span>
+    <span class="n">catalog_schema_profile</span><span class="p">,</span>
+    <span class="n">transformation_project_profile</span><span class="p">,</span>
+    <span class="n">interchange_consumer_profile</span><span class="p">,</span>
+    <span class="n">conformance_baseline_profile</span><span class="p">,</span>
+    <span class="n">semantic_dimension</span><span class="p">,</span>
+    <span class="n">assess_profile_for_target</span><span class="p">,</span>
+    <span class="n">coverage_record_for_profile</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
-<p>The names are illustrative. The key contract is that outbound exports are generated from IncQL evidence artifacts, not from backend logs or reconstructed SQL strings.</p>
-<p>For transformation-project workflows, an exchange bridge can also ingest project artifacts and emit reviewable suggestions:</p>
-<div class="language-incan highlight"><pre><span></span><code><span class="n">project</span> <span class="o">=</span> <span class="n">transformation_project_artifacts</span><span class="p">(</span><span class="s2">"analytics_project/"</span><span class="p">)</span>
-<span class="n">bundle</span> <span class="o">=</span> <span class="n">governed_plan_bundle</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="n">project</span><span class="p">])</span>
-
-<span class="n">sources</span> <span class="o">=</span> <span class="n">bundle</span><span class="o">.</span><span class="n">export_transformation_sources</span><span class="p">()</span>
-<span class="k">tests</span> <span class="o">=</span> <span class="n">bundle</span><span class="o">.</span><span class="n">export_transformation_quality_suggestions</span><span class="p">()</span>
-</code></pre></div>
-<p>The bridge may read common artifacts such as manifests, catalogs, run results, source definitions, tests, tags, metadata, and documentation fragments. In a dbt-shaped bridge, for example, those inputs may include <code>manifest.json</code>, <code>catalog.json</code>, <code>run_results.json</code>, source YAML, model YAML, tags, exposures, tests, and documentation blocks. It may emit suggested source declarations, model metadata, test definitions, tags, exposures, or documentation scaffolds. Those suggestions remain projections from IncQL evidence and imported artifact evidence; they do not make the transformation framework the semantic owner of the plan.</p>
-<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
-<p>An exchange bridge must declare its direction, source evidence schema versions, target format, target format version when available, mapping coverage, unsupported fields, redaction behavior, and diagnostics.</p>
-<p>Outbound exchange bridges must preserve semantic target identifiers when the target format can carry them. When the target format cannot carry them directly, the bridge should preserve them in an extension, custom facet, attribute, or sidecar artifact when safe.</p>
-<p>Inbound exchange bridges must preserve external artifact identity, source location, artifact version, and confidence. Imported records may attach metadata, origin hints, observed run facts, quality observations, verification observations, or candidate mappings to IncQL semantic targets. They must not create IncQL lineage, policy decisions, quality pass/fail states, verification assurance stronger than attested, or adapter coverage unless the corresponding IncQL evidence contract can represent and validate that evidence.</p>
-<p>Lossy mappings must be explicit. If an external lineage format cannot distinguish value, control, grouping, join, and sort lineage, the bridge must either preserve the distinction through an extension or report the loss. If an imported artifact collapses source relation, model, test, and run-result semantics into one node vocabulary, the bridge must report that limitation instead of pretending the artifact has IncQL target precision.</p>
-<p>Sensitive attachments must follow visibility rules. Exchange bridges must not leak sensitive payloads merely because a target format lacks redaction semantics.</p>
-<p>Provider configuration, authentication, network transport, sampling, hosted ingestion, and storage are outside this RFC.</p>
-<h2 id="design-details">Design details</h2>
-<h3 id="syntax">Syntax</h3>
-<p>This RFC introduces no authoring syntax.</p>
-<h3 id="semantics">Semantics</h3>
-<p>Outbound exports are projections. Inbound artifacts are evidence inputs. Neither direction may become the authoritative source of IncQL plan, lineage, quality, or execution semantics.</p>
-<h3 id="standards-alignment">Standards alignment</h3>
-<p>Exchange bridges should prefer public standards and open ecosystem specifications when a target format matches the evidence being exchanged:</p>
-<ul>
-<li>W3C PROV for provenance-shaped entities, activities, agents, derivations, and responsibility.</li>
-<li>W3C DCAT, DCAT-AP, schema.org Dataset, and Dublin Core for dataset catalog metadata, distributions, access metadata, licensing, and descriptive metadata.</li>
-<li>W3C Data Quality Vocabulary for quality dimensions, metrics, measurements, and quality-related provenance.</li>
-<li>OpenLineage for run, job, dataset, and facet-shaped lineage and execution events.</li>
-<li>OpenTelemetry for spans, events, logs, metrics, and trace correlation.</li>
-<li>in-toto and SLSA provenance for signed supply-chain-style attestations, materials, subjects, builders, and reproducible provenance claims.</li>
-<li>W3C Verifiable Credentials, JSON Web Signature, COSE, and JSON canonicalization specifications when portable signed claims or canonical signed payloads are required by a bridge profile.</li>
-</ul>
-<p>Open-data governance frameworks such as the Open Data Charter, EU open-data policy guidance, public data governance training materials, and IEEE open-data governance principles should inform documentation, transparency, privacy, reuse, and stewardship guidance. They are not internal evidence schemas and must not override IncQL semantic targets.</p>
-<p>Standards mappings must be versioned bridge profiles. If a target standard cannot represent IncQL evidence without loss, the bridge must report mapping loss and should emit an extension, custom facet, credential claim, or sidecar artifact when safe. An external standards document must not become the internal source of IncQL semantics merely because an exchange bridge supports it.</p>
-<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
-<p>Exchange bridges depend on inspection artifacts, execution observations, quality observations, adapter coverage, interoperability profiles, and governed plan bundles. They should map from or into those records rather than from backend-specific plans.</p>
-<p>Transformation-framework bridges are a first-class example. A bridge may ingest manifest, catalog, run-result, source, model, test, tag, exposure, metadata, and documentation artifacts from systems such as dbt, Airflow, MWAA, Dagster, or Prefect when the bridge profile supports them. It may export suggested source definitions, model metadata, quality tests, documentation scaffolds, exposures, tags, or run validation summaries. The bridge must keep imported project semantics distinct from Prism-authored semantics and must identify any profile assumptions used to compare source and target environments.</p>
-<p>Data-contract, data-product, and graph bridge profiles are specialized by IncQL RFC 046 and IncQL RFC 047. Contract and product artifacts may seed normalized evidence, product topology, and graph nodes or edges, but they remain imported evidence. Runtime lineage events may seed observed graph relationships, but they remain observed or attested evidence unless separate verification evidence supports a stronger assurance label.</p>
-<h3 id="compatibility-migration">Compatibility / migration</h3>
-<p>Exchange bridges must version their mappings. Adding a new internal evidence field should not silently change external semantics without a mapping version change or documented behavior. Imported artifact schemas must be versioned or fingerprinted where possible so stale or incompatible artifacts can be diagnosed.</p>
-<h2 id="alternatives-considered">Alternatives considered</h2>
-<ul>
-<li><strong>Adopt one external lineage model internally.</strong> Rejected because IncQL needs evidence that many external tools cannot represent directly.</li>
-<li><strong>Leave all exchange to downstream systems.</strong> Rejected because independent reconstruction causes drift.</li>
-<li><strong>Require hosted ingestion.</strong> Rejected because local export must work in open IncQL.</li>
-<li><strong>Treat transformation project artifacts as authoritative semantics.</strong> Rejected because those artifacts are valuable evidence, but they are not Prism's analyzed relational model.</li>
-</ul>
-<h2 id="drawbacks">Drawbacks</h2>
-<ul>
-<li>Exchange bridges require maintenance as external formats evolve.</li>
-<li>Some mappings will be lossy or require extensions.</li>
-<li>Redaction rules can make exports harder to debug.</li>
-<li>Inbound artifact support can be mistaken for semantic endorsement unless confidence, source, and target mapping diagnostics are explicit.</li>
-</ul>
-<h2 id="layers-affected">Layers affected</h2>
-<ul>
-<li><strong>IncQL specification</strong> — exchange bridge responsibilities and loss reporting become normative.</li>
-<li><strong>IncQL library package</strong> — exchange APIs may live in core or optional modules.</li>
-<li><strong>Execution / interchange</strong> — exchanges may include Substrait references, telemetry-shaped observations, lineage events, transformation artifacts, and run-result evidence.</li>
-<li><strong>Documentation</strong> — docs must identify external exchanges as evidence inputs or projections, not internal truth.</li>
-</ul>
-<h2 id="unresolved-questions">Unresolved questions</h2>
-<ul>
-<li>Which exchange bridge profiles are required by this RFC?</li>
-<li>Which public standards bridge profiles are required before this RFC can advance beyond Draft?</li>
-<li>Should exchange bridges live in the core package or optional integration packages?</li>
-<li>What sidecar format should preserve IncQL-specific evidence when an external target is lossy?</li>
-<li>Which transformation-project artifact profiles are required by this RFC?</li>
-<li>Which data contract, product topology, and graph projection bridge profiles are required by this RFC versus owned entirely by IncQL RFC 046 and IncQL RFC 047?</li>
-</ul>
-<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>semantic_dimension(...)</code></td>
+<td>dimension kind, behavior, state, source, confidence</td>
+<td><code>SemanticProfileDimension</code></td>
+</tr>
+<tr>
+<td><code>semantic_profile(...)</code></td>
+<td>target class, profile name, version/configuration, dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>inql_baseline_profile(...)</code></td>
+<td>optional version and evidence references</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>adapter_binding_profile(...)</code></td>
+<td>adapter name/version/configuration and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>execution_engine_profile(...)</code></td>
+<td>engine name/version/configuration and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>sql_dialect_profile(...)</code></td>
+<td>dialect name/version and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>catalog_schema_profile(...)</code></td>
+<td>catalog/schema name/version and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>transformation_project_profile(...)</code></td>
+<td>project name/version and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>interchange_consumer_profile(...)</code></td>
+<td>consumer name/version and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>conformance_baseline_profile(...)</code></td>
+<td>baseline name/version and dimensions</td>
+<td><code>SemanticProfile</code></td>
+</tr>
+<tr>
+<td><code>assess_profile_for_target(...)</code></td>
+<td>plan target and profile</td>
+<td><code>SemanticProfileAssessment</code></td>
+</tr>
+<tr>
+<td><code>profile_assessment(...)</code></td>
+<td>explicit target, profile id, dimensions, and state</td>
+<td><code>SemanticProfileAssessment</code></td>
+</tr>
+<tr>
+<td><code>coverage_record_for_profile(...)</code></td>
+<td>adapter coverage record and profile</td>
+<td><code>AdapterCoverageRecord</code> with <code>semantic_profile_id</code> set</td>
+</tr>
+</tbody>
+</table>
+<h2 id="record-types">Record types</h2>
+<table>
+<thead>
+<tr>
+<th>Record</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SemanticProfile</code></td>
+<td>Versioned evidence context for an external or internal semantic environment.</td>
+</tr>
+<tr>
+<td><code>SemanticProfileDimension</code></td>
+<td>One structured semantic dimension such as temporal behavior, function identity, or catalog semantics.</td>
+</tr>
+<tr>
+<td><code>SemanticProfileAssessment</code></td>
+<td>Assessment of a plan target under a profile.</td>
+</tr>
+</tbody>
+</table>
+<p>The current schema identifier is <code>SEMANTIC_PROFILE_SCHEMA_VERSION</code>.</p>
+<h2 id="enums">Enums</h2>
+<table>
+<thead>
+<tr>
+<th>Enum</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SemanticProfileTargetClass</code></td>
+<td><code>InqlBaseline</code>, <code>ClientProtocol</code>, <code>PlanIngressFrontend</code>, <code>ExecutionEngine</code>, <code>AdapterBinding</code>, <code>SqlDialect</code>, <code>CatalogSchemaSystem</code>, <code>TransformationProject</code>, <code>InterchangeConsumer</code>, <code>ConformanceBaseline</code></td>
+</tr>
+<tr>
+<td><code>SemanticProfileDimensionKind</code></td>
+<td><code>TypeSystem</code>, <code>NumericDecimal</code>, <code>TemporalCalendar</code>, <code>BooleanNullNan</code>, <code>StringComparison</code>, <code>IdentifierResolution</code>, <code>SchemaCatalog</code>, <code>TransformationProject</code>, <code>ClientSessionState</code>, <code>RelationOrdering</code>, <code>AggregateGrouping</code>, <code>WindowSemantics</code>, <code>NestedSemiStructured</code>, <code>FunctionOperatorIdentity</code>, <code>ExtensionFallback</code>, <code>PlanStageObservability</code></td>
+</tr>
+<tr>
+<td><code>SemanticProfileDimensionState</code></td>
+<td><code>Exact</code>, <code>Constrained</code>, <code>Unknown</code>, <code>NotApplicable</code></td>
+</tr>
+<tr>
+<td><code>SemanticProfileConfidence</code></td>
+<td><code>Declared</code>, <code>Attested</code>, <code>Observed</code>, <code>Inferred</code>, <code>Unknown</code></td>
+</tr>
+<tr>
+<td><code>SemanticProfileAssessmentState</code></td>
+<td><code>Matched</code>, <code>Constrained</code>, <code>Mismatched</code>, <code>Unknown</code>, <code>NotApplicable</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="semanticprofile"><code>SemanticProfile</code></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema_version</code></td>
+<td><code>str</code></td>
+<td>Semantic profile schema identifier.</td>
+</tr>
+<tr>
+<td><code>profile_id</code></td>
+<td><code>str</code></td>
+<td>Deterministic local profile id.</td>
+</tr>
+<tr>
+<td><code>target_class</code></td>
+<td><code>SemanticProfileTargetClass</code></td>
+<td>Semantic environment class.</td>
+</tr>
+<tr>
+<td><code>profile_name</code></td>
+<td><code>str</code></td>
+<td>Environment, family, tool, dialect, or baseline name.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td><code>MetadataSource</code></td>
+<td>Source family for the profile declaration.</td>
+</tr>
+<tr>
+<td><code>target_version</code></td>
+<td><code>Option[str]</code></td>
+<td>External version or profile version when known.</td>
+</tr>
+<tr>
+<td><code>target_configuration_fingerprint</code></td>
+<td><code>Option[str]</code></td>
+<td>Non-sensitive configuration fingerprint when available.</td>
+</tr>
+<tr>
+<td><code>dimensions</code></td>
+<td><code>list[SemanticProfileDimension]</code></td>
+<td>Structured semantic dimensions carried by this profile.</td>
+</tr>
+<tr>
+<td><code>confidence</code></td>
+<td><code>SemanticProfileConfidence</code></td>
+<td>Confidence attached to the profile.</td>
+</tr>
+<tr>
+<td><code>diagnostics</code></td>
+<td><code>list[ExecutionDiagnostic]</code></td>
+<td>Profile-level diagnostics.</td>
+</tr>
+<tr>
+<td><code>evidence_refs</code></td>
+<td><code>list[str]</code></td>
+<td>Evidence references supporting this profile.</td>
+</tr>
+</tbody>
+</table>
+<p>Methods:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Output</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>profile.to_json_value()</code></td>
+<td><code>JsonValue</code></td>
+<td>Stable JSON summary value.</td>
+</tr>
+<tr>
+<td><code>profile.to_json_text()</code></td>
+<td><code>Result[str, IoError]</code></td>
+<td>Pretty JSON summary text.</td>
+</tr>
+<tr>
+<td><code>profile.write(path)</code></td>
+<td><code>Result[None, IoError]</code></td>
+<td>Write the JSON summary to a local path.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assessments">Assessments</h2>
+<p><code>assess_profile_for_target(plan_target, profile)</code> conservatively combines the profile's dimension states. Any <code>Unknown</code> dimension keeps the assessment <code>Unknown</code>; any <code>Constrained</code> dimension makes the assessment <code>Constrained</code>; exact dimensions can produce <code>Matched</code>; and not-applicable-only dimensions produce <code>NotApplicable</code>. This prevents missing profile evidence from being treated as compatibility.</p>
+<p>Use <code>profile_assessment(...)</code> when a caller has stronger evidence, explicit mismatch diagnostics, or a precomputed assessment state.</p>
+<h2 id="bundle-and-coverage-integration">Bundle and coverage integration</h2>
+<p><code>governed_plan_bundle(...)</code> and <code>governed_plan_bundle_from_inspection(...)</code> accept <code>semantic_profiles</code> and <code>profile_assessments</code>. Bundles expose <code>semantic_profiles</code> and <code>profile_assessments</code> sections and include <code>SEMANTIC_PROFILE_SCHEMA_VERSION</code> in <code>rule_versions</code> when profile evidence is present.</p>
+<p><code>coverage_record_for_profile(record, profile)</code> sets <code>record.semantic_profile_id</code> on a copied coverage record. It does not change the coverage state; it only records which semantic profile was used for the coverage answer.</p>
+<p>For a task-oriented workflow, see <a href="../../how-to/semantic_profiles/">Use semantic profiles in evidence</a>.</p>
 
 
 
@@ -3531,14 +3957,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
+        <script src="../../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
       
-        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+        <script src="../../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>

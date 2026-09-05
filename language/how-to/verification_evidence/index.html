@@ -10,24 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/037_plan_diff_blast_radius_inputs/">
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/language/how-to/verification_evidence/">
       
       
+        <link rel="prev" href="../ingress/">
       
       
-      <link rel="icon" href="../../shared/brand/incql-favicon.png">
+        <link rel="next" href="../approximate_metrics/">
+      
+      
+      <link rel="icon" href="../../../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>IncQL RFC 037: Plan diff and blast-radius inputs - IncQL</title>
+        <title>Verification evidence - IncQL</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -40,21 +44,21 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260829-nav-container-2">
+      <link rel="stylesheet" href="../../../stylesheets/prismplane.css?v=20260829-nav-container-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260829-hub-type-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystalline.css?v=20260829-hub-type-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#incql-rfc-037-plan-diff-and-blast-radius-inputs" class="md-skip">
+        <a href="#track-async-verification-state" class="md-skip">
           Skip to content
         </a>
       
@@ -99,28 +103,28 @@
 
   
     
-  
-
-  
-    
-  
-
-  
-    
-  
-
-  
-    
-  
-
-  
-    
-  
-    
-  
-    
       
       
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+    
+  
     
   
     
@@ -133,8 +137,8 @@
   
 
 <header class="topbar crystal-strip" data-md-component="header">
-  <a class="brand" href="../.." aria-label="IncQL home">
-    <img src="../../shared/brand/incql-logo-header.png" alt="">
+  <a class="brand" href="../../.." aria-label="IncQL home">
+    <img src="../../../shared/brand/incql-logo-header.png" alt="">
     <span>
       <strong>IncQL</strong>
       <small>Incan Query Layer</small>
@@ -148,15 +152,15 @@
         data-path-prefixes=""
         data-search-label="Search"
         
-        href="../.."
+        href="../../.."
       >Home</a>
     
       <a
         data-site-section="learn"
         data-path-prefixes="language/"
         data-search-label="Search learning paths"
-        
-        href="../../language/"
+        class="is-active" aria-current="page"
+        href="../../"
       >Learn</a>
     
       <a
@@ -164,7 +168,7 @@
         data-path-prefixes="language/reference/"
         data-search-label="Search reference"
         
-        href="../../language/reference/"
+        href="../../reference/"
       >Reference</a>
     
       <a
@@ -172,7 +176,7 @@
         data-path-prefixes="architecture/"
         data-search-label="Explore layers"
         
-        href="../../architecture/"
+        href="../../../architecture/"
       >Architecture</a>
     
       <a
@@ -180,15 +184,15 @@
         data-path-prefixes="roadmap/"
         data-search-label="Search the roadmap"
         
-        href="../../roadmap/"
+        href="../../../roadmap/"
       >Roadmap</a>
     
       <a
         data-site-section="project"
         data-path-prefixes="project/,design_records/,rfcs/,whitepapers/,docs_map/,release_notes/,contributing/"
         data-search-label="Search project and design records"
-        class="is-active" aria-current="page"
-        href="../../project/"
+        
+        href="../../../project/"
       >Project</a>
     
   </nav>
@@ -207,7 +211,7 @@
     </button>
     
       <label class="docs-search" for="__search" aria-label="Search documentation">
-        <span data-site-search-label>Search project and design records</span>
+        <span data-site-search-label>Search learning paths</span>
         <kbd>/</kbd>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -244,7 +248,7 @@
 </div>
     
     <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
-      <img src="../../shared/icons/source-branch.svg" alt="">
+      <img src="../../../shared/icons/source-branch.svg" alt="">
       <span>encero-systems/IncQL</span>
     </a>
   </div>
@@ -271,9 +275,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+    <a href="../../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
+  <img src="../../../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -300,7 +304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -351,7 +355,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -384,7 +388,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/quickstart/" class="md-nav__link">
+      <a href="../../quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -453,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+      <a href="../../explanation/from_sql/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -474,7 +478,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+      <a href="../../explanation/from_spark/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -495,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+      <a href="../../explanation/what_incql_is/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -555,7 +559,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/tutorials/book/" class="md-nav__link ">
+            <a href="../../tutorials/book/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -634,7 +638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+      <a href="../../tutorials/book/01_typed_relation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -655,7 +659,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/02_deferred_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -732,7 +736,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/03_inspect_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -753,7 +757,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+      <a href="../../tutorials/book/04_collect_observed/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -774,7 +778,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+      <a href="../../tutorials/book/05_adapter_coverage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -849,7 +853,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+      <a href="../../tutorials/book/06_quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -870,7 +874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
+      <a href="../../tutorials/book/07_governed_write/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -945,7 +949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+      <a href="../../tutorials/book/08_first_query_block/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -966,7 +970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+      <a href="../../tutorials/book/09_summarize_query/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1049,7 +1053,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
+      <a href="../../explanation/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1070,7 +1074,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/execution_context/" class="md-nav__link">
+      <a href="../../explanation/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1103,6 +1107,8 @@
       
   
   
+    
+  
   
   
     
@@ -1123,21 +1129,24 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/how-to/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1148,13 +1157,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Guides
@@ -1181,17 +1190,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
         
           
-          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1216,7 +1228,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+      <a href="../read_write_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1237,7 +1249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+      <a href="../troubleshooting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1285,17 +1297,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1320,7 +1335,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
+      <a href="../dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1341,7 +1356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/joins/" class="md-nav__link">
+      <a href="../joins/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1362,7 +1377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+      <a href="../normalize_semistructured_fields/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1383,7 +1398,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
+      <a href="../nested_row_values/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1404,7 +1419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
+      <a href="../generator_rows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1425,7 +1440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/window_columns/" class="md-nav__link">
+      <a href="../window_columns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1451,8 +1466,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -1464,22 +1481,37 @@
       
         
       
-    
-    
+        
       
+        
+      
+        
+      
+        
+      
+        
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
       
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+      
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1490,7 +1522,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_4">
             <span class="md-nav__icon md-icon"></span>
             Inspect and trust
@@ -1504,7 +1536,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1525,7 +1557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
+      <a href="../execution_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1546,7 +1578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
+      <a href="../quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1567,7 +1599,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
+      <a href="../governed_evidence/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1576,6 +1608,262 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Verification evidence
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-use-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to use this
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-begin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Before you begin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#declare-what-should-be-checked" class="md-nav__link">
+    <span class="md-ellipsis">
+      Declare what should be checked
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#record-a-run-and-observations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Record a run and observations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#waive-a-known-exception" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waive a known exception
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-current-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project current state
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-verification-evidence-in-a-governed-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Package verification evidence in a governed bundle
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify the result
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-support-and-failure-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Current support and failure boundaries
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1609,17 +1897,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
         
           
-          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1644,7 +1935,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
+      <a href="../approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1665,7 +1956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+      <a href="../typed_hll_sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1686,7 +1977,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../variant_payloads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1755,7 +2046,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/" class="md-nav__link ">
+            <a href="../../reference/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1838,7 +2129,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
+      <a href="../../reference/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1859,7 +2150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
+      <a href="../../reference/dataset_methods/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1880,7 +2171,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/query_blocks/" class="md-nav__link">
+      <a href="../../reference/query_blocks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1949,7 +2240,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+      <a href="../../reference/builders/filters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1970,7 +2261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+      <a href="../../reference/builders/projections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1991,7 +2282,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+      <a href="../../reference/builders/aggregates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2074,7 +2365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/execution_context/" class="md-nav__link">
+      <a href="../../reference/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2095,7 +2386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/capabilities/" class="md-nav__link">
+      <a href="../../reference/capabilities/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2125,6 +2416,18 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -2172,7 +2475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/inspection/" class="md-nav__link">
+      <a href="../../reference/inspection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2193,7 +2496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/quality/" class="md-nav__link">
+      <a href="../../reference/quality/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2214,11 +2517,137 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/governance/" class="md-nav__link">
+      <a href="../../reference/governance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -2280,7 +2709,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/functions/" class="md-nav__link ">
+            <a href="../../reference/functions/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2313,7 +2742,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
+      <a href="../../reference/functions/approximate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2334,7 +2763,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/format/" class="md-nav__link">
+      <a href="../../reference/functions/format/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2355,7 +2784,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/generators/" class="md-nav__link">
+      <a href="../../reference/functions/generators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2376,7 +2805,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/nested/" class="md-nav__link">
+      <a href="../../reference/functions/nested/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2397,7 +2826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
+      <a href="../../reference/functions/sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2418,7 +2847,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/variants/" class="md-nav__link">
+      <a href="../../reference/functions/variants/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2439,7 +2868,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/windows/" class="md-nav__link">
+      <a href="../../reference/functions/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2518,7 +2947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
+      <a href="../../reference/substrait/conformance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2539,7 +2968,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
+      <a href="../../reference/substrait/operator_catalog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2560,7 +2989,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+      <a href="../../reference/substrait/read_root_binding_contract/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2581,7 +3010,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+      <a href="../../reference/substrait/revision_and_extension_policy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2617,7 +3046,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/" class="md-nav__link">
+      <a href="../../../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2637,7 +3066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../roadmap/" class="md-nav__link">
+      <a href="../../../roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2713,7 +3142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../project/" class="md-nav__link">
+      <a href="../../../project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2734,7 +3163,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design_records/" class="md-nav__link">
+      <a href="../../../design_records/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2780,7 +3209,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../rfcs/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2813,7 +3242,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../TEMPLATE/" class="md-nav__link">
+      <a href="../../../rfcs/TEMPLATE/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2869,7 +3298,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../whitepapers/" class="md-nav__link ">
+            <a href="../../../whitepapers/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2902,7 +3331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/incql_db/" class="md-nav__link">
+      <a href="../../../whitepapers/incql_db/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2923,7 +3352,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
+      <a href="../../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2952,7 +3381,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs_map/" class="md-nav__link">
+      <a href="../../../docs_map/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3017,7 +3446,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release_notes/v0_1/" class="md-nav__link">
+      <a href="../../../release_notes/v0_1/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3094,7 +3523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/architecture/" class="md-nav__link">
+      <a href="../../../contributing/architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3115,7 +3544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
+      <a href="../../../contributing/writing_rfcs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3136,7 +3565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
+      <a href="../../../contributing/prismplane_docs_theme/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3192,141 +3621,90 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#when-to-use-this" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      When to use this
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#before-you-begin" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Before you begin
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#goals" class="md-nav__link">
+  <a href="#declare-what-should-be-checked" class="md-nav__link">
     <span class="md-ellipsis">
-      Goals
+      Declare what should be checked
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#non-goals" class="md-nav__link">
+  <a href="#record-a-run-and-observations" class="md-nav__link">
     <span class="md-ellipsis">
-      Non-Goals
+      Record a run and observations
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+  <a href="#waive-a-known-exception" class="md-nav__link">
     <span class="md-ellipsis">
-      Guide-level explanation (how authors think about it)
+      Waive a known exception
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+  <a href="#project-current-state" class="md-nav__link">
     <span class="md-ellipsis">
-      Reference-level explanation (precise rules)
+      Project current state
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-details" class="md-nav__link">
+  <a href="#package-verification-evidence-in-a-governed-bundle" class="md-nav__link">
     <span class="md-ellipsis">
-      Design details
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Design details">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#syntax" class="md-nav__link">
-    <span class="md-ellipsis">
-      Syntax
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      Semantics
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interaction with other IncQL surfaces
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compatibility-migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compatibility / migration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#alternatives-considered" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternatives considered
+      Package verification evidence in a governed bundle
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#drawbacks" class="md-nav__link">
+  <a href="#verify-the-result" class="md-nav__link">
     <span class="md-ellipsis">
-      Drawbacks
+      Verify the result
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#layers-affected" class="md-nav__link">
+  <a href="#current-support-and-failure-boundaries" class="md-nav__link">
     <span class="md-ellipsis">
-      Layers affected
+      Current support and failure boundaries
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#unresolved-questions" class="md-nav__link">
+  <a href="#reference" class="md-nav__link">
     <span class="md-ellipsis">
-      Unresolved questions
+      Reference
     </span>
   </a>
   
@@ -3350,113 +3728,127 @@
   
 
 
-<h1 id="incql-rfc-037-plan-diff-and-blast-radius-inputs">IncQL RFC 037: Plan diff and blast-radius inputs</h1>
-<ul>
-<li><strong>Status:</strong> Draft</li>
-<li><strong>Created:</strong> 2026-05-29</li>
-<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
-<li><strong>Related:</strong></li>
-<li>IncQL RFC 007 (Prism logical planning and optimization engine)</li>
-<li>IncQL RFC 027 (relational evidence program)</li>
-<li>IncQL RFC 028 (semantic identity and target model)</li>
-<li>IncQL RFC 030 (Prism lineage graph)</li>
-<li>IncQL RFC 031 (local inspection APIs and artifacts)</li>
-<li>IncQL RFC 036 (governed plan bundle)</li>
-<li>IncQL RFC 040 (interoperability semantic profiles)</li>
-<li><strong>Issue:</strong> <a href="https://github.com/encero-systems/IncQL/issues/71">IncQL #71</a></li>
-<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a></li>
-<li><strong>Written against:</strong> Incan v0.3-era IncQL</li>
-<li><strong>Shipped in:</strong> —</li>
-</ul>
-<h2 id="summary">Summary</h2>
-<p>This RFC defines local IncQL plan diffs and blast-radius input artifacts. A plan diff compares two IncQL evidence artifacts and classifies changes in output schema, field identity, lineage, joins, filters, aggregates, windows, generators, quality assertions, semantic profiles, adapter requirements, and coverage. The result is a local input to downstream impact analysis, not an organization-wide blast-radius service.</p>
-<h2 id="motivation">Motivation</h2>
-<p>Typed relational evidence should help users understand change before it reaches production. If a query changes, tools should know whether output fields changed, dependencies changed, adapter requirements changed, or quality checks changed. IncQL can produce accurate local diff evidence because it owns the plan and lineage, but it should not claim to know every downstream consumer in every organization.</p>
-<h2 id="goals">Goals</h2>
-<ul>
-<li>Define local plan diff inputs and outputs.</li>
-<li>Classify structural, schema, lineage, quality, semantic profile, and adapter-requirement changes.</li>
-<li>Treat unknown impact as an explicit result.</li>
-<li>Provide downstream systems with blast-radius inputs without defining a global blast-radius engine.</li>
-</ul>
-<h2 id="non-goals">Non-Goals</h2>
-<ul>
-<li>Defining cross-repository dependency indexing.</li>
-<li>Defining organization-wide consumer discovery.</li>
-<li>Defining approvals, promotions, or change-management workflows.</li>
-<li>Deciding whether a change is acceptable for every downstream system.</li>
-</ul>
-<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
-<p>A CI job can compare two plan artifacts:</p>
-<div class="language-incan highlight"><pre><span></span><code><span class="n">before</span> <span class="o">=</span> <span class="n">read_plan_artifact</span><span class="p">(</span><span class="s2">"main/summary.plan.json"</span><span class="p">)</span>
-<span class="n">after</span> <span class="o">=</span> <span class="n">inspect_plan</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+<h1 id="track-async-verification-state">Track async verification state</h1>
+<h2 id="when-to-use-this">When to use this</h2>
+<p>Use verification evidence when checks happen over time or come from different evidence strengths. A migration or reconciliation run might first receive an attested source count, then verified partition checks, then a waiver for a known mismatch. IncQL keeps those as append-only observations and derives current state from them instead of overwriting older evidence.</p>
+<h2 id="before-you-begin">Before you begin</h2>
+<p>You need the semantic targets the checks are about (<code>orders_target</code> in the examples is a target taken from an inspection), stable identifiers for assertions, runs, observations, and waivers, and the evidence strength of each observation. Decide the assurance level honestly: attested, verified, and waived are recorded separately from outcome and lifecycle and are never inferred from execution success or quality status.</p>
+<h2 id="declare-what-should-be-checked">Declare what should be checked</h2>
+<p>A verification assertion describes intent. It is stable while observations change.</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">VerificationAssertionKind</span><span class="o">,</span><span class="w"> </span><span class="nn">VerificationScopeKind</span><span class="o">,</span><span class="w"> </span><span class="nn">verification_assertion</span>
 
-<span class="n">diff</span> <span class="o">=</span> <span class="n">diff_plans</span><span class="p">(</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">)</span>
-<span class="n">diff</span><span class="o">.</span><span class="n">changed_output_fields</span><span class="p">()</span>
-<span class="n">diff</span><span class="o">.</span><span class="n">changed_adapter_requirements</span><span class="p">()</span>
+<span class="n">assertion</span> <span class="o">=</span> <span class="n">verification_assertion</span><span class="p">(</span>
+    <span class="s2">"orders_partition_digest"</span><span class="p">,</span>
+    <span class="nc">VerificationAssertionKind</span><span class="o">.</span><span class="nc">DigestEquality</span><span class="p">,</span>
+    <span class="n">orders_target</span><span class="p">,</span>
+    <span class="n">comparison_intent</span><span class="o">=</span><span class="s2">"source and target partition digests match"</span><span class="p">,</span>
+    <span class="n">scope_kind</span><span class="o">=</span><span class="nc">VerificationScopeKind</span><span class="o">.</span><span class="nc">Partition</span><span class="p">,</span>
+    <span class="n">required_semantic_profile_ids</span><span class="o">=</span><span class="p">[</span><span class="s2">"profile:orders:canonical"</span><span class="p">],</span>
+<span class="p">)</span>
 </code></pre></div>
-<p>The diff tells IncQL-local facts. A higher-level system may combine those facts with dependency indexes and approvals.</p>
-<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
-<p>A plan diff must compare two compatible IncQL evidence artifacts or bundles. If artifacts are incompatible, stale, or missing required identity information, the diff must report unsupported or unknown impact.</p>
-<p>The diff must classify at least:</p>
+<p>The assertion does not say passed or failed. It anchors the check to semantic targets and records what profiles or context matter for interpreting evidence.</p>
+<h2 id="record-a-run-and-observations">Record a run and observations</h2>
+<p>A run records the attempt. Observations record facts emitted by the run.</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+    <span class="nc">VerificationAssurance</span><span class="p">,</span>
+    <span class="nc">VerificationCaptureBasis</span><span class="p">,</span>
+    <span class="nc">VerificationLifecycle</span><span class="p">,</span>
+    <span class="nc">VerificationOutcome</span><span class="p">,</span>
+    <span class="n">verification_coverage</span><span class="p">,</span>
+    <span class="n">verification_observation</span><span class="p">,</span>
+    <span class="n">verification_run</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">run</span> <span class="o">=</span> <span class="n">verification_run</span><span class="p">(</span>
+    <span class="s2">"verification-run:orders:2026-06-20"</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">assertion</span><span class="p">],</span>
+    <span class="n">requested_source_snapshot_id</span><span class="o">=</span><span class="nc">Some</span><span class="p">(</span><span class="s2">"snapshot:oracle:orders:2026-06-20"</span><span class="p">),</span>
+    <span class="n">requested_target_snapshot_id</span><span class="o">=</span><span class="nc">Some</span><span class="p">(</span><span class="s2">"snapshot:athena:orders:2026-06-20"</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">passed_partition</span> <span class="o">=</span> <span class="n">verification_observation</span><span class="p">(</span>
+    <span class="s2">"verification-observation:orders:2026-06-18"</span><span class="p">,</span>
+    <span class="n">run</span><span class="p">,</span>
+    <span class="n">assertion</span><span class="p">,</span>
+    <span class="nc">VerificationLifecycle</span><span class="o">.</span><span class="nc">Complete</span><span class="p">,</span>
+    <span class="nc">VerificationOutcome</span><span class="o">.</span><span class="nc">Passed</span><span class="p">,</span>
+    <span class="nc">VerificationAssurance</span><span class="o">.</span><span class="nc">Verified</span><span class="p">,</span>
+    <span class="n">scope_id</span><span class="o">=</span><span class="s2">"orders/order_date=2026-06-18"</span><span class="p">,</span>
+    <span class="n">coverage</span><span class="o">=</span><span class="n">verification_coverage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"partition"</span><span class="p">),</span>
+    <span class="n">basis</span><span class="o">=</span><span class="nc">VerificationCaptureBasis</span><span class="o">.</span><span class="nc">InternallyComputed</span><span class="p">,</span>
+    <span class="n">event_sequence</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Lifecycle, outcome, and assurance are separate. A check can be complete but failed, passed but only attested, or failed but waived. Do not infer verification assurance from execution success or quality status.</p>
+<h2 id="waive-a-known-exception">Waive a known exception</h2>
+<p>Waivers are observations, not edits. Keep the failed observation and add a later waived observation that supersedes it for the current projection.</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">verification_waiver</span><span class="o">,</span><span class="w"> </span><span class="nn">waived_verification_observation</span>
+
+<span class="n">waiver</span> <span class="o">=</span> <span class="n">verification_waiver</span><span class="p">(</span>
+    <span class="s2">"waiver:orders:2026-06-19"</span><span class="p">,</span>
+    <span class="s2">"known source correction accepted during cutover"</span><span class="p">,</span>
+    <span class="s2">"migration-review"</span><span class="p">,</span>
+    <span class="n">approved_by</span><span class="o">=</span><span class="nc">Some</span><span class="p">(</span><span class="s2">"data-owner"</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">waived_partition</span> <span class="o">=</span> <span class="n">waived_verification_observation</span><span class="p">(</span>
+    <span class="s2">"verification-observation:orders:2026-06-19:waived"</span><span class="p">,</span>
+    <span class="n">run</span><span class="p">,</span>
+    <span class="n">assertion</span><span class="p">,</span>
+    <span class="nc">VerificationOutcome</span><span class="o">.</span><span class="nc">Failed</span><span class="p">,</span>
+    <span class="n">waiver</span><span class="p">,</span>
+    <span class="n">scope_id</span><span class="o">=</span><span class="s2">"orders/order_date=2026-06-19"</span><span class="p">,</span>
+    <span class="n">coverage</span><span class="o">=</span><span class="n">verification_coverage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"partition"</span><span class="p">),</span>
+    <span class="n">supersedes_observation_ids</span><span class="o">=</span><span class="p">[</span><span class="s2">"verification-observation:orders:2026-06-19:failed"</span><span class="p">],</span>
+    <span class="n">event_sequence</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>The current projection can show the waived observation as active, but the outcome remains <code>Failed</code>. That distinction lets reports say “all non-waived partitions verified; one failed partition accepted by waiver” instead of implying the waived partition matched.</p>
+<h2 id="project-current-state">Project current state</h2>
+<p>Use <code>project_verification_state(...)</code> to derive the current state for an assertion and scope from the append-only observation stream.</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">project_verification_state</span>
+
+<span class="n">projection</span> <span class="o">=</span> <span class="n">project_verification_state</span><span class="p">(</span>
+    <span class="n">assertion</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">passed_partition</span><span class="p">,</span> <span class="n">failed_partition</span><span class="p">,</span> <span class="n">waived_partition</span><span class="p">],</span>
+    <span class="s2">"orders/order_date=2026-06-19"</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">println</span><span class="p">(</span><span class="n">projection</span><span class="o">.</span><span class="n">outcome</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+<span class="n">println</span><span class="p">(</span><span class="n">projection</span><span class="o">.</span><span class="n">assurance_count</span><span class="p">(</span><span class="nc">VerificationAssurance</span><span class="o">.</span><span class="nc">Waived</span><span class="p">))</span>
+</code></pre></div>
+<p>No observations means <code>Unknown</code>, not passed and not covered. Mixed active observations remain <code>Mixed</code>, and assurance counts stay visible by label.</p>
+<h2 id="package-verification-evidence-in-a-governed-bundle">Package verification evidence in a governed bundle</h2>
+<p>Pass verification evidence into a governed plan bundle when a local tool needs one handoff value with the plan and evidence together.</p>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">governed_plan_bundle</span><span class="o">,</span><span class="w"> </span><span class="nn">verification_evidence</span>
+
+<span class="n">evidence</span> <span class="o">=</span> <span class="n">verification_evidence</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">assertion</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">run</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">passed_partition</span><span class="p">,</span> <span class="n">waived_partition</span><span class="p">],</span>
+    <span class="n">projections</span><span class="o">=</span><span class="p">[</span><span class="n">projection</span><span class="p">],</span>
+    <span class="n">waivers</span><span class="o">=</span><span class="p">[</span><span class="n">waiver</span><span class="p">],</span>
+    <span class="n">evidence_refs</span><span class="o">=</span><span class="p">[</span><span class="s2">"verification:orders:cutover"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">bundle</span> <span class="o">=</span> <span class="n">governed_plan_bundle</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">verification_evidence</span><span class="o">=</span><span class="p">[</span><span class="n">evidence</span><span class="p">])</span>
+
+<span class="n">println</span><span class="p">(</span><span class="n">bundle</span><span class="o">.</span><span class="n">section_available</span><span class="p">(</span><span class="s2">"verification_evidence"</span><span class="p">))</span>
+<span class="n">println</span><span class="p">(</span><span class="n">bundle</span><span class="o">.</span><span class="n">section_available</span><span class="p">(</span><span class="s2">"verification_projections"</span><span class="p">))</span>
+</code></pre></div>
+<p>The bundle now exposes <code>verification_evidence</code>, <code>verification_assertions</code>, <code>verification_runs</code>, <code>verification_observations</code>, <code>verification_projections</code>, <code>verification_snapshots</code>, <code>verification_commitments</code>, and <code>verification_waivers</code> sections. Omitted verification evidence is <code>Unavailable</code>. Canonical equality profiles, digest profiles, proof artifacts, and constraint planning remain separate RFC families and stay <code>Unsupported</code> until implemented.</p>
+<h2 id="verify-the-result">Verify the result</h2>
 <ul>
-<li>output field added</li>
-<li>output field removed</li>
-<li>output field renamed</li>
-<li>field type changed</li>
-<li>field nullability changed</li>
-<li>field lineage changed</li>
-<li>relation input changed</li>
-<li>filter predicate changed</li>
-<li>join structure changed</li>
-<li>aggregate measure changed</li>
-<li>window specification changed</li>
-<li>generator output changed</li>
-<li>semi-structured or format access confidence changed</li>
-<li>quality assertion changed</li>
-<li>semantic profile changed</li>
-<li>profile assessment changed</li>
-<li>adapter requirement changed</li>
-<li>coverage state changed</li>
+<li>Project the state with <code>project_verification_state(...)</code> for the assertion and scope you care about; <code>Unknown</code> means no observations arrived, not that the check passed.</li>
+<li>Confirm waived observations keep their <code>Failed</code> outcome and that each waiver supersedes the observation you intended, by id.</li>
+<li>Check the assurance counts by label so a report can say how much of the evidence is verified, attested, or waived.</li>
+<li>After bundling, confirm the verification sections are <code>Available</code> and counted.</li>
 </ul>
-<p>Diff records must include affected semantic targets when available, change kind, severity or compatibility classification when known, evidence references, and confidence.</p>
-<p>Unknown impact must be explicit. If IncQL cannot determine whether a change affects a target, it must not omit the target silently.</p>
-<p>Plan diffs may produce blast-radius input artifacts. Those artifacts describe local affected targets and requirement changes. They do not claim to enumerate all downstream consumers outside IncQL's local artifact set.</p>
-<h2 id="design-details">Design details</h2>
-<h3 id="syntax">Syntax</h3>
-<p>This RFC introduces no syntax.</p>
-<h3 id="semantics">Semantics</h3>
-<p>Diffs operate over evidence artifacts, not raw source text. Text diffs may be useful but are not sufficient for semantic change classification.</p>
-<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
-<p>Plan diffs depend on stable semantic identity, lineage, inspection artifacts, semantic profiles, and governed plan bundles. They should not be implemented before those contracts exist.</p>
-<h3 id="compatibility-migration">Compatibility / migration</h3>
-<p>Older artifacts may not contain enough identity or lineage for precise diffs. Diff output must make that limitation explicit.</p>
-<h2 id="alternatives-considered">Alternatives considered</h2>
-<ul>
-<li><strong>Use textual diffs only.</strong> Rejected because text diffs cannot reliably classify relational meaning changes.</li>
-<li><strong>Make IncQL own full blast radius.</strong> Rejected because downstream consumers, deployments, dashboards, and global dependency indexes are outside IncQL.</li>
-<li><strong>Ignore unknown impact.</strong> Rejected because unknown impact is a real result.</li>
-</ul>
-<h2 id="drawbacks">Drawbacks</h2>
-<ul>
-<li>Precise diffs require stable artifacts across versions.</li>
-<li>Conservative diffs may produce noisy warnings.</li>
-<li>Compatibility classification can become complex and may need iteration.</li>
-</ul>
-<h2 id="layers-affected">Layers affected</h2>
-<ul>
-<li><strong>IncQL specification</strong> — change kinds and local diff semantics become normative.</li>
-<li><strong>IncQL library package</strong> — diff APIs must compare structured artifacts.</li>
-<li><strong>Execution / interchange</strong> — adapter requirement changes must be included where execution behavior changes.</li>
-<li><strong>Documentation</strong> — docs must distinguish local blast-radius inputs from global impact analysis.</li>
-</ul>
-<h2 id="unresolved-questions">Unresolved questions</h2>
-<ul>
-<li>Which change kinds should be compatibility-classified in the first release?</li>
-<li>Should diff severity be part of IncQL or left entirely to downstream policy?</li>
-<li>How should diffs handle generated or unstable field names?</li>
-</ul>
-<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+<h2 id="current-support-and-failure-boundaries">Current support and failure boundaries</h2>
+<p>Verification evidence is append-only: waivers and later observations supersede earlier ones in the projection without deleting them. IncQL stores and projects the evidence; it does not run the comparisons, fetch snapshots, or decide that a waiver is acceptable. Canonical equality profiles, digest profiles, proof artifacts, and constraint planning are separate RFC families and remain <code>Unsupported</code> sections until implemented.</p>
+<h2 id="reference">Reference</h2>
+<p>Use <a href="../../reference/verification/">Async verification evidence</a> for the assertion, run, observation, waiver, and projection contracts and <a href="../../reference/governed_plan_bundles/">Governed plan bundles</a> for the verification sections.</p>
+<!-- References -->
 
 
 
@@ -3503,14 +3895,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
+        <script src="../../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
       
-        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+        <script src="../../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>

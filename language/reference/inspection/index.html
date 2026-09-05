@@ -1471,6 +1471,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
       
@@ -1579,6 +1591,132 @@
   
   <span class="md-ellipsis">
     Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/verification_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -2152,6 +2290,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
       
@@ -2327,6 +2477,132 @@
   
   <span class="md-ellipsis">
     Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -3452,8 +3728,8 @@
 <p>Lineage confidence is <code>Exact</code> when the extractor can resolve a dependency to exactly one known input field, and <code>Conservative</code> when the dependency name cannot be matched or is ambiguous in the current schema. Scalar function calls preserve argument dependencies, but their transformation kind is <code>Unknown</code> unless the node kind supplies a more specific relationship such as filter, join, aggregate, generator, window, or sort. Unsupported lineage is not represented as an empty graph; unsupported evidence families are listed separately.</p>
 <h2 id="current-limits">Current limits</h2>
 <p>Inspection is read-only and plan-local. It does not execute the plan, inspect DataFusion physical plans, read catalog metadata, emit files, or make governance decisions.</p>
-<p>The current implementation computes local Prism plan graph, schema flow, lineage graph, inferred adapter requirements, public version/schema metadata attachments, governed attributes, policy checkpoint observations, diagnostics shape, and unsupported-evidence markers. Session execution observations and adapter coverage evaluation are exposed through the execution context rather than through plan inspection. Semantic profiles, ingress mappings, client-session context, frontend coverage, quality observations, governed bundles, and external exchange bridges remain owned by their RFCs and are not silently inferred by this API.</p>
-<p>For a task-oriented workflow, see <a href="../../how-to/inspect_plan_lineage/">Inspect a plan and lineage graph</a>.</p>
+<p>The current implementation computes local Prism plan graph, schema flow, lineage graph, inferred adapter requirements, public version/schema metadata attachments, governed attributes, policy checkpoint observations, diagnostics shape, and unsupported-evidence markers. Session execution observations and adapter coverage evaluation are exposed through the execution context rather than through plan inspection. Governed plan bundles package inspection evidence with caller-supplied quality, execution, and coverage records, but inspection itself still does not execute the plan or fabricate those records. Semantic profiles, ingress mappings, client-session context, frontend coverage, and external exchange bridges remain owned by their RFCs and are not silently inferred by this API.</p>
+<p>For task-oriented workflows, see <a href="../../how-to/inspect_plan_lineage/">Inspect a plan and lineage graph</a> and <a href="../../how-to/governed_plan_bundles/">Package a governed plan bundle</a>.</p>
 
 
 

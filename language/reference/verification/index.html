@@ -10,24 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/036_governed_plan_bundle/">
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/language/reference/verification/">
       
       
+        <link rel="prev" href="../ingress/">
       
       
-      <link rel="icon" href="../../shared/brand/incql-favicon.png">
+        <link rel="next" href="../functions/">
+      
+      
+      <link rel="icon" href="../../../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>IncQL RFC 036: Governed plan bundle - IncQL</title>
+        <title>Verification evidence - IncQL</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -40,21 +44,21 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260829-nav-container-2">
+      <link rel="stylesheet" href="../../../stylesheets/prismplane.css?v=20260829-nav-container-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260829-hub-type-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystalline.css?v=20260829-hub-type-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#incql-rfc-036-governed-plan-bundle" class="md-skip">
+        <a href="#async-verification-evidence-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -99,28 +103,31 @@
 
   
     
-  
-
-  
+      
+      
     
   
 
-  
-    
-  
-
-  
-    
-  
-
-  
-    
-  
-    
   
     
       
       
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+    
+  
     
   
     
@@ -133,8 +140,8 @@
   
 
 <header class="topbar crystal-strip" data-md-component="header">
-  <a class="brand" href="../.." aria-label="IncQL home">
-    <img src="../../shared/brand/incql-logo-header.png" alt="">
+  <a class="brand" href="../../.." aria-label="IncQL home">
+    <img src="../../../shared/brand/incql-logo-header.png" alt="">
     <span>
       <strong>IncQL</strong>
       <small>Incan Query Layer</small>
@@ -148,7 +155,7 @@
         data-path-prefixes=""
         data-search-label="Search"
         
-        href="../.."
+        href="../../.."
       >Home</a>
     
       <a
@@ -156,15 +163,15 @@
         data-path-prefixes="language/"
         data-search-label="Search learning paths"
         
-        href="../../language/"
+        href="../../"
       >Learn</a>
     
       <a
         data-site-section="reference"
         data-path-prefixes="language/reference/"
         data-search-label="Search reference"
-        
-        href="../../language/reference/"
+        class="is-active" aria-current="page"
+        href="../"
       >Reference</a>
     
       <a
@@ -172,7 +179,7 @@
         data-path-prefixes="architecture/"
         data-search-label="Explore layers"
         
-        href="../../architecture/"
+        href="../../../architecture/"
       >Architecture</a>
     
       <a
@@ -180,15 +187,15 @@
         data-path-prefixes="roadmap/"
         data-search-label="Search the roadmap"
         
-        href="../../roadmap/"
+        href="../../../roadmap/"
       >Roadmap</a>
     
       <a
         data-site-section="project"
         data-path-prefixes="project/,design_records/,rfcs/,whitepapers/,docs_map/,release_notes/,contributing/"
         data-search-label="Search project and design records"
-        class="is-active" aria-current="page"
-        href="../../project/"
+        
+        href="../../../project/"
       >Project</a>
     
   </nav>
@@ -207,7 +214,7 @@
     </button>
     
       <label class="docs-search" for="__search" aria-label="Search documentation">
-        <span data-site-search-label>Search project and design records</span>
+        <span data-site-search-label>Search reference</span>
         <kbd>/</kbd>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -244,7 +251,7 @@
 </div>
     
     <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
-      <img src="../../shared/icons/source-branch.svg" alt="">
+      <img src="../../../shared/icons/source-branch.svg" alt="">
       <span>encero-systems/IncQL</span>
     </a>
   </div>
@@ -271,9 +278,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+    <a href="../../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
+  <img src="../../../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -300,7 +307,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -351,7 +358,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -384,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/quickstart/" class="md-nav__link">
+      <a href="../../quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -453,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+      <a href="../../explanation/from_sql/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -474,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+      <a href="../../explanation/from_spark/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -495,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+      <a href="../../explanation/what_incql_is/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -555,7 +562,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/tutorials/book/" class="md-nav__link ">
+            <a href="../../tutorials/book/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -634,7 +641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+      <a href="../../tutorials/book/01_typed_relation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -655,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/02_deferred_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -732,7 +739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/03_inspect_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -753,7 +760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+      <a href="../../tutorials/book/04_collect_observed/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -774,7 +781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+      <a href="../../tutorials/book/05_adapter_coverage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -849,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+      <a href="../../tutorials/book/06_quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -870,7 +877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
+      <a href="../../tutorials/book/07_governed_write/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -945,7 +952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+      <a href="../../tutorials/book/08_first_query_block/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -966,7 +973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+      <a href="../../tutorials/book/09_summarize_query/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1049,7 +1056,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
+      <a href="../../explanation/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1070,7 +1077,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/execution_context/" class="md-nav__link">
+      <a href="../../explanation/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1137,7 +1144,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/how-to/" class="md-nav__link ">
+            <a href="../../how-to/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1216,7 +1223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+      <a href="../../how-to/read_write_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1237,7 +1244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+      <a href="../../how-to/troubleshooting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1320,7 +1327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
+      <a href="../../how-to/dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1341,7 +1348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/joins/" class="md-nav__link">
+      <a href="../../how-to/joins/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1362,7 +1369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+      <a href="../../how-to/normalize_semistructured_fields/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1383,7 +1390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
+      <a href="../../how-to/nested_row_values/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1404,7 +1411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
+      <a href="../../how-to/generator_rows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1425,7 +1432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/window_columns/" class="md-nav__link">
+      <a href="../../how-to/window_columns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1455,6 +1462,18 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -1504,7 +1523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../../how-to/inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1525,7 +1544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
+      <a href="../../how-to/execution_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1546,7 +1565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
+      <a href="../../how-to/quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1567,11 +1586,137 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
+      <a href="../../how-to/governed_evidence/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/verification_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -1644,7 +1789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
+      <a href="../../how-to/approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1665,7 +1810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+      <a href="../../how-to/typed_hll_sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1686,7 +1831,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../../how-to/variant_payloads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1719,6 +1864,8 @@
       
   
   
+    
+  
   
   
     
@@ -1741,21 +1888,24 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1766,13 +1916,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -1803,17 +1953,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1838,7 +1991,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
+      <a href="../dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1859,7 +2012,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
+      <a href="../dataset_methods/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1880,7 +2033,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/query_blocks/" class="md-nav__link">
+      <a href="../query_blocks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1949,7 +2102,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+      <a href="../builders/filters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1970,7 +2123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+      <a href="../builders/projections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1991,7 +2144,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+      <a href="../builders/aggregates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2039,17 +2192,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2074,7 +2230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/execution_context/" class="md-nav__link">
+      <a href="../execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2095,7 +2251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/capabilities/" class="md-nav__link">
+      <a href="../capabilities/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2121,10 +2277,24 @@
                 
   
   
+    
   
   
+  
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -2136,18 +2306,21 @@
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
         
           
-          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2158,7 +2331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_4">
             <span class="md-nav__icon md-icon"></span>
             Inspection, quality, and governance
@@ -2172,7 +2345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/inspection/" class="md-nav__link">
+      <a href="../inspection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2193,7 +2366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/quality/" class="md-nav__link">
+      <a href="../quality/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2214,7 +2387,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/governance/" class="md-nav__link">
+      <a href="../governance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2223,6 +2396,235 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Verification evidence
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#schema-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Schema versions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#record-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Record types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enums" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enums
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#constructors-and-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Constructors and helpers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#projection-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Projection rules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bundle-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bundle integration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Boundaries
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2268,10 +2670,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -2280,7 +2685,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/functions/" class="md-nav__link ">
+            <a href="../functions/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2291,7 +2696,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -2313,7 +2718,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
+      <a href="../functions/approximate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2334,7 +2739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/format/" class="md-nav__link">
+      <a href="../functions/format/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2355,7 +2760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/generators/" class="md-nav__link">
+      <a href="../functions/generators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2376,7 +2781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/nested/" class="md-nav__link">
+      <a href="../functions/nested/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2397,7 +2802,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
+      <a href="../functions/sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2418,7 +2823,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/variants/" class="md-nav__link">
+      <a href="../functions/variants/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2439,7 +2844,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/windows/" class="md-nav__link">
+      <a href="../functions/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2483,17 +2888,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2518,7 +2926,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
+      <a href="../substrait/conformance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2539,7 +2947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
+      <a href="../substrait/operator_catalog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2560,7 +2968,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+      <a href="../substrait/read_root_binding_contract/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2581,7 +2989,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+      <a href="../substrait/revision_and_extension_policy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2617,7 +3025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/" class="md-nav__link">
+      <a href="../../../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2637,7 +3045,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../roadmap/" class="md-nav__link">
+      <a href="../../../roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2713,7 +3121,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../project/" class="md-nav__link">
+      <a href="../../../project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2734,7 +3142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design_records/" class="md-nav__link">
+      <a href="../../../design_records/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2780,7 +3188,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../rfcs/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2813,7 +3221,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../TEMPLATE/" class="md-nav__link">
+      <a href="../../../rfcs/TEMPLATE/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2869,7 +3277,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../whitepapers/" class="md-nav__link ">
+            <a href="../../../whitepapers/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2902,7 +3310,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/incql_db/" class="md-nav__link">
+      <a href="../../../whitepapers/incql_db/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2923,7 +3331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
+      <a href="../../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2952,7 +3360,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs_map/" class="md-nav__link">
+      <a href="../../../docs_map/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3017,7 +3425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release_notes/v0_1/" class="md-nav__link">
+      <a href="../../../release_notes/v0_1/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3094,7 +3502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/architecture/" class="md-nav__link">
+      <a href="../../../contributing/architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3115,7 +3523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
+      <a href="../../../contributing/writing_rfcs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3136,7 +3544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
+      <a href="../../../contributing/prismplane_docs_theme/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3192,141 +3600,63 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#schema-versions" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Schema versions
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#record-types" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Record types
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#goals" class="md-nav__link">
+  <a href="#enums" class="md-nav__link">
     <span class="md-ellipsis">
-      Goals
+      Enums
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#non-goals" class="md-nav__link">
+  <a href="#constructors-and-helpers" class="md-nav__link">
     <span class="md-ellipsis">
-      Non-Goals
+      Constructors and helpers
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+  <a href="#projection-rules" class="md-nav__link">
     <span class="md-ellipsis">
-      Guide-level explanation (how authors think about it)
+      Projection rules
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+  <a href="#bundle-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Reference-level explanation (precise rules)
+      Bundle integration
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#design-details" class="md-nav__link">
+  <a href="#boundaries" class="md-nav__link">
     <span class="md-ellipsis">
-      Design details
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Design details">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#syntax" class="md-nav__link">
-    <span class="md-ellipsis">
-      Syntax
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      Semantics
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interaction with other IncQL surfaces
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compatibility-migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compatibility / migration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#alternatives-considered" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternatives considered
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#drawbacks" class="md-nav__link">
-    <span class="md-ellipsis">
-      Drawbacks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#layers-affected" class="md-nav__link">
-    <span class="md-ellipsis">
-      Layers affected
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#unresolved-questions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Unresolved questions
+      Boundaries
     </span>
   </a>
   
@@ -3350,124 +3680,236 @@
   
 
 
-<h1 id="incql-rfc-036-governed-plan-bundle">IncQL RFC 036: Governed plan bundle</h1>
-<ul>
-<li><strong>Status:</strong> Draft</li>
-<li><strong>Created:</strong> 2026-05-29</li>
-<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
-<li><strong>Related:</strong></li>
-<li>IncQL RFC 002 (Apache Substrait integration)</li>
-<li>IncQL RFC 027 (relational evidence program)</li>
-<li>IncQL RFC 028 (semantic identity and target model)</li>
-<li>IncQL RFC 029 (typed metadata attachments)</li>
-<li>IncQL RFC 030 (Prism lineage graph)</li>
-<li>IncQL RFC 033 (adapter requirements and coverage)</li>
-<li>IncQL RFC 034 (quality assertions and observations)</li>
-<li>IncQL RFC 035 (governed attributes and policy checkpoints)</li>
-<li>IncQL RFC 040 (interoperability semantic profiles)</li>
-<li>IncQL RFC 041 (Prism plan ingress and external client frontends)</li>
-<li>IncQL RFC 042 (async verification evidence)</li>
-<li>IncQL RFC 043 (canonical equality and digest profiles)</li>
-<li>IncQL RFC 044 (verifier statements and proof artifacts)</li>
-<li>IncQL RFC 045 (constraint evidence and verification-aware planning)</li>
-<li>IncQL RFC 046 (data contract ingress and product topology)</li>
-<li>IncQL RFC 047 (semantic evidence graph and agent query surface)</li>
-<li><strong>Issue:</strong> <a href="https://github.com/encero-systems/IncQL/issues/70">IncQL #70</a></li>
-<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a>; <a href="https://github.com/encero-systems/IncQL/pull/83">IncQL #83</a></li>
-<li><strong>Written against:</strong> Incan v0.3-era IncQL</li>
-<li><strong>Shipped in:</strong> —</li>
-</ul>
-<h2 id="summary">Summary</h2>
-<p>This RFC defines the governed plan bundle as the local IncQL artifact that keeps relational computation and evidence together. A bundle contains a plan reference, schemas, lineage, governed attributes, policy checkpoints, quality assertions, verification evidence, canonical equality profiles, verifier statements, proof artifacts, constraint evidence, data contract evidence, product topology, semantic evidence graph projections, semantic profiles, ingress evidence, client session context, adapter requirements, coverage records, evidence references, and version metadata for the IncQL-owned parts of governed relational computation.</p>
-<h2 id="motivation">Motivation</h2>
-<p>Individual evidence artifacts are useful, but many consumers need a coherent handoff unit. A plan without its evidence can be executed without understanding requirements. Evidence without the plan cannot explain what computation it describes. The governed plan bundle gives IncQL a portable local package for the facts it owns while leaving hosted storage, global policy, approvals, and cross-system reasoning outside the contract.</p>
-<h2 id="goals">Goals</h2>
-<ul>
-<li>Define a bundle shape for IncQL-owned relational evidence.</li>
-<li>Keep plan, schema, lineage, attributes, policy checkpoints, quality assertions, verification evidence, canonical equality profiles, verifier statements, proof artifacts, constraint evidence, data contract evidence, product topology, semantic evidence graph projections, semantic profiles, ingress evidence, client session context, adapter requirements, coverage, and versions together.</li>
-<li>Support local tooling and downstream generic consumers.</li>
-<li>Avoid proprietary hosted behavior in the IncQL contract.</li>
-</ul>
-<h2 id="non-goals">Non-Goals</h2>
-<ul>
-<li>Defining a managed control plane or global graph store.</li>
-<li>Defining organization-wide approval or promotion workflow.</li>
-<li>Replacing Substrait as the relational interchange plan.</li>
-<li>Requiring every bundle consumer to understand every optional evidence family.</li>
-</ul>
-<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
-<p>An author or CI job can produce one bundle for a planned relation:</p>
-<div class="language-incan highlight"><pre><span></span><code><span class="n">bundle</span> <span class="o">=</span> <span class="n">governed_plan_bundle</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
-<span class="n">bundle</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"target/incql/summary.bundle.json"</span><span class="p">)</span>
-</code></pre></div>
-<p>The bundle can be inspected locally or consumed by other tools. It does not require a hosted service.</p>
-<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
-<p>A governed plan bundle must include:</p>
-<ul>
-<li>bundle schema version</li>
-<li>IncQL version and relevant rule versions</li>
-<li>plan target</li>
-<li>input schema references</li>
-<li>output schema reference</li>
-<li>lineage graph reference or embedded lineage graph</li>
-<li>metadata attachments</li>
-<li>governed attributes</li>
-<li>policy checkpoint records</li>
-<li>quality assertions and optional observations</li>
-<li>verification assertions, runs, observations, and projections when available</li>
-<li>canonical equality profiles and digest profiles when available</li>
-<li>verifier statements, proof artifacts, and proof verification observations when available</li>
-<li>constraint evidence and verification plans when available</li>
-<li>data contract artifacts, normalized contract evidence, and mapping diagnostics when available</li>
-<li>product topology evidence and port dependency records when available</li>
-<li>semantic evidence graph projection manifests, graph artifacts, and graph query result artifacts when available</li>
-<li>semantic profile records and profile assessments when available</li>
-<li>ingress origin mappings and frontend coverage when available</li>
-<li>client session context when it affected plan analysis</li>
-<li>adapter requirements</li>
-<li>coverage records when available</li>
-<li>evidence references</li>
-<li>export status when available</li>
-</ul>
-<p>The bundle must distinguish required, optional, unavailable, and unsupported evidence sections. A missing evidence section must not be treated as an empty evidence section.</p>
-<p>The bundle may include a Substrait plan or a reference to a Substrait artifact, but Substrait must not be the only source of IncQL evidence in the bundle.</p>
-<p>Sensitive or redacted evidence must follow attachment visibility rules.</p>
-<p>Bundle consumers must be able to ignore optional evidence families they do not understand while still detecting unsupported required evidence.</p>
-<h2 id="design-details">Design details</h2>
-<h3 id="syntax">Syntax</h3>
-<p>This RFC introduces no authoring syntax.</p>
-<h3 id="semantics">Semantics</h3>
-<p>The bundle is an evidence package. It does not make policy decisions by itself.</p>
-<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
-<p>Inspection artifacts, execution observations, quality observations, ingress frontends, and evidence exchange bridges may all read from or write to bundle-compatible records.</p>
-<h3 id="compatibility-migration">Compatibility / migration</h3>
-<p>Bundles must be versioned from the start. Early bundles may contain fewer evidence families, but they must mark unsupported families explicitly.</p>
-<h2 id="alternatives-considered">Alternatives considered</h2>
-<ul>
-<li><strong>Only emit separate artifacts.</strong> Rejected because consumers often need a coherent handoff unit.</li>
-<li><strong>Make the bundle a hosted-service protocol.</strong> Rejected because local IncQL evidence must remain open and service-independent.</li>
-<li><strong>Embed all evidence directly into Substrait.</strong> Rejected because Substrait is not a complete IncQL evidence model.</li>
-</ul>
-<h2 id="drawbacks">Drawbacks</h2>
-<ul>
-<li>Bundle versioning becomes a compatibility commitment.</li>
-<li>Bundles can become large for complex plans.</li>
-<li>Consumers need clear rules for partial evidence.</li>
-</ul>
-<h2 id="layers-affected">Layers affected</h2>
-<ul>
-<li><strong>IncQL specification</strong> — bundle contents and required distinctions become normative.</li>
-<li><strong>IncQL library package</strong> — APIs must produce bundle-compatible records.</li>
-<li><strong>Execution / interchange</strong> — Substrait may be included or referenced, but not treated as the sole evidence store.</li>
-<li><strong>Documentation</strong> — docs must define local bundle use without implying hosted-service requirements.</li>
-</ul>
-<h2 id="unresolved-questions">Unresolved questions</h2>
-<ul>
-<li>Should bundles embed artifacts or reference sibling artifact files by default?</li>
-<li>What stable bundle serialization format should bundles use?</li>
-<li>Which evidence families are required for a bundle to be considered complete?</li>
-</ul>
-<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+<h1 id="async-verification-evidence-reference">Async verification evidence (Reference)</h1>
+<p>Async verification evidence records what should be checked, what verification runs attempted, which append-only observations were emitted, and what the current derived state is for a scope. Verification evidence is separate from quality observations, execution observations, adapter coverage, and proof artifacts. Quality observations answer whether a predicate passed. Execution observations answer whether a session operation ran. Adapter coverage answers whether an adapter can satisfy a capability requirement. Verification observations answer what was checked and how strong the evidence is.</p>
+<h2 id="schema-versions">Schema versions</h2>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VERIFICATION_SCHEMA_VERSION</code></td>
+<td>Schema identifier for RFC 042 verification evidence records.</td>
+</tr>
+<tr>
+<td><code>VERIFICATION_PROJECTION_RULE_VERSION</code></td>
+<td>Rule identifier for the built-in current-state projection helper.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="record-types">Record types</h2>
+<table>
+<thead>
+<tr>
+<th>Record</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VerificationAssertion</code></td>
+<td>Stable declaration of what should be checked. It does not contain current state.</td>
+</tr>
+<tr>
+<td><code>VerificationRun</code></td>
+<td>Attempt to evaluate one or more verification assertions under explicit profiles, bindings, snapshots, and execution references.</td>
+</tr>
+<tr>
+<td><code>VerificationObservation</code></td>
+<td>Append-only event emitted by a verification run.</td>
+</tr>
+<tr>
+<td><code>VerificationProjection</code></td>
+<td>Current state derived from an observation stream for one assertion and scope.</td>
+</tr>
+<tr>
+<td><code>VerificationEvidence</code></td>
+<td>Grouped assertions, runs, observations, projections, snapshots, commitments, and waivers for bundle or exchange handoff.</td>
+</tr>
+<tr>
+<td><code>VerificationCoverage</code></td>
+<td>Covered and total scope counters with a unit label.</td>
+</tr>
+<tr>
+<td><code>VerificationAssuranceCount</code></td>
+<td>Count of selected active observations by assurance label.</td>
+</tr>
+<tr>
+<td><code>VerificationSnapshotReference</code></td>
+<td>Source or target snapshot reference with authority, capture basis, location, version or fingerprint, diagnostics, and evidence references.</td>
+</tr>
+<tr>
+<td><code>VerificationCommitmentReference</code></td>
+<td>Commitment reference with authority, capture basis, algorithm, value, diagnostics, and evidence references.</td>
+</tr>
+<tr>
+<td><code>VerificationWaiver</code></td>
+<td>Accepted exception for failed, missing, or weaker evidence. Waivers do not turn failed evidence into passed evidence.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="enums">Enums</h2>
+<table>
+<thead>
+<tr>
+<th>Enum</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VerificationAssertionKind</code></td>
+<td><code>RelationComparison</code>, <code>QualityAssertion</code>, <code>RowCountEquality</code>, <code>DigestEquality</code>, <code>ProofStatement</code>, <code>ExternalAttestation</code>, <code>Unknown</code></td>
+</tr>
+<tr>
+<td><code>VerificationScopeKind</code></td>
+<td><code>Relation</code>, <code>Field</code>, <code>Row</code>, <code>Partition</code>, <code>Result</code>, <code>Assertion</code>, <code>Unknown</code></td>
+</tr>
+<tr>
+<td><code>VerificationLifecycle</code></td>
+<td><code>Pending</code>, <code>Running</code>, <code>Blocked</code>, <code>Complete</code>, <code>Superseded</code></td>
+</tr>
+<tr>
+<td><code>VerificationOutcome</code></td>
+<td><code>Passed</code>, <code>Failed</code>, <code>Mixed</code>, <code>Errored</code>, <code>Skipped</code>, <code>Unsupported</code>, <code>Unknown</code></td>
+</tr>
+<tr>
+<td><code>VerificationAssurance</code></td>
+<td><code>Proven</code>, <code>Verified</code>, <code>Attested</code>, <code>Sampled</code>, <code>Waived</code>, <code>Unknown</code></td>
+</tr>
+<tr>
+<td><code>VerificationFinality</code></td>
+<td><code>Provisional</code>, <code>Final</code>, <code>Revoked</code></td>
+</tr>
+<tr>
+<td><code>VerificationCaptureBasis</code></td>
+<td><code>InternallyComputed</code>, <code>ConnectorAttested</code>, <code>ExternalArtifact</code>, <code>TrustedParty</code>, <code>TrustedExecutionEnvironment</code>, <code>UserDeclared</code>, <code>Unknown</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="constructors-and-helpers">Constructors and helpers</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Output</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>verification_assertion(...)</code></td>
+<td><code>VerificationAssertion</code></td>
+<td>Declare verification intent and semantic targets.</td>
+</tr>
+<tr>
+<td><code>quality_verification_assertion(assertion, evidence_refs = [])</code></td>
+<td><code>VerificationAssertion</code></td>
+<td>Wrap a <code>QualityAssertion</code> as verification intent without changing the quality assertion.</td>
+</tr>
+<tr>
+<td><code>verification_run(...)</code></td>
+<td><code>VerificationRun</code></td>
+<td>Record one verification run request or attempt.</td>
+</tr>
+<tr>
+<td><code>verification_observation(...)</code></td>
+<td><code>VerificationObservation</code></td>
+<td>Record one append-only verification event.</td>
+</tr>
+<tr>
+<td><code>waived_verification_observation(...)</code></td>
+<td><code>VerificationObservation</code></td>
+<td>Record an accepted exception observation with <code>Waived</code> assurance.</td>
+</tr>
+<tr>
+<td><code>project_verification_state(assertion, observations, scope_id = "")</code></td>
+<td><code>VerificationProjection</code></td>
+<td>Derive current state from active observations for one assertion and scope.</td>
+</tr>
+<tr>
+<td><code>verification_coverage(covered_count = 0, total_count = 0, unit = "scope")</code></td>
+<td><code>VerificationCoverage</code></td>
+<td>Build coverage counters.</td>
+</tr>
+<tr>
+<td><code>verification_snapshot_reference(...)</code></td>
+<td><code>VerificationSnapshotReference</code></td>
+<td>Build a snapshot reference.</td>
+</tr>
+<tr>
+<td><code>verification_commitment_reference(...)</code></td>
+<td><code>VerificationCommitmentReference</code></td>
+<td>Build a commitment reference.</td>
+</tr>
+<tr>
+<td><code>verification_waiver(...)</code></td>
+<td><code>VerificationWaiver</code></td>
+<td>Build an accepted exception record.</td>
+</tr>
+<tr>
+<td><code>verification_evidence(...)</code></td>
+<td><code>VerificationEvidence</code></td>
+<td>Group verification records for bundles and exchange handoff.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="projection-rules">Projection rules</h2>
+<p><code>project_verification_state(...)</code> filters observations by assertion id and scope id, ignores revoked observations, ignores observations superseded by later observations, and projects the active observations into one current state. No matching observations produce <code>VerificationLifecycle.Pending</code>, <code>VerificationOutcome.Unknown</code>, zero coverage, and a diagnostic explaining that no observations matched.</p>
+<p>If active observations have different non-error outcomes, the projection outcome is <code>Mixed</code>. If any active observation is <code>Errored</code>, the projection outcome is <code>Errored</code>. If all active observations share <code>Passed</code>, <code>Failed</code>, <code>Skipped</code>, <code>Unsupported</code>, or <code>Unknown</code>, the projection keeps that outcome. Assurance is not flattened into a single value; <code>VerificationProjection.assurance_summary</code> keeps counts for <code>Proven</code>, <code>Verified</code>, <code>Attested</code>, <code>Sampled</code>, <code>Waived</code>, and <code>Unknown</code> evidence.</p>
+<p>Waived evidence remains separate from passed evidence. Use <code>waived_verification_observation(...)</code> when an accepted exception should supersede earlier evidence for the current projection. The projection outcome remains <code>Failed</code> unless a later non-waived observation establishes a different outcome.</p>
+<h2 id="bundle-integration">Bundle integration</h2>
+<p><code>governed_plan_bundle(...)</code> and <code>governed_plan_bundle_from_inspection(...)</code> accept <code>verification_evidence</code>. When verification evidence is supplied, bundles include <code>VERIFICATION_SCHEMA_VERSION</code> in <code>rule_versions</code>, keep the typed <code>verification_evidence</code> records, and expose concrete optional sections:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>verification_evidence</code></td>
+<td>Supplied <code>VerificationEvidence</code> groups.</td>
+</tr>
+<tr>
+<td><code>verification_assertions</code></td>
+<td>Assertion ids.</td>
+</tr>
+<tr>
+<td><code>verification_runs</code></td>
+<td>Run ids.</td>
+</tr>
+<tr>
+<td><code>verification_observations</code></td>
+<td>Observation ids.</td>
+</tr>
+<tr>
+<td><code>verification_projections</code></td>
+<td>Projection ids.</td>
+</tr>
+<tr>
+<td><code>verification_snapshots</code></td>
+<td>Snapshot ids.</td>
+</tr>
+<tr>
+<td><code>verification_commitments</code></td>
+<td>Commitment ids.</td>
+</tr>
+<tr>
+<td><code>verification_waivers</code></td>
+<td>Waiver ids.</td>
+</tr>
+</tbody>
+</table>
+<p>If verification evidence is omitted, these sections are present as <code>Unavailable</code>, not <code>Unsupported</code>. Related RFC families that are still not implemented, such as canonical equality profiles and proof artifacts, remain explicit <code>Unsupported</code> sections.</p>
+<h2 id="boundaries">Boundaries</h2>
+<p>The current API is an evidence model and reducer. It does not run hosted async verification, define digest canonicalization profiles, implement proof systems, create approvals, or add verification block syntax. Digest and proof-backed observations can reference external profile, snapshot, commitment, and evidence ids today, but the exact canonical equality profiles and proof artifact formats belong to their owning RFCs.</p>
+<p>For a task-oriented workflow, see <a href="../../how-to/verification_evidence/">Track async verification state</a>.</p>
 
 
 
@@ -3514,14 +3956,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
+        <script src="../../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
       
-        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+        <script src="../../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>

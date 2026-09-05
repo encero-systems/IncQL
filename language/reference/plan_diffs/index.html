@@ -10,24 +10,28 @@
       
       
       
-        <link rel="canonical" href="https://encero-systems.github.io/IncQL/rfcs/041_prism_plan_ingress_frontends/">
+        <link rel="canonical" href="https://encero-systems.github.io/IncQL/language/reference/plan_diffs/">
       
       
+        <link rel="prev" href="../governed_plan_bundles/">
       
       
-      <link rel="icon" href="../../shared/brand/incql-favicon.png">
+        <link rel="next" href="../evidence_exchange/">
+      
+      
+      <link rel="icon" href="../../../shared/brand/incql-favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>IncQL RFC 041: Prism plan ingress and external client frontends - IncQL</title>
+        <title>Plan diffs - IncQL</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -40,21 +44,21 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/prismplane.css?v=20260829-nav-container-2">
+      <link rel="stylesheet" href="../../../stylesheets/prismplane.css?v=20260829-nav-container-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystalline.css?v=20260829-hub-type-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystalline.css?v=20260829-hub-type-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-prototype.css?v=20260723-guides-nav-2">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-architecture.css?v=20260720-prototype-restore-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-integration.css?v=20260829-project-hub-1">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-learn.css?v=20260722-learn-crystal-9">
     
-      <link rel="stylesheet" href="../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
+      <link rel="stylesheet" href="../../../stylesheets/crystal-book.css?v=20260723-book-concepts-7">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#incql-rfc-041-prism-plan-ingress-and-external-client-frontends" class="md-skip">
+        <a href="#plan-diffs-and-blast-radius-inputs-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -99,28 +103,31 @@
 
   
     
-  
-
-  
+      
+      
     
   
 
-  
-    
-  
-
-  
-    
-  
-
-  
-    
-  
-    
   
     
       
       
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+    
+  
+    
+  
     
   
     
@@ -133,8 +140,8 @@
   
 
 <header class="topbar crystal-strip" data-md-component="header">
-  <a class="brand" href="../.." aria-label="IncQL home">
-    <img src="../../shared/brand/incql-logo-header.png" alt="">
+  <a class="brand" href="../../.." aria-label="IncQL home">
+    <img src="../../../shared/brand/incql-logo-header.png" alt="">
     <span>
       <strong>IncQL</strong>
       <small>Incan Query Layer</small>
@@ -148,7 +155,7 @@
         data-path-prefixes=""
         data-search-label="Search"
         
-        href="../.."
+        href="../../.."
       >Home</a>
     
       <a
@@ -156,15 +163,15 @@
         data-path-prefixes="language/"
         data-search-label="Search learning paths"
         
-        href="../../language/"
+        href="../../"
       >Learn</a>
     
       <a
         data-site-section="reference"
         data-path-prefixes="language/reference/"
         data-search-label="Search reference"
-        
-        href="../../language/reference/"
+        class="is-active" aria-current="page"
+        href="../"
       >Reference</a>
     
       <a
@@ -172,7 +179,7 @@
         data-path-prefixes="architecture/"
         data-search-label="Explore layers"
         
-        href="../../architecture/"
+        href="../../../architecture/"
       >Architecture</a>
     
       <a
@@ -180,15 +187,15 @@
         data-path-prefixes="roadmap/"
         data-search-label="Search the roadmap"
         
-        href="../../roadmap/"
+        href="../../../roadmap/"
       >Roadmap</a>
     
       <a
         data-site-section="project"
         data-path-prefixes="project/,design_records/,rfcs/,whitepapers/,docs_map/,release_notes/,contributing/"
         data-search-label="Search project and design records"
-        class="is-active" aria-current="page"
-        href="../../project/"
+        
+        href="../../../project/"
       >Project</a>
     
   </nav>
@@ -207,7 +214,7 @@
     </button>
     
       <label class="docs-search" for="__search" aria-label="Search documentation">
-        <span data-site-search-label>Search project and design records</span>
+        <span data-site-search-label>Search reference</span>
         <kbd>/</kbd>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -244,7 +251,7 @@
 </div>
     
     <a class="repo-chip" href="https://github.com/encero-systems/IncQL" target="_blank" rel="noreferrer" aria-label="Open the IncQL repository">
-      <img src="../../shared/icons/source-branch.svg" alt="">
+      <img src="../../../shared/icons/source-branch.svg" alt="">
       <span>encero-systems/IncQL</span>
     </a>
   </div>
@@ -271,9 +278,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
+    <a href="../../.." title="IncQL" class="md-nav__button md-logo" aria-label="IncQL" data-md-component="logo">
       
-  <img src="../../shared/brand/incql-logo-header.png" alt="logo">
+  <img src="../../../shared/brand/incql-logo-header.png" alt="logo">
 
     </a>
     IncQL
@@ -300,7 +307,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -351,7 +358,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -384,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/quickstart/" class="md-nav__link">
+      <a href="../../quickstart/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -453,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_sql/" class="md-nav__link">
+      <a href="../../explanation/from_sql/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -474,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/from_spark/" class="md-nav__link">
+      <a href="../../explanation/from_spark/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -495,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/what_incql_is/" class="md-nav__link">
+      <a href="../../explanation/what_incql_is/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -555,7 +562,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/tutorials/book/" class="md-nav__link ">
+            <a href="../../tutorials/book/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -634,7 +641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/01_typed_relation/" class="md-nav__link">
+      <a href="../../tutorials/book/01_typed_relation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -655,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/02_deferred_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/02_deferred_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -732,7 +739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/03_inspect_plan/" class="md-nav__link">
+      <a href="../../tutorials/book/03_inspect_plan/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -753,7 +760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/04_collect_observed/" class="md-nav__link">
+      <a href="../../tutorials/book/04_collect_observed/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -774,7 +781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/05_adapter_coverage/" class="md-nav__link">
+      <a href="../../tutorials/book/05_adapter_coverage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -849,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/06_quality_observations/" class="md-nav__link">
+      <a href="../../tutorials/book/06_quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -870,7 +877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/07_governed_write/" class="md-nav__link">
+      <a href="../../tutorials/book/07_governed_write/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -945,7 +952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/08_first_query_block/" class="md-nav__link">
+      <a href="../../tutorials/book/08_first_query_block/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -966,7 +973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/tutorials/book/09_summarize_query/" class="md-nav__link">
+      <a href="../../tutorials/book/09_summarize_query/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1049,7 +1056,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/dataset_carriers/" class="md-nav__link">
+      <a href="../../explanation/dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1070,7 +1077,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/explanation/execution_context/" class="md-nav__link">
+      <a href="../../explanation/execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1137,7 +1144,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/how-to/" class="md-nav__link ">
+            <a href="../../how-to/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1216,7 +1223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/read_write_data/" class="md-nav__link">
+      <a href="../../how-to/read_write_data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1237,7 +1244,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/troubleshooting/" class="md-nav__link">
+      <a href="../../how-to/troubleshooting/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1320,7 +1327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/dataset_transformations/" class="md-nav__link">
+      <a href="../../how-to/dataset_transformations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1341,7 +1348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/joins/" class="md-nav__link">
+      <a href="../../how-to/joins/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1362,7 +1369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/normalize_semistructured_fields/" class="md-nav__link">
+      <a href="../../how-to/normalize_semistructured_fields/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1383,7 +1390,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/nested_row_values/" class="md-nav__link">
+      <a href="../../how-to/nested_row_values/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1404,7 +1411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/generator_rows/" class="md-nav__link">
+      <a href="../../how-to/generator_rows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1425,7 +1432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/window_columns/" class="md-nav__link">
+      <a href="../../how-to/window_columns/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1455,6 +1462,18 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -1504,7 +1523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/inspect_plan_lineage/" class="md-nav__link">
+      <a href="../../how-to/inspect_plan_lineage/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1525,7 +1544,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/execution_observations/" class="md-nav__link">
+      <a href="../../how-to/execution_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1546,7 +1565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/quality_observations/" class="md-nav__link">
+      <a href="../../how-to/quality_observations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1567,11 +1586,137 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/governed_evidence/" class="md-nav__link">
+      <a href="../../how-to/governed_evidence/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Governed evidence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/plan_diffs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/verification_evidence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -1644,7 +1789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/approximate_metrics/" class="md-nav__link">
+      <a href="../../how-to/approximate_metrics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1665,7 +1810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/typed_hll_sketches/" class="md-nav__link">
+      <a href="../../how-to/typed_hll_sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1686,7 +1831,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/how-to/variant_payloads/" class="md-nav__link">
+      <a href="../../how-to/variant_payloads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1719,6 +1864,8 @@
       
   
   
+    
+  
   
   
     
@@ -1741,21 +1888,24 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1766,13 +1916,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -1803,17 +1953,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1838,7 +1991,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_carriers/" class="md-nav__link">
+      <a href="../dataset_carriers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1859,7 +2012,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/dataset_methods/" class="md-nav__link">
+      <a href="../dataset_methods/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1880,7 +2033,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/query_blocks/" class="md-nav__link">
+      <a href="../query_blocks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1949,7 +2102,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/filters/" class="md-nav__link">
+      <a href="../builders/filters/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1970,7 +2123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/projections/" class="md-nav__link">
+      <a href="../builders/projections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1991,7 +2144,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/builders/aggregates/" class="md-nav__link">
+      <a href="../builders/aggregates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2039,17 +2192,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2074,7 +2230,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/execution_context/" class="md-nav__link">
+      <a href="../execution_context/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2095,7 +2251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/capabilities/" class="md-nav__link">
+      <a href="../capabilities/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2121,10 +2277,24 @@
                 
   
   
+    
   
   
+  
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
       
         
       
@@ -2136,18 +2306,21 @@
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
         
           
-          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2158,7 +2331,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_4">
             <span class="md-nav__icon md-icon"></span>
             Inspection, quality, and governance
@@ -2172,7 +2345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/inspection/" class="md-nav__link">
+      <a href="../inspection/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2193,7 +2366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/quality/" class="md-nav__link">
+      <a href="../quality/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2214,11 +2387,231 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/governance/" class="md-nav__link">
+      <a href="../governance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governed_plan_bundles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governed plan bundles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Plan diffs
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#entry-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Entry points
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#record-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Record types
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compared-evidence-families" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compared evidence families
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plandiff" class="md-nav__link">
+    <span class="md-ellipsis">
+      PlanDiff
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unknown-impact" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unknown impact
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#blast-radius-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Blast-radius boundary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence_exchange/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence exchange
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../semantic_profiles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Semantic profiles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ingress/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Plan ingress
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verification evidence
   </span>
   
 
@@ -2268,10 +2661,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -2280,7 +2676,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../language/reference/functions/" class="md-nav__link ">
+            <a href="../functions/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2291,7 +2687,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_4_5" id="__nav_4_5_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -2313,7 +2709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/approximate/" class="md-nav__link">
+      <a href="../functions/approximate/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2334,7 +2730,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/format/" class="md-nav__link">
+      <a href="../functions/format/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2355,7 +2751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/generators/" class="md-nav__link">
+      <a href="../functions/generators/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2376,7 +2772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/nested/" class="md-nav__link">
+      <a href="../functions/nested/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2397,7 +2793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/sketches/" class="md-nav__link">
+      <a href="../functions/sketches/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2418,7 +2814,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/variants/" class="md-nav__link">
+      <a href="../functions/variants/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2439,7 +2835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/functions/windows/" class="md-nav__link">
+      <a href="../functions/windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2483,17 +2879,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
         
           
-          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2518,7 +2917,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/conformance/" class="md-nav__link">
+      <a href="../substrait/conformance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2539,7 +2938,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/operator_catalog/" class="md-nav__link">
+      <a href="../substrait/operator_catalog/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2560,7 +2959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/read_root_binding_contract/" class="md-nav__link">
+      <a href="../substrait/read_root_binding_contract/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2581,7 +2980,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../language/reference/substrait/revision_and_extension_policy/" class="md-nav__link">
+      <a href="../substrait/revision_and_extension_policy/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2617,7 +3016,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../architecture/" class="md-nav__link">
+      <a href="../../../architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2637,7 +3036,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../roadmap/" class="md-nav__link">
+      <a href="../../../roadmap/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2713,7 +3112,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../project/" class="md-nav__link">
+      <a href="../../../project/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2734,7 +3133,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design_records/" class="md-nav__link">
+      <a href="../../../design_records/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2780,7 +3179,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../rfcs/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2813,7 +3212,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../TEMPLATE/" class="md-nav__link">
+      <a href="../../../rfcs/TEMPLATE/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2869,7 +3268,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../whitepapers/" class="md-nav__link ">
+            <a href="../../../whitepapers/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2902,7 +3301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/incql_db/" class="md-nav__link">
+      <a href="../../../whitepapers/incql_db/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2923,7 +3322,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
+      <a href="../../../whitepapers/prism_relational_reasoning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2952,7 +3351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs_map/" class="md-nav__link">
+      <a href="../../../docs_map/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3017,7 +3416,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../release_notes/v0_1/" class="md-nav__link">
+      <a href="../../../release_notes/v0_1/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3094,7 +3493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/architecture/" class="md-nav__link">
+      <a href="../../../contributing/architecture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3115,7 +3514,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/writing_rfcs/" class="md-nav__link">
+      <a href="../../../contributing/writing_rfcs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3136,7 +3535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contributing/prismplane_docs_theme/" class="md-nav__link">
+      <a href="../../../contributing/prismplane_docs_theme/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -3192,141 +3591,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
+  <a href="#entry-points" class="md-nav__link">
     <span class="md-ellipsis">
-      Summary
+      Entry points
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#motivation" class="md-nav__link">
+  <a href="#record-types" class="md-nav__link">
     <span class="md-ellipsis">
-      Motivation
+      Record types
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#goals" class="md-nav__link">
+  <a href="#compared-evidence-families" class="md-nav__link">
     <span class="md-ellipsis">
-      Goals
+      Compared evidence families
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#non-goals" class="md-nav__link">
+  <a href="#plandiff" class="md-nav__link">
     <span class="md-ellipsis">
-      Non-Goals
+      PlanDiff
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#guide-level-explanation-how-authors-think-about-it" class="md-nav__link">
+  <a href="#unknown-impact" class="md-nav__link">
     <span class="md-ellipsis">
-      Guide-level explanation (how authors think about it)
+      Unknown impact
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reference-level-explanation-precise-rules" class="md-nav__link">
+  <a href="#blast-radius-boundary" class="md-nav__link">
     <span class="md-ellipsis">
-      Reference-level explanation (precise rules)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#design-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      Design details
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Design details">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#syntax" class="md-nav__link">
-    <span class="md-ellipsis">
-      Syntax
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      Semantics
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#interaction-with-other-incql-surfaces" class="md-nav__link">
-    <span class="md-ellipsis">
-      Interaction with other IncQL surfaces
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compatibility-migration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compatibility / migration
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#alternatives-considered" class="md-nav__link">
-    <span class="md-ellipsis">
-      Alternatives considered
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#drawbacks" class="md-nav__link">
-    <span class="md-ellipsis">
-      Drawbacks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#layers-affected" class="md-nav__link">
-    <span class="md-ellipsis">
-      Layers affected
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#unresolved-questions" class="md-nav__link">
-    <span class="md-ellipsis">
-      Unresolved questions
+      Blast-radius boundary
     </span>
   </a>
   
@@ -3350,139 +3662,214 @@
   
 
 
-<h1 id="incql-rfc-041-prism-plan-ingress-and-external-client-frontends">IncQL RFC 041: Prism plan ingress and external client frontends</h1>
-<ul>
-<li><strong>Status:</strong> Draft</li>
-<li><strong>Created:</strong> 2026-05-30</li>
-<li><strong>Author(s):</strong> Danny Meijer (@dannymeijer)</li>
-<li><strong>Related:</strong></li>
-<li>IncQL RFC 000 (core language model and layer boundaries)</li>
-<li>IncQL RFC 004 (execution context)</li>
-<li>IncQL RFC 007 (Prism logical planning and optimization engine)</li>
-<li>IncQL RFC 012 (unified scalar expression surface)</li>
-<li>IncQL RFC 013 (function catalog program)</li>
-<li>IncQL RFC 027 (relational evidence program)</li>
-<li>IncQL RFC 028 (semantic identity and target model)</li>
-<li>IncQL RFC 029 (typed metadata attachments)</li>
-<li>IncQL RFC 030 (Prism lineage graph)</li>
-<li>IncQL RFC 031 (local inspection APIs and artifacts)</li>
-<li>IncQL RFC 033 (adapter requirements and coverage)</li>
-<li>IncQL RFC 040 (interoperability semantic profiles)</li>
-<li><strong>Issue:</strong> <a href="https://github.com/encero-systems/IncQL/issues/75">IncQL #75</a></li>
-<li><strong>RFC PR:</strong> <a href="https://github.com/encero-systems/IncQL/pull/60">IncQL #60</a></li>
-<li><strong>Written against:</strong> Incan v0.3-era IncQL</li>
-<li><strong>Shipped in:</strong> —</li>
-</ul>
-<h2 id="summary">Summary</h2>
-<p>This RFC defines Prism plan ingress and external client frontends for IncQL. A frontend receives an external authoring or client protocol such as Spark Connect, SQL, or another unresolved relational plan surface, decodes it into a Prism-owned unresolved ingress plan, and asks Prism to analyze that plan into ordinary IncQL relational semantics. The frontend may preserve client-origin evidence, client-session evidence, protocol diagnostics, and ingress coverage records, but it must not make the external protocol, Spark, Substrait, DataFusion, or any backend adapter the semantic owner of the plan.</p>
-<h2 id="motivation">Motivation</h2>
-<p>IncQL should be able to interoperate with established client APIs without pretending that those APIs own IncQL's semantics. Spark Connect is the clearest pressure: a PySpark client can submit plan-shaped calls over a protocol boundary, and those calls may depend on client session state such as configuration, current catalog, temporary views, or function aliases. IncQL should not route those calls through Spark just to recover meaning later. Prism should receive an unresolved representation, resolve names and functions, apply IncQL semantic rules under an explicit profile and session context, and then continue through the normal planning, evidence, Substrait, and execution paths.</p>
-<p>Without a first-class ingress contract, external API support will be squeezed into session adapters, backend adapters, Substrait metadata, or compatibility flags. That would hide the real boundary. Execution adapters run plans. Plan ingress frontends receive external plan requests and let Prism create IncQL plans.</p>
-<h2 id="goals">Goals</h2>
-<ul>
-<li>Define plan ingress frontends as distinct from execution session adapters.</li>
-<li>Define a Prism-owned unresolved ingress plan model for external client plans.</li>
-<li>Preserve client-origin evidence without treating external node identifiers as IncQL semantic identities.</li>
-<li>Represent client session state that can affect Prism analysis.</li>
-<li>Allow Spark Connect-style clients to submit supported relation, expression, and command calls that Prism analyzes directly.</li>
-<li>Require structured unsupported-feature diagnostics and ingress coverage records.</li>
-<li>Connect ingress analysis to semantic profiles for client protocol behavior such as case sensitivity, function aliases, coercion, temporal behavior, and null ordering.</li>
-<li>Keep DataFusion and other execution backends behind the existing execution adapter boundary.</li>
-</ul>
-<h2 id="non-goals">Non-Goals</h2>
-<ul>
-<li>Defining full Spark API parity.</li>
-<li>Defining every Spark Connect protobuf message, gRPC service method, or streaming transport detail.</li>
-<li>Making Spark, PySpark, Spark Connect, DataFusion, or Substrait the source of IncQL relational meaning.</li>
-<li>Defining SQL transpilation as the internal planning model.</li>
-<li>Reimplementing every external client session lifecycle rule.</li>
-<li>Defining a hosted compatibility service or global conformance registry.</li>
-<li>Requiring every IncQL deployment to expose an external client protocol.</li>
-</ul>
-<h2 id="guide-level-explanation-how-authors-think-about-it">Guide-level explanation (how authors think about it)</h2>
-<p>An external client frontend lets an existing tool submit relational intent while IncQL keeps Prism as the planner:</p>
-<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span><span class="o">.</span><span class="n">frontends</span><span class="o">.</span><span class="n">spark</span> <span class="kn">import</span><span class="w"> </span><span class="nn">spark_connect_frontend</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span><span class="o">.</span><span class="n">session</span> <span class="kn">import</span><span class="w"> </span><span class="nn">datafusion_session</span>
+<h1 id="plan-diffs-and-blast-radius-inputs-reference">Plan diffs and blast-radius inputs (Reference)</h1>
+<p>Plan diffs compare structured IncQL evidence artifacts. They do not compare raw source text, generated SQL, Substrait payload bytes, or backend physical plans. The diff result is a local evidence artifact that downstream tools can combine with their own dependency indexes, review workflows, or catalog data.</p>
+<h2 id="entry-points">Entry points</h2>
+<div class="language-incan highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pub</span><span class="p">::</span><span class="n">incql</span> <span class="kn">import</span><span class="w"> </span><span class="nn">diff_lazy_plans</span><span class="o">,</span><span class="w"> </span><span class="nn">diff_plans</span><span class="o">,</span><span class="w"> </span><span class="nn">diff_plan_bundles</span>
 
-<span class="n">frontend</span> <span class="o">=</span> <span class="n">spark_connect_frontend</span><span class="p">(</span><span class="n">session_factory</span><span class="o">=</span><span class="n">datafusion_session</span><span class="p">)</span>
-<span class="n">frontend</span><span class="o">.</span><span class="n">serve</span><span class="p">(</span><span class="s2">"127.0.0.1:15002"</span><span class="p">)</span>
+<span class="n">diff</span> <span class="o">=</span> <span class="n">diff_lazy_plans</span><span class="p">(</span><span class="n">before_summary</span><span class="p">,</span> <span class="n">after_summary</span><span class="p">)</span>
+<span class="n">inspection_diff</span> <span class="o">=</span> <span class="n">diff_plans</span><span class="p">(</span><span class="n">before_inspection</span><span class="p">,</span> <span class="n">after_inspection</span><span class="p">)</span>
+<span class="n">bundle_diff</span> <span class="o">=</span> <span class="n">diff_plan_bundles</span><span class="p">(</span><span class="n">before_bundle</span><span class="p">,</span> <span class="n">after_bundle</span><span class="p">)</span>
 </code></pre></div>
-<p>A PySpark client may send a supported Spark Connect plan to that endpoint. The frontend decodes the request into a Prism ingress plan, Prism analyzes it, and the selected IncQL session executes the resulting plan through the normal adapter path.</p>
-<p>The important user model is not that IncQL becomes Spark internally. The model is that IncQL can speak a client protocol at the edge while keeping Prism responsible for names, functions, types, lineage, diagnostics, evidence, and execution requirements.</p>
-<h2 id="reference-level-explanation-precise-rules">Reference-level explanation (precise rules)</h2>
-<p>IncQL must define a plan ingress frontend boundary. A frontend may parse, decode, authenticate, route, frame client requests, and maintain client session state. It must not resolve relational semantics by delegating to an external engine when Prism can represent the requested plan.</p>
-<p>An ingress frontend must produce a Prism-owned unresolved ingress plan or a structured unsupported diagnostic. An unresolved ingress plan must represent at least:</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>diff_lazy_plans(before, after)</code></td>
+<td>Two <code>LazyFrame</code> values</td>
+<td><code>PlanDiff</code></td>
+</tr>
+<tr>
+<td><code>diff_plans(before, after)</code></td>
+<td>Two <code>PlanInspection</code> values</td>
+<td><code>PlanDiff</code></td>
+</tr>
+<tr>
+<td><code>diff_plan_bundles(before, after)</code></td>
+<td>Two <code>GovernedPlanBundle</code> values</td>
+<td><code>PlanDiff</code></td>
+</tr>
+<tr>
+<td><code>blast_radius_inputs(diff)</code></td>
+<td>One <code>PlanDiff</code></td>
+<td><code>list[BlastRadiusInput]</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>diff_lazy_plans(...)</code> inspects both lazy plans before comparing them. Use <code>diff_plans(...)</code> when inspection already happened, and use <code>diff_plan_bundles(...)</code> when caller-supplied quality, execution, coverage, or evidence-reference records should participate in the comparison.</p>
+<h2 id="record-types">Record types</h2>
+<table>
+<thead>
+<tr>
+<th>Record</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PlanDiff</code></td>
+<td>Top-level comparison result with diff metadata, records, blast-radius inputs, and diagnostics.</td>
+</tr>
+<tr>
+<td><code>PlanDiffRecord</code></td>
+<td>One classified evidence change.</td>
+</tr>
+<tr>
+<td><code>BlastRadiusInput</code></td>
+<td>Local affected-target and requirement-change input derived from one diff record.</td>
+</tr>
+<tr>
+<td><code>PlanDiffChangeFamily</code></td>
+<td>Evidence family being compared.</td>
+</tr>
+<tr>
+<td><code>PlanDiffChangeKind</code></td>
+<td>Change state: <code>Added</code>, <code>Removed</code>, <code>Changed</code>, <code>Renamed</code>, <code>Unchanged</code>, or <code>Unknown</code>.</td>
+</tr>
+<tr>
+<td><code>PlanDiffCompatibility</code></td>
+<td>Conservative local compatibility class: <code>Compatible</code>, <code>PotentiallyBreaking</code>, <code>Breaking</code>, or <code>Unknown</code>.</td>
+</tr>
+<tr>
+<td><code>PlanDiffConfidence</code></td>
+<td>Confidence class: <code>Exact</code>, <code>Conservative</code>, or <code>Unknown</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>PLAN_DIFF_SCHEMA_VERSION</code> and <code>BLAST_RADIUS_INPUT_SCHEMA_VERSION</code> are the current schema identifiers for these records.</p>
+<h2 id="compared-evidence-families">Compared evidence families</h2>
+<p>Plan diffs compare the evidence IncQL owns today:</p>
 <ul>
-<li>ingress request identity</li>
-<li>ingress frontend identity</li>
-<li>client session identity when the request is session-scoped</li>
-<li>client protocol and protocol version when available</li>
-<li>requested semantic profile when available</li>
-<li>unresolved relation nodes</li>
-<li>unresolved expression nodes</li>
-<li>unresolved command nodes when the protocol includes commands</li>
-<li>client-origin references</li>
-<li>diagnostics</li>
-<li>ingress coverage records</li>
+<li>output fields and output schema facts</li>
+<li>authored and rewritten plan node shape</li>
+<li>lineage edges</li>
+<li>metadata attachments</li>
+<li>governed attributes</li>
+<li>policy checkpoints</li>
+<li>adapter requirements</li>
+<li>unsupported evidence markers</li>
 </ul>
-<p>Prism analysis of an ingress plan must produce ordinary Prism semantic targets, relation plans, expression plans, diagnostics, lineage inputs, adapter requirements, and inspection evidence. External client node identifiers may be preserved as origin references, but they must not replace Prism semantic target identities.</p>
-<p>Client session state that can affect analysis must be represented as client session targets, typed attachments, profile evidence, or analyzer binding references. This includes current catalog or namespace, temporary relation names, session variables, function registrations, case sensitivity, ANSI or compatibility modes, timezone settings, and other frontend-specific state that changes name resolution, type coercion, function lookup, or expression semantics.</p>
-<p>Analyzer bindings that depend on client session state must reference the relevant client session target or profile assessment. A later inspection should be able to explain that a relation, function, alias, identifier, or coercion resolved under a specific client session context without treating that client session as the source of relational meaning.</p>
-<p>Ingress frontends must distinguish at least the following coverage states for protocol features:</p>
+<p>Bundle diffs also compare caller-supplied or bundle-specific evidence:</p>
 <ul>
-<li>supported: Prism can represent and analyze the feature under the selected profile</li>
-<li>partially_supported: Prism can represent the feature only under recorded restrictions</li>
-<li>unsupported: Prism cannot represent or analyze the feature</li>
-<li>unknown: IncQL cannot determine support for the feature</li>
+<li>adapter coverage records</li>
+<li>quality assertions</li>
+<li>quality observations</li>
+<li>execution observations</li>
+<li>bundle section states</li>
+<li>bundle-level evidence references</li>
 </ul>
-<p>Unsupported and unknown ingress features must be reported before execution when they affect plan semantics. They must not be silently lowered to backend-specific behavior.</p>
-<p>Spark Connect compatibility must be modeled as a frontend protocol profile plus ingress coverage, not as a backend adapter capability alone. A Spark Connect frontend may accept supported relation and expression calls, reject unsupported calls, and report coverage for omitted protocol areas. It must not require Spark's engine to produce the semantic plan that Prism will execute.</p>
-<p>Semantic profiles may affect ingress analysis. Profile dimensions may control identifier resolution, case sensitivity, function aliases, type coercion, null and NaN behavior, timestamp semantics, decimal behavior, ANSI mode, and other compatibility-sensitive rules. Profile evidence must be explicit when the frontend uses those rules.</p>
-<p>Commands that do not describe relational computation, such as session configuration, catalog inspection, temporary view registration, cache control, or client lifecycle operations, must be represented as command ingress nodes, mapped to explicit IncQL client session or execution session behavior, or rejected with structured diagnostics. Accepted commands that mutate client session state must produce client session evidence. They must not be disguised as ordinary relational plan nodes.</p>
-<p>Plan ingress evidence must be inspectable. Tools must be able to see which frontend produced a plan, which client session context affected analysis, which client protocol features were used, which features were unsupported or partially supported, which profile governed analysis, and how client-origin references map to Prism targets.</p>
-<h2 id="design-details">Design details</h2>
-<h3 id="syntax">Syntax</h3>
-<p>This RFC introduces no IncQL authoring syntax. Frontends are package or service APIs around Prism and Session.</p>
-<h3 id="semantics">Semantics</h3>
-<p>Plan ingress is a semantic boundary before Prism analysis. It is not an execution boundary. The frontend receives external input, Prism owns analysis, and Session plus execution adapters own execution.</p>
-<p>The unresolved ingress model should be general enough for Spark Connect, SQL parsers, notebook clients, and future external plan protocols, but each frontend must declare its own protocol coverage, session-state model, and profile assumptions.</p>
-<h3 id="interaction-with-other-incql-surfaces">Interaction with other IncQL surfaces</h3>
-<p>Method chains, <code>query {}</code> blocks, SQL frontends, and Spark Connect frontends may all produce Prism plans. Equivalent relational intent should converge on comparable Prism targets after analysis, subject to explicit profile differences.</p>
-<p>Prism lineage must preserve client-origin relationships where available. Those relationships explain where a Prism target came from, but they are not value lineage by themselves.</p>
-<p>Inspection APIs and artifacts must expose ingress diagnostics, origin mappings, selected profiles, relevant client session targets, and ingress coverage when a plan came through a frontend.</p>
-<p>Adapter requirements and coverage remain execution-facing evidence. Ingress coverage is frontend-facing evidence. A Spark Connect relation node being accepted by a frontend is not the same as DataFusion being able to execute the resulting plan.</p>
-<h3 id="compatibility-migration">Compatibility / migration</h3>
-<p>Existing IncQL plans and sessions remain valid without ingress evidence. Frontends are additive. Tools that require client-origin evidence must report missing ingress evidence as unsupported or unknown rather than inferring it from display names or backend plans.</p>
-<h2 id="alternatives-considered">Alternatives considered</h2>
-<ul>
-<li><strong>Use Spark as the planner.</strong> Rejected because that would make Spark the semantic owner and reduce Prism to an execution bridge.</li>
-<li><strong>Translate Spark Connect directly to Substrait.</strong> Rejected because Substrait is an interchange boundary, not the full IncQL semantic analysis and evidence model.</li>
-<li><strong>Treat Spark Connect support as a backend adapter.</strong> Rejected because receiving client plan calls and executing an analyzed plan are different boundaries.</li>
-<li><strong>Only support IncQL-native authoring.</strong> Rejected because external client protocols are valuable when they feed Prism honestly instead of bypassing it.</li>
-<li><strong>Accept unsupported calls and hope the backend handles them.</strong> Rejected because unknown frontend semantics must be visible before execution.</li>
-</ul>
-<h2 id="drawbacks">Drawbacks</h2>
-<ul>
-<li>Frontends require protocol-specific maintenance.</li>
-<li>Spark compatibility pressure can pull non-portable semantics into the system unless profiles and coverage stay explicit.</li>
-<li>The unresolved ingress model adds another planning representation before Prism's analyzed plan.</li>
-<li>Early frontend support will be partial, which requires clear diagnostics and compatibility documentation.</li>
-</ul>
-<h2 id="layers-affected">Layers affected</h2>
-<ul>
-<li><strong>IncQL specification</strong> — plan ingress, frontend coverage, origin mapping, and Prism analysis boundaries become normative vocabulary.</li>
-<li><strong>IncQL library package</strong> — frontend APIs, unresolved ingress plan records, diagnostics, and inspection records must be exposed through public modules where implemented.</li>
-<li><strong>Execution / interchange</strong> — Session and backend adapters execute Prism-owned plans and may report adapter coverage, but they do not own ingress semantics.</li>
-<li><strong>Documentation</strong> — docs must distinguish external client protocol support from Spark engine compatibility, Substrait interchange, and DataFusion execution.</li>
-</ul>
-<h2 id="unresolved-questions">Unresolved questions</h2>
-<ul>
-<li>Which Spark Connect relation and expression nodes belong in the first supported ingress slice?</li>
-<li>Should ingress frontends live in the core package or optional integration packages?</li>
-<li>What is the minimum common unresolved ingress model shared by Spark Connect, SQL, and future client protocols?</li>
-<li>Which client session fields are required in the first Spark Connect-compatible profile without importing Spark's session model wholesale?</li>
-</ul>
-<!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
+<p>The comparison keys are semantic where possible. For example, governed attributes are compared by target, key, and scope rather than by plan-local generated IDs. This lets equivalent evidence from separate inspected snapshots compare cleanly while still reporting real semantic changes.</p>
+<h2 id="plandiff"><code>PlanDiff</code></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema_version</code></td>
+<td><code>str</code></td>
+<td>Diff schema identifier.</td>
+</tr>
+<tr>
+<td><code>diff_id</code></td>
+<td><code>str</code></td>
+<td>Local diff id derived from the compared artifacts.</td>
+</tr>
+<tr>
+<td><code>before_plan_id</code></td>
+<td><code>str</code></td>
+<td>Local plan id for the before artifact.</td>
+</tr>
+<tr>
+<td><code>after_plan_id</code></td>
+<td><code>str</code></td>
+<td>Local plan id for the after artifact.</td>
+</tr>
+<tr>
+<td><code>before_bundle_id</code></td>
+<td><code>Option[str]</code></td>
+<td>Before bundle id when comparing bundles.</td>
+</tr>
+<tr>
+<td><code>after_bundle_id</code></td>
+<td><code>Option[str]</code></td>
+<td>After bundle id when comparing bundles.</td>
+</tr>
+<tr>
+<td><code>records</code></td>
+<td><code>list[PlanDiffRecord]</code></td>
+<td>Classified change and unknown-impact records.</td>
+</tr>
+<tr>
+<td><code>blast_radius_inputs</code></td>
+<td><code>list[BlastRadiusInput]</code></td>
+<td>Local downstream-impact inputs derived from records.</td>
+</tr>
+<tr>
+<td><code>diagnostics</code></td>
+<td><code>list[str]</code></td>
+<td>Diff-level diagnostics.</td>
+</tr>
+</tbody>
+</table>
+<p>Methods:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Output</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>diff.is_empty()</code></td>
+<td><code>bool</code></td>
+<td>True when there are no change or unknown-impact records.</td>
+</tr>
+<tr>
+<td><code>diff.changed_output_fields()</code></td>
+<td><code>list[PlanDiffRecord]</code></td>
+<td>Output-field change records.</td>
+</tr>
+<tr>
+<td><code>diff.changed_adapter_requirements()</code></td>
+<td><code>list[PlanDiffRecord]</code></td>
+<td>Adapter requirement change records.</td>
+</tr>
+<tr>
+<td><code>diff.changed_lineage()</code></td>
+<td><code>list[PlanDiffRecord]</code></td>
+<td>Lineage change records.</td>
+</tr>
+<tr>
+<td><code>diff.unknown_impacts()</code></td>
+<td><code>list[PlanDiffRecord]</code></td>
+<td>Records with unknown impact or unknown compatibility.</td>
+</tr>
+<tr>
+<td><code>diff.has_breaking_changes()</code></td>
+<td><code>bool</code></td>
+<td>True when any record is locally classified as breaking.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unknown-impact">Unknown impact</h2>
+<p>Unknown impact is explicit. If inspection schema versions or bundle schema versions are incompatible, IncQL emits an <code>ArtifactCompatibility</code> record with <code>kind = Unknown</code> and <code>compatibility = Unknown</code>. It does not return an empty diff merely because the comparison cannot be performed safely.</p>
+<p>Generated or plan-local IDs are not treated as global identity. Where IncQL can compare by semantic key, it does. Where identity is ambiguous, records use conservative or unknown confidence rather than silently dropping the change.</p>
+<h2 id="blast-radius-boundary">Blast-radius boundary</h2>
+<p><code>BlastRadiusInput</code> records name local affected targets and adapter requirement changes. They are inputs to downstream blast-radius tooling, not final global impact answers. IncQL does not discover dashboards, jobs, consumers, approvals, or cross-repository dependencies in this API.</p>
+<p>For a task-oriented workflow, see <a href="../../how-to/plan_diffs/">Compare two plans</a>.</p>
 
 
 
@@ -3529,14 +3916,14 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
-        <script src="../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
+        <script src="../../../javascripts/prismplane.js?v=20260825-rail-chevron-1"></script>
       
-        <script src="../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
+        <script src="../../../javascripts/crystalline.js?v=20260720-crystal-port-4"></script>
       
     
   </body>
