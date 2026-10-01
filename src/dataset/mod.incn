@@ -137,7 +137,7 @@ pub model CarrierSchema:
     pub resolved_columns [description="Columns recorded by the structured collection boundary after collect."]: list[str]
 
 
-pub class DataFrame[T with Clone] with BoundedDataSet:
+pub class DataFrame[T with Clone] with BoundedDataSet[T]:
     pub _type_witness: list[T]
     pub _materialization: DataFrameMaterialization
     pub _substrait_rel: Rel
@@ -287,7 +287,7 @@ pub class DataFrame[T with Clone] with BoundedDataSet:
         return _data_frame_with_invalidated_materialization(limit_ds(self._substrait_rel, n), self.columns())
 
 
-pub class LazyFrame[T with Clone] with BoundedDataSet:
+pub class LazyFrame[T with Clone] with BoundedDataSet[T]:
     """
     Lazy, immutable carrier over a Prism cursor.
 
@@ -416,7 +416,7 @@ pub trait UnboundedDataSet[T with Clone] with DataSet[T]:
     pass
 
 
-pub class DataStream[T with Clone] with UnboundedDataSet:
+pub class DataStream[T with Clone] with UnboundedDataSet[T]:
     pub _type_witness: list[T]
     pub _substrait_rel: Rel
     # Streaming carriers are also Rel-backed, so they need the same plan-time name sidecar as DataFrame.

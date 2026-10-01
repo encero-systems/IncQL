@@ -47,7 +47,7 @@ def _register_order_schema(table_name: str) -> None:
 
 def _spend_summary() -> LazyFrame[Order]:
     """Build one grouped lazy plan with filter, grouping, and aggregate lineage."""
-    orders: LazyFrame[Order] = lazy_frame_named_table("inspection_orders")
+    orders: LazyFrame[Order] = lazy_frame_named_table[Order]("inspection_orders")
     return orders
         .filter(eq(col("status"), str_lit("paid")))
         .group_by([col("customer_id")])
@@ -215,7 +215,7 @@ def test_inspect_plan__infers_adapter_requirements_from_plan_evidence() -> None:
     """RFC 033: inspection should expose adapter requirements implied by the plan shape."""
     # -- Arrange --
     _register_order_schema("inspection_orders")
-    base: LazyFrame[Order] = lazy_frame_named_table("inspection_orders")
+    base: LazyFrame[Order] = lazy_frame_named_table[Order]("inspection_orders")
     inspected = base
         .filter(eq(col("status"), str_lit("paid")))
         .with_column("payload_kind", typeof(parse_variant_json(col("status"))))
@@ -285,16 +285,18 @@ def test_inspect_lineage__covers_join_projection_generator_window_sort_and_limit
     _register_order_schema("inspection_orders")
     _register_order_schema("inspection_orders_left")
     _register_order_schema("inspection_orders_right")
-    base: LazyFrame[Order] = lazy_frame_named_table("inspection_orders")
+    base: LazyFrame[Order] = lazy_frame_named_table[Order]("inspection_orders")
 
     # -- Act --
     joined = lazy_frame_named_table[Order]("inspection_orders_left").join(
-        lazy_frame_named_table("inspection_orders_right"),
+        lazy_frame_named_table[Order]("inspection_orders_right"),
         eq(col("customer_id"), col("customer_id")),
     )
     projected = base.with_column("amount_copy", col("amount"))
     computed = base.with_column("paid_flag", eq(col("status"), str_lit("paid")))
-    selected: LazyFrame[OrderProjection] = base.select([with_column_assignment("customer_id", col("customer_id"))])
+    selected: LazyFrame[OrderProjection] = base.select[OrderProjection](
+        [with_column_assignment("customer_id", col("customer_id"))],
+    )
     generated = base.generate(explode(col("status"), "status_item"))
     windowed = base.with_window_column("row_num", row_number().over(window().order_by([desc(col("amount"))])))
     sorted_plan = base.order_by([desc(col("amount"))])

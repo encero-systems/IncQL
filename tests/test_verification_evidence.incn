@@ -64,7 +64,7 @@ def _register_order_schema(table_name: str) -> None:
 
 def _orders(table_name: str) -> LazyFrame[VerificationOrder]:
     """Return a named-table lazy frame for bundle tests."""
-    return lazy_frame_named_table(table_name)
+    return lazy_frame_named_table[VerificationOrder](table_name)
 
 
 def _require_section(bundle: GovernedPlanBundle, family: str) -> BundleEvidenceSection:

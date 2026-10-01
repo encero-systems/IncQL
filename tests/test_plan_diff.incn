@@ -40,7 +40,7 @@ def _register_order_schema(table_name: str) -> None:
 
 def _spend_summary(table_name: str) -> LazyFrame[DiffOrder]:
     """Build one grouped lazy plan with stable output fields."""
-    orders: LazyFrame[DiffOrder] = lazy_frame_named_table(table_name)
+    orders: LazyFrame[DiffOrder] = lazy_frame_named_table[DiffOrder](table_name)
     return orders
         .filter(eq(col("status"), str_lit("paid")))
         .group_by([col("customer_id")])
@@ -49,7 +49,7 @@ def _spend_summary(table_name: str) -> LazyFrame[DiffOrder]:
 
 def _status_summary(table_name: str) -> LazyFrame[DiffOrder]:
     """Build a related plan that changes grouping and aggregate output."""
-    orders: LazyFrame[DiffOrder] = lazy_frame_named_table(table_name)
+    orders: LazyFrame[DiffOrder] = lazy_frame_named_table[DiffOrder](table_name)
     return orders
         .filter(eq(col("status"), str_lit("paid")))
         .group_by([col("status")])

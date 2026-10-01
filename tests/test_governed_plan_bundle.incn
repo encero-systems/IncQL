@@ -40,7 +40,7 @@ def _register_order_schema(table_name: str) -> None:
 
 def _spend_summary() -> LazyFrame[BundleOrder]:
     """Build one grouped lazy plan with inspection-backed evidence."""
-    orders: LazyFrame[BundleOrder] = lazy_frame_named_table("bundle_orders")
+    orders: LazyFrame[BundleOrder] = lazy_frame_named_table[BundleOrder]("bundle_orders")
     return orders
         .filter(eq(col("status"), str_lit("paid")))
         .group_by([col("customer_id")])

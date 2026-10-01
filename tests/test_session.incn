@@ -265,7 +265,7 @@ def test_session__lazy_collect_fails_without_active_session() -> None:
     """lazy.collect should fail with no_active_session when no Session has been activated."""
     # -- Arrange --
     Session.clear_active_session()
-    lazy: LazyFrame[Order] = lazy_frame_named_table("orders_never_registered_in_active_session_test")
+    lazy: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_never_registered_in_active_session_test")
 
     # -- Act --
     err = assert_is_err(lazy.collect(), "lazy.collect should fail without an active Session")

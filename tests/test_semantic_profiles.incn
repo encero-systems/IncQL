@@ -48,7 +48,7 @@ def _register_order_schema(table_name: str) -> None:
 
 def _spend_summary(table_name: str) -> LazyFrame[ProfileOrder]:
     """Build one grouped lazy plan with adapter requirements."""
-    orders: LazyFrame[ProfileOrder] = lazy_frame_named_table(table_name)
+    orders: LazyFrame[ProfileOrder] = lazy_frame_named_table[ProfileOrder](table_name)
     return orders
         .filter(eq(col("status"), str_lit("paid")))
         .group_by([col("customer_id")])

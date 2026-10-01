@@ -164,7 +164,7 @@ def test_collect_observed__records_failure_diagnostic() -> None:
     """collect_observed should expose failure evidence when execution rejects the plan."""
     # -- Arrange --
     session = Session.default()
-    lazy: LazyFrame[Order] = lazy_frame_named_table("missing_observed_orders")
+    lazy: LazyFrame[Order] = lazy_frame_named_table[Order]("missing_observed_orders")
 
     # -- Act --
     observed = session.collect_observed(lazy)

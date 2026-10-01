@@ -254,7 +254,7 @@ def test_type_contracts__concrete_carriers_compile() -> None:
         _substrait_rel=read_named_table_rel("orders"),
         _planned_columns=[],
     )
-    lf: LazyFrame[Order] = lazy_frame_named_table("orders")
+    lf: LazyFrame[Order] = lazy_frame_named_table[Order]("orders")
     st: DataStream[Event] = DataStream(
         _type_witness=_event_witness(),
         _substrait_rel=read_named_table_rel("events"),
@@ -281,7 +281,7 @@ def test_hierarchy__concrete_and_supertrait_assignability() -> None:
         _substrait_rel=read_named_table_rel("orders"),
         _planned_columns=[],
     )
-    lf: LazyFrame[Order] = lazy_frame_named_table("orders")
+    lf: LazyFrame[Order] = lazy_frame_named_table[Order]("orders")
     st: DataStream[Event] = DataStream(
         _type_witness=_event_witness(),
         _substrait_rel=read_named_table_rel("events"),
@@ -306,7 +306,7 @@ def test_type_contracts__concrete_and_trait_types_match_generic_arguments() -> N
         _substrait_rel=read_named_table_rel("orders"),
         _planned_columns=[],
     )
-    lf: LazyFrame[Order] = lazy_frame_named_table("orders")
+    lf: LazyFrame[Order] = lazy_frame_named_table[Order]("orders")
     st: DataStream[Event] = DataStream(
         _type_witness=_event_witness(),
         _substrait_rel=read_named_table_rel("events"),
@@ -384,7 +384,7 @@ def test_dataset_ops__all_carriers_emit_real_plans() -> None:
         _substrait_rel=read_named_table_rel("orders"),
         _planned_columns=[],
     )
-    lf: LazyFrame[Order] = lazy_frame_named_table("orders")
+    lf: LazyFrame[Order] = lazy_frame_named_table[Order]("orders")
     st = DataStream(_type_witness=_event_witness(), _substrait_rel=read_named_table_rel("events"), _planned_columns=[])
 
     # -- Act --
@@ -402,7 +402,7 @@ def test_dataset_ops__with_column_updates_lazy_planned_columns_with_add_or_repla
     """with_column should append new names and replace existing names in place at lazy plan time."""
     # -- Arrange --
     _register_projection_test_schema("orders_projection")
-    base: LazyFrame[Order] = lazy_frame_named_table("orders_projection")
+    base: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_projection")
 
     # -- Act --
     augmented = base.with_column("double_id", mul(col("id"), 2))
@@ -430,7 +430,7 @@ def test_dataset_ops__select_retargets_output_row_type_while_preserving_carrier_
         _substrait_rel=read_named_table_rel("orders_projection_types"),
         _planned_columns=[],
     )
-    base_lazy: LazyFrame[Order] = lazy_frame_named_table("orders_projection_types")
+    base_lazy: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_projection_types")
     base_stream: DataStream[Event] = DataStream(
         _type_witness=_event_witness(),
         _substrait_rel=read_named_table_rel("orders_projection_types"),
@@ -438,9 +438,9 @@ def test_dataset_ops__select_retargets_output_row_type_while_preserving_carrier_
     )
 
     # -- Act --
-    projected_df: DataFrame[OrderProjection] = base_df.select(assignments)
-    projected_lazy: LazyFrame[OrderProjection] = base_lazy.select(assignments)
-    projected_stream: DataStream[OrderProjection] = base_stream.select(assignments)
+    projected_df: DataFrame[OrderProjection] = base_df.select[OrderProjection](assignments)
+    projected_lazy: LazyFrame[OrderProjection] = base_lazy.select[OrderProjection](assignments)
+    projected_stream: DataStream[OrderProjection] = base_stream.select[OrderProjection](assignments)
 
     # -- Assert --
     assert projected_df.planned_columns() == ["order_id"], "DataFrame SELECT should expose the projected row shape"
@@ -462,7 +462,7 @@ def test_dataset_ops__api_lowered_boundary_facts_stay_stable() -> None:
 
 def test_lazy_frame__immutable_branching_and_origin_mapping_hold() -> None:
     # -- Arrange --
-    base: LazyFrame[Order] = lazy_frame_named_table("orders")
+    base: LazyFrame[Order] = lazy_frame_named_table[Order]("orders")
 
     # -- Act --
     filtered: LazyFrame[Order] = base.filter(always_false())
@@ -475,8 +475,8 @@ def test_lazy_frame__immutable_branching_and_origin_mapping_hold() -> None:
 
 def test_lazy_frame__independent_roots_can_join_and_lower() -> None:
     # -- Arrange --
-    left: LazyFrame[Order] = lazy_frame_named_table("orders").filter(always_false())
-    right: LazyFrame[Order] = lazy_frame_named_table("orders_archive").filter(always_false())
+    left: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").filter(always_false())
+    right: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_archive").filter(always_false())
 
     # -- Act --
     joined: LazyFrame[Order] = left.join(right, always_true())
@@ -502,36 +502,36 @@ def test_lazy_frame__native_prism_ops_preserve_current_boundary_shapes() -> None
 
     # -- Act --
     projected: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").select[Order]()
-    grouped: LazyFrame[Order] = lazy_frame_named_table("orders").group_by([col("id")])
+    grouped: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").group_by([col("id")])
 
     aggregated = grouped.agg([count()])
-    ordered: LazyFrame[Order] = lazy_frame_named_table("orders").order_by([col("id")])
-    limited: LazyFrame[Order] = lazy_frame_named_table("orders").limit(10)
-    generated: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    ordered: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").order_by([col("id")])
+    limited: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").limit(10)
+    generated: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         explode(col("line_items"), "line_item"),
     )
-    generated_outer: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_outer: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         explode_outer(col("line_items"), "line_item"),
     )
-    generated_positional: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_positional: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         posexplode(col("line_items"), "position", "line_item"),
     )
-    generated_positional_outer: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_positional_outer: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         posexplode_outer(col("line_items"), "position", "line_item"),
     )
-    generated_inline: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_inline: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         inline(col("line_items"), ["sku", "quantity"]),
     )
-    generated_inline_outer: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_inline_outer: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         inline_outer(col("line_items"), ["sku", "quantity"]),
     )
-    generated_flatten: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_flatten: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         flatten(col("line_items"), "line_item"),
     )
-    generated_stack: LazyFrame[Order] = lazy_frame_named_table("orders_generator_dataset").generate(
+    generated_stack: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_generator_dataset").generate(
         stack(2, [str_lit("sku_a"), int_lit(1), str_lit("sku_b"), int_lit(2)], ["sku", "quantity"]),
     )
-    windowed: LazyFrame[Order] = lazy_frame_named_table("orders").with_window_column(
+    windowed: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").with_window_column(
         "row_num",
         row_number().over(window().order_by([col("id")])),
     )
@@ -561,8 +561,8 @@ def test_lazy_frame__deeper_independent_roots_still_lower_with_stable_shapes() -
     # -- Arrange --
     _register_order_schema("orders")
     _register_order_schema("orders_archive")
-    left: LazyFrame[Order] = lazy_frame_named_table("orders").filter(always_false())
-    right_base: LazyFrame[Order] = lazy_frame_named_table("orders_archive")
+    left: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").filter(always_false())
+    right_base: LazyFrame[Order] = lazy_frame_named_table[Order]("orders_archive")
 
     # -- Act --
     right_joined: LazyFrame[Order] = right_base
@@ -581,7 +581,7 @@ def test_lazy_frame__deeper_independent_roots_still_lower_with_stable_shapes() -
 
 def test_lazy_frame__canonical_rewrite_removes_filter_true_and_preserves_boundary_validity() -> None:
     # -- Arrange --
-    simplified: LazyFrame[Order] = lazy_frame_named_table("orders").filter(always_true())
+    simplified: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").filter(always_true())
 
     # -- Act --
     plan = simplified.to_substrait_plan()

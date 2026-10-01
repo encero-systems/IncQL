@@ -155,11 +155,11 @@ pub def memory_relation_sources() -> MemoryRelationSources:
     """
     _register_memory_relation_schemas()
     return MemoryRelationSources(
-        revisions=lazy_frame_named_table(MEMORY_REVISIONS_TABLE),
-        projections=lazy_frame_named_table(MEMORY_PROJECTIONS_TABLE),
-        scopes=lazy_frame_named_table(MEMORY_SCOPES_TABLE),
-        scope_parents=lazy_frame_named_table(MEMORY_SCOPE_PARENTS_TABLE),
-        links=lazy_frame_named_table(MEMORY_LINKS_TABLE),
+        revisions=lazy_frame_named_table[RevisionRow](MEMORY_REVISIONS_TABLE),
+        projections=lazy_frame_named_table[ProjectionRow](MEMORY_PROJECTIONS_TABLE),
+        scopes=lazy_frame_named_table[ScopeRow](MEMORY_SCOPES_TABLE),
+        scope_parents=lazy_frame_named_table[ScopeRow](MEMORY_SCOPE_PARENTS_TABLE),
+        links=lazy_frame_named_table[LinkRow](MEMORY_LINKS_TABLE),
     )
 
 

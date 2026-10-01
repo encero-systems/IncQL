@@ -205,7 +205,7 @@ pub class Session:
         self._register_parsed(name, source)?
         # TODO(IncQL RFC 004): Formalize logical-name schema binding as an explicit catalog/snapshot model and surface overwrite diagnostics.
         register_named_table_schema(name.0, columns)
-        return self.table(name.0)
+        return self.table[T](name.0)
 
     def read_parquet[T with Clone](mut self, logical_name: str, uri: str) -> Result[LazyFrame[T], SessionError]:
         """Convenience read path: register one Parquet source then return one lazy named-table plan."""
@@ -213,7 +213,7 @@ pub class Session:
         source_uri = _source_uri_from_text(uri)?
         self._register_parsed(name, parquet_source(source_uri.0))?
         register_named_table_schema(name.0, [])
-        return self.table(name.0)
+        return self.table[T](name.0)
 
     def read_arrow[T with Clone](mut self, logical_name: str, uri: str) -> Result[LazyFrame[T], SessionError]:
         """Convenience read path: register one Arrow IPC source then return one lazy named-table plan."""
@@ -221,14 +221,14 @@ pub class Session:
         source_uri = _source_uri_from_text(uri)?
         self._register_parsed(name, arrow_source(source_uri.0))?
         register_named_table_schema(name.0, [])
-        return self.table(name.0)
+        return self.table[T](name.0)
 
     def table[T with Clone](self, logical_name: str) -> Result[LazyFrame[T], SessionError]:
         """Return one lazy named-table carrier for a previously registered logical name."""
         name = _logical_name_from_text(logical_name)?
         if _find_registration_index(self._registrations, name.0) < 0:
             return Err(SessionError(kind=SessionErrorKind.UnknownTable, message=f"table '{name.0}' is not registered"))
-        return Ok(lazy_frame_named_table(name.0))
+        return Ok(lazy_frame_named_table[T](name.0))
 
     def activate(self) -> None:
         """Set this Session as the current active Session used by LazyFrame.collect()."""
