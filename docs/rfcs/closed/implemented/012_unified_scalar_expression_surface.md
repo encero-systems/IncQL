@@ -261,7 +261,7 @@ Correctness takes precedence over convenience. If a permissive helper path would
 - Add package tests covering `lit(...)` and typed literal helpers across filters, computed projections, grouping keys, and aggregate inputs.
 - Add negative tests for unsupported scalar-expression shapes in grouping and aggregate positions when the implementation cannot lower them faithfully.
 - Update reference and explanation docs so users see one scalar expression model instead of separate filter/projection literal families.
-- Decide whether this user-visible package change requires an IncQL package version bump, and if so keep `incan.toml` and `src/metadata.incn` synchronized.
+- Decide whether this user-visible package change requires an IncQL package version bump, and if so keep `loaf.toml` and `src/metadata.incn` synchronized.
 
 ## Implementation Log
 

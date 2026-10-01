@@ -27,7 +27,7 @@ def active_high_value_orders(orders: LazyFrame[Order]) -> LazyFrame[Order]:
 
 
 def customer_dimension(customers: LazyFrame[Customer]) -> LazyFrame[Customer]:
-    return customers.select()
+    return customers.select[Customer]()
 
 
 def join_orders_with_revision(orders: LazyFrame[Order], revised_orders: LazyFrame[Order]) -> LazyFrame[Order]:
@@ -39,7 +39,7 @@ def customer_dimension_preview(customers: LazyFrame[Customer]) -> LazyFrame[Cust
 
 
 def select_order_fields(orders: LazyFrame[Order]) -> LazyFrame[Order]:
-    return orders.select()
+    return orders.select[Order]()
 
 
 def derive_amount_with_tax(orders: LazyFrame[Order]) -> LazyFrame[Order]:

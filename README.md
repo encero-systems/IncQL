@@ -44,14 +44,14 @@ Normative proposals live under **[docs/rfcs/](docs/rfcs/README.md)**. IncQL’s 
 ## Project layout
 
 - `Makefile` — build, test, and format targets (`make help`)
-- `incan.toml` — package manifest
+- `loaf.toml` — package manifest
 - `src/lib.incn` — public exports
 - `src/` — library modules
 - `tests/` — tests
 - `mkdocs.yml` — documentation site configuration for the `docs/` tree
 - `.github/workflows/` — CI for package checks, strict docs builds, and GitHub Pages deployment
 
-Build and test from this repo root (with `incan` on your `PATH`):
+Build and test from this repo root with exactly `incan 0.6.0-dev.6` on your `PATH`:
 
 ```bash
 make ci

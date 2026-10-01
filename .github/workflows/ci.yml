@@ -12,7 +12,7 @@
 #
 # Why the release packaging script rather than `cargo build` alone: since Incan
 # 0.5, a project that declares a `[vocab]` companion (IncQL does — see
-# `incan.toml`) needs a compiler-owned vocabulary helper drawn from a
+# `loaf.toml`) needs a compiler-owned vocabulary helper drawn from a
 # release-cohort Oven Loaf. A bare `cargo build` produces no Loafs. Incan's
 # `workspaces/release/toolchain/package_archive.sh` seals them beside the
 # binary (`share/incan/oven/loafs`), where the compiler looks for them, along
@@ -43,8 +43,8 @@ env:
   # so a branch name would drift under the pin; keep this a full commit SHA and
   # keep it in every compiler-dependent cache key, because several commits can
   # share one version string.
-  INCAN_REF: 173300a2f232220f46f3fe7bc3b5efaa05f9f105
-  EXPECTED_INCAN_VERSION: 0.6.0-dev.1.4
+  INCAN_REF: 614df3645bfd213d9f1b867acac066ed051b5542
+  EXPECTED_INCAN_VERSION: 0.6.0-dev.6
   # The Loafs the packaging step seals bind to the exact `rustc --version` that
   # sealed them and are verified against it, so this must name a concrete
   # version. A floating `stable` channel drifts out from under the cached
@@ -159,7 +159,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .incan-generated-cargo-target
-          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('oven.lock', 'loaf.toml') }}
           restore-keys: |
             incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-
 
@@ -177,7 +177,7 @@ jobs:
             target/incan_lock/rust_inspect/**/src/main.rs
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
-          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('oven.lock', 'loaf.toml') }}
           restore-keys: |
             incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
 
@@ -194,7 +194,7 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('oven.lock', 'loaf.toml') }}
           restore-keys: |
             incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-
             incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-
@@ -211,13 +211,13 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.incan/oven/store
-          key: incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          key: incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('oven.lock', 'loaf.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
           restore-keys: |
-            incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-
+            incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('oven.lock', 'loaf.toml') }}-
             incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-
 
       # One online fetch before the bake, so a cold runner degrades to a slow
-      # run rather than an aborted bake. `incan.lock` already names every
+      # run rather than an aborted bake. `oven.lock` already names every
       # registry crate and exact version in the closure, so seed precisely
       # those rather than guessing.
       #
@@ -227,7 +227,7 @@ jobs:
       # errors until `.incan`, `target/incan_lock` and `target/incan` are
       # removed. Failing before the bake starts is much cheaper than failing
       # inside it.
-      # Seeding from `incan.lock` is not enough: the project Cargo manifest that
+      # Seeding from `oven.lock` is not enough: the project Cargo manifest that
       # Oven generates uses caret ranges (`blake2 = "0.10"`, `datafusion = "53"`),
       # so it resolves to the newest compatible versions rather than the lock's
       # pins. The only reliable description of what the bake needs is the
@@ -346,7 +346,7 @@ jobs:
         with:
           path: |
             .incan-generated-cargo-target
-          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-generated-cargo-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('oven.lock', 'loaf.toml') }}
 
       - name: Save cache — generated IncQL Rust metadata
         if: always() && steps.rust-inspect-cache.outputs.cache-hit != 'true'
@@ -358,7 +358,7 @@ jobs:
             target/incan_lock/rust_inspect/**/src/main.rs
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_cache.json
             target/incan_lock/rust_inspect/**/.incan_rust_inspect_fingerprint
-          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-rust-inspect-${{ runner.os }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('oven.lock', 'loaf.toml') }}
 
       - name: Save cache — Cargo registry for Oven extension sources
         if: always() && steps.oven-sources-cache.outputs.cache-hit != 'true'
@@ -367,11 +367,11 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('incan.lock', 'incan.toml') }}
+          key: incql-oven-sources-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-${{ hashFiles('oven.lock', 'loaf.toml') }}
 
       - name: Save cache — Oven store
         if: always() && steps.oven-store-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: ~/.incan/oven/store
-          key: incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('incan.lock', 'incan.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}
+          key: incql-oven-store-v1-${{ runner.os }}-${{ runner.arch }}-incan-${{ env.EXPECTED_INCAN_VERSION }}-${{ env.INCAN_REF }}-rust-${{ env.RUST_VERSION }}-${{ hashFiles('oven.lock', 'loaf.toml') }}-${{ hashFiles('src/**/*.incn', 'tests/**/*.incn', 'scripts/**/*.incn') }}

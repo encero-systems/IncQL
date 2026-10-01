@@ -2,7 +2,7 @@
 
 import std.async
 from rust::substrait::proto import Plan
-from rust::incan_stdlib::async::runtime import block_on
+from rust::incan_std_async::runtime import block_on
 from backends import BackendKind, BackendSelection
 from dataset.materialization import DataFrameMaterialization
 from session.backend_types import BackendError, BackendErrorKind, BackendRegistration, backend_error

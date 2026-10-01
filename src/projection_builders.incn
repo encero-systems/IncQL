@@ -7,7 +7,7 @@ scalar intent without requiring parser or typechecker changes in the Incan compi
 """
 
 from function_registry import function_ref_for
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 
 
 @derive(Clone)

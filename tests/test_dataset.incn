@@ -501,7 +501,7 @@ def test_lazy_frame__native_prism_ops_preserve_current_boundary_shapes() -> None
     )
 
     # -- Act --
-    projected: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").select()
+    projected: LazyFrame[Order] = lazy_frame_named_table[Order]("orders").select[Order]()
     grouped: LazyFrame[Order] = lazy_frame_named_table("orders").group_by([col("id")])
 
     aggregated = grouped.agg([count()])

@@ -1,7 +1,7 @@
 """Shared validation helpers for JSON scalar payload functions."""
 
 from projection_builders import ColumnExpr, str_expr
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 
 
 pub def json_path_expr(path: str) -> ColumnExpr:

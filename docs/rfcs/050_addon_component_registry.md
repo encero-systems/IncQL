@@ -502,7 +502,7 @@ DataFusion must be migrated first as a built-in file connector and local compute
 
 - Which typed Incan mechanism should carry executable component hooks: nominal interfaces, checked protocols, generated dispatch records, or another representation?
 - What is the minimum first set of binding protocol ids needed to prove DataFusion files, external DuckDB files, Arrow transfer, and one backend-native pushdown route?
-- Should checked component descriptors be authored in Incan source, declared partly in `incan.toml`, or generated from declaration-side metadata?
+- Should checked component descriptors be authored in Incan source, declared partly in `loaf.toml`, or generated from declaration-side metadata?
 - Which descriptor and feature facts can the current Incan lockfile preserve, and which require package-tooling changes?
 - How should a future multi-runtime routing policy be represented and fingerprinted without making routing part of Prism logical meaning?
 - How should native addon artifacts be distributed when a package cannot be built from Rust dependencies alone on a target platform?
@@ -542,4 +542,3 @@ RFC 050 can move from `Draft` to `Planned` when the unresolved questions above a
 Two items are load-bearing rather than incidental. The built-in DataFusion components must go through the same contracts as external ones, because a privileged internal path would leave the external contract untested by the code that exercises it most. And at least one genuinely external component must be registered and used end to end, because a registry that has only ever hosted its own package has not demonstrated the property this RFC exists to provide.
 
 IncQL RFC 069 depends on this contract for table-format source components. This RFC therefore gates the lakehouse source work rather than running alongside it.
-

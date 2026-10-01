@@ -2,5 +2,5 @@
 
 
 pub def incql_version() -> str:
-    """Semantic version of this IncQL package (keep in sync with `incan.toml`)."""
+    """Semantic version of this IncQL package (keep in sync with `loaf.toml`)."""
     return "0.1.0"

@@ -8,7 +8,7 @@ plan assembly or plan inspection.
 
 from rust::prost_types import Any
 from rust::prost import Message
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from rust::std::boxed import Box
 from rust::std::primitive import i32 as RustI32
 from rust::substrait::proto import (

@@ -1258,7 +1258,7 @@ def _data_frame_from_materialization[T with Clone](
     """Build one collected DataFrame from backend materialization plus the executed logical plan."""
     rel = root_rel(plan)
     return DataFrame(
-        _type_witness=_empty_type_witness(),
+        _type_witness=_empty_type_witness[T](),
         _materialization=materialization,
         _substrait_rel=rel,
         _planned_columns=relation_output_columns(rel.clone()),

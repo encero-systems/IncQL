@@ -37,7 +37,7 @@ The book is not compiled as part of IncQL itself. It is a small downstream proje
 **Project manifest**
 
 ```toml
---8<-- "examples/tutorial_book/incan.toml"
+--8<-- "examples/tutorial_book/loaf.toml"
 ```
 
 </div>

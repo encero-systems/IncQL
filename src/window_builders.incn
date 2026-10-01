@@ -6,7 +6,7 @@ related rows. They intentionally do not reuse scalar expression nodes, so invali
 diagnosable as the query surface grows.
 """
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from function_registry import function_ref_for
 from projection_builders import ColumnExpr, int_expr
 

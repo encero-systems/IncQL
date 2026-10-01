@@ -13,7 +13,7 @@
 [writing-rfcs]: docs/contributing/writing_rfcs.md
 [issue-templates]: .github/ISSUE_TEMPLATE/
 [ci-workflow]: .github/workflows/ci.yml
-[incan-toml]: incan.toml
+[loaf-toml]: loaf.toml
 [metadata-incn]: src/metadata.incn
 [lib-incn]: src/lib.incn
 [tests-dir]: tests/
@@ -71,7 +71,7 @@ Normative behavior is defined in **`docs/rfcs/`**. If package code and an RFC di
 1. **Branch from `main`**: Prefer `<type>/<issue>-<slug>` (e.g. `feature/8-rfc-table-automation`, `docs/9-mkdocs-ci`), matching team practice.
 2. **Follow RFCs**: Behavior changes should be reflected in the right RFC under `docs/rfcs/` (or a new RFC) before or alongside code in the appropriate repository.
 3. **Run the local gate**: `make ci` (or at least `make fmt-check`, `make build`, `make test`) before considering work done for **this** repo.
-4. **Version sync**: If you bump the package version, update **both** [incan.toml][incan-toml] (`[project] version`) and [src/metadata.incn][metadata-incn] (`incql_version()`) in the same commit (see [CONTRIBUTING.md][contributing]).
+4. **Version sync**: If you bump the package version, update **both** [loaf.toml][loaf-toml] (`[project] version`) and [src/metadata.incn][metadata-incn] (`incql_version()`) in the same commit (see [CONTRIBUTING.md][contributing]).
 5. **Documentation**: User-facing or spec changes should update `README.md`, relevant `docs/*`, or RFCs as appropriate. Keep prose markdown **without hard wrapping** (natural paragraphs).
    - Use RFCs for normative design and design history.
    - Use `docs/language/reference/` for current API/contracts.
@@ -190,7 +190,7 @@ Reusable Incan workflows live in the Incan repo under `.cursor/skills/` (e.g. `/
 
 - [ ] `make ci` passes (or equivalent `fmt-check`, `build`, `test`).
 - [ ] Semantics changes cite or update the relevant **RFC** in `docs/rfcs/`.
-- [ ] **Version**: if `version` changed, [incan.toml][incan-toml] and [src/metadata.incn][metadata-incn] stay in sync.
+- [ ] **Version**: if `version` changed, [loaf.toml][loaf-toml] and [src/metadata.incn][metadata-incn] stay in sync.
 - [ ] **README** / **docs** updated for anything a new contributor or user would notice.
 - [ ] If the change is user-facing, **release notes** under `docs/release_notes/` updated when appropriate.
 - [ ] Compiler or Rust changes (if any in another PR) follow Incan’s gates and **[Incan `AGENTS.md`][incan-agents]**.

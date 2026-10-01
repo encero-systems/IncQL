@@ -1,6 +1,7 @@
 [project]
 name = "incql"
 version = "0.1.0"
+requires-incan = "=0.6.0-dev.6"
 
 # Oven bakes only `src/main.incn`, `src/lib.incn`, and the entry points declared
 # here. `make registry-metadata` runs the checker below through `incan run`, so

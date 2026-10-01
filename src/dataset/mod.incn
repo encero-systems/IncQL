@@ -383,7 +383,7 @@ pub class LazyFrame[T with Clone] with BoundedDataSet:
 
 pub def lazy_frame_named_table[T with Clone](table_name: str) -> LazyFrame[T]:
     """Create one deferred lazy carrier rooted at one logical named-table read."""
-    return LazyFrame(_cursor=prism_cursor_named_table(table_name))
+    return LazyFrame(_cursor=prism_cursor_named_table[T](table_name))
 
 
 def _empty_type_witness[T with Clone]() -> list[T]:
@@ -397,7 +397,7 @@ def _data_frame_with_invalidated_materialization[T with Clone](
 ) -> DataFrame[T]:
     """Build one DataFrame whose logical relation changed and whose prior collected materialization is no longer valid."""
     return DataFrame(
-        _type_witness=_empty_type_witness(),
+        _type_witness=_empty_type_witness[T](),
         _materialization=DataFrameMaterialization.empty(),
         _substrait_rel=rel,
         _planned_columns=planned_columns,
@@ -459,7 +459,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with a filter stage."""
         input_columns = self.columns()
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=filter_ds_of_columns(self._substrait_rel, input_columns, predicate),
             _planned_columns=input_columns,
         )
@@ -477,7 +477,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
             relation_name,
         )
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=rel,
             _planned_columns=relation_output_columns(rel.clone()),
         )
@@ -495,7 +495,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
             relation_name,
         )
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=rel,
             _planned_columns=relation_output_columns(rel.clone()),
         )
@@ -519,7 +519,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with an add-or-replace projection stage."""
         input_columns = self.columns()
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=with_column_ds(self._substrait_rel, input_columns, name, expr),
             _planned_columns=project_output_columns(input_columns, [with_column_assignment(name, expr)]),
         )
@@ -528,7 +528,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with a grouping stage."""
         rel = group_by_ds_of_columns(self._substrait_rel, self.columns(), columns)
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=rel,
             _planned_columns=relation_output_columns(rel.clone()),
         )
@@ -537,7 +537,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with an aggregation stage."""
         rel = agg_ds_of_columns(self._substrait_rel, self.columns(), measures)
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=rel,
             _planned_columns=relation_output_columns(rel.clone()),
         )
@@ -546,7 +546,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with a generator stage."""
         rel = generate_ds_of_columns(self._substrait_rel, self.columns(), generator)
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=rel,
             _planned_columns=relation_output_columns(rel.clone()),
         )
@@ -555,7 +555,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with a named window projection stage."""
         rel = with_window_column_ds(self._substrait_rel, self.columns(), name, application)
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=rel,
             _planned_columns=relation_output_columns(rel.clone()),
         )
@@ -564,7 +564,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
         """Return one new DataStream with an ordering stage."""
         input_columns = self.columns()
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=order_by_ds_of_columns(self._substrait_rel, input_columns, columns),
             _planned_columns=input_columns,
         )
@@ -572,7 +572,7 @@ pub class DataStream[T with Clone] with UnboundedDataSet:
     def limit(self, n: int) -> Self:
         """Return one new DataStream with a row-limit stage."""
         return DataStream(
-            _type_witness=_empty_type_witness(),
+            _type_witness=_empty_type_witness[T](),
             _substrait_rel=limit_ds(self._substrait_rel, n),
             _planned_columns=self.columns(),
         )

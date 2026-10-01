@@ -6,7 +6,7 @@ the authoring intent through Dataset, Prism, and Substrait boundaries without ma
 row-level expression positions.
 """
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from function_registry import function_ref_for
 from functions.nested.array import array
 from functions.nested.array_range import array_range

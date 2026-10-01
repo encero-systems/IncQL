@@ -12,7 +12,7 @@ mkdir -p "$PROJECT_DIR"
 
 "$INCAN_BIN" init "$PROJECT_DIR" --name incql_pub_consumer_smoke >/dev/null
 
-cat > "$PROJECT_DIR/incan.toml" <<EOF
+cat > "$PROJECT_DIR/loaf.toml" <<EOF
 [project]
 name = "incql_pub_consumer_smoke"
 version = "0.1.0"

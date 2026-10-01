@@ -4,7 +4,7 @@ SHA-2 compatibility helper.
 `sha2(expr, bits)` rewrites to the matching concrete SHA-2 helper for supported digest lengths.
 """
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from function_registry import (
     CORE_FUNCTION_NAMESPACE,
     FunctionClass,

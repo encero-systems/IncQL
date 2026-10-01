@@ -5,7 +5,7 @@ This module owns builder-to-Substrait expression conversion for scalar expressio
 conversion helpers needed by proto fields along that path.
 """
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from rust::std::boxed import Box
 from rust::std::primitive import i32 as RustI32, u32 as RustU32
 from function_registry import FunctionInputType, FunctionRegistryEntry, SubstraitMappingKind

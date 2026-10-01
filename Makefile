@@ -102,7 +102,7 @@ registry-metadata: ## Validate RFC 014 function registry checked API metadata
 	@RUSTFLAGS="-Awarnings" $(INCAN) run scripts/check_function_registry_metadata.incn
 
 .PHONY: build-locked
-build-locked: ## Build with `--locked` (stricter; requires current `incan.lock`)
+build-locked: ## Build with `--locked` (stricter; requires current `oven.lock`)
 	@echo "\033[1mBuilding IncQL library (locked)...\033[0m"
 	@$(INCAN) build --lib --locked
 

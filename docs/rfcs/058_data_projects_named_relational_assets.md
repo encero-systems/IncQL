@@ -349,7 +349,7 @@ This section is non-normative. A practical implementation can collect checked de
 - Should asset names be globally unique within a project or unique within hierarchical namespaces that are always present in canonical ids?
 - Which resource kinds, if any, need first-class multi-output contracts in the initial release?
 - How should generated-manifest producers be sandboxed and versioned by the Incan toolchain?
-- Which project configuration belongs in `incan.toml`, and which requires a separate IncQL project document?
+- Which project configuration belongs in `loaf.toml`, and which requires a separate IncQL project document?
 
 <!-- When every question is resolved, rename this section to **Design Decisions**, group answers under ### Resolved, and remove this comment. -->
 

@@ -1,6 +1,7 @@
 [project]
-name = "incql_semantic_memory_brain"
+name = "incql_quickstart"
 version = "0.1.0"
+requires-incan = "=0.6.0-dev.6"
 
 [dependencies]
 incql = { path = "../.." }

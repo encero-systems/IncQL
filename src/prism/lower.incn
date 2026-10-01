@@ -1,7 +1,7 @@
 """Lowering from Prism optimized views into Substrait relations and plans."""
 
 from rust::substrait::proto import Plan, Rel
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from prism.output_columns import rewritten_output_columns, rewritten_output_schema
 from substrait.plans import plan_from_root_relation
 from substrait.relations import (

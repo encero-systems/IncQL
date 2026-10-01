@@ -2,7 +2,7 @@
 
 from functions.inputs import ScalarValueOrColumn, scalar_value_or_column_expr
 from projection_builders import ColumnExpr, ScalarFunctionOption, col, scalar_function_option
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 
 pub const SKETCH_FAMILY_OPTION: str = "sketch_family"
 pub const SKETCH_VALUE_DOMAIN_OPTION: str = "sketch_value_domain"

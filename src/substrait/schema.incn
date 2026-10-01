@@ -20,7 +20,7 @@ from rust::substrait::proto::type import (
     String as SubstraitString,
     Struct,
 )
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from rust::std::boxed import Box
 
 

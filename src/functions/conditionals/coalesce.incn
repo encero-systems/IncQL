@@ -4,7 +4,7 @@ Coalesce conditional helper.
 `coalesce` accepts a non-empty expression list and stores the call as a variadic registry-backed scalar application.
 """
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from function_registry import (
     FunctionClass,
     FunctionLifecycle,

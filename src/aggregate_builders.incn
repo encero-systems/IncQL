@@ -19,7 +19,7 @@ from projection_builders import (
     scalar_expr_output_name,
     untyped_column_expr,
 )
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from sketch_types import SketchExpr, SketchLogicalType, SketchValueDomain, hll_type, require_hll_sketch
 from window_builders import WindowFunctionApplication, WindowSpec, aggregate_window_call
 

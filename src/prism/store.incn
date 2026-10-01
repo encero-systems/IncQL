@@ -1,6 +1,6 @@
 """Append-only Prism store allocation, storage, reachability, and cross-store adoption."""
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from aggregate_builders import AggregateMeasure
 from generator_builders import GeneratorApplication
 from window_builders import WindowBound, WindowFrame, WindowFunctionApplication, WindowProjection, WindowSpec

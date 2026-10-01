@@ -5,7 +5,7 @@ This module derives extension declarations from registry metadata and collects r
 expression trees.
 """
 
-from rust::incan_stdlib::errors import raise_value_error
+from rust::incan_std_core::errors import raise_value_error
 from rust::std::primitive import u32 as RustU32
 from rust::substrait::proto import AggregateFunction, Expression, ExtensionSingleRel, FunctionArgument, Rel, SortField
 from rust::substrait::proto::consistent_partition_window_rel import WindowRelFunction

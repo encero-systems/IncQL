@@ -21,7 +21,7 @@ Thank you for your interest in IncQL — the typed relational layer for [Incan][
 ## Getting started
 
 1. **Install a matching Incan toolchain**  
-   Build or install `incan` so it is on your `PATH` (start from the [Incan repository][incan-repo] and its contributor docs). The CI uses a **reusable composite action** that caches built binaries for faster subsequent runs.
+   Build `incan 0.6.0-dev.6` so it is on your `PATH` (start from the [Incan repository][incan-repo] and its contributor docs). The current development version has no released archive. CI builds the commit-pinned toolchain from source and caches the packaged binaries.
 
 2. **Clone this repository**
 
@@ -68,7 +68,7 @@ Thank you for your interest in IncQL — the typed relational layer for [Incan][
 
 See [docs/architecture.md][architecture] for a concise map. In short:
 
-- `incan.toml` — package name and version
+- `loaf.toml` — package name and version
 - `src/*.incn` — library modules; `lib.incn` re-exports the public surface
 - `tests/` — Incan tests for the package
 - `docs/rfcs/` — design specifications (numbered separately from Incan’s RFC index)
@@ -123,7 +123,7 @@ See [docs/architecture.md][architecture] for a concise map. In short:
 
 IncQL carries its version in two places that **must stay in sync**:
 
-1. `incan.toml` — `[project] version = "…"`
+1. `loaf.toml` — `[project] version = "…"`
 2. `src/metadata.incn` — the string returned by `incql_version()`
 
 Bump both in the same commit.
