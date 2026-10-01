@@ -4,14 +4,14 @@
 [incan]
 format = 2
 incan-version = "0.6.0-dev.6"
-deps-fingerprint = "sha256:d09ca73e98d9286a7e50f5b16acb129ae2cdfcddd0eeaa8897d7cb04f0fbbdb7"
+deps-fingerprint = "sha256:8f1b67580a4408abe4fe3779906222c65dfc4ee8ae4545f71571861947a2e5f0"
 cargo-features = []
 cargo-no-default-features = false
 cargo-all-features = false
 
 [semantic.sdk]
 identity = "incan@0.6.0-dev.6"
-inventory_digest = "sha256:5857061b74af9f6ddec4c909ddec55af826c70848277453621d78fe421cdc556"
+inventory_digest = "sha256:a38c42bdf27d089a9646a48c87a49034abc42306ef96c8e99e9f7fb1a17c4cdf"
 profile = "default"
 
 [[semantic.sdk.components]]
@@ -131,7 +131,7 @@ implementation_facets = ["rust_collections", "rust_datetime", "rust_graph", "rus
 backend_requirements = ["cargo-dependency:incan_std_data"]
 
 [[semantic.providers]]
-identity = "incan_stdlib_interop@0.5.0#sha256:d029aa492e0b9ff0377d2e1b8bc43c52c6b52a428cf4464dc16a324d35282896[]"
+identity = "incan_stdlib_interop@0.5.0#sha256:015e343ff6a1e025531c531d931f6435e01a40ff3ee7b6b788a89ca16c267dd2[]"
 participation = "enabled"
 namespace_claims = [["std", "interop"]]
 used_modules = []
