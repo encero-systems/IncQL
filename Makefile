@@ -136,6 +136,7 @@ docs-build: rfc-index-check docs-test ## Validate and build the documentation si
 tutorial-book: ## Type-check every tutorial chapter and run each complete learning path
 	@echo "\033[1mChecking IncQL tutorial-book chapters...\033[0m"
 	@cd $(TUTORIAL_BOOK_DIR) && $(INCAN) lock >/dev/null
+	@cd $(TUTORIAL_BOOK_DIR) && $(INCAN) oven bake --project . >/dev/null
 	@for script in $(TUTORIAL_BOOK_CHAPTERS); do \
 		echo "\033[1m  -> $$script\033[0m"; \
 		cd $(TUTORIAL_BOOK_DIR) && $(INCAN) --check "$$script" || exit $$?; \
@@ -151,6 +152,7 @@ tutorial-book: ## Type-check every tutorial chapter and run each complete learni
 quickstart: ## Check and run the exact ten-minute newcomer project
 	@echo "\033[1mChecking IncQL quickstart...\033[0m"
 	@cd $(QUICKSTART_DIR) && $(INCAN) lock >/dev/null
+	@cd $(QUICKSTART_DIR) && $(INCAN) oven bake --project . >/dev/null
 	@cd $(QUICKSTART_DIR) && $(INCAN) --check src/main.incn
 	@cd $(QUICKSTART_DIR) && $(INCAN) run src/main.incn --locked
 

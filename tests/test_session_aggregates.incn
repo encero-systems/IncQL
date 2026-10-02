@@ -226,7 +226,7 @@ def test_session_aggregates__grouped_collect_executes_approximate_aggregates() -
 
     # -- Assert --
     assert df.row_count() == 2, "approximate grouped aggregate should produce one row per customer"
-    assert resolved == ["customer_id", "approx_count_distinct_product_id_filtered", "approx_percentile_amount_p0_a10000_filtered"], "approximate aggregate output columns should preserve percentile and accuracy parameters"
+    assert resolved == ["customer_id", "approx_count_distinct_product_id_filtered", "approx_percentile_amount_p0_0_a10000_filtered"], "approximate aggregate output columns should preserve percentile and accuracy parameters"
     assert payload.contains("A"), "approximate aggregate output should contain customer A"
     assert payload.contains("B"), "approximate aggregate output should contain customer B"
     _assert_preview_row_contains(payload, ["A", "1", "10"], "customer A approximate aggregates should materialize")
