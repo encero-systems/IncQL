@@ -1,0 +1,4 @@
+[project]
+name = "incql_core"
+version = "0.1.0"
+requires-incan = "=0.6.0-dev.6"

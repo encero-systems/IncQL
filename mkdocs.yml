@@ -135,6 +135,7 @@ nav:
       - Runtime and I/O:
           - Execution context: language/reference/execution_context.md
           - Backend capability matrix: language/reference/capabilities.md
+          - IncQL-DB foundation: language/reference/incql_db.md
       - Inspection, quality, and governance:
           - Inspection: language/reference/inspection.md
           - Quality: language/reference/quality.md

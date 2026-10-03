@@ -1,0 +1,825 @@
+"""Embedded `.inqldb` control-plane store for typed semantic memory."""
+
+from pub::incql_core import (
+    CommitReceipt,
+    LogicalRecordId,
+    PayloadProposal,
+    PayloadRef,
+    RecordFamily,
+    RecordFamilyName,
+    RevisionId,
+    RevisionProposal,
+    StoreCatalog,
+    StoreSnapshot,
+)
+from rust::std::cell import RefCell
+from rust::std::rc import Rc
+from rust::std::string import FromUtf8Error, String as RustString
+from std.encoding.hex import hexlify
+from std.fs import Path
+from std.fs.locking import FileLock
+from std.hash import sha256
+from std.io import BytesIO, Endian, IoError, _BytesIO
+
+
+pub class Session:
+    """
+    One exclusive local writer session over an `.inqldb` directory.
+
+    The retained advisory lock makes a session single-writer. Readers and higher-level query integration are future
+    slices; this foundation only exposes the durable semantic-store control plane.
+    """
+
+    pub root: Path
+    pub snapshot: StoreSnapshot
+    lock: Rc[RefCell[FileLock]]
+    transactions_begun: int
+
+    def begin(mut self) -> Transaction:
+        """Start a staged transaction rooted at this session's current snapshot."""
+        self.transactions_begun = self.transactions_begun + 1
+        return Transaction(
+            root=self.root,
+            base_snapshot_id=self.snapshot.id,
+            transaction_number=self.transactions_begun,
+            declared_families=[],
+            revisions=[],
+            payloads=[],
+        )
+
+    def catalog(self) -> Result[StoreCatalog, IoError]:
+        """Return the committed catalog visible through this session's current snapshot."""
+        return _catalog_at(self.root, self.snapshot)
+
+    def commit(mut self, transaction: Transaction) -> Result[CommitReceipt, IoError]:
+        """Durably publish one staged transaction as the next immutable snapshot."""
+        if transaction.belongs_to(self.root) is false:
+            return Err(_store_error("commit", "invalid_transaction", "transaction belongs to another store"))
+        if transaction.is_based_on(self.snapshot.id) is false:
+            return Err(_store_error("commit", "stale_transaction", "transaction was created from another snapshot"))
+        _validate_transaction(self.root, self.snapshot, transaction)?
+
+        next_snapshot_id = self.snapshot.id + 1
+        _write_new_file(self.root, _pending_path(self.root, next_snapshot_id), _entry_magic())?
+
+        for family in transaction.families_for_commit():
+            _write_new_file(self.root, _family_path(self.root, next_snapshot_id, family), _entry_magic())?
+
+        for revision in transaction.revisions_for_commit():
+            _write_new_file(self.root, _revision_path(self.root, next_snapshot_id, revision), _revision_entry(revision)?)?
+
+        # Payload bytes were written to staging when they were appended; publishing moves each file into the
+        # snapshot's payload partition beside an entry that records its fingerprint and length.
+        for staged in transaction.payloads_for_commit():
+            target = _payload_path(self.root, next_snapshot_id, staged.proposal)
+            target.parent().mkdir(parents=true, exist_ok=true)?
+            (self.root / "staging" / staged.staging_name).replace(target)?
+            _sync_directories_to_root(target.parent(), self.root)?
+            _write_new_file(
+                self.root,
+                _payload_entry_path(self.root, next_snapshot_id, staged.proposal),
+                _payload_entry(staged.proposal, staged.byte_length)?,
+            )?
+
+        manifest = _snapshot_manifest(next_snapshot_id, self.snapshot.id, transaction)?
+        _write_staged_file(
+            self.root,
+            f"snapshot-{next_snapshot_id}.staged",
+            _manifest_path(self.root, next_snapshot_id),
+            manifest,
+        )?
+        _write_staged_file(
+            self.root,
+            f"current-{next_snapshot_id}.staged",
+            self.root / "CURRENT",
+            _current_pointer(next_snapshot_id)?,
+        )?
+        _reset_staging(self.root)?
+
+        self.snapshot = StoreSnapshot(id=next_snapshot_id, parent_id=Some(next_snapshot_id - 1))
+        return Ok(
+            CommitReceipt(
+                snapshot=self.snapshot,
+                declared_record_family_count=transaction.declared_family_count(),
+                revision_count=transaction.revision_count(),
+                payload_count=transaction.payload_count(),
+            ),
+        )
+
+    def payloads(self) -> Result[list[PayloadRef], IoError]:
+        """Return every payload visible through this session's current snapshot, oldest snapshot first."""
+        return _payloads_at(self.root, self.snapshot)
+
+    def read_payload(self, payload: PayloadRef) -> Result[bytes, IoError]:
+        """
+        Read one committed payload whole and verify it against its recorded fingerprint and length.
+
+        A payload that does not match is reported as corrupt and no bytes are returned.
+        """
+        path = _payload_path_for(self.root, payload)
+        data = path.read_bytes()?
+        if len(data) != payload.byte_length or _fingerprint(data) != payload.content_fingerprint:
+            return Err(_store_error("read", "corrupt_payload", "payload bytes do not match their committed identity"))
+        return Ok(data)
+
+    def read_payload_range(self, payload: PayloadRef, offset: int, length: int) -> Result[bytes, IoError]:
+        """
+        Read one range of a committed payload without verifying the whole file.
+
+        Callers that need the identity guarantee read the payload whole once (`read_payload`) and then use ranged
+        reads for the parts they touch, such as the vectors of a query's candidates.
+        """
+        if offset < 0 or length < 0 or offset + length > payload.byte_length:
+            return Err(_store_error("read", "invalid_range", "payload range is outside the committed length"))
+        file = _payload_path_for(self.root, payload).open(mode="rb")?
+        file.seek(offset, 0)?
+        return file.read_exact(length)
+
+
+pub class StagedPayload:
+    """One payload whose bytes already sit in staging, waiting for the commit that publishes it."""
+
+    pub proposal: PayloadProposal
+    pub staging_name: str
+    pub byte_length: int
+
+
+pub class Transaction:
+    """A mutable write set that is invisible until `Session.commit()` publishes its snapshot."""
+
+    root: Path
+    base_snapshot_id: int
+    transaction_number: int
+    declared_families: list[RecordFamily]
+    revisions: list[RevisionProposal]
+    payloads: list[StagedPayload]
+
+    def declare_family(mut self, family: RecordFamily) -> None:
+        """Stage one typed record-family declaration for the transaction."""
+        self.declared_families.append(family)
+
+    def append_revision(mut self, revision: RevisionProposal) -> None:
+        """Stage one immutable logical-record revision for the transaction."""
+        self.revisions.append(revision)
+
+    def append_payload(mut self, proposal: PayloadProposal, data: bytes) -> Result[None, IoError]:
+        """
+        Stage one immutable payload for the transaction.
+
+        The bytes are written to staging now, so a large payload is never held twice, and the proposal's fingerprint
+        must be the fingerprint of the bytes supplied; a mismatch is rejected before anything is staged.
+        """
+        _validate_payload(proposal)?
+        if _fingerprint(data) != proposal.content_fingerprint:
+            return Err(_store_error("stage", "fingerprint_mismatch", "payload bytes do not match the proposal"))
+        staging_name = f"payload-{self.base_snapshot_id + 1}-{self.transaction_number}-{len(self.payloads)}.staged"
+        _write_new_file(self.root, self.root / "staging" / staging_name, data)?
+        self.payloads.append(StagedPayload(proposal=proposal, staging_name=staging_name, byte_length=len(data)))
+        return Ok(None)
+
+    def payloads_for_commit(self) -> list[StagedPayload]:
+        """Return the staged payloads for module-local commit publication."""
+        return self.payloads
+
+    def payload_count(self) -> int:
+        """Return the number of payloads staged by this transaction."""
+        return len(self.payloads)
+
+    def belongs_to(self, root: Path) -> bool:
+        """Return whether this write set was created by a session for the supplied store root."""
+        return self.root.0 == root.0
+
+    def is_based_on(self, snapshot_id: int) -> bool:
+        """Return whether this write set starts from the supplied committed snapshot."""
+        return self.base_snapshot_id == snapshot_id
+
+    def families_for_commit(self) -> list[RecordFamily]:
+        """Return the staged record-family declarations for module-local commit publication."""
+        return self.declared_families
+
+    def revisions_for_commit(self) -> list[RevisionProposal]:
+        """Return the staged immutable revisions for module-local commit publication."""
+        return self.revisions
+
+    def declared_family_count(self) -> int:
+        """Return the number of record-family declarations staged by this transaction."""
+        return len(self.declared_families)
+
+    def revision_count(self) -> int:
+        """Return the number of immutable revisions staged by this transaction."""
+        return len(self.revisions)
+
+
+pub def open(path: str) -> Result[Session, IoError]:
+    """
+    Open or bootstrap an `.inqldb` directory as its exclusive writer.
+
+    The returned session retains the writer lock until it leaves scope. A malformed store format or incomplete layout
+    is rejected explicitly; staged data and snapshot partitions beyond `CURRENT` are removed because they never became
+    visible.
+    """
+    root = Path(path)
+    root.mkdir(parents=true, exist_ok=true)?
+    lock = root.lock_exclusive()?
+    snapshot = _open_store(root)?
+    return Ok(Session(root=root, snapshot=snapshot, lock=Rc.new(RefCell.new(lock)), transactions_begun=0))
+
+
+pub def try_open(path: str) -> Result[Option[Session], IoError]:
+    """Attempt to open an `.inqldb` directory without blocking on another writer."""
+    root = Path(path)
+    root.mkdir(parents=true, exist_ok=true)?
+    match root.try_lock_exclusive()?:
+        Some(lock) =>
+            snapshot = _open_store(root)?
+            return Ok(Some(Session(root=root, snapshot=snapshot, lock=Rc.new(RefCell.new(lock)), transactions_begun=0)))
+        None => return Ok(None)
+
+
+def _open_store(root: Path) -> Result[StoreSnapshot, IoError]:
+    """Validate or bootstrap the store format, clear abandoned staging, and load `CURRENT`."""
+    format_path = root / "FORMAT"
+    if not format_path.exists():
+        if len(root.iterdir()?) != 0:
+            return Err(_store_error("open", "incomplete_store", "store has no FORMAT marker"))
+        _bootstrap(root)?
+    elif format_path.read_bytes()? != _format_magic():
+        return Err(_store_error("open", "unsupported_format", "FORMAT marker is not IncQL-DB v1"))
+    else:
+        _require_layout(root)?
+
+    current_path = root / "CURRENT"
+    if not current_path.exists():
+        _discard_unpublished_snapshots(root, 0)?
+        _reset_staging(root)?
+        return Ok(StoreSnapshot(id=0, parent_id=None))
+    snapshot_id = _read_current(current_path)?
+    manifest_path = _manifest_path(root, snapshot_id)
+    if not manifest_path.exists():
+        return Err(_store_error("open", "incomplete_store", "CURRENT references a missing snapshot manifest"))
+    mut snapshot = StoreSnapshot(id=0, parent_id=None)
+    for committed_snapshot_id in range(1, snapshot_id + 1):
+        snapshot = _read_snapshot_manifest(root, committed_snapshot_id)?
+    _discard_unpublished_snapshots(root, snapshot_id)?
+    _reset_staging(root)?
+    return Ok(snapshot)
+
+
+def _bootstrap(root: Path) -> Result[None, IoError]:
+    """Create the empty v1 directory layout and publish the format marker."""
+    (root / "catalog").mkdir(parents=true, exist_ok=false)?
+    (root / "tables").mkdir(parents=true, exist_ok=false)?
+    (root / "snapshots").mkdir(parents=true, exist_ok=false)?
+    (root / "staging").mkdir(parents=true, exist_ok=false)?
+    (root / "payloads").mkdir(parents=true, exist_ok=false)?
+    _write_staged_file(root, "format.bootstrap", root / "FORMAT", _format_magic())?
+    return Ok(None)
+
+
+def _require_layout(root: Path) -> Result[None, IoError]:
+    """Reject a formatted store whose required control-plane directories are missing."""
+    for name in ["catalog", "tables", "payloads", "snapshots", "staging"]:
+        if not (root / name).is_dir():
+            return Err(_store_error("open", "incomplete_store", f"missing required directory: {name}"))
+    return Ok(None)
+
+
+def _reset_staging(root: Path) -> Result[None, IoError]:
+    """Discard unpublished staged files and recreate the staging directory."""
+    staging = root / "staging"
+    if staging.exists():
+        staging.remove_tree()?
+    staging.mkdir(parents=true, exist_ok=false)?
+    return Ok(None)
+
+
+def _discard_unpublished_snapshots(root: Path, current_snapshot_id: int) -> Result[None, IoError]:
+    """Remove only snapshot partitions and manifests newer than the durable `CURRENT` pointer."""
+    _discard_future_directories(root / "catalog", current_snapshot_id)?
+    _discard_future_directories(root / "tables", current_snapshot_id)?
+    _discard_future_directories(root / "payloads", current_snapshot_id)?
+    for manifest in (root / "snapshots").iterdir()?:
+        if manifest.is_file() and manifest.suffix() == ".manifest" and int(manifest.stem()) > current_snapshot_id:
+            manifest.unlink()?
+    return Ok(None)
+
+
+def _discard_future_directories(parent: Path, current_snapshot_id: int) -> Result[None, IoError]:
+    """Remove private snapshot-numbered trees that were never made visible by `CURRENT`."""
+    for child in parent.iterdir()?:
+        if child.is_dir() and int(child.name()) > current_snapshot_id:
+            child.remove_tree()?
+    return Ok(None)
+
+
+def _write_new_file(root: Path, path: Path, data: bytes) -> Result[None, IoError]:
+    """Write one immutable file and synchronize every newly reachable directory back to the store root."""
+    path.parent().mkdir(parents=true, exist_ok=true)?
+    file = path.open(mode="xb")?
+    file.write_bytes(data)?
+    file.sync()?
+    _sync_directories_to_root(path.parent(), root)?
+    return Ok(None)
+
+
+def _write_staged_file(root: Path, staging_name: str, target: Path, data: bytes) -> Result[None, IoError]:
+    """Sync a staged file, atomically publish it, and sync the target directory."""
+    staged = root / "staging" / staging_name
+    _write_new_file(root, staged, data)?
+    staged.replace(target)?
+    _sync_directories_to_root(target.parent(), root)?
+    return Ok(None)
+
+
+def _sync_directories_to_root(directory: Path, root: Path) -> Result[None, IoError]:
+    """Synchronize a changed directory and each ancestor through the owning store root."""
+    root_text = root.resolve()?.0
+    mut current = directory
+    loop:
+        current.sync_directory()?
+        if current.resolve()?.0 == root_text:
+            return Ok(None)
+        parent = current.parent()
+        if parent.0 == current.0:
+            # The filesystem root was reached without meeting the store root: never spin, report it.
+            return Err(_store_error("sync", "outside_store", "directory is not inside the store root"))
+        current = parent
+
+
+def _catalog_at(root: Path, snapshot: StoreSnapshot) -> Result[StoreCatalog, IoError]:
+    """Materialize catalog metadata that is visible at one committed snapshot boundary."""
+    mut families: list[RecordFamily] = []
+    mut revision_count = 0
+    for snapshot_id in range(1, snapshot.id + 1):
+        catalog_snapshot = _snapshot_dir(root / "catalog", snapshot_id)
+        if catalog_snapshot.is_dir():
+            for family_dir in catalog_snapshot.iterdir()?:
+                if family_dir.is_dir():
+                    for schema_file in family_dir.iterdir()?:
+                        if schema_file.suffix() == ".family":
+                            schema_version = int(schema_file.stem())
+                            family = RecordFamily(
+                                name=RecordFamilyName(family_dir.name()),
+                                schema_version=schema_version,
+                            )
+                            if not _contains_family(families, family):
+                                families.append(family)
+        table_snapshot = _snapshot_dir(root / "tables", snapshot_id)
+        if table_snapshot.is_dir():
+            revision_count = revision_count + _revision_file_count(table_snapshot)?
+    payload_count = len(_payloads_at(root, snapshot)?)
+    return Ok(
+        StoreCatalog(
+            snapshot=snapshot,
+            record_families=families,
+            revision_count=revision_count,
+            payload_count=payload_count,
+        ),
+    )
+
+
+def _revision_file_count(path: Path) -> Result[int, IoError]:
+    """Count immutable revision entry files beneath one snapshot's table partition."""
+    if not path.exists():
+        return Ok(0)
+    mut count = 0
+    for child in path.iterdir()?:
+        if child.is_dir():
+            count = count + _revision_file_count(child)?
+        elif child.suffix() == ".revision":
+            count = count + 1
+    return Ok(count)
+
+
+def _validate_transaction(root: Path, snapshot: StoreSnapshot, transaction: Transaction) -> Result[None, IoError]:
+    """Reject invalid family and revision identity before a transaction writes private files."""
+    catalog = _catalog_at(root, snapshot)?
+    mut declared: list[RecordFamily] = []
+    for family in transaction.families_for_commit():
+        _validate_record_family(family)?
+        if _contains_family(catalog.record_families, family) or _contains_family(declared, family):
+            return Err(_store_error("commit", "duplicate_record_family", "record family schema version already exists"))
+        declared.append(family)
+
+    mut staged: list[RevisionProposal] = []
+    for revision in transaction.revisions_for_commit():
+        _validate_revision(revision)?
+        if _contains_family(catalog.record_families, revision.family) is false and _contains_family(
+            declared,
+            revision.family,
+        ) is false:
+            return Err(
+                _store_error("commit", "unknown_record_family", "revision references an undeclared record family"),
+            )
+        if _revision_exists(root, snapshot.id, revision)? or _contains_revision(staged, revision):
+            return Err(_store_error("commit", "duplicate_revision", "logical record revision already exists"))
+        staged.append(revision)
+
+    mut staged_payloads: list[PayloadProposal] = []
+    for payload in transaction.payloads_for_commit():
+        if _contains_family(catalog.record_families, payload.proposal.family) is false and _contains_family(
+            declared,
+            payload.proposal.family,
+        ) is false:
+            return Err(_store_error("commit", "unknown_record_family", "payload references an undeclared record family"))
+        if _payload_exists(root, snapshot.id, payload.proposal)? or _contains_payload(staged_payloads, payload.proposal):
+            return Err(_store_error("commit", "duplicate_payload", "payload identity already exists"))
+        staged_payloads.append(payload.proposal)
+    return Ok(None)
+
+
+def _revision_exists(root: Path, latest_snapshot_id: int, revision: RevisionProposal) -> Result[bool, IoError]:
+    """Return whether one logical-record revision was already committed in an earlier snapshot."""
+    for snapshot_id in range(1, latest_snapshot_id + 1):
+        if _revision_path(root, snapshot_id, revision).exists():
+            return Ok(true)
+    return Ok(false)
+
+
+def _contains_revision(revisions: list[RevisionProposal], expected: RevisionProposal) -> bool:
+    """Return whether one staged revision repeats the same immutable logical-record identity."""
+    for revision in revisions:
+        if (
+            revision.family.name.0 == expected.family.name.0
+            and revision.family.schema_version == expected.family.schema_version
+            and revision.logical_record_id.0 == expected.logical_record_id.0
+            and revision.revision_id.0 == expected.revision_id.0
+        ):
+            return true
+    return false
+
+
+def _family_file_count(path: Path) -> Result[int, IoError]:
+    """Count immutable record-family declaration files beneath one snapshot's catalog partition."""
+    if not path.exists():
+        return Ok(0)
+    mut count = 0
+    for child in path.iterdir()?:
+        if child.is_dir():
+            count = count + _family_file_count(child)?
+        elif child.suffix() == ".family":
+            count = count + 1
+    return Ok(count)
+
+
+def _contains_family(families: list[RecordFamily], expected: RecordFamily) -> bool:
+    """Return whether a catalog list already contains the exact family schema declaration."""
+    for family in families:
+        if family.name.0 == expected.name.0 and family.schema_version == expected.schema_version:
+            return true
+    return false
+
+
+def _snapshot_manifest(snapshot_id: int, parent_id: int, transaction: Transaction) -> Result[bytes, IoError]:
+    """Encode the fixed-width snapshot publication record without JSON or engine dependencies."""
+    buffer = BytesIO()
+    buffer.write_bytes(_snapshot_magic())?
+    buffer.write(_as_u64(snapshot_id)?, Endian.Little)?
+    buffer.write(_as_u64(parent_id)?, Endian.Little)?
+    buffer.write(_as_u64(transaction.declared_family_count())?, Endian.Little)?
+    buffer.write(_as_u64(transaction.revision_count())?, Endian.Little)?
+    buffer.write(_as_u64(transaction.payload_count())?, Endian.Little)?
+    return Ok(buffer.getvalue())
+
+
+def _current_pointer(snapshot_id: int) -> Result[bytes, IoError]:
+    """Encode the durable pointer to the sole snapshot visible to new sessions."""
+    buffer = BytesIO()
+    buffer.write_bytes(_current_magic())?
+    buffer.write(_as_u64(snapshot_id)?, Endian.Little)?
+    return Ok(buffer.getvalue())
+
+
+def _revision_entry(revision: RevisionProposal) -> Result[bytes, IoError]:
+    """Encode the immutable evidence fingerprint retained for one durable revision entry."""
+    fingerprint = RustString.from(revision.content_fingerprint).into_bytes()
+    buffer = BytesIO()
+    buffer.write_bytes(_entry_magic())?
+    buffer.write(_as_u64(len(fingerprint))?, Endian.Little)?
+    buffer.write_bytes(fingerprint)?
+    return Ok(buffer.getvalue())
+
+
+def _read_current(path: Path) -> Result[int, IoError]:
+    """Parse and validate the fixed-width binary `CURRENT` pointer."""
+    buffer = BytesIO(path.read_bytes()?)
+    magic = _current_magic()
+    header = _read_metadata_bytes(buffer, len(magic), "invalid_current", "CURRENT ended before its binary header")?
+    if header != magic:
+        return Err(_store_error("open", "invalid_current", "CURRENT has an unknown binary header"))
+    snapshot_id = _read_metadata_u64(buffer, "invalid_current", "CURRENT ended before its snapshot id")?
+    if buffer.remaining() != 0:
+        return Err(_store_error("open", "invalid_current", "CURRENT has trailing bytes"))
+    if snapshot_id == 0:
+        return Err(_store_error("open", "invalid_current", "CURRENT must reference a committed snapshot"))
+    return Ok(int(snapshot_id))
+
+
+def _read_snapshot_manifest(root: Path, snapshot_id: int) -> Result[StoreSnapshot, IoError]:
+    """Parse and cross-check the committed manifest selected by `CURRENT`."""
+    path = _manifest_path(root, snapshot_id)
+    if not path.is_file():
+        return Err(_store_error("open", "invalid_snapshot", "committed snapshot is missing its manifest"))
+    buffer = BytesIO(path.read_bytes()?)
+    magic = _snapshot_magic()
+    header = _read_metadata_bytes(
+        buffer,
+        len(magic),
+        "invalid_snapshot",
+        "snapshot manifest ended before its binary header",
+    )?
+    if header != magic:
+        return Err(_store_error("open", "invalid_snapshot", "snapshot manifest has an unknown binary header"))
+    stored_snapshot_id = _read_metadata_u64(buffer, "invalid_snapshot", "snapshot manifest ended before its snapshot id")?
+    stored_parent_id = _read_metadata_u64(buffer, "invalid_snapshot", "snapshot manifest ended before its parent id")?
+    declared_family_count = _read_metadata_u64(
+        buffer,
+        "invalid_snapshot",
+        "snapshot manifest ended before its family count",
+    )?
+    declared_revision_count = _read_metadata_u64(
+        buffer,
+        "invalid_snapshot",
+        "snapshot manifest ended before its revision count",
+    )?
+    declared_payload_count = _read_metadata_u64(
+        buffer,
+        "invalid_snapshot",
+        "snapshot manifest ended before its payload count",
+    )?
+    if buffer.remaining() != 0:
+        return Err(_store_error("open", "invalid_snapshot", "snapshot manifest has trailing bytes"))
+    if stored_snapshot_id != snapshot_id:
+        return Err(_store_error("open", "invalid_snapshot", "snapshot manifest identity does not match CURRENT"))
+    if stored_parent_id != snapshot_id - 1:
+        return Err(_store_error("open", "invalid_snapshot", "snapshot manifest has an invalid parent"))
+    family_count = _family_file_count(_snapshot_dir(root / "catalog", snapshot_id))?
+    if family_count != declared_family_count:
+        return Err(
+            _store_error("open", "invalid_snapshot", "snapshot manifest family count does not match catalog entries"),
+        )
+    revision_count = _revision_file_count(_snapshot_dir(root / "tables", snapshot_id))?
+    if revision_count != declared_revision_count:
+        return Err(
+            _store_error("open", "invalid_snapshot", "snapshot manifest revision count does not match table entries"),
+        )
+    payload_count = _payload_entry_count(_snapshot_dir(root / "payloads", snapshot_id))?
+    if payload_count != declared_payload_count:
+        return Err(
+            _store_error("open", "invalid_snapshot", "snapshot manifest payload count does not match payload entries"),
+        )
+    return Ok(StoreSnapshot(id=snapshot_id, parent_id=Some(snapshot_id - 1)))
+
+
+def _read_metadata_bytes(buffer: _BytesIO, size: int, kind: str, detail: str) -> Result[bytes, IoError]:
+    """Read one exact metadata field while preserving a stable store-level corruption error."""
+    match buffer.read_exact(size):
+        Ok(data) => return Ok(data)
+        Err(_) => return Err(_store_error("open", kind, detail))
+
+
+def _read_metadata_u64(buffer: _BytesIO, kind: str, detail: str) -> Result[int, IoError]:
+    """Read one fixed-width metadata counter while preserving a stable store-level corruption error."""
+    value: u64 = match _read_u64_le(buffer):
+        Ok(data) => data
+        Err(_) => return Err(_store_error("open", kind, detail))
+
+    return Ok(int(value))
+
+
+def _read_u64_le(buffer: _BytesIO) -> Result[u64, IoError]:
+    """Read one little-endian u64 with an explicit result type for `BytesIO` overload resolution."""
+    value: u64 = buffer.read(Endian.Little)?
+    return Ok(value)
+
+
+def _as_u64(value: int) -> Result[u64, IoError]:
+    """Convert a non-negative Incan integer to the store's fixed-width binary counter type."""
+    maybe: Option[u64] = value.try_resize()
+    match maybe:
+        Some(converted) => return Ok(converted)
+        None => return Err(_store_error("encode", "invalid_counter", "counter does not fit u64"))
+
+
+def _format_magic() -> bytes:
+    """Return the mutable v1 format-header bytes used for exact on-disk comparisons."""
+    return BytesIO(b"INCQLDB\x00\x01").getvalue()
+
+
+def _current_magic() -> bytes:
+    """Return the mutable binary header used to validate the durable current-snapshot pointer."""
+    return BytesIO(b"INCQLDB-CURRENT\x00").getvalue()
+
+
+def _snapshot_magic() -> bytes:
+    """Return the mutable binary header used by fixed-width snapshot manifests."""
+    return BytesIO(b"INCQLDB-SNAPSHOT\x00").getvalue()
+
+
+def _entry_magic() -> bytes:
+    """Return the mutable binary marker for immutable catalog and revision entry files."""
+    return BytesIO(b"INCQLDB-ENTRY\x00\x01").getvalue()
+
+
+def _validate_record_family(family: RecordFamily) -> Result[None, IoError]:
+    """Validate the path-safe identity used by one record-family declaration."""
+    if family.schema_version <= 0:
+        return Err(_store_error("commit", "invalid_record_family", "schema version must be positive"))
+    return _validate_segment(family.name.0, "record family")
+
+
+def _validate_revision(revision: RevisionProposal) -> Result[None, IoError]:
+    """Validate the path-safe identity components used by one immutable revision entry."""
+    _validate_record_family(revision.family)?
+    _validate_segment(revision.logical_record_id.0, "logical record id")?
+    _validate_segment(revision.revision_id.0, "revision id")?
+    if len(revision.content_fingerprint) == 0:
+        return Err(_store_error("commit", "invalid_revision", "content fingerprint must not be empty"))
+    return Ok(None)
+
+
+def _validate_segment(value: str, kind: str) -> Result[None, IoError]:
+    """Reject names that would escape or make the inspectable on-disk layout ambiguous."""
+    if len(value) == 0 or value == "." or value == ".." or value.contains("/") or value.contains("\\"):
+        return Err(_store_error("commit", "invalid_identifier", f"{kind} must be a non-empty path segment"))
+    return Ok(None)
+
+
+def _snapshot_dir(root: Path, snapshot_id: int) -> Path:
+    """Return the deterministic directory name allocated to one snapshot."""
+    return root / f"{snapshot_id}"
+
+
+def _manifest_path(root: Path, snapshot_id: int) -> Path:
+    """Return the immutable manifest path for one committed snapshot."""
+    return root / "snapshots" / f"{snapshot_id}.manifest"
+
+
+def _pending_path(root: Path, snapshot_id: int) -> Path:
+    """Return the private staging marker path for one in-progress commit."""
+    return root / "staging" / f"{snapshot_id}.pending"
+
+
+def _family_path(root: Path, snapshot_id: int, family: RecordFamily) -> Path:
+    """Return the immutable catalog entry path for one family schema declaration."""
+    return root / "catalog" / f"{snapshot_id}" / family.name.0 / f"{family.schema_version}.family"
+
+
+def _revision_path(root: Path, snapshot_id: int, revision: RevisionProposal) -> Path:
+    """Return the immutable revision entry path within its snapshot partition."""
+    return (root / "tables" / f"{snapshot_id}" / revision.family.name.0 / f"{revision.family.schema_version}" / revision.logical_record_id.0 / f"{revision.revision_id.0}.revision")
+
+
+def _store_error(operation: str, kind: str, detail: str) -> IoError:
+    """Create one stable store-level I/O error for validation and recovery failures."""
+    return IoError(operation=operation, kind=kind, detail=detail)
+
+
+def _fingerprint(data: bytes) -> str:
+    """Return the content fingerprint the store records for payload bytes."""
+    return f"sha256:{hexlify(sha256.digest(data))}"
+
+
+def _validate_payload(proposal: PayloadProposal) -> Result[None, IoError]:
+    """Validate the path-safe identity components used by one payload."""
+    _validate_record_family(proposal.family)?
+    _validate_segment(proposal.payload_kind, "payload kind")?
+    _validate_segment(proposal.payload_id, "payload id")?
+    if len(proposal.content_fingerprint) == 0:
+        return Err(_store_error("stage", "invalid_payload", "content fingerprint must not be empty"))
+    return Ok(None)
+
+
+def _payload_dir(root: Path, snapshot_id: int, family: RecordFamily, payload_kind: str) -> Path:
+    """Return the directory holding one family's payloads of one kind within a snapshot partition."""
+    return root / "payloads" / f"{snapshot_id}" / family.name.0 / f"{family.schema_version}" / payload_kind
+
+
+def _payload_path(root: Path, snapshot_id: int, proposal: PayloadProposal) -> Path:
+    """Return the immutable payload file path within its snapshot partition."""
+    return _payload_dir(root, snapshot_id, proposal.family, proposal.payload_kind) / f"{proposal.payload_id}.payload"
+
+
+def _payload_entry_path(root: Path, snapshot_id: int, proposal: PayloadProposal) -> Path:
+    """Return the entry file that records a payload's fingerprint and length beside it."""
+    return _payload_dir(root, snapshot_id, proposal.family, proposal.payload_kind) / f"{proposal.payload_id}.payloadentry"
+
+
+def _payload_path_for(root: Path, payload: PayloadRef) -> Path:
+    """Return the payload file a committed reference points at."""
+    return _payload_dir(root, payload.snapshot_id, payload.family, payload.payload_kind) / f"{payload.payload_id}.payload"
+
+
+def _payload_entry(proposal: PayloadProposal, byte_length: int) -> Result[bytes, IoError]:
+    """Encode the immutable identity retained for one payload: its fingerprint and byte length."""
+    fingerprint = RustString.from(proposal.content_fingerprint).into_bytes()
+    buffer = BytesIO()
+    buffer.write_bytes(_entry_magic())?
+    buffer.write(_as_u64(byte_length)?, Endian.Little)?
+    buffer.write(_as_u64(len(fingerprint))?, Endian.Little)?
+    buffer.write_bytes(fingerprint)?
+    return Ok(buffer.getvalue())
+
+
+def _read_payload_entry(path: Path) -> Result[PayloadEntry, IoError]:
+    """Parse one payload entry file into its recorded length and fingerprint."""
+    buffer = BytesIO(path.read_bytes()?)
+    magic = _entry_magic()
+    header = _read_metadata_bytes(buffer, len(magic), "invalid_payload_entry", "payload entry ended before its header")?
+    if header != magic:
+        return Err(_store_error("open", "invalid_payload_entry", "payload entry has an unknown binary header"))
+    byte_length = _read_metadata_u64(buffer, "invalid_payload_entry", "payload entry ended before its length")?
+    fingerprint_length = _read_metadata_u64(
+        buffer,
+        "invalid_payload_entry",
+        "payload entry ended before its fingerprint",
+    )?
+    fingerprint_bytes = _read_metadata_bytes(
+        buffer,
+        fingerprint_length,
+        "invalid_payload_entry",
+        "payload entry ended inside its fingerprint",
+    )?
+    if buffer.remaining() != 0:
+        return Err(_store_error("open", "invalid_payload_entry", "payload entry has trailing bytes"))
+    decoded: Result[str, FromUtf8Error] = RustString.from_utf8(fingerprint_bytes)
+    fingerprint = match decoded:
+        Ok(text) => text
+        Err(_) => return Err(_store_error("open", "invalid_payload_entry", "payload fingerprint is not text"))
+
+    return Ok(PayloadEntry(byte_length=byte_length, content_fingerprint=fingerprint))
+
+
+model PayloadEntry:
+    """The identity recorded beside one committed payload file."""
+
+    byte_length: int
+    content_fingerprint: str
+
+
+def _payload_entry_count(path: Path) -> Result[int, IoError]:
+    """Count immutable payload entry files beneath one snapshot's payload partition."""
+    if not path.exists():
+        return Ok(0)
+    mut count = 0
+    for child in path.iterdir()?:
+        if child.is_dir():
+            count = count + _payload_entry_count(child)?
+        elif child.suffix() == ".payloadentry":
+            count = count + 1
+    return Ok(count)
+
+
+def _payloads_at(root: Path, snapshot: StoreSnapshot) -> Result[list[PayloadRef], IoError]:
+    """List every payload visible at one committed snapshot boundary, oldest snapshot first."""
+    mut payloads: list[PayloadRef] = []
+    for snapshot_id in range(1, snapshot.id + 1):
+        partition = _snapshot_dir(root / "payloads", snapshot_id)
+        if not partition.is_dir():
+            continue
+        for family_dir in partition.iterdir()?:
+            if not family_dir.is_dir():
+                continue
+            for version_dir in family_dir.iterdir()?:
+                if not version_dir.is_dir():
+                    continue
+                family = RecordFamily(name=RecordFamilyName(family_dir.name()), schema_version=int(version_dir.name()))
+                for kind_dir in version_dir.iterdir()?:
+                    if not kind_dir.is_dir():
+                        continue
+                    for entry_file in kind_dir.iterdir()?:
+                        if entry_file.suffix() != ".payloadentry":
+                            continue
+                        entry = _read_payload_entry(entry_file)?
+                        payloads.append(
+                            PayloadRef(
+                                snapshot_id=snapshot_id,
+                                family=family,
+                                payload_kind=kind_dir.name(),
+                                payload_id=entry_file.stem(),
+                                content_fingerprint=entry.content_fingerprint,
+                                byte_length=entry.byte_length,
+                            ),
+                        )
+    return Ok(payloads)
+
+
+def _payload_exists(root: Path, latest_snapshot_id: int, proposal: PayloadProposal) -> Result[bool, IoError]:
+    """Return whether one payload identity was already committed in an earlier snapshot."""
+    for snapshot_id in range(1, latest_snapshot_id + 1):
+        if _payload_entry_path(root, snapshot_id, proposal).exists():
+            return Ok(true)
+    return Ok(false)
+
+
+def _contains_payload(payloads: list[PayloadProposal], expected: PayloadProposal) -> bool:
+    """Return whether one staged payload repeats the same identity."""
+    for payload in payloads:
+        if (
+            payload.family.name.0 == expected.family.name.0
+            and payload.family.schema_version == expected.family.schema_version
+            and payload.payload_kind == expected.payload_kind
+            and payload.payload_id == expected.payload_id
+        ):
+            return true
+    return false
