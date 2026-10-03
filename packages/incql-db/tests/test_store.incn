@@ -1,0 +1,377 @@
+"""Behavioral tests for the IncQL-DB durable local-store foundation."""
+
+from pub::incql_core import (
+    LogicalRecordId,
+    PayloadProposal,
+    RecordFamily,
+    RecordFamilyName,
+    RevisionId,
+    RevisionProposal,
+)
+from std.encoding.hex import hexlify
+from std.hash import sha256
+from rust::std::string import String as RustString
+from lib import open, try_open
+from std.fs import Path
+from std.io import BytesIO, Endian
+from std.tempfile import TemporaryDirectory
+from std.testing import assert_is_err, assert_is_ok
+
+
+def _store_path() -> str:
+    """Create an isolated temporary `.inqldb` path for one test."""
+    workspace = assert_is_ok(TemporaryDirectory.try_new(), "temporary test workspace should be available")
+    persisted = assert_is_ok(workspace.persist(), "temporary test workspace should persist for the test")
+    return (persisted / ".inqldb").0
+
+
+def _knowledge_family() -> RecordFamily:
+    """Return the typed family used by durable revision tests."""
+    return RecordFamily(name=RecordFamilyName("KnowledgeRevision"), schema_version=1)
+
+
+def _knowledge_revision() -> RevisionProposal:
+    """Return one inspectable immutable revision proposal."""
+    return RevisionProposal(
+        family=_knowledge_family(),
+        logical_record_id=LogicalRecordId("knowledge-42"),
+        revision_id=RevisionId("r1"),
+        content_fingerprint="sha256:fixture",
+    )
+
+
+def test_store__open_bootstraps_empty_binary_control_plane() -> None:
+    """Opening a fresh directory should expose only the empty committed snapshot."""
+    # -- Arrange --
+    path = _store_path()
+
+    # -- Act --
+    session = assert_is_ok(open(path), "opening a fresh local directory should bootstrap a store")
+    catalog = assert_is_ok(session.catalog(), "fresh store catalog should be inspectable")
+
+    # -- Assert --
+    assert catalog.snapshot.id == 0, "a fresh store should expose the empty snapshot"
+    assert len(catalog.record_families) == 0, "a fresh store should not invent record families"
+    assert catalog.revision_count == 0, "a fresh store should not invent revisions"
+
+
+def test_store__writer_contention_returns_no_second_session() -> None:
+    """A second non-blocking writer attempt should observe the retained exclusive lock."""
+    # -- Arrange --
+    path = _store_path()
+    _writer = assert_is_ok(open(path), "first writer should acquire the store lock")
+
+    # -- Act --
+    contender = assert_is_ok(try_open(path), "non-blocking open should report lock state")
+
+    # -- Assert --
+    match contender:
+        Some(_) =>
+            assert false, "a second writer must not acquire the same store lock"
+        None => pass
+
+
+def test_store__commit_publishes_typed_catalog_and_revision_snapshot() -> None:
+    """One committed transaction should make its typed catalog and revision visible together."""
+    # -- Arrange --
+    path = _store_path()
+    mut session = assert_is_ok(open(path), "writer should open")
+    mut transaction = session.begin()
+    transaction.declare_family(_knowledge_family())
+    transaction.append_revision(_knowledge_revision())
+
+    # -- Act --
+    receipt = assert_is_ok(session.commit(transaction), "typed transaction should publish atomically")
+    catalog = assert_is_ok(session.catalog(), "published snapshot should be inspectable")
+
+    # -- Assert --
+    assert receipt.snapshot.id == 1, "first committed transaction should publish snapshot one"
+    assert catalog.snapshot.id == 1, "session should advance to the published snapshot"
+    assert len(catalog.record_families) == 1, "catalog should expose the declared typed family"
+    assert catalog.record_families[0].name.0 == "KnowledgeRevision", "catalog should preserve record-family identity"
+    assert catalog.revision_count == 1, "catalog should expose the immutable revision entry"
+
+
+def test_store__commit_persists_the_revision_fingerprint() -> None:
+    """Each immutable revision entry should retain the supplied content fingerprint."""
+    # -- Arrange --
+    path = _store_path()
+    mut session = assert_is_ok(open(path), "writer should open")
+    mut transaction = session.begin()
+    transaction.declare_family(_knowledge_family())
+    transaction.append_revision(_knowledge_revision())
+
+    # -- Act --
+    assert_is_ok(session.commit(transaction), "typed transaction should publish atomically")
+    revision_path = session.root / "tables" / "1" / "KnowledgeRevision" / "1" / "knowledge-42" / "r1.revision"
+    entry = assert_is_ok(revision_path.read_bytes(), "published revision entry should be readable")
+    reader = BytesIO(entry)
+    assert_is_ok(reader.read_exact(len(b"INCQLDB-ENTRY\x00\x01")), "revision entry should have a binary header")
+    fingerprint_size: u64 = assert_is_ok(
+        reader.read(Endian.Little),
+        "revision entry should include a fingerprint length",
+    )
+    fingerprint_bytes = assert_is_ok(
+        reader.read_exact(int(fingerprint_size)),
+        "revision entry should include the fingerprint",
+    )
+    fingerprint = assert_is_ok(RustString.from_utf8(fingerprint_bytes), "revision fingerprint should be valid UTF-8")
+
+    # -- Assert --
+    assert fingerprint.to_string() == "sha256:fixture", "revision entry should retain the proposed fingerprint"
+    assert reader.remaining() == 0, "revision entry should not have an ambiguous trailing payload"
+
+
+def test_store__reopen_recovers_committed_snapshot_and_discards_staging() -> None:
+    """Reopening should retain only the `CURRENT` snapshot and remove abandoned write state."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_one(path)
+    _leave_abandoned_staging(path)
+
+    # -- Act --
+    session = assert_is_ok(open(path), "reopen should recover through CURRENT")
+    catalog = assert_is_ok(session.catalog(), "recovered snapshot should remain inspectable")
+
+    # -- Assert --
+    assert catalog.snapshot.id == 1, "staging must not become a visible snapshot"
+    assert catalog.revision_count == 1, "recovery must ignore unpublished entries"
+    assert (session.root / "staging").is_dir(), "recovery should recreate a clean staging directory"
+    assert len(assert_is_ok((session.root / "staging").iterdir(), "staging should be readable")) == 0, "recovery should discard staged files"
+
+
+def test_store__reopen_discards_snapshot_data_not_referenced_by_current() -> None:
+    """Recovery should discard a crash-left snapshot partition that was never published through `CURRENT`."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_one(path)
+    _leave_unpublished_snapshot(path)
+
+    # -- Act --
+    session = assert_is_ok(open(path), "reopen should recover through the durable current pointer")
+
+    # -- Assert --
+    assert (session.root / "catalog" / "2").exists() is false, "unpublished catalog entries must be removed"
+    assert (session.root / "tables" / "2").exists() is false, "unpublished revision entries must be removed"
+    assert (session.root / "snapshots" / "2.manifest").exists() is false, "unpublished manifest must be removed"
+
+
+def test_store__reopen_rejects_a_corrupt_current_manifest() -> None:
+    """A `CURRENT` snapshot is valid only when its binary manifest validates exactly."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_one(path)
+    manifest = Path(path) / "snapshots" / "1.manifest"
+    assert_is_ok(manifest.write_bytes(b"invalid manifest"), "fixture manifest should be writable")
+
+    # -- Act --
+    error = assert_is_err(open(path), "opening a corrupt current manifest should fail")
+
+    # -- Assert --
+    assert error.kind == "invalid_snapshot", "corrupt committed metadata must not be accepted as a snapshot"
+
+
+def test_store__commit_rejects_a_revision_for_an_undeclared_family() -> None:
+    """A revision cannot create a logical record outside the typed family registry."""
+    # -- Arrange --
+    path = _store_path()
+    mut session = assert_is_ok(open(path), "writer should open")
+    mut transaction = session.begin()
+    transaction.append_revision(_knowledge_revision())
+
+    # -- Act --
+    error = assert_is_err(session.commit(transaction), "revision without a declared family should fail")
+    catalog = assert_is_ok(session.catalog(), "failed validation should leave the current snapshot intact")
+
+    # -- Assert --
+    assert error.kind == "unknown_record_family", "revision identity must resolve through a record family"
+    assert catalog.snapshot.id == 0, "rejected transactions must not publish a snapshot"
+
+
+def test_store__reopen_validates_the_entire_committed_snapshot_chain() -> None:
+    """A later CURRENT pointer cannot conceal corruption in an earlier committed snapshot."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_one(path)
+    _commit_second_revision(path)
+    first_manifest = Path(path) / "snapshots" / "1.manifest"
+    assert_is_ok(first_manifest.write_bytes(b"corrupt first snapshot"), "fixture manifest should be writable")
+
+    # -- Act --
+    error = assert_is_err(open(path), "reopen should reject corruption anywhere in the committed chain")
+
+    # -- Assert --
+    assert error.kind == "invalid_snapshot", "all committed snapshot manifests must remain valid"
+
+
+def _commit_one(path: str) -> None:
+    """Commit one fixture transaction and release its writer session before reopen."""
+    mut session = assert_is_ok(open(path), "fixture writer should open")
+    mut transaction = session.begin()
+    transaction.declare_family(_knowledge_family())
+    transaction.append_revision(_knowledge_revision())
+    assert_is_ok(session.commit(transaction), "fixture transaction should commit")
+
+
+def _leave_abandoned_staging(path: str) -> None:
+    """Write private staged state that a subsequent opener must discard."""
+    root = assert_is_ok(open(path), "fixture writer should reopen")
+    staged = root.root / "staging" / "abandoned.pending"
+    assert_is_ok(staged.write_bytes(b"not committed"), "fixture staging file should be writable")
+
+
+def _leave_unpublished_snapshot(path: str) -> None:
+    """Create crash-left snapshot files that are newer than `CURRENT` without publishing the pointer."""
+    session = assert_is_ok(open(path), "fixture writer should reopen")
+    catalog = session.root / "catalog" / "2" / "KnowledgeRevision" / "1.family"
+    revision = session.root / "tables" / "2" / "KnowledgeRevision" / "1" / "knowledge-42" / "r2.revision"
+    manifest = session.root / "snapshots" / "2.manifest"
+    assert_is_ok(catalog.parent().mkdir(parents=true, exist_ok=true), "fixture catalog directory should be writable")
+    assert_is_ok(revision.parent().mkdir(parents=true, exist_ok=true), "fixture table directory should be writable")
+    assert_is_ok(catalog.write_bytes(b"unpublished"), "fixture catalog entry should be writable")
+    assert_is_ok(revision.write_bytes(b"unpublished"), "fixture revision entry should be writable")
+    assert_is_ok(manifest.write_bytes(b"unpublished"), "fixture manifest should be writable")
+
+
+def _commit_second_revision(path: str) -> None:
+    """Commit a second revision and release the writer session, so a later reopen does not wait on its lock."""
+    mut session = assert_is_ok(open(path), "fixture writer should reopen")
+    mut transaction = session.begin()
+    transaction.append_revision(
+        RevisionProposal(
+            family=_knowledge_family(),
+            logical_record_id=LogicalRecordId("knowledge-42"),
+            revision_id=RevisionId("r2"),
+            content_fingerprint="sha256:fixture-r2",
+        ),
+    )
+    assert_is_ok(session.commit(transaction), "second revision should publish snapshot two")
+
+
+def _payload(payload_id: str, data: bytes) -> PayloadProposal:
+    """Return a payload proposal for the knowledge family whose fingerprint matches ``data``."""
+    return PayloadProposal(
+        family=_knowledge_family(),
+        payload_kind="retrieval_index",
+        payload_id=payload_id,
+        content_fingerprint=f"sha256:{hexlify(sha256.digest(data))}",
+    )
+
+
+def _commit_two_payloads(path: str) -> None:
+    """Declare the family and commit two payloads, releasing the writer afterwards."""
+    mut session = assert_is_ok(open(path), "fixture writer should open")
+    mut transaction = session.begin()
+    transaction.declare_family(_knowledge_family())
+    assert_is_ok(transaction.append_payload(_payload("codes", b"CODES-0123456789"), b"CODES-0123456789"), "codes stage")
+    assert_is_ok(transaction.append_payload(_payload("vectors", b"VECTORS-abcdef"), b"VECTORS-abcdef"), "vectors stage")
+    receipt = assert_is_ok(session.commit(transaction), "payload transaction should commit")
+    assert receipt.payload_count == 2, "the receipt counts both payloads"
+
+
+def test_store__payloads_are_committed_listed_and_read_back_verified() -> None:
+    """Payload bytes become visible only through their commit, carry their identity, and read back exactly."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_two_payloads(path)
+
+    # -- Act --
+    session = assert_is_ok(open(path), "reopen after payload commit")
+    payloads = assert_is_ok(session.payloads(), "payload listing")
+    catalog = assert_is_ok(session.catalog(), "catalog after payload commit")
+
+    # -- Assert --
+    assert len(payloads) == 2, "both payloads are visible at the committed snapshot"
+    assert catalog.payload_count == 2, "the catalog counts committed payloads"
+    for payload in payloads:
+        assert payload.snapshot_id == 1, "payloads belong to the snapshot that published them"
+        data = assert_is_ok(session.read_payload(payload), "verified whole read")
+        assert len(data) == payload.byte_length, "the committed length matches the bytes"
+        if payload.payload_id == "codes":
+            assert data == b"CODES-0123456789", "codes read back exactly"
+            part = assert_is_ok(session.read_payload_range(payload, 6, 4), "ranged read")
+            assert part == b"0123", "a ranged read returns the requested slice"
+            assert_is_err(session.read_payload_range(payload, 10, 7), "a range past the end is refused")
+
+
+def test_store__payload_bytes_must_match_their_proposal() -> None:
+    """Staging a payload whose bytes do not match the proposed fingerprint is refused before anything is written."""
+    # -- Arrange --
+    path = _store_path()
+    mut session = assert_is_ok(open(path), "open")
+    mut transaction = session.begin()
+    transaction.declare_family(_knowledge_family())
+
+    # -- Act --
+    error = assert_is_err(transaction.append_payload(_payload("codes", b"one"), b"two"), "mismatch is refused")
+
+    # -- Assert --
+    assert error.kind == "fingerprint_mismatch", "the refusal names the mismatch"
+    assert transaction.payload_count() == 0, "nothing was staged"
+
+
+def test_store__commit_rejects_duplicate_and_orphan_payloads() -> None:
+    """A payload identity is immutable across snapshots, and a payload needs a declared family."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_two_payloads(path)
+    mut session = assert_is_ok(open(path), "reopen")
+
+    # -- Act --
+    mut duplicate = session.begin()
+    assert_is_ok(duplicate.append_payload(_payload("codes", b"again"), b"again"), "staging a repeat is allowed")
+    duplicate_error = assert_is_err(session.commit(duplicate), "a repeated payload identity must not commit")
+
+    mut orphan = session.begin()
+    stray = PayloadProposal(
+        family=RecordFamily(name=RecordFamilyName("Unknown"), schema_version=1),
+        payload_kind="retrieval_index",
+        payload_id="codes",
+        content_fingerprint=f"sha256:{hexlify(sha256.digest(b"x"))}",
+    )
+    assert_is_ok(orphan.append_payload(stray, b"x"), "staging checks the bytes, not the family")
+    orphan_error = assert_is_err(session.commit(orphan), "an undeclared family must not commit")
+
+    # -- Assert --
+    assert duplicate_error.kind == "duplicate_payload", "the repeat is named"
+    assert orphan_error.kind == "unknown_record_family", "the undeclared family is named"
+    assert assert_is_ok(session.catalog(), "catalog").snapshot.id == 1, "neither attempt published a snapshot"
+
+
+def test_store__a_corrupt_payload_is_detected_on_read() -> None:
+    """Changing committed payload bytes on disk is reported instead of returned."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_two_payloads(path)
+    corrupt_target = Path(path) / "payloads" / "1" / "KnowledgeRevision" / "1" / "retrieval_index" / "codes.payload"
+    assert_is_ok(corrupt_target.write_bytes(b"CODES-9876543210"), "fixture payload should be writable")
+
+    # -- Act --
+    session = assert_is_ok(open(path), "reopen")
+    payloads = assert_is_ok(session.payloads(), "listing")
+    mut corrupt_seen = false
+    for payload in payloads:
+        if payload.payload_id == "codes":
+            error = assert_is_err(session.read_payload(payload), "the altered payload must not be returned")
+            assert error.kind == "corrupt_payload", "the corruption is named"
+            corrupt_seen = true
+
+    # -- Assert --
+    assert corrupt_seen, "the altered payload was listed and checked"
+
+
+def test_store__reopen_discards_payloads_not_referenced_by_current() -> None:
+    """A payload partition for a snapshot that never became CURRENT is removed on reopen."""
+    # -- Arrange --
+    path = _store_path()
+    _commit_two_payloads(path)
+    stray = Path(path) / "payloads" / "2" / "KnowledgeRevision" / "1" / "retrieval_index"
+    assert_is_ok(stray.mkdir(parents=true, exist_ok=true), "fixture partition")
+    assert_is_ok((stray / "orphan.payload").write_bytes(b"never committed"), "fixture payload")
+
+    # -- Act --
+    session = assert_is_ok(open(path), "reopen")
+
+    # -- Assert --
+    assert not (Path(path) / "payloads" / "2").exists(), "the unpublished partition is gone"
+    assert len(assert_is_ok(session.payloads(), "listing")) == 2, "only committed payloads remain"

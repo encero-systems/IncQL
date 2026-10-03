@@ -1,0 +1,87 @@
+"""Backend-neutral semantic-store identities and immutable write contracts."""
+
+
+@derive(Clone)
+pub type RecordFamilyName = newtype str
+
+
+@derive(Clone)
+pub type LogicalRecordId = newtype str
+
+
+@derive(Clone)
+pub type RevisionId = newtype str
+
+
+@derive(Clone)
+pub model RecordFamily:
+    """One typed record-family declaration at a specific schema version."""
+
+    pub name: RecordFamilyName
+    pub schema_version: int
+
+
+@derive(Clone)
+pub model RevisionProposal:
+    """One immutable logical-record revision proposed for a transaction."""
+
+    pub family: RecordFamily
+    pub logical_record_id: LogicalRecordId
+    pub revision_id: RevisionId
+    pub content_fingerprint: str
+
+
+@derive(Clone)
+pub model PayloadProposal:
+    """
+    One immutable payload file proposed for a transaction.
+
+    A payload is bytes a record family owns under a named kind, such as a retrieval index built when a package is
+    made. The store keeps it as a whole file bound to the snapshot that published it, names it by its content
+    fingerprint, and never interprets it.
+    """
+
+    pub family: RecordFamily
+    pub payload_kind: str
+    pub payload_id: str
+    pub content_fingerprint: str
+
+
+@derive(Clone)
+pub model PayloadRef:
+    """One committed payload: where it became visible, who owns it, and the identity readers verify it against."""
+
+    pub snapshot_id: int
+    pub family: RecordFamily
+    pub payload_kind: str
+    pub payload_id: str
+    pub content_fingerprint: str
+    pub byte_length: int
+
+
+@derive(Clone)
+pub model StoreSnapshot:
+    """One stable, bounded view of committed semantic-store metadata."""
+
+    pub id: int
+    pub parent_id: Option[int]
+
+
+@derive(Clone)
+pub model StoreCatalog:
+    """Inspectable catalog state at one committed snapshot."""
+
+    pub snapshot: StoreSnapshot
+    pub record_families: list[RecordFamily]
+    pub revision_count: int
+    pub payload_count: int
+
+
+@derive(Clone)
+pub model CommitReceipt:
+    """Evidence that one transaction became visible at a named snapshot."""
+
+    pub snapshot: StoreSnapshot
+    pub declared_record_family_count: int
+    pub revision_count: int
+    pub payload_count: int
